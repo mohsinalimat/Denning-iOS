@@ -1,2 +1,4 @@
+
+#ignoring Cocoa Pod
 /Pods/
-/External/
+
