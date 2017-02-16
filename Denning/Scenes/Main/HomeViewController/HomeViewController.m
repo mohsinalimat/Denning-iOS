@@ -10,10 +10,9 @@
 #import "NewsCell.h"
 #import "EventCell.h"
 
-@interface HomeViewController ()
+@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) NewsModel* latestNews;
-@property (strong, nonatomic) EventModel* latestEvent;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -22,13 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self registerNibs];
+  //  [self registerNibs];
     
-    // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = YES;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self prepareUI];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,46 +35,15 @@
 {
     [super viewWillAppear:animated];
     
-    [self getLatestNews];
-    [self getLatestEvent];
+//    [self getLatestNews];
+//    [self getLatestEvent];
 }
 
-- (void) getLatestNews
+- (void) prepareUI
 {
-    @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestNewsWithCompletion:^(NewsModel * _Nonnull news, NSError * _Nonnull error) {
-       
-        @strongify(self)
-        if (error == nil) {
-            self.latestNews = news;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSIndexPath* rowToReload = [NSIndexPath indexPathForRow:0 inSection:0];
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:rowToReload, nil] withRowAnimation:UITableViewRowAnimationNone];
-            });
-            
-        } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
-}
-
-- (void) getLatestEvent
-{
-    @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestEventWithCompletion:^(EventModel * _Nonnull event, NSError * _Nonnull error) {
-        
-        @strongify(self)
-        if (error == nil) {
-            self.latestEvent = event;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSIndexPath* rowToReload = [NSIndexPath indexPathForRow:0 inSection:1];
-                    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:rowToReload, nil] withRowAnimation:UITableViewRowAnimationNone];
-
-                });
-            } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mainbackground.jpg"]];
 }
 
 - (void)registerNibs {
@@ -95,30 +59,34 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return 1;
+    return 3;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
-        NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:[NewsCell cellIdentifier] forIndexPath:indexPath];
-        
-        cell.tag = indexPath.section;
-        [cell configureCellWithNews:self.latestNews];
-        return cell;
-    }
-    
-    EventCell *cell = [tableView dequeueReusableCellWithIdentifier:[EventCell cellIdentifier] forIndexPath:indexPath];
-    
-    cell.tag = indexPath.section;
-    [cell configureCellWithEvent:self.latestEvent];
+    UITableViewCell *cell;
+    if (indexPath.row == 0) {
+         cell = [tableView dequeueReusableCellWithIdentifier:@"NewsUpdatesCell" forIndexPath:indexPath];
+//        cell.imageView.image = [UIImage imageNamed:@"users"];
+//        cell.textLabel.text = @"News & Update";
+//        cell.tag = indexPath.section;
 
+        return cell;
+    } else if (indexPath.row == 1) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"FreeCalcCell" forIndexPath:indexPath];
+      //  cell.imageView.image = [UIImage imageNamed:@"users"];
+     //   cell.textLabel.text = @"Free Feature";
+    } else if (indexPath.row == 2) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"UpcomingEventCell" forIndexPath:indexPath];
+//        cell.imageView.image = [UIImage imageNamed:@"users"];
+//        cell.textLabel.text = @"Upcomming Event";
+    }
     
     return cell;
 }
@@ -163,14 +131,14 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
 }
-*/
+
 
 @end

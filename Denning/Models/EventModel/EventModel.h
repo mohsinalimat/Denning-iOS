@@ -24,6 +24,8 @@
 
 @property (strong, nonatomic) NSString * imageURL;
 
+@property (strong, nonatomic) NSString * imageData;
+
 @property (strong, nonatomic) NSString * location;
 
 @property (strong, nonatomic) NSString * reminder1;

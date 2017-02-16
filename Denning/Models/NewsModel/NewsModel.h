@@ -20,6 +20,8 @@
 
 @property (strong, nonatomic) NSString * imageURL;
 
+@property (strong, nonatomic) NSString * imageData;
+
 @property (strong, nonatomic) NSString * reminder;
 
 @property (strong, nonatomic) NSString * shortDescription;

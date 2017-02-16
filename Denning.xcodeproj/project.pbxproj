@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		17FD9C2CE930CB38D8DE674D /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */; };
 		4614714DB83FC0B8A26C9915 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 064FEAC551343F357D0017CC /* libPods-Denning.a */; };
+		790060DF1E5287330020097F /* mainbackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 790060DE1E5287330020097F /* mainbackground.jpg */; };
 		790B239F1E3732D70037A187 /* denning-logo@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 790B239C1E3732D70037A187 /* denning-logo@1x.png */; };
 		790B23A01E3732D70037A187 /* denning-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 790B239D1E3732D70037A187 /* denning-logo@2x.png */; };
 		790B23A11E3732D70037A187 /* denning-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 790B239E1E3732D70037A187 /* denning-logo@3x.png */; };
@@ -17,6 +18,8 @@
 		790B23AD1E37B0130037A187 /* DISignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23AC1E37B0130037A187 /* DISignupViewController.m */; };
 		790B23B11E381FF50037A187 /* FirmListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23B01E381FF50037A187 /* FirmListViewController.m */; };
 		790B23B81E384C040037A187 /* DIHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23B71E384C040037A187 /* DIHelpers.m */; };
+		798CACAD1E53C6D900FD5175 /* NewsUpdatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 798CACAC1E53C6D900FD5175 /* NewsUpdatesViewController.m */; };
+		798CACB41E53D67E00FD5175 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 798CACB31E53D67E00FD5175 /* EventViewController.m */; };
 		79F9FC751E41834A0097CB23 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79F9FC721E41834A0097CB23 /* Search.storyboard */; };
 		79F9FC761E41834A0097CB23 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79F9FC741E41834A0097CB23 /* SearchViewController.m */; };
 		79F9FC7A1E4183B30097CB23 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79F9FC791E4183B30097CB23 /* HomeViewController.m */; };
@@ -270,6 +273,7 @@
 		064FEAC551343F357D0017CC /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1996F974161488BB17036EF8 /* Pods-Denning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Denning.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Denning/Pods-Denning.debug.xcconfig"; sourceTree = "<group>"; };
 		1E17F995330526CFB53C3FA3 /* Pods-Denning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Denning.release.xcconfig"; path = "Pods/Target Support Files/Pods-Denning/Pods-Denning.release.xcconfig"; sourceTree = "<group>"; };
+		790060DE1E5287330020097F /* mainbackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mainbackground.jpg; sourceTree = "<group>"; };
 		790B239C1E3732D70037A187 /* denning-logo@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "denning-logo@1x.png"; sourceTree = "<group>"; };
 		790B239D1E3732D70037A187 /* denning-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "denning-logo@2x.png"; sourceTree = "<group>"; };
 		790B239E1E3732D70037A187 /* denning-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "denning-logo@3x.png"; sourceTree = "<group>"; };
@@ -283,6 +287,10 @@
 		790B23B01E381FF50037A187 /* FirmListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirmListViewController.m; sourceTree = "<group>"; };
 		790B23B61E384C040037A187 /* DIHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIHelpers.h; sourceTree = "<group>"; };
 		790B23B71E384C040037A187 /* DIHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DIHelpers.m; sourceTree = "<group>"; };
+		798CACAB1E53C6D800FD5175 /* NewsUpdatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsUpdatesViewController.h; sourceTree = "<group>"; };
+		798CACAC1E53C6D900FD5175 /* NewsUpdatesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsUpdatesViewController.m; sourceTree = "<group>"; };
+		798CACB21E53D67E00FD5175 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
+		798CACB31E53D67E00FD5175 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		79F9FC721E41834A0097CB23 /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		79F9FC731E41834A0097CB23 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		79F9FC741E41834A0097CB23 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
@@ -783,6 +791,10 @@
 			children = (
 				79F9FC781E4183B30097CB23 /* HomeViewController.h */,
 				79F9FC791E4183B30097CB23 /* HomeViewController.m */,
+				798CACAB1E53C6D800FD5175 /* NewsUpdatesViewController.h */,
+				798CACAC1E53C6D900FD5175 /* NewsUpdatesViewController.m */,
+				798CACB21E53D67E00FD5175 /* EventViewController.h */,
+				798CACB31E53D67E00FD5175 /* EventViewController.m */,
 			);
 			path = HomeViewController;
 			sourceTree = "<group>";
@@ -2204,6 +2216,7 @@
 		79FBE14B1E30F7F500448FE3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				790060DE1E5287330020097F /* mainbackground.jpg */,
 				790B239C1E3732D70037A187 /* denning-logo@1x.png */,
 				790B239D1E3732D70037A187 /* denning-logo@2x.png */,
 				790B239E1E3732D70037A187 /* denning-logo@3x.png */,
@@ -2642,6 +2655,7 @@
 			files = (
 				79FBE1DD1E315D7A00448FE3 /* Main.storyboard in Resources */,
 				79FBDFE11E30421A00448FE3 /* calling.wav in Resources */,
+				790060DF1E5287330020097F /* mainbackground.jpg in Resources */,
 				79F9FC9B1E4217840097CB23 /* NewsCell.xib in Resources */,
 				79FBE0FE1E304F5000448FE3 /* QMNoResultsCell.xib in Resources */,
 				79FBE21C1E31EDF200448FE3 /* back_1@2x.png in Resources */,
@@ -2822,6 +2836,7 @@
 				79FBE0F61E304F5000448FE3 /* QMContactCell.m in Sources */,
 				79FBDFAA1E30421A00448FE3 /* UIPlaceholderTextView.m in Sources */,
 				79FBDFDB1E30421A00448FE3 /* QMImagePreview.m in Sources */,
+				798CACB41E53D67E00FD5175 /* EventViewController.m in Sources */,
 				79FBE0991E304EAB00448FE3 /* QMTagView.m in Sources */,
 				79F9FC851E41874E0097CB23 /* DIGeneralCell.m in Sources */,
 				79FBE10F1E304F5000448FE3 /* QMUserInfoViewController.m in Sources */,
@@ -2869,6 +2884,7 @@
 				79FBDFAB1E30421A00448FE3 /* UIView+Borders.m in Sources */,
 				79FBE19B1E3101CC00448FE3 /* QMNewMessageViewController.m in Sources */,
 				79FBE1951E3101CC00448FE3 /* QMDialogsDataSource.m in Sources */,
+				798CACAD1E53C6D900FD5175 /* NewsUpdatesViewController.m in Sources */,
 				79FBE1111E304F5000448FE3 /* QMFeedbackViewController.m in Sources */,
 				79FBE10D1E304F5000448FE3 /* QMGroupNameViewController.m in Sources */,
 				79F9FC8E1E41BDB50097CB23 /* EventModel.m in Sources */,
