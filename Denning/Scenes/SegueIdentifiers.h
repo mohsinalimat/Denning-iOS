@@ -47,3 +47,5 @@ static NSString* const kChangePasswordSegue                 = @"ChangePasswordSe
 static NSString* const kInstagramSegue                      = @"InstagramSegue";
 
 static NSString* const kPrivacyPolicy                       = @"PrivacyPolicy";
+
+static NSString* const kAuthSegue = @"AuthSegue";

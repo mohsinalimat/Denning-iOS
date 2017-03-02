@@ -13,6 +13,8 @@
 @interface QMForgotPasswordViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *phoneNumberTextField;
+@property (weak, nonatomic) IBOutlet UITextField *TACTextField;
 
 @property (weak, nonatomic) BFTask *task;
 
@@ -28,6 +30,9 @@
     [super viewDidAppear:animated];
     
     [self.emailTextField becomeFirstResponder];
+    
+    // initialize the number of bad try to log in
+    [QMNetworkManager sharedManager].invalidTry = @0;
 }
 
 #pragma mark - actions
@@ -74,6 +79,45 @@
         }
         
         return nil;
+    }];
+}
+
+- (IBAction)requestSMS:(id)sender {
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
+                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
+                                               duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    
+    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:self.emailTextField.text phoneNumber:self.phoneNumberTextField.text reason:@"from Forget Password form" withCompletion:^(BOOL success, NSString * _Nonnull error) {
+        
+        if (!success) {
+            
+            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+        }
+        else {
+            
+            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
+        }
+
+    }];
+}
+
+- (IBAction)forgotPassword:(id)sender {
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
+                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
+                                               duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+
+    [[QMNetworkManager sharedManager] requestForgetPasswordWithEmail:self.emailTextField.text phoneNumber:self.phoneNumberTextField.text activationCode:self.TACTextField.text withCompletion:^(BOOL success, NSString * _Nonnull error) {
+        
+        if (!success) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+        }
+        else {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
+        }
     }];
 }
 

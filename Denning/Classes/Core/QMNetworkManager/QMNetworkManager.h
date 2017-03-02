@@ -28,8 +28,10 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @property (strong, atomic) NSString       *installDateTemp;
 @property (assign) CLLocationCoordinate2D     oldLocation;
 @property(strong, atomic) NSString       *countryName;
-@property(strong, atomic) NSString       *cityName;
+@property(strong, nonatomic) NSString       *cityName;
 @property(strong, atomic) NSString       *stateName;
+@property (strong, atomic) NSNumber      *invalidTry;
+@property (strong, atomic) NSDate       *startTrackTimeForLogin;
 
 @property(nonatomic, strong) UserModel*     myProfile;
 
@@ -38,6 +40,45 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 /*
  ******** Auth *********
  */
+
+/*
+ *  Sign In
+ *   
+ *  @param: username
+ *  @param: email
+ */
+
+-(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode)) completion;
+
+/*
+ *  Request SMS for New Device
+ *  @param: email
+ *  @param: activation code
+ */
+
+- (void) sendSMSNewDeviceWithEmail: (NSString*) email activationCode: (NSNumber*) activationCode withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode)) completion;
+
+/*
+ *  Forget Password
+ *    1.  Request SMS
+ *  @param: email
+ *  @param: phone number
+ *  @param: reason
+ */
+
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+
+
+/*
+ *  Forget Password
+ *  @param: email
+ *  @param: phone number
+ *  @param: activationCode
+ */
+
+- (void) requestForgetPasswordWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber activationCode: (NSString*) activationCode withCompletion:(void(^)(BOOL success, NSString* error)) completion;
 
 /*
  *  Get Firm List

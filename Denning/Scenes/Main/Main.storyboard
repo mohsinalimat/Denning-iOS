@@ -31,13 +31,21 @@
             </objects>
             <point key="canvasLocation" x="726" y="632"/>
         </scene>
+        <!--Auth-->
+        <scene sceneID="ocE-48-8t1">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Auth" id="wmb-V7-9yJ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xfc-Bw-r9c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1979" y="117"/>
+        </scene>
         <!--Search-->
         <scene sceneID="PXg-yd-AOO">
             <objects>
                 <viewControllerPlaceholder storyboardName="Search" id="lT2-W5-9GD" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZEa-zT-FeD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2026" y="209"/>
+            <point key="canvasLocation" x="2059" y="209"/>
         </scene>
         <!--Denning-->
         <scene sceneID="N5q-l7-NTe">
@@ -55,6 +63,9 @@
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
+                            <connections>
+                                <action selector="tapLogin:" destination="bT0-8O-GTj" id="46F-3j-RYR"/>
+                            </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem image="nav_menu" id="cCz-Ri-n8A">
@@ -63,6 +74,7 @@
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="search" id="3Ub-3P-Iye">
+                                <inset key="imageInsets" minX="10" minY="0.0" maxX="-10" maxY="0.0"/>
                                 <connections>
                                     <action selector="showSearchView:" destination="bT0-8O-GTj" id="0Cd-6n-IvT"/>
                                     <segue destination="lT2-W5-9GD" kind="popoverPresentation" popoverAnchorBarButtonItem="3Ub-3P-Iye" id="5GZ-LS-g51">
@@ -85,11 +97,12 @@
                         <segue destination="3dI-aP-UFS" kind="relationship" relationship="viewControllers" id="8uh-6h-g7m"/>
                         <segue destination="OCX-Ho-XDd" kind="relationship" relationship="viewControllers" id="FJy-eA-6VZ"/>
                         <segue destination="WdE-3B-K2h" kind="relationship" relationship="viewControllers" id="Tfy-Wj-E90"/>
+                        <segue destination="wmb-V7-9yJ" kind="presentation" identifier="AuthSegue" id="gYd-Hw-XzJ"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bIz-o6-OvI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1495" y="632"/>
+            <point key="canvasLocation" x="1490" y="627"/>
         </scene>
         <!--News Updates View Controller-->
         <scene sceneID="FKt-o4-vvE">
@@ -339,7 +352,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Introducing the new D360" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r6a-0V-wB3">
-                                            <rect key="frame" x="20" y="172.5" width="335" height="31.5"/>
+                                            <rect key="frame" x="20" y="172" width="335" height="32"/>
                                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="23"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>

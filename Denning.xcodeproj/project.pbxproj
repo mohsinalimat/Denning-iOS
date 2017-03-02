@@ -234,6 +234,7 @@
 		79FBE21D1E31EDF200448FE3 /* back_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 79FBE21A1E31EDF200448FE3 /* back_1@3x.png */; };
 		79FBE2201E31F0E400448FE3 /* home_30.png in Resources */ = {isa = PBXBuildFile; fileRef = 79FBE21E1E31F0E400448FE3 /* home_30.png */; };
 		79FBE2211E31F0E400448FE3 /* list-simple-star-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 79FBE21F1E31F0E400448FE3 /* list-simple-star-7.png */; };
+		79FC42851E588B3900D9DC64 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79FC42841E588B3800D9DC64 /* Localizable.strings */; };
 		79FD2D021E428526005978E3 /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79FD2D011E428526005978E3 /* MainTabBarController.m */; };
 /* End PBXBuildFile section */
 
@@ -664,6 +665,7 @@
 		79FBE21A1E31EDF200448FE3 /* back_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_1@3x.png"; sourceTree = "<group>"; };
 		79FBE21E1E31F0E400448FE3 /* home_30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_30.png; sourceTree = "<group>"; };
 		79FBE21F1E31F0E400448FE3 /* list-simple-star-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list-simple-star-7.png"; sourceTree = "<group>"; };
+		79FC42841E588B3800D9DC64 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		79FD2D001E428526005978E3 /* MainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarController.h; sourceTree = "<group>"; };
 		79FD2D011E428526005978E3 /* MainTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarController.m; sourceTree = "<group>"; };
 		B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -863,6 +865,7 @@
 		79FBDE661E302F6600448FE3 = {
 			isa = PBXGroup;
 			children = (
+				79FC42841E588B3800D9DC64 /* Localizable.strings */,
 				79FBDE711E302F6600448FE3 /* Denning */,
 				79FBDFE91E304A6200448FE3 /* Frameworks */,
 				79FBDE8B1E302F6600448FE3 /* DenningTests */,
@@ -922,13 +925,13 @@
 			isa = PBXGroup;
 			children = (
 				79FBE01A1E304D6500448FE3 /* SegueIdentifiers.h */,
+				79FBE0211E304EAA00448FE3 /* Base */,
 				79FBE1EA1E31600F00448FE3 /* Auth */,
 				79FBE15A1E3101CC00448FE3 /* Message */,
 				79FBE1551E30FBEA00448FE3 /* Calls */,
 				79FBE09B1E304F5000448FE3 /* Cells */,
 				79FBE0C01E304F5000448FE3 /* Chat */,
 				79FBE0DD1E304F5000448FE3 /* Settings */,
-				79FBE0211E304EAA00448FE3 /* Base */,
 				79FBE03D1E304EAA00448FE3 /* Views */,
 				79F9FC711E41834A0097CB23 /* Search */,
 				79FBDEAA1E30410000448FE3 /* Main */,
@@ -2677,6 +2680,7 @@
 				79FBE0861E304EAB00448FE3 /* QMCallInfoView.xib in Resources */,
 				790B23A11E3732D70037A187 /* denning-logo@3x.png in Resources */,
 				79FBE0871E304EAB00448FE3 /* QMVideoCallInfoView.xib in Resources */,
+				79FC42851E588B3900D9DC64 /* Localizable.strings in Resources */,
 				79FBE0FC1E304F5000448FE3 /* QMNoContactsCell.xib in Resources */,
 				79FBE1051E304F5000448FE3 /* Chat.storyboard in Resources */,
 				79FBDFE51E30421A00448FE3 /* sent.wav in Resources */,

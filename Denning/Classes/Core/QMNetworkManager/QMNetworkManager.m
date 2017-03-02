@@ -39,9 +39,15 @@
 - (instancetype)init {
     if (self = [super init]) {
         [self initManager];
+        [self initVariables];
     }
     
     return self;
+}
+
+- (void) initVariables
+{
+    self.invalidTry = @0;
 }
 
 - (void)initManager
@@ -67,9 +73,117 @@
     self.searchDataSource.requestParams = [[NSMutableDictionary alloc] init];     // Add your request parameters
 }
 
+- (NSDictionary*) buildRquestParamsFromDictionary: (NSDictionary*) dict
+{
+    NSDictionary* basicParams = @{
+                                    @"ipWAN": [DIHelpers getWANIP],
+                                    @"ipLAN": [DIHelpers getLANIP],
+                                    @"OS": [DIHelpers getOSName],
+                                    @"device": [DIHelpers getDevice],
+                                    @"deviceName": [DIHelpers getDeviceName]
+                                    };
+    NSMutableDictionary* mutableBasicParams = [basicParams mutableCopy];
+    
+    NSMutableDictionary* params = [[NSMutableDictionary alloc] initWithDictionary:dict];
+    
+    [mutableBasicParams addEntriesFromDictionary:params];
+    
+    return [mutableBasicParams copy];
+}
+
 /*
  ******** Auth *********
  */
+
+-(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSInteger statusCode)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{
+                                                            @"email": email,
+                                                            @"password": password}];
+    
+    
+    [self.manager POST:SIGNIN_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            if ([[responseObject objectForKey:@"statusCode"] longValue] == 200) {
+                completion(YES, nil, 200);
+            } else if ([[responseObject objectForKey:@"statusCode"] longValue] == 250){
+                completion(YES, nil, 250);
+            }
+            
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
+            
+            NSLog(@"%ld, %@", test.statusCode, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
+
+            if (test.statusCode == 401){
+                completion(NO, @"Invalid username and password", 401);
+            } else {
+                completion(NO, error.localizedDescription, test.statusCode);
+            }
+        }
+    }];
+}
+
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{
+                                                                   @"email": email,
+                                                                   @"hpNumber": phoneNumber,
+                                                                   @"reason": reason}];
+    
+    [self sendSMSGeneralWithEmail:params url:FORGOT_PASSWORD_SEND_SMS_URL withCompletion:completion];
+}
+
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{
+                                                                   @"email": email,
+                                                                   @"hpNumber": phoneNumber,
+                                                                   @"reason": reason}];
+    
+    [self sendSMSGeneralWithEmail:params url:LOGIN_SEND_SMS_URL withCompletion:completion];
+}
+
+- (void) sendSMSGeneralWithEmail: (NSDictionary*) params url:(NSString*)url withCompletion:(void(^)(BOOL success, NSString* error)) completion
+{
+
+    
+    [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(YES, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(YES, error.localizedDescription);
+        }
+    }];
+}
+
+- (void) requestForgetPasswordWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber activationCode: (NSString*) activationCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"hpNumber": phoneNumber, @"activationCode": activationCode}];
+    
+    [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
+    
+    [self.manager POST:FORGOT_PASSWORD_REQUEST_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (completion != nil) {
+            completion(YES, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(NO, error.localizedDescription);
+        }
+    }];
+}
 
 - (void) getFirmListWithCompletion: (void(^)(NSArray* resultArray)) completion
 {
@@ -90,19 +204,14 @@
 
 - (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email password:(NSString*) password isLayer:(NSNumber*) isLayer firmCode: (NSString*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
 {
-    NSDictionary* params = @{
-                             @"name": username,
-                             @"hpphone": phone,
-                             @"email": email,
-                             @"password": password,
-                             @"isLawyer": isLayer,
-                             @"firmCode": firmCode,
-                             @"ipWAN": [DIHelpers getWANIP],
-                             @"ipLAN": [DIHelpers getLANIP],
-                             @"OS": [DIHelpers getOSName],
-                             @"device": [DIHelpers getDevice],
-                             @"deviceName": [DIHelpers getDeviceName]
-                             };
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{
+                                                                   @"name": username,
+                                                                   @"hpphone": phone,
+                                                                   @"email": email,
+                                                                   @"password": password,
+                                                                   @"isLawyer": isLayer,
+                                                                   @"firmCode": firmCode}];
+    
     [self.manager POST:SIGNUP_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
@@ -122,8 +231,6 @@
 {
     
     NSString* urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
-    
-    NSProgress* downloadProgress;
     
     [self.manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         

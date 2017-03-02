@@ -26,11 +26,19 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
     PublicGovernmentOffices = 512
 };
 
+#define FORGOT_PASSWORD_SEND_SMS_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/lostPassword"
+
+#define FORGOT_PASSWORD_REQUEST_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/password/forget"
+
+#define LOGIN_SEND_SMS_URL  @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/request"
+
 #define SIGNUP_FIRM_LIST_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/Solicitor"
 
 #define SIGNUP_URL  @"http://denningsoft.dlinkddns.com/denningwcf/v1/signUp"
 
-#define SIGNUP_ACTIVATION_URL @"http://denningsoft.dlinkddns.com/denningwcf/v1/signUp/activate"
+#define SIGNIN_URL  @"http://denningsoft.dlinkddns.com/denningwcf/v1/signIn"
+
+#define Auth_ACTIVATION_URL @"http://denningsoft.dlinkddns.com/denningwcf/v1/signUp/activate"
 
 #define GENERAL_KEYWORD_SEARCH_URL  @"http://121.196.213.102:9339/denningwcf/v1/generalSearch/keyword?search="
 
