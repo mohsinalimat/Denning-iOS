@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'D8F94A911C4AD81091815CDCD792F2B6'
+               BlueprintIdentifier = '859D9B87CBC26FB29280F65C839BB6E5'
                BlueprintName = 'QMServices-QMContactListCacheModel'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'QMContactListCacheModel.bundle'>

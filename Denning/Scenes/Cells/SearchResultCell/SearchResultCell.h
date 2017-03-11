@@ -9,8 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "DIGeneralCell.h"
 
+@protocol SearchDelegate;
+
+
 @interface SearchResultCell : DIGeneralCell
 
+@property (weak, nonatomic) id<SearchDelegate> delegate;
+
 - (void) configureCellWithSearchModel: (SearchResultModel*) searchResult;
+
+@end
+
+@protocol SearchDelegate <NSObject>
+
+@optional
+
+- (void) didTapFileFolder: (SearchResultCell*) cell;
+
+- (void) didTapLedger: (SearchResultCell*) cell;
 
 @end

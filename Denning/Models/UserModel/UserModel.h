@@ -8,6 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UserModel : NSObject
+@interface FirmURLModel : RLMObject
+@property NSString      *firmURL;
+@end
+RLM_ARRAY_TYPE(FirmURLModel)
+
+@interface UserModel : RLMObject
+
+@property   NSString    *sessionID;
+@property   NSString    *email;
+@property   NSString    *phoneNumber;
+@property   NSString    *username;
+@property   NSString    *status;
+//@property   RLMArray<FirmURLModel *><FirmURLModel>    *firmList;
+@property   NSString    *userType;
+@property   NSString    *serverURL;
+@property   NSInteger    activationCode;
 
 @end

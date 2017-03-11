@@ -10,24 +10,18 @@
 
 @interface DataManager : NSObject
 
+@property (strong, nonatomic) NSString  *searchType;
+@property (strong, nonatomic) UserModel *user;
+
 + (DataManager *)sharedManager;
 
-@property (copy, atomic) NSString *notificationToken;
-@property (copy, atomic) NSString *activeUserID;
-@property (copy, atomic) NSString *username;
-@property (copy, atomic) NSString *email;
-@property (copy, atomic) NSString *password;
-@property (strong, atomic) NSDictionary *messages;
-@property (copy, atomic) NSString *avatar;
-@property (strong, atomic) NSNumber *isCallRing;
-@property (strong, atomic) NSNumber *isCallVibrate;
 
-@property (assign, atomic) NSInteger chatContactBadge;
-@property (assign, atomic) NSInteger chatDialogBadge;
-@property (assign, atomic) NSInteger newsFeedBadge;
-@property (assign, atomic) NSInteger GroupsBadge;
-@property (assign, atomic) NSArray *myFriends;
+- (void) setUserInfoFromLogin: (NSDictionary*) response;
 
-@property (assign, atomic) NSString* searchType;
+- (void) setUserInfoFromNewDeviceLogin: (NSDictionary*) response;
+
+- (void) setUserInfoFromChangePassword: (NSDictionary*) response;
+
+
 
 @end

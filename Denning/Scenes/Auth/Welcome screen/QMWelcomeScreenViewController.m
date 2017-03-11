@@ -33,12 +33,13 @@ static NSString * const kQMFacebookIDField = @"id";
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
-- (void) gotoMainView
-{
-    
-}
+
+
 
 #pragma mark - Actions
+- (IBAction)gotoMainView:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (IBAction)signUp:(UIButton *)sender {
     
@@ -46,7 +47,6 @@ static NSString * const kQMFacebookIDField = @"id";
 }
 
 - (IBAction)signIn:(UIButton *)sender {
-    
     
 }
 

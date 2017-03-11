@@ -9,12 +9,17 @@
 #import "SearchViewController.h"
 #import <HTHorizontalSelectionList/HTHorizontalSelectionList.h>
 #import "SearchResultCell.h"
+#import "ContactViewController.h"
+#import "RelatedMatterViewController.h"
+#import "PropertyViewController.h"
 
 @interface SearchViewController ()<UITextFieldDelegate, AutoCompletionTextFieldDelegate, UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate>
 {
     NSInteger category;
     NSString* keyword;
     NSString* searchURL;
+    NSArray* generalKeyArray;
+    NSMutableArray* generalValueArray;
 }
 
 @property (weak, nonatomic) IBOutlet AutoCompletionTextField *searchTextField;
@@ -56,6 +61,7 @@
     self.searchTextField.suggestionsResultDelegate = self;
     self.searchTextField.delegate = self;
     self.searchTextField.backgroundColor = [UIColor whiteColor];
+    self.searchTextField.clearButtonMode = UITextFieldViewModeNever;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -93,18 +99,38 @@
                             action:@selector(displaySearchResult)
                   forControlEvents:UIControlEventValueChanged];
     
-    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
+    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 69, self.view.frame.size.width, 44)];
     self.selectionList.delegate = self;
     self.selectionList.dataSource = self;
     
-    self.generalSearchFilters = @{@"All Contacts": [NSNumber numberWithInteger: AllContact],
+    self.generalSearchFilters = @{@"All": [NSNumber numberWithInteger: All],
+                                  @"Contacts":[NSNumber numberWithInteger: Contact],
                                   @"Related Matter": [NSNumber numberWithInteger: RelatedMatter],
                                   @"Property": [NSNumber numberWithInteger: Property],
+                                  @"Bank": [NSNumber numberWithInteger: Bank],
                                   @"Government Offices": [NSNumber numberWithInteger: GovernmentOffices],
-                                  @"Document": [NSNumber numberWithInteger: Document]
+                                  @"Legal Firm": [NSNumber numberWithInteger: LegalFirm],
+                                  @"Documents": [NSNumber numberWithInteger: Documents]
                                   };
     
-    self.publicSearchFilters = @{@"Public LawFirm": [NSNumber numberWithInteger: PublicLawFirm],
+    generalKeyArray = [self.generalSearchFilters keysSortedByValueUsingComparator: ^(id obj1, id obj2) {
+        
+        if ([obj1 integerValue] > [obj2 integerValue]) {
+            
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        if ([obj1 integerValue] < [obj2 integerValue]) {
+            
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    
+    generalValueArray = [[NSMutableArray alloc] initWithObjects:[NSNumber numberWithInteger: All], [NSNumber numberWithInteger: Contact], [NSNumber numberWithInteger: RelatedMatter], [NSNumber numberWithInteger: Property], [NSNumber numberWithInteger: Bank], [NSNumber numberWithInteger: GovernmentOffices], [NSNumber numberWithInteger: LegalFirm], [NSNumber numberWithInteger: Documents], nil];
+    
+    self.publicSearchFilters = @{@"All Public": [NSNumber numberWithInteger:AllPublic],
+                                 @"Public LawFirm": [NSNumber numberWithInteger: PublicLawFirm],
                                  @"Public Document": [NSNumber numberWithInteger: PublicDocment],
                                  @"Public Government Offices": [NSNumber numberWithInteger: PublicGovernmentOffices],
                                  };
@@ -113,16 +139,17 @@
     self.selectionList.showsEdgeFadeEffect = YES;
    // self.selectionList.snapToCenter = YES;
     
-    self.selectionList.selectionIndicatorColor = [UIColor blueColor];
-    [self.selectionList setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    [self.selectionList setTitleFont:[UIFont systemFontOfSize:13] forState:UIControlStateNormal];
-    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:13] forState:UIControlStateSelected];
-    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:13] forState:UIControlStateHighlighted];
+    self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"2196F3"];
+    [self.selectionList setTitleColor:[UIColor colorWithHexString:@"2196F3"] forState:UIControlStateHighlighted];
+    [self.selectionList setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.selectionList setTitleFont:[UIFont systemFontOfSize:17] forState:UIControlStateNormal];
+    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateSelected];
+    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateHighlighted];
     
     [self.view addSubview:self.selectionList];
     
     self.selectionList.hidden = YES;
-    self.selectionList.backgroundColor = [UIColor colorWithHexString:@"EBEBF1"];
+    self.selectionList.backgroundColor = [UIColor clearColor];
     
     category = 1;
 }
@@ -163,14 +190,20 @@
     self.searchTextField.hidden = NO;
 }
 
+- (IBAction)eraseSearchBox:(id)sender {
+}
+
+
 - (IBAction)toggleSearchType:(UIButton*)sender {
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
         [DataManager sharedManager].searchType = @"Public";
+        category = -1;
     } else {
         [DataManager sharedManager].searchType = @"General";
+        category = 0;
     }
 
-    [self.searchTypeBtn setTitle:[DataManager sharedManager].searchType forState:UIControlStateNormal];
+//    [self.searchTypeBtn setTitle:[DataManager sharedManager].searchType forState:UIControlStateNormal];
     [self updateUI];
 }
 
@@ -215,7 +248,7 @@
 
 - (NSString *)selectionList:(HTHorizontalSelectionList *)selectionList titleForItemWithIndex:(NSInteger)index {
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        return self.generalSearchFilters.allKeys[index];
+        return generalKeyArray[index];
     }
     return self.publicSearchFilters.allKeys[index];
 }
@@ -224,8 +257,9 @@
 
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
     // update the view for the corresponding index
+    
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        category = [self.generalSearchFilters.allValues[index] integerValue];
+        category = [generalValueArray[index] integerValue];
         searchURL = GENERAL_SEARCH_URL;
     } else {
         category = [self.publicSearchFilters.allValues[index] integerValue];
@@ -265,8 +299,24 @@
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [self performSegueWithIdentifier:kTopicReplySegue sender:self.group.topics[indexPath.section]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SearchResultCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.tag == 1){ // Contact
+        [self performSegueWithIdentifier:kContactSearchSegue sender:self.searchResultArray[indexPath.section]];
+    } else if (cell.tag == 2){ // Related Matter
+        [self performSegueWithIdentifier:kRelatedMatterSegue sender:self.searchResultArray[indexPath.section]];
+    } else if (cell.tag == 4){ // Property
+        id sender = self.searchResultArray[indexPath.section];
+        [self performSegueWithIdentifier:kPropertySearchSegue sender:sender];
+//    } else if (cell.tag == 8){ // Bank
+//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
+//    } else if (cell.tag == 16){ // Government offices
+//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
+//    } else if (cell.tag == 16){ // Government offices
+//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
+    }
+    
 }
 
 #pragma mark - Delegate
@@ -316,6 +366,27 @@
     } else {
         // down
         
+    }
+}
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kContactSearchSegue]){
+        ContactViewController* contactVC = segue.destinationViewController;
+        contactVC.responseCell = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kRelatedMatterSegue]){
+        RelatedMatterViewController* relatedMatterVC = segue.destinationViewController;
+        relatedMatterVC.responseCell = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kPropertySearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        PropertyViewController* propertyVC = [navC viewControllers].firstObject;
+        propertyVC.responseCell = sender;
     }
 }
 

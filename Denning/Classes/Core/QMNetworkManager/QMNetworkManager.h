@@ -17,6 +17,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class UserModel;
 @class NewsModel;
 @class EventModel;
+@class PropertyModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -35,6 +36,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 @property(nonatomic, strong) UserModel*     myProfile;
 
+@property (nonatomic, strong) NSString* selectedBaseURLForGeneral;
+
 + (QMNetworkManager *)sharedManager;
 
 /*
@@ -48,7 +51,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  @param: email
  */
 
--(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode)) completion;
+-(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode, NSDictionary* responseObject)) completion;
 
 /*
  *  Request SMS for New Device
@@ -66,10 +69,11 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  @param: reason
  */
 
-- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;
 
-- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;
 
+- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;;
 
 /*
  *  Forget Password
@@ -79,6 +83,15 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  */
 
 - (void) requestForgetPasswordWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber activationCode: (NSString*) activationCode withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+
+/*
+ *  Change Pasword
+ *
+ *  @param: email
+ *  @param: password
+ */
+
+- (void) changePasswordAfterLoginWithEmail: (NSString*) email password: (NSString*) password withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;
 
 /*
  *  Get Firm List
@@ -115,6 +128,11 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 // Event
 
 - (void) getLatestEventWithCompletion: (void(^)(EventModel* event, NSError* error)) completion;
+
+// Property
+
+- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion;
+
 
 @end
 

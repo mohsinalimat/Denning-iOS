@@ -49,3 +49,11 @@ static NSString* const kInstagramSegue                      = @"InstagramSegue";
 static NSString* const kPrivacyPolicy                       = @"PrivacyPolicy";
 
 static NSString* const kAuthSegue = @"AuthSegue";
+
+static NSString* const kNewDeviceSegue = @"NewDeviceSegue";
+
+static NSString* const kPropertySearchSegue = @"PropertySearchSegue";
+
+static NSString* const kContactSearchSegue = @"ContactSearchSegue";
+
+static NSString* const kRelatedMatterSegue = @"RelatedMatterSegue";

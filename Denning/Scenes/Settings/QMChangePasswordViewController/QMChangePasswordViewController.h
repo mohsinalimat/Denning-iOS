@@ -10,4 +10,6 @@
 
 @interface QMChangePasswordViewController : UITableViewController
 
+@property (strong, nonatomic) NSString* email;
+
 @end

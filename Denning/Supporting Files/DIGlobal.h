@@ -12,15 +12,18 @@
 // Constant for Search
 
 typedef NS_ENUM(NSInteger, DIGeneralSearchFilter) {
-    AllContact          = 1,
+    All                 = 0,
+    Contact             = 1,
     RelatedMatter       = 2,
     Property            = 4,
     Bank                = 8,
     GovernmentOffices   = 16,
-    Document            = 64
+    LegalFirm           = 32,
+    Documents            = 64
 };
 
 typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
+    AllPublic               = -1,
     PublicLawFirm           = 128,
     PublicDocment           = 256,
     PublicGovernmentOffices = 512
@@ -30,7 +33,11 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define FORGOT_PASSWORD_REQUEST_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/password/forget"
 
+#define CHANGE_PASSWORD_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/password/new"
+
 #define LOGIN_SEND_SMS_URL  @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/request"
+
+#define NEW_DEVICE_SEND_SMS_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/newDevice"
 
 #define SIGNUP_FIRM_LIST_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/Solicitor"
 

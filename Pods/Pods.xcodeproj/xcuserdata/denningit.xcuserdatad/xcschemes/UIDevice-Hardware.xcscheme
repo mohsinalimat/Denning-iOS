@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'E78E4B066C9C60491DAD4E59C65701F9'
+               BlueprintIdentifier = 'B7D1C58CDEEC0692EFBB91723C9A80AD'
                BlueprintName = 'UIDevice-Hardware'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libUIDevice-Hardware.a'>

@@ -48,6 +48,7 @@
 - (void) initVariables
 {
     self.invalidTry = @0;
+    self.selectedBaseURLForGeneral = @"http://121.196.213.102:9339/";
 }
 
 - (void)initManager
@@ -73,6 +74,12 @@
     self.searchDataSource.requestParams = [[NSMutableDictionary alloc] init];     // Add your request parameters
 }
 
+- (void) setHTTPHeader
+{
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
+}
+
 - (NSDictionary*) buildRquestParamsFromDictionary: (NSDictionary*) dict
 {
     NSDictionary* basicParams = @{
@@ -95,7 +102,7 @@
  ******** Auth *********
  */
 
--(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSInteger statusCode)) completion
+-(void) userSignInWithEmail: (NSString*)email password:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSInteger statusCode, NSDictionary* responseObject)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                             @"email": email,
@@ -105,30 +112,25 @@
     [self.manager POST:SIGNIN_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            if ([[responseObject objectForKey:@"statusCode"] longValue] == 200) {
-                completion(YES, nil, 200);
-            } else if ([[responseObject objectForKey:@"statusCode"] longValue] == 250){
-                completion(YES, nil, 250);
-            }
-            
+            completion(YES, nil, [[responseObject objectForKey:@"statusCode"] integerValue], responseObject);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)
         {
             NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
             
-            NSLog(@"%ld, %@", test.statusCode, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
+            NSLog(@"%@, %@", test.allHeaderFields, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
 
             if (test.statusCode == 401){
-                completion(NO, @"Invalid username and password", 401);
+                completion(NO, @"Invalid username and password", 401, nil);
             } else {
-                completion(NO, error.localizedDescription, test.statusCode);
+                completion(NO, error.localizedDescription, test.statusCode, nil);
             }
         }
     }];
 }
 
-- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"email": email,
@@ -138,7 +140,7 @@
     [self sendSMSGeneralWithEmail:params url:FORGOT_PASSWORD_SEND_SMS_URL withCompletion:completion];
 }
 
-- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error)) completion
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"email": email,
@@ -148,19 +150,28 @@
     [self sendSMSGeneralWithEmail:params url:LOGIN_SEND_SMS_URL withCompletion:completion];
 }
 
-- (void) sendSMSGeneralWithEmail: (NSDictionary*) params url:(NSString*)url withCompletion:(void(^)(BOOL success, NSString* error)) completion
+- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{
+                                                                   @"email": email,
+                                                                   @"activationCode": activationCode}];
+    
+    [self setHTTPHeader];
+    [self sendSMSGeneralWithEmail:params url:NEW_DEVICE_SEND_SMS_URL withCompletion:completion];
+}
+
+- (void) sendSMSGeneralWithEmail: (NSDictionary*) params url:(NSString*)url withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
 {
 
-    
     [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            completion(YES, nil);
+            completion(YES, nil, responseObject);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)
         {
-            completion(YES, error.localizedDescription);
+            completion(NO, error.localizedDescription, nil);
         }
     }];
 }
@@ -168,6 +179,7 @@
 - (void) requestForgetPasswordWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber activationCode: (NSString*) activationCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"hpNumber": phoneNumber, @"activationCode": activationCode}];
+    
     
     [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
     
@@ -181,6 +193,24 @@
         
         if (completion != nil) {
             completion(NO, error.localizedDescription);
+        }
+    }];
+}
+
+- (void) changePasswordAfterLoginWithEmail: (NSString*) email password: (NSString*) password withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"password": password}];
+    [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
+    [self.manager POST:CHANGE_PASSWORD_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (completion != nil) {
+            completion(YES, nil, responseObject);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(NO, error.localizedDescription, nil);
         }
     }];
 }
@@ -277,6 +307,32 @@
     [self.manager GET:EVENT_LATEST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         EventModel* result = [EventModel getEventFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// property
+
+- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Property/%@", self.selectedBaseURLForGeneral, code];
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
+        
+        NSLog(@"%@, %@", test.allHeaderFields, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
+        
+        PropertyModel* result = [PropertyModel getPropertyFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }

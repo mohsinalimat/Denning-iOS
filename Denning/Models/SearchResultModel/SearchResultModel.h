@@ -32,6 +32,6 @@
 
 + (SearchResultModel*) getSearchResultFromResponse: (NSDictionary*) response;
 
-+ (NSArray*) getSearchResultArrayFromResponse: (NSDictionary*) response;
++ (NSArray*) getSearchResultArrayFromResponse: (NSArray*) response;
 
 @end

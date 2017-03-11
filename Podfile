@@ -28,12 +28,14 @@ target ‘Denning’ do
 	pod 'AFNetworking’
 	pod 'Bolts'
 
+	pod 'Realm'
+
 	pod 'Quickblox-WebRTC', '~> 2.3.1'
 	pod 'QuickBlox'
 
 	pod 'Fabric'
+	pod 'Digits'
 	pod 'Crashlytics'
-    	pod 'Digits'
     	pod 'TwitterCore', '~> 1.15'
 
     	#Facebook

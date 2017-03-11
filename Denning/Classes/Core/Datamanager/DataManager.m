@@ -8,7 +8,13 @@
 
 #import "DataManager.h"
 
+@interface DataManager()
+
+@end
+
 @implementation DataManager
+@synthesize user;
+@synthesize searchType;
 
 + (DataManager *)sharedManager {
     static DataManager *manager = nil;
@@ -25,92 +31,48 @@
     self = [super init];
     
     if (self) {
-        self.newsFeedBadge = 0;
-        self.chatDialogBadge = 0;
-        self.chatContactBadge = 0;
-        self.GroupsBadge = 0;
-        
-        self.searchType = @"General";
+        searchType = @"General";
+//        RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
+//        configuration.fileURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"IT.Denning"] URLByAppendingPathComponent:@"Denning.realm"];
+//        [RLMRealmConfiguration setDefaultConfiguration:configuration];
+//        [[NSFileManager defaultManager] removeItemAtURL:[RLMRealmConfiguration defaultConfiguration].fileURL error:nil];
     }
     
     return self;
 }
 
-- (void)setNotificationToken:(NSString *)notificationToken {
-    [[NSUserDefaults standardUserDefaults] setObject:notificationToken forKey:@"notificationToken"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSString *)notificationToken {
-    return [[[[NSString stringWithFormat:@"%@", [QMCore instance].pushNotificationManager.deviceToken]  stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-}
-
-- (void)setActiveUserID:(NSString *)activeUserID {
-    [[NSUserDefaults standardUserDefaults] setObject:activeUserID forKey:@"activeUserID"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSString *)activeUserID {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"activeUserID"];
-}
-
-- (void) setPassword:(NSString *)password
+- (void) setUserInfoFromLogin: (NSDictionary*) response
 {
-    [[NSUserDefaults standardUserDefaults] setObject:password forKey:@"password"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    user = [UserModel allObjects].firstObject;
+    if (!user) {
+        [[RLMRealm defaultRealm] transactionWithBlock:^{
+            user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"", @"", @"", @"", @"", @0]];
+        }];
+    }
+    
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        user.email = [response objectForKeyNotNull:@"email"];
+        user.phoneNumber = [response objectForKeyNotNull:@"hpNumber"];
+        //    user.firmList = [response objectForKeyNotNull:@"firmList"];
+        user.userType = [response objectForKeyNotNull:@"userType"];
+        user.sessionID = [response objectForKeyNotNull:@"sessionID"];
+        user.status = [response objectForKeyNotNull:@"status"];
+        user.username = [response objectForKeyNotNull:@"name"];
+    }];
 }
 
-- (NSString*) password {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"password"];
-}
-
-- (void) setUsername:(NSString *)username
+- (void) setUserInfoFromNewDeviceLogin: (NSDictionary*) response
 {
-    [[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+//        user.firmList = [response objectForKey:@"firmList"];
+        user.status = [response objectForKeyNotNull:@"status"];
+        user.userType = [response objectForKeyNotNull:@"userType"];
+    }];
 }
 
-- (NSString*) username
+- (void) setUserInfoFromChangePassword: (NSDictionary*) response
 {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
-}
-
-- (void) setEmail:(NSString *)email
-{
-    [[NSUserDefaults standardUserDefaults] setObject:email forKey:@"username"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSString*) email
-{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
-}
-
-- (void)setMessages:(NSMutableDictionary *)messages {
-    [[NSUserDefaults standardUserDefaults] setObject:messages forKey:@"messages"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSDictionary *)messages {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"messages"];
-}
-
-- (void)setIsCallRing:(NSNumber *)isCallRing {
-    [[NSUserDefaults standardUserDefaults] setObject:isCallRing forKey:@"isCallRing"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSNumber *)isCallRing {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"isCallRing"];
-}
-
-- (void)setIsCallVibrate:(NSNumber *)isCallVibrate {
-    [[NSUserDefaults standardUserDefaults] setObject:isCallVibrate forKey:@"isCallVibrate"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSNumber *)isCallVibrate {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"isCallVibrate"];
+    [self setUserInfoFromNewDeviceLogin:response];
 }
 
 @end

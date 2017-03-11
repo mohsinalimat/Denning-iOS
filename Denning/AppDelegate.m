@@ -13,7 +13,8 @@
 #import "QMHelpers.h"
 #import "QMNetworkManager.h"
 #import "DataManager.h"
-
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #define DEVELOPMENT 0
 
@@ -54,6 +55,9 @@ static NSString * const kQMAccountKey = @"C8mpRE2Cs5qSfFBzxJ7Z";
     
     [QBSettings setAutoReconnectEnabled:YES];
     [QBSettings setCarbonsEnabled:YES];
+    
+    [Fabric with:@[CrashlyticsKit]];
+
     
 #if DEVELOPMENT == 0
     [QBSettings setLogLevel:QBLogLevelNothing];

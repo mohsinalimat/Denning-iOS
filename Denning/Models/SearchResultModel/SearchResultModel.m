@@ -29,7 +29,7 @@
     return searchResult;
 }
 
-+ (NSArray*) getSearchResultArrayFromResponse: (NSDictionary*) response
++ (NSArray*) getSearchResultArrayFromResponse: (NSArray*) response
 {
     NSMutableArray *searchResultArray = [[NSMutableArray alloc] init];
     

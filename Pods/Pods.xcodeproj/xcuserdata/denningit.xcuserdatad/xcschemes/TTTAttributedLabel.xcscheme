@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '390334B7B3D461F7723208C29EEA4C08'
+               BlueprintIdentifier = '43C184D50641D403B84C7BBDF5B96712'
                BlueprintName = 'TTTAttributedLabel'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libTTTAttributedLabel.a'>

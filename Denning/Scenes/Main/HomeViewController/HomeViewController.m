@@ -23,6 +23,8 @@
     
   //  [self registerNibs];
     
+    NSLog(@"user info email: %@", [DataManager sharedManager].user);
+    
     [self prepareUI];
 }
 
@@ -73,21 +75,13 @@
     UITableViewCell *cell;
     if (indexPath.row == 0) {
          cell = [tableView dequeueReusableCellWithIdentifier:@"NewsUpdatesCell" forIndexPath:indexPath];
-//        cell.imageView.image = [UIImage imageNamed:@"users"];
-//        cell.textLabel.text = @"News & Update";
-//        cell.tag = indexPath.section;
 
         return cell;
     } else if (indexPath.row == 1) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"FreeCalcCell" forIndexPath:indexPath];
-      //  cell.imageView.image = [UIImage imageNamed:@"users"];
-     //   cell.textLabel.text = @"Free Feature";
-    } else if (indexPath.row == 2) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"UpcomingEventCell" forIndexPath:indexPath];
-//        cell.imageView.image = [UIImage imageNamed:@"users"];
-//        cell.textLabel.text = @"Upcomming Event";
+    } else if (indexPath.row == 2) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"FreeCalcCell" forIndexPath:indexPath];
     }
-    
     return cell;
 }
 

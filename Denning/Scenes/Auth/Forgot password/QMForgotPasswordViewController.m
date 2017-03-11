@@ -29,10 +29,68 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.emailTextField becomeFirstResponder];
+    [self.phoneNumberTextField becomeFirstResponder];
     
     // initialize the number of bad try to log in
     [QMNetworkManager sharedManager].invalidTry = @0;
+    
+    [self addTapGesture];
+}
+
+#pragma mark Private
+
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)handleTap {
+    [self.view endEditing:YES];
+}
+
+- (void)addKeyboardObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)removeKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self addKeyboardObservers];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self removeKeyboardObservers];
+    [SVProgressHUD dismiss];
+    [self.view endEditing:YES];
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShow:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f && [self.TACTextField isFirstResponder])
+    {
+        CGFloat y = -keyboardSize.height/2;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f)
+    {
+        CGFloat y = 0;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
 }
 
 #pragma mark - actions
@@ -57,6 +115,8 @@
 }
 
 - (void)resetPasswordForMail:(NSString *)emailString {
+    
+    
 
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
                                                 message:NSLocalizedString(@"QM_STR_LOADING", nil)
@@ -82,14 +142,32 @@
     }];
 }
 
+- (BOOL) validateInputsWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber
+{
+    if (email.length == 0 || phoneNumber.length == 0) {
+        
+        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil) duration:kQMDefaultNotificationDismissTime];
+        return false;
+    }
+    return true;
+}
+
 - (IBAction)requestSMS:(id)sender {
+    NSString *email = self.emailTextField.text;
+    NSString *phoneNumber = self.phoneNumberTextField.text;
+    
+    if (![self validateInputsWithEmail:email phoneNumber:phoneNumber])
+    {
+        return;
+    }
+    
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
                                                 message:NSLocalizedString(@"QM_STR_LOADING", nil)
                                                duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
     
-    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:self.emailTextField.text phoneNumber:self.phoneNumberTextField.text reason:@"from Forget Password form" withCompletion:^(BOOL success, NSString * _Nonnull error) {
+    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:email phoneNumber:phoneNumber reason:@"from Forget Password form" withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
         
         if (!success) {
             
@@ -104,6 +182,14 @@
 }
 
 - (IBAction)forgotPassword:(id)sender {
+    NSString *email = self.emailTextField.text;
+    NSString *phoneNumber = self.phoneNumberTextField.text;
+    
+    if (![self validateInputsWithEmail:email phoneNumber:phoneNumber])
+    {
+        return;
+    }
+    
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
                                                 message:NSLocalizedString(@"QM_STR_LOADING", nil)
                                                duration:0];

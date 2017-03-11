@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-            timestampString = "510114773.130935"
+            timestampString = "510526652.563884"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "-getFirmListWithCompletion:"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Cells/SearchResultCell/SearchResultCell.m"
-            timestampString = "507693048.782968"
+            timestampString = "510548209.28123"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "-configureCellWithSearchModel:"
             landmarkType = "7">
          </BreakpointContent>
@@ -161,54 +161,6 @@
             endingLineNumber = "35"
             landmarkName = "-fetchSuggestionsForIncompleteString:withCompletionBlock:"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-            timestampString = "510114773.130935"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "-getGlobalSearchFromKeyword:searchURL:forCategory:withCompletion:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[QMNetworkManager getGlobalSearchFromKeyword:searchURL:forCategory:withCompletion:]"
-                  moduleName = "Denning"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-                  timestampString = "507602157.690081"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "340">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__84-[QMNetworkManager getGlobalSearchFromKeyword:searchURL:forCategory:withCompletion:]_block_invoke"
-                  moduleName = "Denning"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-                  timestampString = "507602157.693664"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -473,11 +425,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-            timestampString = "510114773.130935"
+            timestampString = "510526652.563884"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
             landmarkName = "-getLatestEventWithCompletion:"
             landmarkType = "7">
          </BreakpointContent>
@@ -517,7 +469,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/MainTabBarController/MainTabBarController.m"
@@ -533,31 +485,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-            timestampString = "510113362.715444"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "-userSignInWithEmail:password:withCompletion:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
-            timestampString = "510113362.715444"
+            timestampString = "510526652.563884"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "-userSignInWithEmail:password:withCompletion:"
             landmarkType = "7">
          </BreakpointContent>
@@ -569,28 +505,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Auth/Forgot password/QMForgotPasswordViewController.m"
-            timestampString = "510113362.715444"
+            timestampString = "510475368.136149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "-forgotPassword:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Denning/Scenes/Auth/Login screen/QMLogInViewController.m"
-            timestampString = "510115269.230558"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "-loginWithEmail:password:"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
+            landmarkName = "-requestSMS:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -607,6 +527,675 @@
             startingLineNumber = "58"
             endingLineNumber = "58"
             landmarkName = "-done:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Auth/Forgot password/QMForgotPasswordViewController.m"
+            timestampString = "510475368.136149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-keyboardWillShow:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Auth/Forgot password/QMForgotPasswordViewController.m"
+            timestampString = "510475925.285382"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "-validateInputsWithEmail:phoneNumber:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+            timestampString = "510526652.563884"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "-userSignInWithEmail:password:withCompletion:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[QMNetworkManager userSignInWithEmail:password:withCompletion:]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848410.282086"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "452">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__64-[QMNetworkManager userSignInWithEmail:password:withCompletion:]_block_invoke"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848410.284397"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "244">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__copy_helper_block_"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848410.286384"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848410.288532"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__64-[QMNetworkManager userSignInWithEmail:password:withCompletion:]_block_invoke.263"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848410.290426"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/HomeViewController/HomeViewController.m"
+            timestampString = "510515902.946342"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Auth/NewDeviceLogin/NewDeviceLoginViewController.m"
+            timestampString = "510526652.563884"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-resendSMSTAC:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Auth/Login screen/QMLogInViewController.m"
+            timestampString = "510522964.361916"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "-loginWithEmail:password:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Auth/ChangePassword/ChangePasswordViewController.m"
+            timestampString = "510569473.329714"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "-changePassword:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510629199.084104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
+            landmarkName = "-toggleSearchType:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510629199.084104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "-displaySearchResult"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[SearchViewController displaySearchResult]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Scenes/Search/SearchViewController.m"
+                  timestampString = "510629199.714773"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "215"
+                  endingLineNumber = "215"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__43-[SearchViewController displaySearchResult]_block_invoke"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Scenes/Search/SearchViewController.m"
+                  timestampString = "510629199.717471"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "215"
+                  endingLineNumber = "215"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510812271.426435"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "315"
+            endingLineNumber = "315"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510812271.426435"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510629199.084104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "-displaySearchResult"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+            timestampString = "510622930.489079"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
+            landmarkName = "-getGlobalSearchFromKeyword:searchURL:forCategory:withCompletion:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Classes/MPAutoComplete/APIRequestOperation.m"
+            timestampString = "510809158.853247"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "-performRequestOperation:withCompletionBlock:setCompletionBlock:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[APIRequestOperation performRequestOperation:withCompletionBlock:setCompletionBlock:]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/MPAutoComplete/APIRequestOperation.m"
+                  timestampString = "510809359.23618"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "416">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__86-[APIRequestOperation performRequestOperation:withCompletionBlock:setCompletionBlock:]_block_invoke"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/MPAutoComplete/APIRequestOperation.m"
+                  timestampString = "510809359.238021"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510812271.426435"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Models/PropertyModel/PropertyModel.m"
+            timestampString = "510809800.01101"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "+getPropertyFromResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Models/PropertyModel/PropertyModel.m"
+            timestampString = "510809880.011909"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "+getPropertyFromResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+            timestampString = "510847814.407742"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
+            landmarkName = "-loadPropertyfromSearchWithCode:completion:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+            timestampString = "510809907.48403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
+            landmarkName = "-loadPropertyfromSearchWithCode:completion:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[QMNetworkManager loadPropertyfromSearchWithCode:completion:]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848128.871917"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "329"
+                  endingLineNumber = "329"
+                  offsetFromSymbolStart = "212">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__62-[QMNetworkManager loadPropertyfromSearchWithCode:completion:]_block_invoke"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Classes/Core/QMNetworkManager/QMNetworkManager.m"
+                  timestampString = "510848128.874021"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "329"
+                  endingLineNumber = "329"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510810996.252891"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "-tableView:numberOfRowsInSection:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "-loadProperty"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[PropertyViewController loadProperty]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Scenes/Search/Property/PropertyViewController.m"
+                  timestampString = "510812273.04398"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__38-[PropertyViewController loadProperty]_block_invoke"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/Denning/Denning/Scenes/Search/Property/PropertyViewController.m"
+                  timestampString = "510812273.049041"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "-registerNibs"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "-tableView:numberOfRowsInSection:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "-loadProperty"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510812271.426435"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/SearchViewController.m"
+            timestampString = "510848128.586654"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "391"
+            endingLineNumber = "391"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Property/PropertyViewController.m"
+            timestampString = "510848409.011403"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

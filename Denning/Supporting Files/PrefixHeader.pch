@@ -36,6 +36,7 @@
 #import "QMTasks.h"
 #import "DIGlobal.h"
 #import "RWDropdownMenu.h"
+#import <Realm/Realm.h>
 
 #import "AppDelegate.h"
 #import "BaseViewController.h"
@@ -44,7 +45,6 @@
 #import "NetworkErrors.h"
 #import "NetworkManagerConstants.h"
 #import "PushManager.h"
-
 
 #import "QMCore.h"
 #import "QMNetworkManager.h"
@@ -59,6 +59,7 @@
 #import "BaseNavigationController.h"
 #import "QMNavigationBar.h"
 #import "DIHelpers.h"
+#import "NSDictionary+NotNull.h"
 
 @import AutoCompletion;
 #import "APIDataSource.h"
@@ -72,6 +73,6 @@
 #import "FirmModel.h"
 #import "NewsModel.h"
 #import "EventModel.h"
-
+#import "PropertyModel.h"
 
 #endif /* PrefixHeader_pch */

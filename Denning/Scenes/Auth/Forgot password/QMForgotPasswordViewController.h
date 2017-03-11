@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QMForgotPasswordViewController : UITableViewController
+@interface QMForgotPasswordViewController : UIViewController
 
 @end

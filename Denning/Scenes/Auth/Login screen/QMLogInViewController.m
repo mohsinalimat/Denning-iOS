@@ -9,6 +9,9 @@
 #import "QMLogInViewController.h"
 #import "QMCore.h"
 #import "UINavigationController+QMNotification.h"
+#import "QMChangePasswordViewController.h"
+#import "NewDeviceLoginViewController.h"
+#import "HomeViewController.h"
 
 @interface QMLogInViewController ()
 
@@ -76,13 +79,25 @@
     
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self);
-    [[QMNetworkManager sharedManager] userSignInWithEmail:email password:password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode) {
+    [[QMNetworkManager sharedManager] userSignInWithEmail:email password:password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode, NSDictionary* responseObject) {
         
         @strongify(self)
-
+        [navigationController dismissNotificationPanel];
         if (success){
-            [navigationController dismissNotificationPanel];
-            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+            [[DataManager sharedManager] setUserInfoFromLogin:responseObject];
+            if (statusCode == 250) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self performSegueWithIdentifier:kNewDeviceSegue sender:responseObject];
+                });
+            } else if (statusCode == 280) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self performSegueWithIdentifier:kChangePasswordSegue sender:responseObject];
+                });
+            } else {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     [self performSegueWithIdentifier:kQMSceneSegueMain sender:responseObject];
+                 });
+            }
         } else {
             if (statusCode == 401) {
                 int value = [[QMNetworkManager sharedManager].invalidTry intValue];
@@ -94,9 +109,25 @@
                 }
             } 
             
-            [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error duration:kQMDefaultNotificationDismissTime];
+            [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error duration:kQMDefaultNotificationDismissTime*1.5];
         }
     }];
 }
-
+- (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
+    if ([segue.identifier isEqualToString:kQMSceneSegueMain]){
+        UINavigationController* mainNC = segue.destinationViewController;
+        UITabBarController* mainTC = [mainNC viewControllers].firstObject;
+        UINavigationController* homeNC = [mainTC viewControllers].firstObject;
+        HomeViewController* homeVC = [homeNC viewControllers].firstObject;
+        
+    }
+    
+    if ([segue.identifier isEqualToString:kNewDeviceSegue]){
+        
+    }
+    
+    if ([segue.identifier isEqualToString:kChangePasswordSegue]){
+        
+    }
+}
 @end

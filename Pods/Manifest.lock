@@ -106,6 +106,9 @@ PODS:
   - Quickblox-WebRTC (2.3.1):
     - QuickBlox (>= 2.7)
   - Reachability (3.2)
+  - Realm (2.4.2):
+    - Realm/Headers (= 2.4.2)
+  - Realm/Headers (2.4.2)
   - RWDropdownMenu (1.0.3)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -141,6 +144,7 @@ DEPENDENCIES:
   - QuickBlox
   - Quickblox-WebRTC (~> 2.3.1)
   - Reachability (~> 3.2)
+  - Realm
   - RWDropdownMenu (~> 1.0.0)
   - SDWebImage (~> 3.6)
   - SSKeychain (~> 1.2.2)
@@ -174,6 +178,7 @@ SPEC CHECKSUMS:
   QuickBlox: 69e1dace6f9fa74e39557b96e0303552654d7707
   Quickblox-WebRTC: 1f1ac580fc20a8eb862c1e3547d6ee952b680984
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  Realm: d27b758e12d62a3371879a065d4c40aa212c5a54
   RWDropdownMenu: c7fda4b7adf4f3f63a46d96359c2f490a7713795
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SSKeychain: 3f42991739c6c60a9cf1bbd4dff6c0d3694bcf3d
@@ -183,6 +188,6 @@ SPEC CHECKSUMS:
   TwitterCore: cce24b3c798993ccde72787ea79ea9a478b284e4
   UIDevice-Hardware: ecb52d9a7b223b31f81982358e2b0769ac1a7918
 
-PODFILE CHECKSUM: 7b31fcad2ca4fbf5ab3de2374ae6ce013d83fc06
+PODFILE CHECKSUM: 3bc071c8e00011fb86f4e80495b5565a54a0e3bf
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
