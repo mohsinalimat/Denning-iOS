@@ -60,7 +60,7 @@
 
     NSMutableString *strURL = [[NSMutableString alloc] init];
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        _requestURL = GENERAL_KEYWORD_SEARCH_URL;
+        _requestURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
     } else {
         _requestURL = PUBLIC_KEYWORD_SEARCH_URL;
     }

@@ -7,8 +7,9 @@
 //
 
 #import "LoanAmortisationViewController.h"
+#import "QMAlert.h"
 
-@interface LoanAmortisationViewController ()
+@interface LoanAmortisationViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *loanAmountTF;
 @property (weak, nonatomic) IBOutlet UITextField *annualInterestRateTF;
 @property (weak, nonatomic) IBOutlet UITextField *loanPeriodInYear;
@@ -35,7 +36,7 @@
 - (void) prepareUI {
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor babyRed];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
@@ -65,14 +66,21 @@
 }
 
 - (IBAction)didTapCalculate:(id)sender {
-    double P = [self.loanAmountTF.text doubleValue];
-    double r = [self.annualInterestRateTF.text doubleValue] / 100;
-    double  n = [self.loanPeriodInYear.text doubleValue] * 12;
+    if ([self.loanAmountTF.text isEqualToString:@""] || self.loanAmountTF.text.length == 0){
+        [QMAlert showAlertWithMessage:@"Please input the loan amount value or loan period in year to calculate stamp duty" actionSuccess:NO inViewController:self];
+        return;
+    }
+    
+    double P = [self getActualNumber:self.loanAmountTF.text];
+    double r = [self getActualNumber:self.annualInterestRateTF.text] / 12/100;
+    double  n = [self getActualNumber:self.loanPeriodInYear.text] * 12;
     
     double A = P * (r + r / (pow(1+r, n) - 1));
-    double total = 360 * A;
+    
     self.monthlyInslament.text = [NSString stringWithFormat:@"%.2f", A];
-//    self.totalInterest.text = [NSString stringWithFormat:@"%.2f", total];
+    self.numberOfMonths.text = [NSString stringWithFormat:@"%ld", (long)n];
+    double total = n * A - P;
+    self.totalInterest.text = [NSString stringWithFormat:@"%.2f", total];
 }
 
 - (IBAction)didTapReset:(id)sender {
@@ -82,6 +90,41 @@
     self.monthlyInslament.text = @"";
     self.numberOfMonths.text = @"";
     self.totalInterest.text = @"";
+}
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
+#pragma mark - UITexFieldDelegate
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        NSString *mystring = [self removeCommaFromString:textField.text];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        textField.text = [formatter stringFromNumber:number];
+    }
 }
 
 #pragma mark - Table view data source
@@ -102,50 +145,6 @@
     }
     return 0;
 }
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

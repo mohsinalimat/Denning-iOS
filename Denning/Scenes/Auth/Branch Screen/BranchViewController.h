@@ -10,4 +10,5 @@
 
 @interface BranchViewController : UITableViewController
 
+@property (strong, nonatomic) NSArray* firmArray;
 @end

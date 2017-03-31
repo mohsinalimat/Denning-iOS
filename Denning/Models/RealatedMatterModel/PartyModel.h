@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface PartyModel : NSObject
-
+@property (strong, nonatomic) NSString* partyCode;
+@property (strong, nonatomic) NSString* partyName;
 @end

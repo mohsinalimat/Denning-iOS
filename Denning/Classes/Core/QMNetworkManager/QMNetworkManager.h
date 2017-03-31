@@ -18,6 +18,14 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class NewsModel;
 @class EventModel;
 @class PropertyModel;
+@class ContactModel;
+@class RelatedMatterModel;
+@class BankModel;
+@class LegalFirmModel;
+@class GovOfficeModel;
+@class LedgerModel;
+@class LedgerDetailModel;
+@class DocumentModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -58,8 +66,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  @param: email
  *  @param: activation code
  */
-
-- (void) sendSMSNewDeviceWithEmail: (NSString*) email activationCode: (NSNumber*) activationCode withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode)) completion;
+//
+//- (void) sendSMSNewDeviceWithEmail: (NSString*) email activationCode: (NSNumber*) activationCode withCompletion:(void(^)(BOOL success, NSString* error , NSInteger statusCode)) completion;
 
 /*
  *  Forget Password
@@ -69,11 +77,11 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  @param: reason
  */
 
-- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion;
 
-- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion;
 
-- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion;;
+- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion;
 
 /*
  *  Forget Password
@@ -100,6 +108,18 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) getFirmListWithCompletion: (void(^)(NSArray* resultArray)) completion;
 
 /*
+ *  Secondary Log in
+ */
+
+// Denning Login
+
+-(void) denningSignIn:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* responseObject)) completion;
+
+// client login
+- (void) clientSignIn: (NSString*) url password: (NSString*) password withCompletion: (void(^)(BOOL success, NSString* error,  DocumentModel* doumentModel)) completion;
+
+
+/*
  *      Sign up
  *
  *  @param: username
@@ -119,19 +139,45 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Home Search
 
-- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion;
+- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category searchType:(NSString*)searchType withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion;
 
+// Updates
+- (void) getLatestUpdatesWithCompletion: (void(^)(NSArray* updatesArray, NSError* error)) completion;
 // News
 
-- (void) getLatestNewsWithCompletion: (void(^)(NewsModel* news, NSError* error)) completion;
+- (void) getLatestNewsWithCompletion: (void(^)(NSArray* newsArray, NSError* error)) completion;
 
 // Event
 
-- (void) getLatestEventWithCompletion: (void(^)(EventModel* event, NSError* error)) completion;
+- (void) getLatestEventWithCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
 
 // Property
 
 - (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion;
+
+// Contact
+- (void) loadContactFromSearchWithCode: (NSString*) code completion: (void(^)(ContactModel* contactModel, NSError* error)) completion;
+
+// Bank
+- (void) loadBankFromSearchWithCode: (NSString*) code completion: (void(^)(BankModel* bankModel, NSError* error)) completion;
+
+// Government Offices
+- (void) loadGovOfficesFromSearchWithCode: (NSString*) code type:(NSString*) type completion: (void(^)(GovOfficeModel* govOfficeModel, NSError* error)) completion;
+
+// Related Matter
+- (void) loadRelatedMatterWithCode: (NSString*) code completion: (void(^)(RelatedMatterModel* contactModel, NSError* error)) completion;
+
+// Legal firm (Solicitor)
+- (void) loadLegalFirmWithCode: (NSString*) code completion: (void(^)(LegalFirmModel* legalFirmModel, NSError* error)) completion;
+
+// Ledger
+- (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NSArray* ledgerModelArray, NSError* error)) completion;
+
+// Ledger detail
+- (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerDetailModelArray, NSError* error)) completion;
+
+// Document
+- (void) loadDocumentWithCode: (NSString*) code completion: (void(^)(DocumentModel* doumentModel, NSError* error)) completion;
 
 
 @end

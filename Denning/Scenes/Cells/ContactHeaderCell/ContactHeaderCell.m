@@ -8,6 +8,11 @@
 
 #import "ContactHeaderCell.h"
 
+@interface ContactHeaderCell()
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
+@end
+
 @implementation ContactHeaderCell
 
 - (void)awakeFromNib {
@@ -19,6 +24,11 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void) configureCellWithContact:(NSString*) contactID
+{
+    self.titleLabel.text = contactID;
 }
 
 @end

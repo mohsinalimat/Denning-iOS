@@ -37,6 +37,7 @@
 #import "DIGlobal.h"
 #import "RWDropdownMenu.h"
 #import <Realm/Realm.h>
+#import "ActionSheetPicker.h"
 
 #import "AppDelegate.h"
 #import "BaseViewController.h"
@@ -59,6 +60,7 @@
 #import "BaseNavigationController.h"
 #import "QMNavigationBar.h"
 #import "DIHelpers.h"
+#import "QMAlert.h"
 #import "NSDictionary+NotNull.h"
 
 @import AutoCompletion;
@@ -74,5 +76,22 @@
 #import "NewsModel.h"
 #import "EventModel.h"
 #import "PropertyModel.h"
+#import "ContactModel.h"
+#import "BankGroupModel.h"
+#import "RelatedMatterModel.h"
+#import "PartyModel.h"
+#import "PartyGroupModel.h"
+#import "SolicitorGroup.h"
+#import "GeneralGroup.h"
+#import "LegalFirmModel.h"
+#import "BankModel.h"
+#import "GovOfficeModel.h"
+#import "LedgerModel.h"
+#import "LedgerDetailModel.h"
+#import "FileModel.h"
+#import "DocumentModel.h"
+#import "FolderModel.h"
+#import "CourtModel.h"
+#import "FirmURLModel.h"
 
 #endif /* PrefixHeader_pch */

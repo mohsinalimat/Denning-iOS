@@ -10,4 +10,5 @@
 
 @interface EventViewController : UITableViewController
 
+@property (strong, nonatomic) NSArray* originalArray;
 @end

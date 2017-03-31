@@ -15,10 +15,12 @@
     BankGroupModel* bankGroupModel = [BankGroupModel new];
     bankGroupModel.bankGroupName = [response objectForKey:@"groupName"];
     if ([[response objectForKey:@"bank"] isKindOfClass:[NSNull class]]) {
-        bankGroupModel.bankCode = @"";
-        bankGroupModel.bankName = @"";
+        return nil;
     } else {
         bankGroupModel.bankCode = [[response objectForKey:@"bank"] objectForKey:@"code"];
+        if ([bankGroupModel.bankCode isKindOfClass:[NSNull class]]) {
+            bankGroupModel.bankCode = @"";
+        }
         bankGroupModel.bankName = [[response objectForKey:@"bank"] objectForKey:@"name"];
     }
     
@@ -30,7 +32,9 @@
     NSMutableArray* bankGroupArray = [NSMutableArray new];
     for (id group in response){
         BankGroupModel* model = [BankGroupModel getBankGroupFromResponse:group];
-        [bankGroupArray addObject:model];
+        if (model != nil) {
+            [bankGroupArray addObject:model];
+        }
     }
     return bankGroupArray;
 }

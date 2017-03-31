@@ -48,7 +48,7 @@
 - (void) initVariables
 {
     self.invalidTry = @0;
-    self.selectedBaseURLForGeneral = @"http://121.196.213.102:9339/";
+    self.selectedBaseURLForGeneral = @"http://43.252.215.163/";
 }
 
 - (void)initManager
@@ -58,11 +58,12 @@
     self.manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", nil];
     
     self.manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    self.manager.requestSerializer.timeoutInterval= [[[NSUserDefaults standardUserDefaults] valueForKey:@"timeoutInterval"] longValue];
+    self.manager.requestSerializer.timeoutInterval= 100;
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self.manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
     [self.manager.requestSerializer setValue:@"SkySea@denning.com.my" forHTTPHeaderField:@"webuser-id"];
+    
     
     self.session = [NSURLSession sharedSession];
     
@@ -74,10 +75,16 @@
     self.searchDataSource.requestParams = [[NSMutableDictionary alloc] init];     // Add your request parameters
 }
 
-- (void) setHTTPHeader
+- (void) setLoginHTTPHeader
 {
-    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
+    [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:@"SkySea@denning.com.my" forHTTPHeaderField:@"webuser-id"];
+}
+
+- (void) setOtherForLoginHTTPHeader
+{
+    [self.manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:@"email@com.mysdf" forHTTPHeaderField:@"webuser-id"];
 }
 
 - (NSDictionary*) buildRquestParamsFromDictionary: (NSDictionary*) dict
@@ -87,7 +94,8 @@
                                     @"ipLAN": [DIHelpers getLANIP],
                                     @"OS": [DIHelpers getOSName],
                                     @"device": [DIHelpers getDevice],
-                                    @"deviceName": [DIHelpers getDeviceName]
+                                    @"deviceName": [DIHelpers getDeviceName],
+                                    @"MAC": [DIHelpers getMAC]
                                     };
     NSMutableDictionary* mutableBasicParams = [basicParams mutableCopy];
     
@@ -108,6 +116,7 @@
                                                             @"email": email,
                                                             @"password": password}];
     
+    [self setLoginHTTPHeader];
     
     [self.manager POST:SIGNIN_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -130,7 +139,7 @@
     }];
 }
 
-- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+- (void) sendSMSForgetPasswordWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"email": email,
@@ -140,7 +149,7 @@
     [self sendSMSGeneralWithEmail:params url:FORGOT_PASSWORD_SEND_SMS_URL withCompletion:completion];
 }
 
-- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+- (void) sendSMSRequestWithEmail: (NSString*) email phoneNumber: (NSString*) phoneNumber reason:(NSString*) reason withCompletion:(void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"email": email,
@@ -150,28 +159,31 @@
     [self sendSMSGeneralWithEmail:params url:LOGIN_SEND_SMS_URL withCompletion:completion];
 }
 
-- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+- (void) sendSMSForNewDeviceWithEmail: (NSString*) email activationCode: (NSString*) activationCode withCompletion: (void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"email": email,
                                                                    @"activationCode": activationCode}];
     
-    [self setHTTPHeader];
     [self sendSMSGeneralWithEmail:params url:NEW_DEVICE_SEND_SMS_URL withCompletion:completion];
 }
 
-- (void) sendSMSGeneralWithEmail: (NSDictionary*) params url:(NSString*)url withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
+- (void) sendSMSGeneralWithEmail: (NSDictionary*) params url:(NSString*)url withCompletion:(void(^)(BOOL success, NSInteger statusCode, NSString* error, NSDictionary* response)) completion
 {
 
+    [self setLoginHTTPHeader];
+    
     [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            completion(YES, nil, responseObject);
+            NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
+            completion(YES, test.statusCode, nil, responseObject);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)
         {
-            completion(NO, error.localizedDescription, nil);
+            NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
+            completion(NO, test.statusCode, error.localizedDescription, nil);
         }
     }];
 }
@@ -180,6 +192,7 @@
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"hpNumber": phoneNumber, @"activationCode": activationCode}];
     
+    [self setLoginHTTPHeader];
     
     [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
     
@@ -200,7 +213,9 @@
 - (void) changePasswordAfterLoginWithEmail: (NSString*) email password: (NSString*) password withCompletion: (void(^)(BOOL success, NSString* error, NSDictionary* response)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"password": password}];
-    [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
+    
+    [self setOtherForLoginHTTPHeader];
+    
     [self.manager POST:CHANGE_PASSWORD_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (completion != nil) {
@@ -217,6 +232,8 @@
 
 - (void) getFirmListWithCompletion: (void(^)(NSArray* resultArray)) completion
 {
+    [self setLoginHTTPHeader];
+    
     [self.manager GET:SIGNUP_FIRM_LIST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSArray* result = [FirmModel getFirmArrayFromResponse:responseObject];
@@ -232,6 +249,45 @@
     }];
 }
 
+-(void) denningSignIn:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* responseObject)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": [DataManager sharedManager].user.email, @"password": password, @"sessionID": [DataManager sharedManager].user.sessionID}];
+    
+    [self setLoginHTTPHeader];
+    NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_SIGNIN_URL];
+    [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (completion != nil) {
+            completion(YES, nil, responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(NO, error.localizedDescription, nil);
+        }
+    }];
+}
+
+- (void) clientSignIn: (NSString*) url password:(NSString*) password withCompletion: (void(^)(BOOL success, NSString* error,  DocumentModel* doumentModel)) completion
+{
+    NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": [DataManager sharedManager].user.email, @"password": password, @"sessionID": [DataManager sharedManager].user.sessionID}];
+
+    [self setLoginHTTPHeader];
+    [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        DocumentModel* result = [DocumentModel getDocumentFromResponse:responseObject];
+        if (completion != nil) {
+            completion(YES, nil, result);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(NO, error.localizedDescription, nil);
+        }
+    }];
+}
+
 - (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email password:(NSString*) password isLayer:(NSNumber*) isLayer firmCode: (NSString*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
@@ -241,6 +297,8 @@
                                                                    @"password": password,
                                                                    @"isLawyer": isLayer,
                                                                    @"firmCode": firmCode}];
+    
+    [self setLoginHTTPHeader];
     
     [self.manager POST:SIGNUP_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -257,10 +315,20 @@
 
 // Home Search
 
-- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion
+- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category searchType:(NSString*)searchType withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion
 {
+    NSString* urlString;
+    if ([[DataManager sharedManager].searchType isEqualToString:@"Public"]){
+        [self setLoginHTTPHeader];
+        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
+    } else {
+        [self setOtherForLoginHTTPHeader];
+        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
+    }
     
-    NSString* urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
+    if ([searchType isEqualToString:@"Special"]) { // Direct Tap on the search button
+        urlString = [urlString stringByAppendingString:@"&isAutoComplete=1"];
+    }
     
     [self.manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -279,13 +347,32 @@
     }];
 }
 
-// News
+// Updates
+- (void) getLatestUpdatesWithCompletion: (void(^)(NSArray* updatesArray, NSError* error)) completion
+{
+    [self.manager GET:UPATES_LATEST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [NewsModel getNewsArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
 
-- (void) getLatestNewsWithCompletion: (void(^)(NewsModel* news, NSError* error)) completion
+// News
+- (void) getLatestNewsWithCompletion: (void(^)(NSArray* newsArray, NSError* error)) completion
 {
     [self.manager GET:NEWS_LATEST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NewsModel* result = [NewsModel getNewsFromResponse:responseObject];
+        NSArray* result = [NewsModel getNewsArrayFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }
@@ -302,11 +389,13 @@
 
 // Event
 
-- (void) getLatestEventWithCompletion: (void(^)(EventModel* event, NSError* error)) completion
+- (void) getLatestEventWithCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion
 {
+    [self setOtherForLoginHTTPHeader];
+    
     [self.manager GET:EVENT_LATEST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        EventModel* result = [EventModel getEventFromResponse:responseObject];
+        NSArray* result = [EventModel getEventsArrayFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }
@@ -326,6 +415,8 @@
 - (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion
 {
     NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Property/%@", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
@@ -333,6 +424,197 @@
         NSLog(@"%@, %@", test.allHeaderFields, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
         
         PropertyModel* result = [PropertyModel getPropertyFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Contact
+- (void) loadContactFromSearchWithCode: (NSString*) code completion: (void(^)(ContactModel* contactModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Contact/%@", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ContactModel* result = [ContactModel getCotactFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+
+}
+
+// Related Matter
+- (void) loadRelatedMatterWithCode: (NSString*) code completion: (void(^)(RelatedMatterModel* contactModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        RelatedMatterModel* result = [RelatedMatterModel getRelatedMatterFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Bank
+- (void) loadBankFromSearchWithCode: (NSString*) code completion: (void(^)(BankModel* bankModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/bank/branch/%@", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        BankModel* result = [BankModel getBankFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Government Offices
+- (void) loadGovOfficesFromSearchWithCode: (NSString*) code type:(NSString*) type completion: (void(^)(GovOfficeModel* govOfficeModel, NSError* error)) completion
+{
+    NSString *point = @"";
+    if ([type isEqualToString:@"LandOffice"]) {
+        point = @"landOffice";
+    } else {
+        point = @"PTG";
+    }
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/GovOffice/%@/%@", self.selectedBaseURLForGeneral, point, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        GovOfficeModel* result = [GovOfficeModel getGovOfficeFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Legal firm (Solicitor)
+- (void) loadLegalFirmWithCode: (NSString*) code completion: (void(^)(LegalFirmModel* legalFirmModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Solicitor/%@", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        LegalFirmModel* result = [LegalFirmModel getLegalFirmFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Ledger
+- (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NSArray* ledgerModelArray, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [LedgerModel getLedgerArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Ledger detail
+- (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerModelDetailArray, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger/%@", self.selectedBaseURLForGeneral, code, accountType];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [LedgerDetailModel getLedgerDetailArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+// Documents
+- (void) loadDocumentWithCode: (NSString*) code completion: (void(^)(DocumentModel* doumentModel, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@/fileFolder", self.selectedBaseURLForGeneral, code];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        DocumentModel* result = [DocumentModel getDocumentFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }

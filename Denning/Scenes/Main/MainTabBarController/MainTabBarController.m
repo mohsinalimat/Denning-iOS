@@ -19,6 +19,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    UIImage *img = [UIImage imageNamed:@"denning_logo_white.png"];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 30, 30)];
+    [imgView setImage:img];
+    // setContent mode aspect fit
+    [imgView setContentMode:UIViewContentModeScaleAspectFit];
+    self.navigationItem.titleView = imgView;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,14 +38,53 @@
 {
     if (!_menuItems)
     {
+        NSString* userInfo = [DataManager sharedManager].user.username;
+        if (userInfo.length == 0) {
+            userInfo = @"Login";
+        }
+        
         _menuItems =
         @[
-          [RWDropdownMenuItem itemWithText:@"Twitter" image:[UIImage imageNamed:@"icon_twitter"] action:nil],
-          [RWDropdownMenuItem itemWithText:@"Facebook" image:[UIImage imageNamed:@"icon_facebook"] action:nil],
-          [RWDropdownMenuItem itemWithText:@"Message" image:[UIImage imageNamed:@"icon_message"] action:nil],
-          [RWDropdownMenuItem itemWithText:@"Email" image:[UIImage imageNamed:@"icon_email"] action:nil],
-          [RWDropdownMenuItem itemWithText:@"Save to Photo Album" image:[UIImage imageNamed:@"icon_album"] action:nil],
-          ];
+          [RWDropdownMenuItem itemWithText:userInfo image:[UIImage imageNamed:@"icon_profile"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Home" image:[UIImage imageNamed:@"home"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Add" image:[UIImage imageNamed:@"icon_add"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Overview" image:[UIImage imageNamed:@"icon_overview"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Our Products" image:[UIImage imageNamed:@"icon_our_product"] action:^{
+            
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Help" image:[UIImage imageNamed:@"icon_help"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Settings" image:[UIImage imageNamed:@"icon_settings"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Contact Us" image:[UIImage imageNamed:@"icon_phone"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Terms of Uses" image:[UIImage imageNamed:@"icon_termsOfUses"] action:^{
+              
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Log out" image:[UIImage imageNamed:@"icon_signout"] action:^{
+              
+          }],
+        ];
     }
     return _menuItems;
 }

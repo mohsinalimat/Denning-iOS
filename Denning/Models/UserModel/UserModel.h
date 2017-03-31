@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FirmURLModel.h"
 
-@interface FirmURLModel : RLMObject
-@property NSString      *firmURL;
-@end
+//@class FirmURLModel;
+//
+//@interface FirmURLModel : RLMObject
+//
+//@end
+
+
 RLM_ARRAY_TYPE(FirmURLModel)
 
 @interface UserModel : RLMObject
@@ -19,10 +24,19 @@ RLM_ARRAY_TYPE(FirmURLModel)
 @property   NSString    *email;
 @property   NSString    *phoneNumber;
 @property   NSString    *username;
+@property   NSString    *password;
 @property   NSString    *status;
-//@property   RLMArray<FirmURLModel *><FirmURLModel>    *firmList;
+@property   NSString    *serverAPI;
 @property   NSString    *userType;
 @property   NSString    *serverURL;
 @property   NSInteger    activationCode;
 
 @end
+
+//@interface FirmURLModel()
+//
+//@property NSString      *firmServerURL;
+//@property NSString      *name;
+////@property NSString      *category;
+////@property BOOL          isActive;
+//@end

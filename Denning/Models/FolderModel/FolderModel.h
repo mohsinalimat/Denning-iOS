@@ -10,4 +10,12 @@
 
 @interface FolderModel : NSObject
 
+@property (strong, nonatomic) NSString* date;
+@property (strong, nonatomic) NSString* name;
+@property (strong, nonatomic) NSArray* folders;
+@property (strong, nonatomic) NSArray* documents;
+
++ (FolderModel*) getFolderFromResponse:(NSDictionary*) response;
+
++ (NSArray*) getFolderArrayFromResponse: (NSDictionary*) response;
 @end

@@ -11,7 +11,6 @@
 
 @interface UpdateViewController ()
 
-@property (strong, nonatomic) NSArray* newsArray;
 @property (weak, nonatomic) IBOutlet UIImageView *topImageView;
 @property (weak, nonatomic) IBOutlet UILabel *topNewsTitle;
 @property (weak, nonatomic) IBOutlet UILabel *topNewsContent;
@@ -25,6 +24,8 @@
     [super viewDidLoad];
     
     [self prepareUI];
+    [self displayLatestNewsOnTop];
+    [self registerNibs];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,6 +39,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+    self.tableView.tableFooterView = [UIView new];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 13, 23)];
     [backButton setBackgroundImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
@@ -55,12 +57,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated
-{
-    [self getLatestNewsWithCompletion:^{
-        [self registerNibs];
-        [self displayLatestNewsOnTop];
-    }];
-    
+{  
     [super viewWillAppear:animated];
 }
 
@@ -72,10 +69,10 @@
 
 - (void) displayLatestNewsOnTop
 {
-    if (self.newsArray.count == 0){
+    if (self.updatesArray.count == 0){
         return;
     }
-    NewsModel* newsModel = self.newsArray[0];
+    NewsModel* newsModel = self.updatesArray[0];
     NSURL *URL = [NSURL URLWithString:
                   [NSString stringWithFormat:@"data:application/octet-stream;base64,%@",
                    newsModel.imageData]];
@@ -96,25 +93,6 @@
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
 
-- (void) getLatestNewsWithCompletion: (void (^)(void))completion
-{
-    @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestNewsWithCompletion:^(NSArray * _Nonnull newsArray, NSError * _Nonnull error) {
-        
-        @strongify(self)
-        if (error == nil) {
-            self.newsArray = newsArray;
-            if (completion != nil) {
-                completion();
-                [self.tableView reloadData];
-            }
-            
-        } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)__unused tableView {
@@ -124,14 +102,14 @@
 
 - (NSInteger)tableView:(UITableView *)__unused tableView numberOfRowsInSection:(NSInteger)__unused section {
     
-    return [self.newsArray count]-1;
+    return [self.updatesArray count]-1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:[NewsCell cellIdentifier] forIndexPath:indexPath];
     
     cell.tag = indexPath.row;
-    [cell configureCellWithNews:self.newsArray[indexPath.row+1]];
+    [cell configureCellWithNews:self.updatesArray[indexPath.row+1]];
     
     return cell;
 }
@@ -139,7 +117,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NewsModel* news = self.newsArray[indexPath.row+1];
+    NewsModel* news = self.updatesArray[indexPath.row+1];
     NSURL* url = [NSURL URLWithString:news.URL];
     
     if (![url.scheme isEqual:@"http"] && ![url.scheme isEqual:@"https"]) {

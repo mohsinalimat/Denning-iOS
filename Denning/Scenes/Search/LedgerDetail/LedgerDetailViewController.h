@@ -10,4 +10,6 @@
 
 @interface LedgerDetailViewController : UITableViewController
 
+@property (strong, nonatomic) NSArray* ledgerDetailArray;
+
 @end

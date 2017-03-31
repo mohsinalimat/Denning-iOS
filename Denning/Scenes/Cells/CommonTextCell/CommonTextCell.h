@@ -11,5 +11,5 @@
 
 @interface CommonTextCell : DIGeneralCell
 
-- (void) configureCellWithFixeLabel: (NSString*) fixedLabel value: (NSString*) value;
+- (void) configureCellWithValue: (NSString*) value;
 @end

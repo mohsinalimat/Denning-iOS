@@ -16,6 +16,6 @@
 
 @end
 
-@interface DISignupViewController : UITableViewController
+@interface DISignupViewController : UIViewController
 
 @end

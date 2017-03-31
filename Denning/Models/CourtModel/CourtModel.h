@@ -10,4 +10,17 @@
 
 @interface CourtModel : NSObject
 
+
+// Court case information
+@property (strong, nonatomic) NSString * court;
+
+@property (strong, nonatomic) NSString * place;
+
+@property (strong, nonatomic) NSString * caseNumber;
+
+@property (strong, nonatomic) NSString * judge;
+
+@property (strong, nonatomic) NSString * SAR;
+
++ (CourtModel*) getCourtFromResponse: (NSDictionary*) response;
 @end

@@ -28,8 +28,14 @@
     newsModel.category = [response objectForKey:@"category"];
     newsModel.newsCode = [response objectForKey:@"code"];
     newsModel.fullDescription = [response objectForKey:@"fullDesc"];
-    newsModel.imageURL = [[response objectForKey:@"img"] objectForKey:@"FileName"];
-    newsModel.imageData = [[response objectForKey:@"img"] objectForKey:@"base64"];
+    if ([[response objectForKey:@"img"] isKindOfClass:[NSNull class]]) {
+        newsModel.imageURL = @"";
+        newsModel.imageData = nil;
+    } else {
+        newsModel.imageURL = [[response objectForKey:@"img"] objectForKey:@"FileName"];
+        newsModel.imageData = [[response objectForKey:@"img"] objectForKey:@"base64"];
+    }
+
     newsModel.reminder = [response objectForKey:@"reminder"];
     newsModel.shortDescription = [response objectForKey:@"shortDesc"];
     newsModel.theDateTime = [response objectForKey:@"theDateTime"];

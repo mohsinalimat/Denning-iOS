@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface ThreeFieldsCell : UITableViewCell
+@interface ThreeFieldsCell : DIGeneralCell
 
+- (void) configureCellWithValue1: (NSString*) value1 value2:(NSString*) value2 value3: (NSString*) value3;
 @end

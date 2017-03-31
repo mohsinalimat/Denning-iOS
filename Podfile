@@ -33,6 +33,8 @@ target ‘Denning’ do
 	pod 'Quickblox-WebRTC', '~> 2.3.1'
 	pod 'QuickBlox'
 
+	pod 'ActionSheetPicker-3.0'
+
 	pod 'Fabric'
 	pod 'Digits'
 	pod 'Crashlytics'

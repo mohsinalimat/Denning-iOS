@@ -24,7 +24,6 @@
 
 - (void) prepareUI
 {
-    self.title = @"Change Password";
     
     UIBarButtonItem *confirmButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStylePlain target:self action:@selector(changePassword:)];
     
@@ -35,39 +34,39 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (IBAction)changePassword:(id)sender {
     NSString *password1 = self.newpasswordTextField.text;
     NSString *password2 = self.confirmPasswordTextField.text;
     
     if (password1.length == 0 || password2.length == 0) {
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil) duration:kQMDefaultNotificationDismissTime];
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil)];
         return;
     } else if (![password1 isEqualToString:password2]){
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:@"Password should be matching" duration:kQMDefaultNotificationDismissTime];
+        [SVProgressHUD showErrorWithStatus:@"Password should be matching"];
         return;
     }
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
-    
-    __weak UINavigationController *navigationController = self.navigationController;
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
 
     [[QMNetworkManager sharedManager] changePasswordAfterLoginWithEmail:[DataManager sharedManager].user.email password:password1 withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
         @strongify(self)
-        [navigationController dismissNotificationPanel];
+        [SVProgressHUD dismiss];
         if (success){
             [[DataManager sharedManager] setUserInfoFromChangePassword:response];
             [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         }
         
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error duration:kQMDefaultNotificationDismissTime];
+        [SVProgressHUD showErrorWithStatus:error];
     }];
 }
 
 - (IBAction)skipChange:(id)sender {
+    
 }
 
 /*

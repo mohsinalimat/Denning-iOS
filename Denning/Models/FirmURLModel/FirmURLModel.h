@@ -6,11 +6,14 @@
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
-#import <Realm/Realm.h>
+@interface FirmURLModel : NSObject
 
-@interface FirmURLModel : RLMObject
+@property(strong, nonatomic) NSString      *firmServerURL;
+@property(strong, nonatomic) NSString      *name;
+@property(strong, nonatomic) DocumentModel* document;
 
-@property NSString      *firmServerURL;
-@property NSString      *name;
++ (FirmURLModel*) getFirmModelFromResponse: (NSDictionary*) response;
+
++ (NSArray*) getFirmArrayFromResponse:(NSArray*) response;
 
 @end

@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface PartyGroupModel : NSObject
-
+@property (strong, nonatomic) NSString* partyGroupName;
+@property (strong, nonatomic) PartyModel* party;
 @end

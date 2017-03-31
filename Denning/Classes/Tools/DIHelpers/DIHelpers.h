@@ -20,6 +20,13 @@
 
 + (NSString*) getDeviceName;
 
++ (NSString*) getMAC;
+
 + (NSAttributedString*) getLastRefreshingTime;
 
++ (NSString*) getDateInLongForm: (NSString*) date;
+
++ (NSString*) getDateInShortForm: (NSString*) date;
+
++ (NSString*) getTimeFromDate: (NSString*) date;
 @end

@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface ContactCell : UITableViewCell
+@interface ContactCell : DIGeneralCell
+
+- (void) configureCellWithContact:(NSString*) title text:(NSString*) text;
 
 @end

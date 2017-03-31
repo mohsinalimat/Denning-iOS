@@ -7,6 +7,12 @@
 //
 
 #import "SearchMatterCell.h"
+@interface SearchMatterCell()
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+
+@end
 
 @implementation SearchMatterCell
 
@@ -20,5 +26,22 @@
 
     // Configure the view for the selected state
 }
+
+- (void) configureCellWithSearchModel: (SearchResultModel*) model
+{
+    self.titleLabel.text = model.title;
+    self.headerLabel.text = model.indexData;
+    self.descriptionLabel.text = model.description;
+}
+
+- (IBAction)fileFolderTapped:(id)sender {
+    [self.delegate didTapFileFolder:self];
+}
+
+- (IBAction)ledgerTapped:(id)sender {
+    [self.delegate didTapLedger:self];
+}
+
+
 
 @end

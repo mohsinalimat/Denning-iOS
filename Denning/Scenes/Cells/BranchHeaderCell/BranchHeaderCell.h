@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface BranchHeaderCell : UITableViewCell
+@protocol BranchHeaderDelegate;
+
+@interface BranchHeaderCell : DIGeneralCell
+@property (weak, nonatomic) id<BranchHeaderDelegate> delegate;
+
+- (void) configureCellWithTitle:(NSString*) title;
+@end
+
+
+@protocol BranchHeaderDelegate <NSObject>
+
+- (void) didBackBtnTapped: (BranchHeaderCell*) cell;
 
 @end

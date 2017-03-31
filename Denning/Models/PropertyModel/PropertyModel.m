@@ -10,7 +10,8 @@
 
 @implementation PropertyModel
 @synthesize fullTitle;
-@synthesize lotpt;
+@synthesize lotptType;
+@synthesize lotptValue;
 @synthesize address;
 @synthesize area;
 @synthesize relatedMatter;
@@ -18,15 +19,46 @@
 + (PropertyModel*) getPropertyFromResponse: (NSDictionary*) response
 {
     PropertyModel* propertyModel = [PropertyModel new];
+    propertyModel.key = [response objectForKey:@"code"];
+    if ([[response objectForKey:@"code"] isKindOfClass:[NSNull class]]) {
+        propertyModel.key = @"";
+    }
+
     propertyModel.fullTitle = [response objectForKey:@"fullTitle"];
+    if ([[response objectForKey:@"fullTitle"] isKindOfClass:[NSNull class]]) {
+        propertyModel.fullTitle = @"";
+    }
     NSDictionary* lotptObject = [response objectForKey:@"lotPt"];
-    propertyModel.lotpt = [NSString stringWithFormat:@"%@(%@)", [lotptObject objectForKey:@"type"], [lotptObject objectForKey:@"value"]];
+    propertyModel.lotptType = [lotptObject objectForKey:@"type"];
+    if ([[response objectForKey:@"lotPt"] isKindOfClass:[NSNull class]]) {
+        propertyModel.lotptType = @"";
+    }
+    propertyModel.lotptValue = [lotptObject objectForKey:@"value"];
+    if ([[response objectForKey:@"value"] isKindOfClass:[NSNull class]]) {
+        propertyModel.lotptValue = @"";
+    }
     NSDictionary* areaObject = [response objectForKey:@"area"];
     propertyModel.area = [NSString stringWithFormat:@"%@(%@)", [areaObject objectForKey:@"type"], [areaObject objectForKey:@"value"]];
     propertyModel.address = [response objectForKey:@"address"];
+    if ([[response objectForKey:@"address"] isKindOfClass:[NSNull class]]) {
+        propertyModel.address = @"";
+    }
     propertyModel.relatedMatter = [SearchResultModel getSearchResultArrayFromResponse:[response objectForKey:@"relatedMatter"]];
-    
+    propertyModel.matterDescription = @"";
+    for(SearchResultModel* model in propertyModel.relatedMatter) {
+        propertyModel.matterDescription = [NSString stringWithFormat:@"%@, %@", propertyModel.matterDescription, model.key];
+    }
+
     return propertyModel;
 }
 
++(NSArray*) getPropertyArrayFromResponse: (NSDictionary*) response
+{
+    NSMutableArray* propertyArray = [NSMutableArray new];
+    for (id object in response) {
+        PropertyModel* propertyModel = [PropertyModel getPropertyFromResponse:object];
+        [propertyArray addObject:propertyModel];
+    }
+    return propertyArray;
+}
 @end

@@ -24,8 +24,6 @@
 
 @optional
 
-- (void) didTapFileFolder: (SearchResultCell*) cell;
-
-- (void) didTapLedger: (SearchResultCell*) cell;
+- (void) didTapMatter: (SearchResultCell*) cell;
 
 @end

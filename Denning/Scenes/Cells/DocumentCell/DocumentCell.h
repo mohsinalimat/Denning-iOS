@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface DocumentCell : UITableViewCell
+@interface DocumentCell : DIGeneralCell
 
+- (void) configureCellWithFileModel: (FileModel*) model;
 @end

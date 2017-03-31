@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UpdateViewController : UITableViewController
-
+@property (strong, nonatomic) NSArray* updatesArray;
 @end

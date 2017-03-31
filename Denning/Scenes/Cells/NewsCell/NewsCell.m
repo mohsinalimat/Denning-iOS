@@ -34,7 +34,17 @@
 {
     self.titleLabel.text = news.title;
     self.shortDestriptionLabel.text = news.shortDescription;
-    self.dateLabel.text = news.theDateTime;
+    self.dateLabel.text = [DIHelpers getDateInShortForm:news.theDateTime];
+    
+    NSURL *URL = [NSURL URLWithString:
+                  [NSString stringWithFormat:@"data:application/octet-stream;base64,%@",
+                   news.imageData]];
+    NSData* imageData = [NSData dataWithContentsOfURL:URL];
+    if (imageData != nil) {
+        self.newsImageView.image = [UIImage imageWithData:imageData];
+    } else {
+        self.newsImageView.image = [UIImage imageNamed:@"law-firm.jpg"];
+    }
 }
 
 @end

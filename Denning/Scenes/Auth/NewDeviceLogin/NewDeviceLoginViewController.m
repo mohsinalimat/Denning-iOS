@@ -10,6 +10,7 @@
 
 @interface NewDeviceLoginViewController()
 @property (weak, nonatomic) IBOutlet UITextField *TACTextField;
+@property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 
 @end
 
@@ -19,61 +20,98 @@
 {
     [super viewDidLoad];
     [self prepareUI];
+    [self addTapGesture];
 }
 
 - (void) prepareUI
 {
-    self.title = @"New Device Login";
-   
-    UIBarButtonItem *confirmButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Confirm" style:UIBarButtonItemStylePlain target:self action:@selector(confirmTAC)];
-    
-    [self.navigationItem setRightBarButtonItems:@[ confirmButtonItem] animated:YES];
+    self.phoneNumberLabel.text = [DataManager sharedManager].user.phoneNumber;
 }
 
-- (void) confirmTAC {
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
+    tap.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)handleTap {
+    [self.view endEditing:YES];
+}
+
+- (IBAction)confirmTAC:(id)sender  {
     if (self.TACTextField.text.length < 1){
+        [QMAlert showAlertWithMessage:@"Please input the TAC" actionSuccess:NO inViewController:self];
         return;
     }
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
-    
-    __weak UINavigationController *navigationController = self.navigationController;
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
-    [[QMNetworkManager sharedManager] sendSMSForNewDeviceWithEmail:[DataManager sharedManager].user.email activationCode:self.TACTextField.text withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
+    [[QMNetworkManager sharedManager] sendSMSForNewDeviceWithEmail:[DataManager sharedManager].user.email activationCode:self.TACTextField.text withCompletion:^(BOOL success, NSInteger statusCode, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
         @strongify(self);
         if (!success) {
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:error];
         }
         else {
             [[DataManager sharedManager] setUserInfoFromNewDeviceLogin:response];
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
-            [self performSegueWithIdentifier:kChangePasswordSegue sender:nil];
+            if (statusCode == 200) {
+                [self manageUserType];
+            } else {
+                [self performSegueWithIdentifier:kChangePasswordSegue sender:nil];
+            }
         }
     }];
+}
+
+- (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+    });
+}
+
+- (void) manageFirmURL: (NSArray*) firmURLArray {
+    if (firmURLArray.count == 1) {
+        [self registerURLAndGotoMain:firmURLArray[0]];
+    } else {
+        [self performSegueWithIdentifier:kBranchSegue sender:firmURLArray];
+    }
+}
+
+- (void) manageUserType {
+    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+        [DataManager sharedManager].seletedUserType = @"Denning";
+        [self manageFirmURL:[DataManager sharedManager].denningArray];
+    } else if ([DataManager sharedManager].personalArray.count > 0) {
+        [DataManager sharedManager].seletedUserType = @"Personal";
+        [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
+    } else {
+        [DataManager sharedManager].seletedUserType = @"Public";
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+        });
+    }
 }
 
 - (IBAction)resendSMSTAC:(id)sender {
     self.TACTextField.text = @"";
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
-    
-    __weak UINavigationController *navigationController = self.navigationController;
+   [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
 
-    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:[DataManager sharedManager].user.email phoneNumber:[DataManager sharedManager].user.phoneNumber reason:@"from new device login" withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
+    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:[DataManager sharedManager].user.email phoneNumber:[DataManager sharedManager].user.phoneNumber reason:@"from new device login" withCompletion:^(BOOL success, NSInteger statusCode, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
 
         if (!success) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:error];
         }
         else {
             [[DataManager sharedManager] setUserInfoFromNewDeviceLogin:response];
-            
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showWithStatus:@"SMS is sent to your phone"];
         }
     }];
 }

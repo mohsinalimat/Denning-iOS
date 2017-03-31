@@ -7,8 +7,13 @@
 //
 
 #import "LedgerViewController.h"
+#import "LedgerDetailViewController.h"
+#import "LedgerCell.h"
 
 @interface LedgerViewController ()
+{
+    __block BOOL isLoading;
+}
 
 @end
 
@@ -17,11 +22,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self registerNibs];
+    if (self.previousScreen.length != 0) {
+        [self prepareUI];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,70 +33,103 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) prepareUI {
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    
+    [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
+    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+}
+
+- (void) popupScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)registerNibs {
+    [LedgerCell registerForReuseInTableView:self.tableView];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    
+    return self.ledgerArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    return 1;
 }
 
-/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (isLoading) return;
+    isLoading = YES;
+    LedgerModel* model = self.ledgerArray[indexPath.row];
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadLedgerDetailWithCode:self.matterCode accountType:model.accountType completion:^(NSArray * _Nonnull ledgerDetailModelArray, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kLedgerDetailSearchSegue sender:ledgerDetailModelArray];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    LedgerModel* ledgerModel = self.ledgerArray[section];
+    return ledgerModel.accountName;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    // Configure the cell...
+    LedgerCell *cell = [tableView dequeueReusableCellWithIdentifier:[LedgerCell cellIdentifier] forIndexPath:indexPath];
     
+    [cell configureCellWithLedger:self.ledgerArray[indexPath.section]];
+
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:kLedgerDetailSearchSegue]){
+        LedgerDetailViewController* ledgerDetailVC = segue.destinationViewController;
+        ledgerDetailVC.ledgerDetailArray = sender;
+    }
 }
-*/
 
 @end

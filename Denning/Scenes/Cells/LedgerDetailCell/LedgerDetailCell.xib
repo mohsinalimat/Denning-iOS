@@ -1,19 +1,69 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
+        </array>
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="LedgerDetailCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="110" id="KGk-i7-Jjw" customClass="LedgerDetailCell">
+            <rect key="frame" x="0.0" y="0.0" width="491" height="110"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <frame key="frameInset" width="320" height="43"/>
+                <rect key="frame" x="0.0" y="0.0" width="491" height="109"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Document No" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dR0-VQ-ERx">
+                        <rect key="frame" x="16" y="16" width="105.5" height="19"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxv-GT-pbB">
+                        <rect key="frame" x="16" y="43" width="105.5" height="50"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="19"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uMP-SL-Db6">
+                        <rect key="frame" x="417.5" y="16" width="53.5" height="18"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="15"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="dR0-VQ-ERx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="JR8-7j-cPQ"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="uxv-GT-pbB" secondAttribute="bottom" constant="8" id="JUO-KI-6Mi"/>
+                    <constraint firstItem="uxv-GT-pbB" firstAttribute="leading" secondItem="dR0-VQ-ERx" secondAttribute="leading" id="S8B-c7-jpT"/>
+                    <constraint firstItem="uMP-SL-Db6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dR0-VQ-ERx" secondAttribute="trailing" constant="50" id="WZq-DJ-ZvQ"/>
+                    <constraint firstItem="uMP-SL-Db6" firstAttribute="top" secondItem="dR0-VQ-ERx" secondAttribute="top" id="YPJ-GX-Cpp"/>
+                    <constraint firstItem="uxv-GT-pbB" firstAttribute="trailing" secondItem="dR0-VQ-ERx" secondAttribute="trailing" id="Z86-2y-4mV"/>
+                    <constraint firstItem="dR0-VQ-ERx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="dcp-UF-zC1"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="uMP-SL-Db6" secondAttribute="trailing" constant="12" id="jpj-eO-FXT"/>
+                    <constraint firstItem="uxv-GT-pbB" firstAttribute="top" secondItem="dR0-VQ-ERx" secondAttribute="bottom" constant="8" id="zL5-VO-gN5"/>
+                </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="amount" destination="uMP-SL-Db6" id="zYq-gK-Iin"/>
+                <outlet property="descriptionLabel" destination="uxv-GT-pbB" id="a9q-qK-tRb"/>
+                <outlet property="documentNo" destination="dR0-VQ-ERx" id="3B0-Nv-bad"/>
+            </connections>
+            <point key="canvasLocation" x="297.5" y="-90"/>
         </tableViewCell>
     </objects>
 </document>

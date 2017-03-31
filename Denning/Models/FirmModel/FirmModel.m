@@ -56,4 +56,17 @@
     return firmArray;
 }
 
++ (NSArray*) getFirmNameArrayFromResponse: (NSDictionary*) response
+{
+    NSMutableArray *firmArray = [[NSMutableArray alloc] init];
+    
+    if ([response isKindOfClass:[NSArray class]]) {
+        for (NSDictionary* dictionary in response) {
+            [firmArray addObject:[FirmModel getFirmModelFromResponse:dictionary].name];
+        }
+    }
+    
+    return firmArray;
+}
+
 @end

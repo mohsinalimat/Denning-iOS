@@ -43,17 +43,6 @@
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
     NSDate *pickerDate = [_datePicker date];
     
-//    NSDate *restrctDate = [dateFormat dateFromString:@"2001-01-01"];
-//    
-//    if ([pickerDate compare:restrctDate] == NSOrderedDescending) {
-//        [QMAlert showAlertWithMessage:@"Sorry you must be born before 12/31/2000 to use this app" actionSuccess:NO inViewController:self];
-//        return;
-//    }
-
-//    [QMNetworkManager sharedManager].installDate = [dateFormat stringFromDate:pickerDate];
-  //  [dateFormat setDateFormat:@"yyyy-MM-dd"];
- //   [QMNetworkManager sharedManager].installDateTemp = [dateFormat stringFromDate:pickerDate];
-    
     if ([self.typeOfDate isEqualToString:@"Date of Disposal"]) {
         [self.realVC updateDateOfDisposal:[dateFormat stringFromDate:pickerDate]];
     } else {

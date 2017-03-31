@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ContactViewController : UIViewController
+@interface ContactViewController : UITableViewController
 
-@property (strong, nonatomic) NSDictionary* responseCell;
+@property (strong, nonatomic) ContactModel* contactModel;
+@property (strong, nonatomic) NSString* previousScreen;
+
 @end

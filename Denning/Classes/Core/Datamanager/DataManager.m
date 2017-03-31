@@ -7,6 +7,7 @@
 //
 
 #import "DataManager.h"
+#import "FirmURLModel.h"
 
 @interface DataManager()
 
@@ -14,7 +15,11 @@
 
 @implementation DataManager
 @synthesize user;
+@synthesize denningArray;
+@synthesize bussinessArray;
+@synthesize personalArray;
 @synthesize searchType;
+@synthesize documentView;
 
 + (DataManager *)sharedManager {
     static DataManager *manager = nil;
@@ -31,48 +36,80 @@
     self = [super init];
     
     if (self) {
-        searchType = @"General";
-//        RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
-//        configuration.fileURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"IT.Denning"] URLByAppendingPathComponent:@"Denning.realm"];
-//        [RLMRealmConfiguration setDefaultConfiguration:configuration];
-//        [[NSFileManager defaultManager] removeItemAtURL:[RLMRealmConfiguration defaultConfiguration].fileURL error:nil];
+        searchType = @"Public";
+        documentView = @"nothing";
+        user = [UserModel allObjects].firstObject;
+        if (!user) {
+            [[RLMRealm defaultRealm] transactionWithBlock:^{
+                user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"",  @"", @"", @"", @"", @"", @"", @0]];
+            }];
+        }
     }
     
     return self;
 }
 
+- (void) getFirmServerArrayFromResponse: (NSDictionary*) response {
+    self.denningArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catDenning"]];
+    self.bussinessArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catBussiness"]];
+    self.personalArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catPersonal"]];
+}
+
+- (NSString*) determineUserType
+{
+    NSString* type;
+    if (self.denningArray.count > 0) {
+        type = @"denning";
+    } else if (self.personalArray.count > 0) {
+        type = @"personal";
+    } else {
+        type = @"";
+    }
+    return type;
+}
+
 - (void) setUserInfoFromLogin: (NSDictionary*) response
 {
-    user = [UserModel allObjects].firstObject;
-    if (!user) {
-        [[RLMRealm defaultRealm] transactionWithBlock:^{
-            user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"", @"", @"", @"", @"", @0]];
-        }];
-    }
+    [self getFirmServerArrayFromResponse:response];
     
     [[RLMRealm defaultRealm] transactionWithBlock:^{
         user.email = [response objectForKeyNotNull:@"email"];
         user.phoneNumber = [response objectForKeyNotNull:@"hpNumber"];
-        //    user.firmList = [response objectForKeyNotNull:@"firmList"];
         user.userType = [response objectForKeyNotNull:@"userType"];
         user.sessionID = [response objectForKeyNotNull:@"sessionID"];
         user.status = [response objectForKeyNotNull:@"status"];
         user.username = [response objectForKeyNotNull:@"name"];
+        user.userType = [self determineUserType];
+    }];
+}
+
+- (void) setUserPassword: (NSString*) password
+{
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        user.password = password;
     }];
 }
 
 - (void) setUserInfoFromNewDeviceLogin: (NSDictionary*) response
 {
+    [self getFirmServerArrayFromResponse:response];
+    
     [[RLMRealm defaultRealm] transactionWithBlock:^{
-//        user.firmList = [response objectForKey:@"firmList"];
         user.status = [response objectForKeyNotNull:@"status"];
-        user.userType = [response objectForKeyNotNull:@"userType"];
+        user.userType = [self determineUserType];
     }];
 }
 
 - (void) setUserInfoFromChangePassword: (NSDictionary*) response
 {
     [self setUserInfoFromNewDeviceLogin:response];
+}
+
+- (void) setServerAPI: (NSString*) serverAPI
+{
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        user.serverAPI = serverAPI;
+    }];
 }
 
 @end

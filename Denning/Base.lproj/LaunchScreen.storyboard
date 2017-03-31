@@ -21,17 +21,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Denning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TNF-tW-i1L">
-                                <rect key="frame" x="116" y="312.5" width="143" height="43"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="36"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="splash_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="1Hy-vG-eGo">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="splash_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="AVI-hu-fRc">
+                                <rect key="frame" x="117" y="277" width="142" height="113"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="TNF-tW-i1L" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="o3t-vm-qZH"/>
-                            <constraint firstItem="TNF-tW-i1L" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="pXG-tS-Pjr"/>
+                            <constraint firstAttribute="bottom" secondItem="1Hy-vG-eGo" secondAttribute="bottom" id="JWH-a9-aaK"/>
+                            <constraint firstAttribute="trailing" secondItem="1Hy-vG-eGo" secondAttribute="trailing" id="Wnk-9B-jzl"/>
+                            <constraint firstItem="1Hy-vG-eGo" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="dtU-0J-i5e"/>
+                            <constraint firstItem="AVI-hu-fRc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="gBB-Fg-ezP"/>
+                            <constraint firstItem="1Hy-vG-eGo" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="jkK-hH-K4D"/>
+                            <constraint firstItem="AVI-hu-fRc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="kiW-Wd-zmr"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,4 +44,8 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="splash_background.png" width="375" height="667"/>
+        <image name="splash_logo.png" width="142" height="113"/>
+    </resources>
 </document>

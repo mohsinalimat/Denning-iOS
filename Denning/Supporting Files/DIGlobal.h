@@ -39,6 +39,12 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define NEW_DEVICE_SEND_SMS_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/newDevice"
 
+#define DENNING_SIGNIN_URL  @"/denningwcf/v1/app/staffLogin"
+
+#define DENNING_CLIENT_SIGNIN @"denningwcf/v1/app/clientLogin"
+
+#define DENNING_CLIENT_FIRST_SIGNIN @"denningwcf/v1/app/clientLogin/first"
+
 #define SIGNUP_FIRM_LIST_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/Solicitor"
 
 #define SIGNUP_URL  @"http://denningsoft.dlinkddns.com/denningwcf/v1/signUp"
@@ -47,16 +53,18 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define Auth_ACTIVATION_URL @"http://denningsoft.dlinkddns.com/denningwcf/v1/signUp/activate"
 
-#define GENERAL_KEYWORD_SEARCH_URL  @"http://121.196.213.102:9339/denningwcf/v1/generalSearch/keyword?search="
+#define GENERAL_KEYWORD_SEARCH_URL  @"denningwcf/v1/generalSearch/keyword?search="
 
-#define GENERAL_SEARCH_URL   @"http://121.196.213.102:9339/denningwcf/v1/generalSearch?search="
+#define GENERAL_SEARCH_URL   @"denningwcf/v1/generalSearch?search="
 
 #define PUBLIC_KEYWORD_SEARCH_URL   @"http://denningsoft.dlinkddns.com/denningwcf/v1/publicSearch/keyword?search="
 
 #define PUBLIC_SEARCH_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/publicSearch?search="
 
-#define NEWS_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningNews/1"
+#define UPATES_LATEST_URL   @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningUpdate"
 
-#define EVENT_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningEvent/1"
+#define NEWS_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningNews"
+
+#define EVENT_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningEvent"
 
 #endif /* PreHeader_h */

@@ -10,6 +10,6 @@
 
 @interface PropertyViewController : UITableViewController
 
-@property (strong, nonatomic) SearchResultModel* responseCell;
-
+@property (strong, nonatomic) PropertyModel* propertyModel;
+@property (strong, nonatomic) NSString* previousScreen;
 @end

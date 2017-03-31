@@ -10,4 +10,5 @@
 
 @interface DocumentPreviewController : UIViewController
 
+@property (strong, nonatomic) NSString* documentURL;
 @end

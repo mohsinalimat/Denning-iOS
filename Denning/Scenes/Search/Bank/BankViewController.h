@@ -10,4 +10,7 @@
 
 @interface BankViewController : UITableViewController
 
+@property (strong, nonatomic) BankModel* bankModel;
+@property (strong, nonatomic) NSString* previousScreen;
+
 @end

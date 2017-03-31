@@ -11,7 +11,6 @@
 
 @interface NewsViewController ()
 
-@property (strong, nonatomic) NSArray* newsArray;
 @property (weak, nonatomic) IBOutlet UIImageView *topImageView;
 @property (weak, nonatomic) IBOutlet UILabel *topNewsTitle;
 @property (weak, nonatomic) IBOutlet UILabel *topNewsContent;
@@ -24,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self prepareUI];
+    [self registerNibs];
+    [self displayLatestNewsOnTop];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,11 +34,6 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self getLatestNewsWithCompletion:^{
-        [self registerNibs];
-        [self displayLatestNewsOnTop];
-    }];
-    
     [super viewWillAppear:animated];
 }
 
@@ -52,6 +48,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+    self.tableView.tableFooterView = [UIView new];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 13, 23)];
     [backButton setBackgroundImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
@@ -95,24 +92,6 @@
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
 
-- (void) getLatestNewsWithCompletion: (void (^)(void))completion
-{
-    @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestNewsWithCompletion:^(NSArray * _Nonnull newsArray, NSError * _Nonnull error) {
-        
-        @strongify(self)
-        if (error == nil) {
-            self.newsArray = newsArray;
-            if (completion != nil) {
-                completion();
-                [self.tableView reloadData];
-            }
-            
-        } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
-}
 
 #pragma mark - Table view data source
 

@@ -7,12 +7,14 @@
 //
 
 #import "TenancyViewController.h"
+#import "QMAlert.h"
 
 @interface TenancyViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *monthlyRentTextField;
-@property (weak, nonatomic) IBOutlet UILabel *annualRentLabel;
+@property (weak, nonatomic) IBOutlet UITextField *annualRentLabel;
 @property (weak, nonatomic) IBOutlet UITextField *termsOfTenancyTextField;
 @property (weak, nonatomic) IBOutlet UITextField *resultTextField;
+@property (weak, nonatomic) IBOutlet UITextField *legalCostTextField;
 
 @end
 
@@ -35,7 +37,7 @@
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor babyRed];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
@@ -47,6 +49,52 @@
 
 - (void)handleTap {
     [self.view endEditing:YES];
+}
+
+- (void) addCommaToStaticTF {
+    
+}
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
+- (NSString*) getCommaSeparatedValue: (NSString*) string{
+    NSString *mystring = [self removeCommaFromString:string];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    return [formatter stringFromNumber:number];
+}
+
+#pragma mark - UITexFieldDelegate
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        textField.text = [self getCommaSeparatedValue:textField.text];
+    }
+    
+    self.annualRentLabel.text = [NSString stringWithFormat:@"%.2f", [self getActualNumber:self.monthlyRentTextField.text] * 12];
 }
 
 #pragma mark - Table view data source
@@ -69,20 +117,74 @@
 }
 
 - (IBAction)didTapCalculate:(id)sender {
-    if ([self.annualRentLabel.text floatValue] <= 2400){
+    if ([self.monthlyRentTextField.text isEqualToString:@""]){
+        [QMAlert showAlertWithMessage:@"Please input the monthly rent to calculate stamp duty" actionSuccess:NO inViewController:self];
+        return;
+    }
+    
+    if ([self.termsOfTenancyTextField.text isEqualToString:@""]){
+        [QMAlert showAlertWithMessage:@"Please input the terms of tenancy to calculate stamp duty" actionSuccess:NO inViewController:self];
+        return;
+    }
+
+    if ([self getActualNumber:self.annualRentLabel.text] <= 2400){
         self.resultTextField.text = @"0";
         return;
     }
     
-    double actualValue = [self.annualRentLabel.text floatValue]/250;
-    if ([self.termsOfTenancyTextField.text isEqual:@"1"]){
+    double actualValue = [self getActualNumber:self.annualRentLabel.text]/250;
+    if ([self getActualNumber:self.termsOfTenancyTextField.text] == 1){
         self.resultTextField.text = [NSString stringWithFormat:@"%.2f", actualValue];
-    } else if ([self.termsOfTenancyTextField.text integerValue] < 4) {
+    } else if ([self getActualNumber:self.termsOfTenancyTextField.text] < 4) {
         self.resultTextField.text = [NSString stringWithFormat:@"%.2f", actualValue * 2];
     } else {
         self.resultTextField.text = [NSString stringWithFormat:@"%.2f", actualValue * 4];
     }
     
+    // calculate the legal cost
+    double priceValue = [self getActualNumber:self.annualRentLabel.text];
+    double legalCost = 0;
+    if (priceValue  >= 500000) {
+        legalCost  += 500000* 0.01;
+    } else {
+        legalCost  += priceValue * 0.01;
+        legalCost = MAX(legalCost,500);
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 500000){
+        legalCost  += priceValue *0.008;
+    } else if (priceValue  >= 500000) {
+        legalCost  += 500000*0.008;
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.007;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.007;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.006;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.006;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2500000){
+        legalCost  += priceValue *0.005;
+    } else if (priceValue  >= 2500000) {
+        legalCost  += 2500000*0.005;
+    }
+    priceValue  -= 2500000;
+    
+    if (priceValue > 0) {
+        [QMAlert showAlertWithMessage:@"There will be a negotiation for the legal cost with such amount of money" actionSuccess:YES inViewController:self];
+    }
+    
+    self.legalCostTextField.text = [NSString stringWithFormat:@"%.2f", legalCost];
 }
 
 - (IBAction)didTapReset:(id)sender {
@@ -90,66 +192,7 @@
     self.annualRentLabel.text = @"";
     self.termsOfTenancyTextField.text = @"";
     self.resultTextField.text = @"";
+    self.legalCostTextField.text = @"";
 }
-
-#pragma mark - UITextField delegate
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    self.annualRentLabel.text = [NSString stringWithFormat:@"%.2f", [self.monthlyRentTextField.text floatValue] * 12];
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -10,4 +10,7 @@
 
 @interface GovernmentOfficesViewController : UITableViewController
 
+@property (strong, nonatomic) GovOfficeModel* govOfficeModel;
+@property (strong, nonatomic) NSString* previousScreen;
+
 @end

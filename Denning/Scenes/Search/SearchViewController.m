@@ -9,17 +9,37 @@
 #import "SearchViewController.h"
 #import <HTHorizontalSelectionList/HTHorizontalSelectionList.h>
 #import "SearchResultCell.h"
+#import "SearchMatterCell.h"
+#import "SearchDocumentCell.h"
 #import "ContactViewController.h"
 #import "RelatedMatterViewController.h"
 #import "PropertyViewController.h"
+#import "LegalFirmViewController.h"
+#import "GovernmentOfficesViewController.h"
+#import "LedgerViewController.h"
+#import "DocumentViewController.h"
 
-@interface SearchViewController ()<UITextFieldDelegate, AutoCompletionTextFieldDelegate, UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate>
+typedef NS_ENUM(NSInteger, DISearchCellType) {
+    DIContactCell = 1,
+    DIRelatedMatterCell = 2,
+    DIPropertyCell = 4,
+    DIBankCell = 8,
+    DIGovernmentLandOfficesCell = 16,
+    DIGovernmentPTGOfficesCell = 17,
+    DILegalFirmCell = 32,
+    DIDocumentCell = 128,
+};
+
+@interface SearchViewController ()<UITextFieldDelegate, AutoCompletionTextFieldDelegate, UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate, SearchDelegate, SearchMatterDelegate, SearchDocumentDelegate>
 {
     NSInteger category;
     NSString* keyword;
     NSString* searchURL;
     NSArray* generalKeyArray;
     NSMutableArray* generalValueArray;
+    __block BOOL isLoading;
+    NSString* _matterCode;
+    NSString* searchType;
 }
 
 @property (weak, nonatomic) IBOutlet AutoCompletionTextField *searchTextField;
@@ -30,6 +50,7 @@
 @property (nonatomic, strong) NSDictionary *publicSearchFilters;
 @property (weak, nonatomic) IBOutlet UIButton *searchTypeBtn;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchContainerHeight;
 
 @property (strong, nonatomic) NSMutableArray* searchResultArray;
 
@@ -54,14 +75,13 @@
 
 - (void) prepareSearchTextField
 {
-    [QMNetworkManager sharedManager].searchDataSource.requestURL = GENERAL_KEYWORD_SEARCH_URL;
+    [QMNetworkManager sharedManager].searchDataSource.requestURL = PUBLIC_KEYWORD_SEARCH_URL;
     [QMNetworkManager sharedManager].searchDataSource.manager = [QMNetworkManager sharedManager].manager;
     
     self.searchTextField.suggestionsResultDataSource = [QMNetworkManager sharedManager].searchDataSource;
     self.searchTextField.suggestionsResultDelegate = self;
     self.searchTextField.delegate = self;
     self.searchTextField.backgroundColor = [UIColor whiteColor];
-    self.searchTextField.clearButtonMode = UITextFieldViewModeNever;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -139,8 +159,8 @@
     self.selectionList.showsEdgeFadeEffect = YES;
    // self.selectionList.snapToCenter = YES;
     
-    self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"2196F3"];
-    [self.selectionList setTitleColor:[UIColor colorWithHexString:@"2196F3"] forState:UIControlStateHighlighted];
+    self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"FF3B2F"];
+    [self.selectionList setTitleColor:[UIColor colorWithHexString:@"FF3B2F"] forState:UIControlStateHighlighted];
     [self.selectionList setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.selectionList setTitleFont:[UIFont systemFontOfSize:17] forState:UIControlStateNormal];
     [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateSelected];
@@ -151,12 +171,17 @@
     self.selectionList.hidden = YES;
     self.selectionList.backgroundColor = [UIColor clearColor];
     
-    category = 1;
+    category = 0;
+    
+    // control search contrainer view
+    self.searchContainerHeight.constant = 44;
 }
 
 - (void)registerNibs {
     
     [SearchResultCell registerForReuseInTableView:self.tableView];
+    [SearchMatterCell registerForReuseInTableView:self.tableView];
+    [SearchDocumentCell registerForReuseInTableView:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
@@ -190,16 +215,18 @@
     self.searchTextField.hidden = NO;
 }
 
-- (IBAction)eraseSearchBox:(id)sender {
-}
-
-
 - (IBAction)toggleSearchType:(UIButton*)sender {
+    if (![[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+        return;
+    }
+    
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+        [self.searchTypeBtn setTitle:@"Public" forState:UIControlStateNormal];
         [DataManager sharedManager].searchType = @"Public";
         category = -1;
     } else {
         [DataManager sharedManager].searchType = @"General";
+        [self.searchTypeBtn setTitle:@"General" forState:UIControlStateNormal];
         category = 0;
     }
 
@@ -215,7 +242,7 @@
 {
     @weakify(self)
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
-    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:searchURL forCategory:category withCompletion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
+    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:searchURL forCategory:category searchType:searchType withCompletion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
         
         [SVProgressHUD dismiss];
         
@@ -235,6 +262,42 @@
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
     }];
+}
+
+#pragma mark - SearchDelegate : Contact, Bank, Gvernment Offices, Legal Firm
+
+- (void) didTapMatter:(SearchResultCell *)cell
+{
+    SearchResultModel* model = self.searchResultArray[cell.tag];
+    [self openRelatedMatter:model];
+}
+
+#pragma mark - SearchDocumentDelegate : Document
+
+- (void) didTapOpenMatter:(SearchDocumentCell *)cell
+{
+    SearchResultModel* model = self.searchResultArray[cell.tag];
+    [self openRelatedMatter:model];
+}
+
+- (void) didTapOpenFolder:(SearchDocumentCell *)cell
+{
+    SearchResultModel* model = self.searchResultArray[cell.tag];
+    [self openDocument:model];
+}
+
+#pragma mark - SearchMatterDelegate : Related Matter
+- (void) didTapFileFolder:(SearchMatterCell *)cell
+{
+    SearchResultModel* model = self.searchResultArray[cell.tag];
+    [self openDocument:model];
+}
+
+- (void) didTapLedger:(SearchMatterCell *)cell
+{
+    SearchResultModel* model = self.searchResultArray[cell.tag];
+    _matterCode = model.key;
+    [self openLedger:model];
 }
 
 #pragma mark - HTHorizontalSelectionListDataSource Protocol Methods
@@ -260,7 +323,7 @@
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
         category = [generalValueArray[index] integerValue];
-        searchURL = GENERAL_SEARCH_URL;
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];
     } else {
         category = [self.publicSearchFilters.allValues[index] integerValue];
         searchURL = PUBLIC_SEARCH_URL;
@@ -276,6 +339,23 @@
     [self displaySearchResult];
 }
 
+#pragma mark - Search delegate
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]) {
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];;
+    } else {
+        searchURL = PUBLIC_SEARCH_URL;
+    }
+    
+    keyword = self.searchTextField.text;
+    [self.searchTextField resignFirstResponder];
+    searchType = @"Special";
+    [self displaySearchResult];
+    return YES;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)__unused tableView {
@@ -288,35 +368,241 @@
     return 1;
 }
 
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    SearchResultModel* model = self.searchResultArray[section];
+    if ([model.form isEqualToString:@"200customer"]) // Contact
+    {
+        sectionName = @"Contact";
+    } else if ([model.form isEqualToString:@"500file"]){ // Related Matter
+        sectionName = @"Matter";
+    } else if ([model.form isEqualToString:@"800property"]){ // Property
+        sectionName = @"Property";
+    } else if ([model.form isEqualToString:@"400bankbranch"]){ // Bank
+        sectionName = @"Bank";
+    } else if ([model.form isEqualToString:@"310landoffice"]  || [model.form isEqualToString:@"310landregdist"]){ // Government Office
+        sectionName = @"Government Office";
+    } else if ([model.form isEqualToString:@"320PTG"]){ // Government Office
+        sectionName = @"Government Office";
+    } else if ([model.form isEqualToString:@"300lawyer"]){ // Legal firm
+        sectionName = @"Legal Firm";
+    } else if ([model.form isEqualToString:@"950docfile"]){ // Document
+        sectionName = @"Document";
+    }
+    return sectionName;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 10;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchResultCell cellIdentifier] forIndexPath:indexPath];
+    SearchResultModel* model = self.searchResultArray[indexPath.section];
+    NSUInteger cellType = [self detectItemType:model.form];
+
+    if (cellType == DIContactCell || cellType == DIBankCell || cellType == DIGovernmentPTGOfficesCell || cellType == DIGovernmentLandOfficesCell || cellType == DILegalFirmCell || cellType == DIPropertyCell) {
+        SearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchResultCell cellIdentifier] forIndexPath:indexPath];
+        
+        cell.tag = indexPath.section;
+        cell.delegate = self;
+        [cell configureCellWithSearchModel:self.searchResultArray[indexPath.section]];
+        return cell;
+    } else if (cellType == DIRelatedMatterCell) {
+        SearchMatterCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchMatterCell cellIdentifier] forIndexPath:indexPath];
+        
+        cell.tag = indexPath.section;
+        cell.delegate = self;
+        [cell configureCellWithSearchModel:self.searchResultArray[indexPath.section]];
+        return cell;
+    } else if (cellType == DIDocumentCell) {
+        SearchDocumentCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchDocumentCell cellIdentifier] forIndexPath:indexPath];
+        
+        cell.tag = indexPath.section;
+        cell.delegate = self;
+        [cell configureCellWithSearchModel:self.searchResultArray[indexPath.section]];
+        return cell;
+    }
     
-    cell.tag = indexPath.section;
-    [cell configureCellWithSearchModel:self.searchResultArray[indexPath.section]];
+    return nil;
+}
+
+- (NSUInteger) detectItemType: (NSString*) form
+{
+    if ([form isEqualToString:@"200customer"]) // Contact
+    {
+        return DIContactCell;
+    } else if ([form isEqualToString:@"500file"]){ // Related Matter
+        return DIRelatedMatterCell;
+    } else if ([form isEqualToString:@"800property"]){ // Property
+        return DIPropertyCell;
+    } else if ([form isEqualToString:@"400bankbranch"]){ // Bank
+        return DIBankCell;
+    } else if ([form isEqualToString:@"310landoffice"] || [form isEqualToString:@"310landregdist"]){ // Government Office
+        return DIGovernmentLandOfficesCell;
+    } else if ([form isEqualToString:@"320PTG"]){ // Government Office
+        return DIGovernmentPTGOfficesCell;
+    } else if ([form isEqualToString:@"300lawyer"]){ // Legal firm
+        return DILegalFirmCell;
+    } else if ([form isEqualToString:@"950docfile"]){ // Document
+        return DIDocumentCell;
+    }
     
-    return cell;
+    return 0;
+}
+
+- (void) openRelatedMatter: (SearchResultModel*) model {
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadRelatedMatterWithCode:model.key completion:^(RelatedMatterModel * _Nonnull relatedModel, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kRelatedMatterSegue sender:relatedModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openDocument: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadDocumentWithCode:[model.key substringToIndex:9] completion:^(DocumentModel * _Nonnull documentModel, NSError * _Nonnull error) {
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kDocumentSearchSegue sender:documentModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openLedger: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadLedgerWithCode:model.key completion:^(NSArray * _Nonnull ledgerModelArray, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kLedgerSearchSegue sender:ledgerModelArray];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
 }
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    SearchResultCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell.tag == 1){ // Contact
-        [self performSegueWithIdentifier:kContactSearchSegue sender:self.searchResultArray[indexPath.section]];
-    } else if (cell.tag == 2){ // Related Matter
-        [self performSegueWithIdentifier:kRelatedMatterSegue sender:self.searchResultArray[indexPath.section]];
-    } else if (cell.tag == 4){ // Property
-        id sender = self.searchResultArray[indexPath.section];
-        [self performSegueWithIdentifier:kPropertySearchSegue sender:sender];
-//    } else if (cell.tag == 8){ // Bank
-//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
-//    } else if (cell.tag == 16){ // Government offices
-//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
-//    } else if (cell.tag == 16){ // Government offices
-//        [self performSegueWithIdentifier:kPropertySearchSegue sender:self.searchResultArray[indexPath.section]];
+    if (isLoading) return;
+    isLoading = YES;
+
+    SearchResultModel* model = self.searchResultArray[indexPath.section];
+    NSUInteger cellType = [self detectItemType:model.form];
+    if (cellType == DIContactCell){ // Contact
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:model.key completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+            
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+        
+    } else if (cellType  == DIRelatedMatterCell){ // Related Matter
+        [self openRelatedMatter:model];
+    } else if (cellType  == DIPropertyCell){ // Property
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
+            
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kPropertySearchSegue sender:propertyModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    } else if (cellType  == DIBankCell){ // Bank
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadBankFromSearchWithCode:model.key completion:^(BankModel * _Nonnull bankModel, NSError * _Nonnull error) {
+            
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kBankSearchSegue sender:bankModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    } else if (cellType  == DIGovernmentLandOfficesCell){ // Government offices
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"LandOffice" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    } else if (cellType  == DIGovernmentPTGOfficesCell){ // PTG offices
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"PTG" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
+            [SVProgressHUD dismiss];
+            @strongify(self);
+            self->isLoading = false;
+            if (error == nil) {
+                [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    } else if (cellType  == DILegalFirmCell){ // Legal firm
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadLegalFirmWithCode:model.key completion:^(LegalFirmModel * _Nonnull legalFirmModel, NSError * _Nonnull error) {
+            [SVProgressHUD dismiss];
+            @strongify(self);
+            self->isLoading = false;
+            if (error == nil) {
+                [self performSegueWithIdentifier:kLegalFirmSearchSegue sender:legalFirmModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    } else if (cellType  == DIDocumentCell) // Document
+    {
+        [self openDocument:model];
     }
-    
 }
 
 #pragma mark - Delegate
@@ -328,11 +614,12 @@
     keyword = item.title;
 
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]) {
-        searchURL = GENERAL_SEARCH_URL;
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString:GENERAL_SEARCH_URL];
     } else {
         searchURL = PUBLIC_SEARCH_URL;
     }
     
+    searchType = @"Normal";
     [self displaySearchResult];
 }
 
@@ -345,6 +632,9 @@
         self.selectionList.hidden = YES;
     }];
     
+    // Control the search contrainer
+    self.searchContainerHeight.constant = 280;
+    
     return YES;
 }
 
@@ -355,6 +645,9 @@
     } completion:^(BOOL finished) {
         self.selectionList.hidden = NO;
     }];
+    
+    // Control the search contrainer
+    self.searchContainerHeight.constant = 44;
 }
 
 #pragma mark - ScrollViewDelegate
@@ -374,19 +667,46 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:kContactSearchSegue]){
-        ContactViewController* contactVC = segue.destinationViewController;
-        contactVC.responseCell = sender;
+        UINavigationController* navVC = segue.destinationViewController;
+        ContactViewController* contactVC = navVC.viewControllers.firstObject;
+        contactVC.contactModel = sender;
     }
     
     if ([segue.identifier isEqualToString:kRelatedMatterSegue]){
-        RelatedMatterViewController* relatedMatterVC = segue.destinationViewController;
-        relatedMatterVC.responseCell = sender;
+        UINavigationController* navC = segue.destinationViewController;
+        RelatedMatterViewController* relatedMatterVC = [navC viewControllers].firstObject;
+        relatedMatterVC.relatedMatterModel = sender;
     }
     
     if ([segue.identifier isEqualToString:kPropertySearchSegue]){
         UINavigationController* navC = segue.destinationViewController;
         PropertyViewController* propertyVC = [navC viewControllers].firstObject;
-        propertyVC.responseCell = sender;
+        propertyVC.propertyModel = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kLegalFirmSearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        LegalFirmViewController* legalFirmVC = [navC viewControllers].firstObject;
+        legalFirmVC.legalFirmModel = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kGovernmentOfficesSearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        GovernmentOfficesViewController* GovOfficesVC = [navC viewControllers].firstObject;
+        GovOfficesVC.govOfficeModel = sender;
+    }
+
+    if ([segue.identifier isEqualToString:kLedgerSearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        LedgerViewController* ledgerVC = navC.viewControllers.firstObject;
+        ledgerVC.ledgerArray = sender;
+        ledgerVC.matterCode = _matterCode;
+    }
+    
+    if ([segue.identifier isEqualToString:kDocumentSearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        DocumentViewController* documentVC = navC.viewControllers.firstObject;
+        documentVC.documentModel = sender;
     }
 }
 

@@ -26,9 +26,8 @@
     // Configure the view for the selected state
 }
 
-- (void) configureCellWithFixeLabel: (NSString*) fixedLabel value: (NSString*) value
+- (void) configureCellWithValue: (NSString*) value
 {
-    self.fixedLabel.text = fixedLabel;
     self.valueLabel.text = value;
 }
 

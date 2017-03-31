@@ -8,9 +8,29 @@
 
 #import "FirmURLModel.h"
 
-@implementation FirmURLModel: RLMObject
+@implementation FirmURLModel
 
-@property NSString      *firmServerURL;
-@property NSString      *name;
++ (FirmURLModel*) getFirmModelFromResponse: (NSDictionary*) response
+{
+    FirmURLModel* model = [FirmURLModel new];
+    
+    model.firmServerURL = [response objectForKey:@"APIServer"];
+    model.name = [[response objectForKey:@"LawFirm"] objectForKey:@"name"];
+    model.document = [DocumentModel getDocumentFromResponse:[response objectForKey:@"folders"]];
+    
+    return model;
+}
 
++ (NSArray*) getFirmArrayFromResponse:(NSArray*) response
+{
+    NSMutableArray* firmArray = [NSMutableArray new];
+    
+    if (![response isKindOfClass:[NSNull class]]) {
+        for(id obj in response) {
+            [firmArray addObject:[FirmURLModel getFirmModelFromResponse:obj]];
+        }
+    }
+    
+    return firmArray;
+}
 @end

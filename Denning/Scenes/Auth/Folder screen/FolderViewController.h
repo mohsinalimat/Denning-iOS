@@ -10,4 +10,5 @@
 
 @interface FolderViewController : UITableViewController
 
+@property (strong, nonatomic) DocumentModel* documentModel;
 @end

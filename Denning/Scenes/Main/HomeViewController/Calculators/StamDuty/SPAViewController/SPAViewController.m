@@ -9,12 +9,13 @@
 #import "SPAViewController.h"
 #import "QMAlert.h"
 
-@interface SPAViewController ()
+@interface SPAViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *priceValueTextField;
 @property (weak, nonatomic) IBOutlet UITextField *resultTextField;
 @property (weak, nonatomic) IBOutlet UILabel *relationshipLabel;
 @property (strong, nonatomic) NSArray* relationsArray;
+@property (weak, nonatomic) IBOutlet UITextField *legalCostTextField;
 
 @end
 
@@ -27,17 +28,19 @@
 }
 
 - (void) prepareUI {
-    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parenet-Child (50%)", @"Grandparent-Grandchild(50%)", @"Trustee-Beneficiary (+RM10)", @"Administrator-Beneficiary (+RM10)", @"Others (100%)", nil];
+    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parenet-Child (50%)", @"Grandparent-Grandchild(50%)", @"Trustee-Beneficiary (+RM10)", @"Administrator-Beneficiary (+RM10)", @"Others (+RM10)", nil];
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor babyRed];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [accessoryView sizeToFit];
     self.priceValueTextField.inputAccessoryView = accessoryView;
+    
+    [self.resultTextField addTarget:self action:@selector(textFieldDidEndEditing:) forControlEvents:UIControlEventEditingChanged];
 }
 
 - (void)handleTap {
@@ -49,59 +52,152 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 - (IBAction)didTapReset:(id)sender {
     self.priceValueTextField.text = @"";
     self.relationshipLabel.text = @"";
     self.resultTextField.text = @"";
+    self.legalCostTextField.text = @"";
 }
 
 - (IBAction)didTapCalculate:(id)sender {
-    NSUInteger stamDuty = [self.priceValueTextField.text integerValue];
+    double priceValue = [self getActualNumber:self.priceValueTextField.text];
     if ([self.priceValueTextField.text isEqualToString:@""]){
         [QMAlert showAlertWithMessage:@"Please input the price or market value to calculate stamp duty" actionSuccess:NO inViewController:self];
         return;
     }
-    double calcluatedValue = 0;
-    if (stamDuty >= 100000) {
-        calcluatedValue += 100000* 0.01;
+    
+    if (self.relationshipLabel.text.length == 0) {
+        [QMAlert showAlertWithMessage:@"Please select the relationship you want to apply for" actionSuccess:YES inViewController:self];
+        return;
+    }
+    
+    // Calculate the stam Duty
+    double stamDuty = 0;
+    if (priceValue  >= 100000) {
+        stamDuty  += 100000* 0.01;
     } else {
-        calcluatedValue += stamDuty* 0.01;
+        stamDuty  += priceValue * 0.01;
     }
     
-    stamDuty -= 100000;
+    priceValue  -= 100000;
     
-    if (stamDuty > 0 && stamDuty < 400000){
-        calcluatedValue += stamDuty*0.02;
-    } else if (stamDuty >= 400000) {
-        calcluatedValue += 400000*0.02;
+    if (priceValue  > 0 && priceValue  < 400000){
+        stamDuty  += priceValue *0.02;
+    } else if (priceValue  >= 400000) {
+        stamDuty  += 400000*0.02;
     }
     
-    stamDuty -= 400000;
+    priceValue  -= 400000;
     
-    if (stamDuty > 0) {
-        calcluatedValue += stamDuty*0.03;
+    if (priceValue  > 0) {
+        stamDuty  += priceValue *0.03;
+    }
+    
+    // calculate the legal cost
+    priceValue = [self getActualNumber:self.priceValueTextField.text];
+    
+    double legalCost = 0;
+    if (priceValue  >= 500000) {
+        legalCost  += 500000* 0.01;
+    } else {
+        legalCost  += priceValue * 0.01;
+        legalCost = MAX(legalCost,500);
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 500000){
+        legalCost  += priceValue *0.008;
+    } else if (priceValue  >= 500000) {
+        legalCost  += 500000*0.008;
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.007;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.007;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.006;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.006;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2500000){
+        legalCost  += priceValue *0.005;
+    } else if (priceValue  >= 2500000) {
+        legalCost  += 2500000*0.005;
+    }
+    priceValue  -= 2500000;
+    
+    if (priceValue > 0) {
+        [QMAlert showAlertWithMessage:@"There will be a negotiation for the legal cost with such amount of money" actionSuccess:YES inViewController:self];
     }
     
     if ([self.relationshipLabel.text isEqualToString:@"Seller-Purchaser (100%)"])
     {
-        calcluatedValue *= 1; // 100%
+        stamDuty  *= 1; // 100%
+        legalCost *= 1;
     } else if ([self.relationshipLabel.text isEqualToString:@"Husband-wife (0%)"]){
         // No more stamp duty
-        calcluatedValue = 0;
+        stamDuty  = 0;
+        legalCost = 0;
     } else if ([self.relationshipLabel.text isEqualToString:@"Parenet-Child (50%)"]){
-        calcluatedValue *= .5; // 50%
+        stamDuty  *= .5; // 50%
+        legalCost *= .5;
     } else if ([self.relationshipLabel.text isEqualToString:@"Grandparent-Grandchild (50%)"]){
-        calcluatedValue *= .5; // 50%
+        stamDuty  *= .5; // 50%
+        legalCost *= .5;
     } else if ([self.relationshipLabel.text isEqualToString:@"Trustee-Beneficiary (+RM10)"] || [self.relationshipLabel.text isEqualToString:@"Administrator-Beneficiary (+RM10)"]){
-        calcluatedValue += 10; // Add RM10
+        stamDuty  += 10; // Add RM10
+        legalCost += 10;
     } else {
-        calcluatedValue *= 1; // 100%
+        stamDuty  += 10; // Add RM10
+        legalCost += 10;
     }
     
-    
-    self.resultTextField.text = [NSString stringWithFormat:@"%.2f", calcluatedValue];
+    self.resultTextField.text = [NSString stringWithFormat:@"%.2f", stamDuty ];
+    self.legalCostTextField.text = [NSString stringWithFormat:@"%.2f", legalCost];
 }
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
+#pragma mark - UITexFieldDelegate
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        NSString *mystring = [self removeCommaFromString:textField.text];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        textField.text = [formatter stringFromNumber:number];
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -126,7 +222,7 @@
     [self.view endEditing:YES];
     
     if (indexPath.section == 0 && indexPath.row == 1) {
-        [ActionSheetStringPicker showPickerWithTitle:@"Select a Relation"
+        [ActionSheetStringPicker showPickerWithTitle:@"Select a Relationship"
                                             rows:self.relationsArray
                                     initialSelection:0
                                            doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {

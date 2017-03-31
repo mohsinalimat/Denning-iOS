@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+// RM group, Date group, other information
 @interface GeneralGroup : NSObject
-
+@property (strong, nonatomic) NSString* label;
+@property (strong, nonatomic) NSString* value;
 @end

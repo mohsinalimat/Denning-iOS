@@ -1,4 +1,5 @@
 PODS:
+  - ActionSheetPicker-3.0 (2.2.0)
   - AFNetworking (3.1.0):
     - AFNetworking/NSURLSession (= 3.1.0)
     - AFNetworking/Reachability (= 3.1.0)
@@ -122,6 +123,7 @@ PODS:
   - UIDevice-Hardware (0.1.8)
 
 DEPENDENCIES:
+  - ActionSheetPicker-3.0
   - AFNetworking
   - Bolts
   - ChameleonFramework
@@ -155,6 +157,7 @@ DEPENDENCIES:
   - UIDevice-Hardware (~> 0.1.3)
 
 SPEC CHECKSUMS:
+  ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
@@ -188,6 +191,6 @@ SPEC CHECKSUMS:
   TwitterCore: cce24b3c798993ccde72787ea79ea9a478b284e4
   UIDevice-Hardware: ecb52d9a7b223b31f81982358e2b0769ac1a7918
 
-PODFILE CHECKSUM: 3bc071c8e00011fb86f4e80495b5565a54a0e3bf
+PODFILE CHECKSUM: 7eceed66c09b46052a2be388d0141107ee03528f
 
 COCOAPODS: 1.2.0

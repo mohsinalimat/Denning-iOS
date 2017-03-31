@@ -7,11 +7,13 @@
 //
 
 #import "LoanViewController.h"
+#import "QMAlert.h"
 
-@interface LoanViewController ()
+@interface LoanViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *loanAmount;
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
 @property (weak, nonatomic) IBOutlet UITextField *resultLabel;
+@property (weak, nonatomic) IBOutlet UITextField *legalCostTextField;
 
 @property (strong, nonatomic)NSArray* typesArray;
 
@@ -22,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     [self prepareUI];
 }
 
@@ -30,7 +33,7 @@
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor babyRed];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
@@ -39,11 +42,9 @@
     self.loanAmount.inputAccessoryView = accessoryView;
 }
 
-
 - (void)handleTap {
     [self.view endEditing:YES];
 }
-
 
 #pragma mark - Table view data source
 
@@ -61,6 +62,41 @@
         return 1;
     }
     return 6;
+}
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
+#pragma mark - UITexFieldDelegate
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        NSString *mystring = [self removeCommaFromString:textField.text];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        textField.text = [formatter stringFromNumber:number];
+    }
 }
 
 #pragma mark - Table view data source
@@ -90,66 +126,76 @@
 }
 
 - (IBAction)didTapCalculate:(id)sender {
+    if ([self.loanAmount.text isEqualToString:@""]){
+        [QMAlert showAlertWithMessage:@"Please input the loan amount value to calculate stamp duty" actionSuccess:NO inViewController:self];
+        return;
+    }
+
+    if (self.typeLabel.text.length == 0) {
+        [QMAlert showAlertWithMessage:@"Please select the relationship you want to apply for" actionSuccess:YES inViewController:self];
+        return;
+    }
+    
     double stamDuty;
     if ([self.typeLabel.text isEqualToString:@"Conventional"]) {
-        stamDuty = [self.loanAmount.text doubleValue]*0.005;
+        stamDuty = [self getActualNumber:self.loanAmount.text]*0.005;
     } else if ([self.typeLabel.text isEqualToString:@"Islamic"]) {
-        stamDuty = [self.loanAmount.text doubleValue]*0.005*100/80;
+        stamDuty = [self getActualNumber:self.loanAmount.text]*0.005*80/100;
+    }
+    
+    // calculate the legal cost
+    double priceValue = [self getActualNumber:self.loanAmount.text];
+    double legalCost = 0;
+    if (priceValue  >= 500000) {
+        legalCost  += 500000* 0.01;
+    } else {
+        legalCost  += priceValue * 0.01;
+        legalCost = MAX(legalCost,500);
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 500000){
+        legalCost  += priceValue *0.008;
+    } else if (priceValue  >= 500000) {
+        legalCost  += 500000*0.008;
+    }
+    priceValue  -= 500000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.007;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.007;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2000000){
+        legalCost  += priceValue *0.006;
+    } else if (priceValue  >= 2000000) {
+        legalCost  += 2000000*0.006;
+    }
+    priceValue  -= 2000000;
+    
+    if (priceValue  > 0 && priceValue  < 2500000){
+        legalCost  += priceValue *0.005;
+    } else if (priceValue  >= 2500000) {
+        legalCost  += 2500000*0.005;
+    }
+    priceValue  -= 2500000;
+    
+    if (priceValue > 0) {
+        [QMAlert showAlertWithMessage:@"There will be a negotiation for the legal cost with such amount of money" actionSuccess:YES inViewController:self];
     }
     
     self.resultLabel.text = [NSString stringWithFormat:@"%.2f", stamDuty];
+    self.legalCostTextField.text =[NSString stringWithFormat:@"%.2f", legalCost];
 }
-
 
 - (IBAction)didTapReset:(id)sender {
     self.loanAmount.text = @"";
     self.typeLabel.text = @"";
     self.resultLabel.text = @"";
+    self.legalCostTextField.text = @"";
 }
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

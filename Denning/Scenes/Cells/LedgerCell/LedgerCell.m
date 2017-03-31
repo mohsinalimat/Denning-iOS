@@ -8,6 +8,12 @@
 
 #import "LedgerCell.h"
 
+@interface LedgerCell()
+@property (weak, nonatomic) IBOutlet UILabel *accountName;
+@property (weak, nonatomic) IBOutlet UILabel *availableBalance;
+
+@end
+
 @implementation LedgerCell
 
 - (void)awakeFromNib {
@@ -19,6 +25,12 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void) configureCellWithLedger: (LedgerModel*) ledgerModel
+{
+    self.accountName.text = ledgerModel.accountName;
+    self.availableBalance.text = ledgerModel.availableBalance;
 }
 
 @end

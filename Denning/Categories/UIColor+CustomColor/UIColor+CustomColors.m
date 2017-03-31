@@ -42,4 +42,8 @@
     return [UIColor colorWithRed:0/255.0f green:208/255.0f blue:255/255.0f alpha:1.0f];
 }
 
++ (UIColor*) babyRed {
+    return [UIColor colorWithRed:255/255.0f green:59/255.0f blue:47/255.0f alpha:1.0f];
+}
+
 @end

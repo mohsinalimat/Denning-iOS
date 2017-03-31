@@ -10,4 +10,8 @@
 
 @interface LedgerViewController : UITableViewController
 
+@property (strong, nonatomic) NSArray* ledgerArray;
+@property (strong, nonatomic) NSString* matterCode;
+
+@property (strong, nonatomic) NSString *previousScreen;
 @end

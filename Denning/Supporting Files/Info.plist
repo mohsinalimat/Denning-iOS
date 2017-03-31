@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>com.adobe.adobe-reader</string>
+		<string>ms-word</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -35,32 +40,32 @@
 			</dict>
 		</dict>
 	</dict>
-    <key>Fabric</key>
-    <dict>
-        <key>APIKey</key>
-        <string>c8c9ce069bbe1d055e363514286076d5786e848b</string>
-        <key>Kits</key>
-        <array>
-            <dict>
-                <key>KitInfo</key>
-                <dict/>
-                <key>KitName</key>
-                <string>Crashlytics</string>
-            </dict>
-            <dict>
-                <key>KitInfo</key>
-                <dict>
-                    <key>consumerKey</key>
-                    <string>Consumer Key</string>
-                    <key>consumerSecret</key>
-                    <string>Consumer Secret</string>
-                </dict>
-                <key>KitName</key>
-                <string>Digits</string>
-            </dict>
-        </array>
-    </dict>
-   	<key>UILaunchStoryboardName</key>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>c8c9ce069bbe1d055e363514286076d5786e848b</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>consumerKey</key>
+					<string>Consumer Key</string>
+					<key>consumerSecret</key>
+					<string>Consumer Secret</string>
+				</dict>
+				<key>KitName</key>
+				<string>Digits</string>
+			</dict>
+		</array>
+	</dict>
+	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>

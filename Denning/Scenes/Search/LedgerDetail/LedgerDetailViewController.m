@@ -7,6 +7,7 @@
 //
 
 #import "LedgerDetailViewController.h"
+#import "LedgerDetailCell.h"
 
 @interface LedgerDetailViewController ()
 
@@ -17,11 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self registerNibs];
+    [self prepareUI];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,27 +27,56 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) prepareUI {
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 23)];
+    
+    [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+}
+
+- (void) popupScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)registerNibs {
+    
+    [LedgerDetailCell registerForReuseInTableView:self.tableView];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+
+    return self.ledgerDetailArray.count;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    LedgerDetailModel* ledgerDetailModel = self.ledgerDetailArray[indexPath.row];
     
-    // Configure the cell...
+    LedgerDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:[LedgerDetailCell cellIdentifier] forIndexPath:indexPath];
+    [cell configureCellWithLedgerDetail:ledgerDetailModel];
     
     return cell;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 /*
 // Override to support conditional editing of the table view.

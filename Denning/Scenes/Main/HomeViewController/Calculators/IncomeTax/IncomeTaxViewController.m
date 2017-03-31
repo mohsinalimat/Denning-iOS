@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
 #import "QMAlert.h"
 
 @interface IncomeTaxViewController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *taxableIncome;
+
 @property (weak, nonatomic) IBOutlet UITextField *PersonalReliefTF;
 @property (weak, nonatomic) IBOutlet UITextField *LifeInsuranceTF;
 @property (weak, nonatomic) IBOutlet UITextField *EduMedicalInsuranceTF;
@@ -81,6 +83,7 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
 }
 
 - (void) prepareUI {
+    self.taxableIncome.delegate = self;
     self.PersonalReliefTF.delegate = self;
     self.LifeInsuranceTF.delegate = self;
     self.EduMedicalInsuranceTF.delegate = self;
@@ -116,6 +119,7 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [accessoryView sizeToFit];
+    self.taxableIncome.inputAccessoryView = accessoryView;
     self.PersonalReliefTF.inputAccessoryView = accessoryView;
     self.LifeInsuranceTF.inputAccessoryView = accessoryView;
     self.EduMedicalInsuranceTF.inputAccessoryView = accessoryView;
@@ -171,53 +175,55 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
         UITextField* inputField = [self.view viewWithTag:i];
         if (i == 15 || i == 17 || i == 19 || i == 21 || i == 23) {
             UITextField* numberOfChild = [self.view viewWithTag:i-1];
-            totalValue += [inputField.text doubleValue] * [numberOfChild.text integerValue];
+            totalValue +=  [self getActualNumber:inputField.text] * [numberOfChild.text integerValue];
         } else {
-            totalValue += [inputField.text doubleValue];
+            totalValue += [self getActualNumber:inputField.text];
         }
     }
+    
+    double taxableIncome = [self getActualNumber:self.taxableIncome.text] - totalValue;
     
     // Apply formular to income tax
     double incomeTax = 0;
     
-    if (totalValue < 500000) {
-        incomeTax = totalValue * 0.01;
+    if (taxableIncome < 500000) {
+        incomeTax = taxableIncome * 0.01;
         incomeTax = MAX(incomeTax, 500);
     } else {
         incomeTax = 500000 * 0.01;
     }
     
-    totalValue -= 500000;
+    taxableIncome -= 500000;
     
-    if (totalValue > 0 && totalValue < 500000 ) {
-        incomeTax += totalValue * 0.008;
-    } else if (totalValue >= 500000){
+    if (taxableIncome > 0 && taxableIncome < 500000 ) {
+        incomeTax += taxableIncome * 0.008;
+    } else if (taxableIncome >= 500000){
         incomeTax = 500000 * 0.008;
     }
-    totalValue -= 500000;
+    taxableIncome -= 500000;
     
-    if (totalValue > 0 && totalValue < 2000000){
-        incomeTax += totalValue * 0.007;
-    } else if (totalValue > 2000000) {
+    if (taxableIncome > 0 && taxableIncome < 2000000){
+        incomeTax += taxableIncome * 0.007;
+    } else if (taxableIncome > 2000000) {
         incomeTax += 2000000 * 0.007;
     }
-    totalValue -= 2000000;
+    taxableIncome -= 2000000;
     
-    if (totalValue > 0 && totalValue < 2000000){
-        incomeTax += totalValue * 0.006;
-    } else if (totalValue > 2000000) {
+    if (taxableIncome > 0 && taxableIncome < 2000000){
+        incomeTax += taxableIncome * 0.006;
+    } else if (taxableIncome > 2000000) {
         incomeTax += 2000000 * 0.006;
     }
-    totalValue -= 2000000;
+    taxableIncome -= 2000000;
     
-    if (totalValue > 0 && totalValue < 2500000){
-        incomeTax += totalValue * 0.005;
-    } else if (totalValue > 2500000) {
+    if (taxableIncome > 0 && taxableIncome < 2500000){
+        incomeTax += taxableIncome * 0.005;
+    } else if (taxableIncome > 2500000) {
         incomeTax += 2500000 * 0.005;
     }
-    totalValue -= 2500000;
+    taxableIncome -= 2500000;
     
-    if (totalValue > 0) {
+    if (taxableIncome > 0) {
         [QMAlert showAlertWithMessage:@"Some consideration" actionSuccess:NO inViewController:self];
     }
     
@@ -257,6 +263,14 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
 #pragma mark - TextField Delegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField.text.length > 0) {
+        NSString *mystring = [self removeCommaFromString:textField.text];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        textField.text = [formatter stringFromNumber:number];
+    }
+
     if (textField.text.length == 0 || [textField.text doubleValue] < 0) {
         textField.text = @"0";
     }
@@ -389,24 +403,50 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     }
 }
 
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 4;
-    } else if (section == 1) {
-        return 8;
-    } else if (section == 2) {
-        return 7;
-    } else if (section == 3) {
         return 1;
+    } else if (section == 1) {
+        return 4;
+    } else if (section == 2) {
+        return 8;
+    } else if (section == 3) {
+        return 7;
     } else if (section == 4) {
+        return 1;
+    } else if (section == 5) {
         return 1;
     }
     

@@ -10,4 +10,7 @@
 
 @interface DocumentViewController : UITableViewController
 
+@property (strong, nonatomic) DocumentModel* documentModel;
+@property (strong, nonatomic) NSString* previousScreen;
+
 @end

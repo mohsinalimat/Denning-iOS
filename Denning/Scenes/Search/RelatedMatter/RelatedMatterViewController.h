@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RelatedMatterViewController : UIViewController
+@interface RelatedMatterViewController : UITableViewController
 
-@property (strong, nonatomic) NSDictionary* responseCell;
+@property (strong, nonatomic) RelatedMatterModel* relatedMatterModel;
+@property (strong, nonatomic) NSString *previousScreen;
 
 @end

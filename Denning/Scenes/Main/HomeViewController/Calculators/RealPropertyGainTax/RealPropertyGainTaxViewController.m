@@ -11,10 +11,21 @@
 #import "QMAlert.h"
 
 @interface RealPropertyGainTaxViewController ()<UITextFieldDelegate>
+{
+    double numberOfYears;
+    NSDate *disposalDate;
+    NSDate *acquisitionDate;
+    NSDateFormatter *dateFormat;
+    double taxRate;
+    double realpropertyTax;
+}
+@property (weak, nonatomic) IBOutlet UITextField *disposalPriceTF;
 @property (weak, nonatomic) IBOutlet UITextField *saleCommissionTF;
 @property (weak, nonatomic) IBOutlet UITextField *legalCostsTF;
 @property (weak, nonatomic) IBOutlet UITextField *renovationImprovementTF;
 @property (weak, nonatomic) IBOutlet UITextField *netDisposalPriceTF;
+
+@property (weak, nonatomic) IBOutlet UITextField *acquisitionPriceTF;
 @property (weak, nonatomic) IBOutlet UITextField *purchaseCommisionTF;
 @property (weak, nonatomic) IBOutlet UITextField *legalCostsStampDutyTF;
 @property (weak, nonatomic) IBOutlet UITextField *otherCostsIncurredTF;
@@ -24,8 +35,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *dateOfAcquizition;
 @property (weak, nonatomic) IBOutlet UITextField *numberOfYearHeldTF;
 @property (weak, nonatomic) IBOutlet UITextField *statusOfTaxPayerTF;
-@property (weak, nonatomic) IBOutlet UITextField *taxPayable;
 @property (weak, nonatomic) IBOutlet UITextField *taxRateTF;
+
+@property (weak, nonatomic) IBOutlet UITextField *taxPayable;
 
 @property (strong, nonatomic) NSArray* statusOfTaxPayerArray;
 
@@ -50,16 +62,18 @@
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor babyRed];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [accessoryView sizeToFit];
+    self.disposalPriceTF.inputAccessoryView = accessoryView;
     self.saleCommissionTF.inputAccessoryView = accessoryView;
     self.legalCostsTF.inputAccessoryView = accessoryView;
     self.renovationImprovementTF.inputAccessoryView = accessoryView;
     self.purchaseCommisionTF.inputAccessoryView = accessoryView;
+    self.acquisitionPriceTF.inputAccessoryView = accessoryView;
     self.legalCostsStampDutyTF.inputAccessoryView = accessoryView;
     self.otherCostsIncurredTF.inputAccessoryView = accessoryView;
     self.numberOfYearHeldTF.inputAccessoryView = accessoryView;
@@ -76,6 +90,21 @@
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+    
+//    self.saleCommissionTF.delegate = self;
+//    self.legalCostsTF.delegate = self;
+//    self.renovationImprovementTF.delegate = self;
+//    self.netDisposalPriceTF.delegate = self;
+//    
+//    self.purchaseCommisionTF.delegate = self;
+//    self.legalCostsTF.delegate = self;
+//    self.otherCostsIncurredTF.delegate = self;
+//    self.netAcquisitionPriceTF.delegate = self;
+//    self.gainsLossTF.delegate = self;
+//    self.numberOfYearHeldTF.delegate = self;
+//    self.taxRateTF.delegate = self;
+//    
+//    self.taxPayable.delegate = self;
 }
 
 - (void) popupScreen:(id)sender {
@@ -109,10 +138,10 @@
 }
 
 - (IBAction)didTapCalculate:(id)sender {
-    double netDisposalPrice = [self.saleCommissionTF.text doubleValue] + [self.legalCostsTF.text doubleValue] + [self.renovationImprovementTF.text doubleValue];
+    double netDisposalPrice = [self getActualNumber:self.disposalPriceTF.text] - [self getActualNumber:self.saleCommissionTF.text] - [self getActualNumber:self.legalCostsTF.text] - [self getActualNumber:self.renovationImprovementTF.text];
     self.netDisposalPriceTF.text = [NSString stringWithFormat:@"%.2f", netDisposalPrice];
     
-    double netAcquisitionPrice = [self.purchaseCommisionTF.text doubleValue] + [self.legalCostsStampDutyTF.text doubleValue] + [self.otherCostsIncurredTF.text doubleValue];
+    double netAcquisitionPrice = [self getActualNumber:self.acquisitionPriceTF.text] + [self getActualNumber:self.purchaseCommisionTF.text] + [self getActualNumber:self.legalCostsStampDutyTF.text] + [self getActualNumber:self.otherCostsIncurredTF.text];
     self.netAcquisitionPriceTF.text = [NSString stringWithFormat:@"%.2f", netAcquisitionPrice];
     
     double gainsLoss = netDisposalPrice - netAcquisitionPrice;
@@ -128,33 +157,159 @@
         return;
     }
     
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    NSDate *disposalDate = [dateFormat dateFromString:self.dateOfDisposalTF.text];
-    NSDate *acquisitionDate = [dateFormat dateFromString:self.dateOfAcquizition.text];
+    disposalDate = [dateFormat dateFromString:self.dateOfDisposalTF.text];
+    acquisitionDate = [dateFormat dateFromString:self.dateOfAcquizition.text];
     
-    if ([disposalDate earlierDate:acquisitionDate]) {
+    if (![disposalDate earlierDate:acquisitionDate]) {
         [QMAlert showAlertWithMessage:@"Opps! there is something. please input valid dates." actionSuccess:NO inViewController:self];
         return;
     }
     
+    NSCalendar *gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSUInteger units = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *components = [gregorian components:units fromDate:acquisitionDate toDate:disposalDate options:0];
+    numberOfYears = [components year];
+    NSInteger numberOfMonths = [components month];
+    NSInteger numberOfDays = [components day];
+    numberOfYears += numberOfMonths / 12 + numberOfDays/365;
+    
+    self.numberOfYearHeldTF.text = [NSString stringWithFormat:@"%.2f", numberOfYears];
+    
     if ([self.statusOfTaxPayerTF.text isEqualToString:@"Malaysian Company"]) {
-        
+        [self calculateTaxRateForLocalCompany];
+        realpropertyTax =  gainsLoss * taxRate / 100;
     } else if ([self.statusOfTaxPayerTF.text isEqualToString:@"Malaysian Individual / PR"]) {
-        
+        [self calculateTaxRateForLocalPerson];
+        realpropertyTax =  gainsLoss * taxRate / 100;
+        [self applyTaxRestriction];
     } else if ([self.statusOfTaxPayerTF.text isEqualToString:@"Foreigner"]) {
-        
+        [self calculateTaxRateForForeignerAndCompany];
+        realpropertyTax =  gainsLoss * taxRate / 100;
+        [self applyTaxRestriction];
     } else if ([self.statusOfTaxPayerTF.text isEqualToString:@"Foreign Company"]) {
-        
+        [self calculateTaxRateForForeignerAndCompany];
+        realpropertyTax =  gainsLoss * taxRate / 100;
+    }
+    
+    self.taxRateTF.text = [NSString stringWithFormat:@"%.2f", taxRate];
+    self.taxPayable.text = [NSString stringWithFormat:@"%2.f", realpropertyTax];
+}
+
+- (void) applyTaxRestriction
+{
+    if ([acquisitionDate earlierDate:[dateFormat dateFromString:@"2013-01-01"]]) {
+        realpropertyTax = MAX(realpropertyTax, 5000);
+    } else {
+        realpropertyTax = MAX(realpropertyTax, 10000);
     }
 }
 
+- (void) calculateTaxRateForLocalCompany
+{
+    taxRate = 0;
+    if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2009-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2012-01-01"]]){
+        taxRate = 5;
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2011-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2013-01-01"]]) {
+        if (numberOfYears <= 2) {
+            taxRate = 10;
+        } else if (numberOfYears <= 5) {
+            taxRate = 5;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2012-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2014-01-01"]]) {
+        if (numberOfYears <= 2) {
+            taxRate = 15;
+        } else if (numberOfYears <= 5) {
+            taxRate = 10;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2013-12-31"]]) {
+        if (numberOfYears <= 3) {
+            taxRate = 30;
+        } else if (numberOfYears <= 4) {
+            taxRate = 20;
+        } else if (numberOfYears <= 5) {
+            taxRate = 15;
+        } else if (numberOfYears <= 6) {
+           taxRate = 5;
+        }
+    }
+
+}
+
+- (void) calculateTaxRateForLocalPerson
+{
+    taxRate = 0;
+    if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2009-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2012-01-01"]]){
+        taxRate = 5;
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2011-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2013-01-01"]]) {
+        if (numberOfYears <= 2) {
+            taxRate = 10;
+        } else if (numberOfYears <= 5) {
+            taxRate = 5;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2012-12-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2014-01-01"]]) {
+        if (numberOfYears <= 2) {
+            taxRate = 15;
+        } else if (numberOfYears <= 5) {
+            taxRate = 10;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2013-12-31"]]) {
+        if (numberOfYears <= 3) {
+            taxRate = 30;
+        } else if (numberOfYears <= 4) {
+            taxRate = 20;
+        } else if (numberOfYears <= 5) {
+            taxRate = 15;
+        }
+    }
+}
+
+- (void) calculateTaxRateForForeignerAndCompany
+{
+    taxRate = 0;
+    if ([acquisitionDate laterDate:[dateFormat dateFromString:@"1997-10-16"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2007-04-01"]]){
+        if (numberOfYears <= 5) {
+            taxRate = 30;
+        } else {
+            taxRate = 5;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2007-03-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2010-01-01"]]){
+        taxRate = 0;
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2010-05-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2012-06-01"]]){
+        if (numberOfYears <= 5) {
+            taxRate = 5;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2012-05-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2013-06-01"]]){
+        if (numberOfYears <= 2) {
+            taxRate = 10;
+        } else if (numberOfYears <= 5) {
+            taxRate = 5;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2013-05-31"]] && [acquisitionDate earlierDate:[dateFormat dateFromString:@"2014-06-01"]]){
+        if (numberOfYears <= 2) {
+            taxRate = 15;
+        } else if (numberOfYears <= 5) {
+            taxRate = 10;
+        }
+    } else if ([acquisitionDate laterDate:[dateFormat dateFromString:@"2014-05-31"]]){
+        if (numberOfYears <= 5) {
+            taxRate = 30;
+        } else {
+            taxRate = 5;
+        }
+    }
+}
+
+
 - (IBAction)didTapReset:(id)sender {
+    self.disposalPriceTF.text = @"";
     self.saleCommissionTF.text = @"";
     self.legalCostsTF.text = @"";
     self.renovationImprovementTF.text = @"";
     self.netDisposalPriceTF.text = @"";
     
+    self.acquisitionPriceTF.text = @"";
     self.purchaseCommisionTF.text = @"";
     self.legalCostsStampDutyTF.text = @"";
     self.otherCostsIncurredTF.text = @"";
@@ -179,6 +334,42 @@
     self.dateOfAcquizition.text = date;
 }
 
+
+- (NSString*) removeCommaFromString: (NSString*) formattedNumber
+{
+    NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
+    
+    NSString * result = nil;
+    for(NSString *s in comps)
+    {
+        if(result)
+        {
+            result = [result stringByAppendingFormat:@"%@",[s capitalizedString]];
+        } else
+        {
+            result = [s capitalizedString];
+        }
+    }
+    
+    return result;
+}
+- (double) getActualNumber: (NSString*) formattedNumber
+{
+    return [[self removeCommaFromString:formattedNumber] doubleValue];
+}
+
+#pragma mark - UITexFieldDelegate
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        NSString *mystring = [self removeCommaFromString:textField.text];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+        NSNumberFormatter *formatter = [NSNumberFormatter new];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        textField.text = [formatter stringFromNumber:number];
+    }
+}
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
@@ -187,9 +378,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 4;
+        return 5;
     } else if (section == 1) {
-        return 4;
+        return 5;
     } else if (section == 2) {
         return 6;
     } else if (section == 3) {

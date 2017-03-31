@@ -8,7 +8,6 @@
 
 #import "QMForgotPasswordViewController.h"
 #import "QMTasks.h"
-#import "UINavigationController+QMNotification.h"
 
 @interface QMForgotPasswordViewController ()
 
@@ -38,6 +37,10 @@
 }
 
 #pragma mark Private
+
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)addTapGesture {
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
@@ -73,7 +76,7 @@
 #pragma mark - Keyboard
 - (void)keyboardWillShow:(NSNotification*) notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    if (keyboardSize.height != 0.0f && [self.TACTextField isFirstResponder])
+    if (keyboardSize.height != 0.0f)
     {
         CGFloat y = -keyboardSize.height/2;
         CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
@@ -95,34 +98,9 @@
 
 #pragma mark - actions
 
-- (IBAction)pressResetPasswordBtn:(id)__unused sender {
-    
-    if (self.task != nil) {
-        // task in progress
-        return;
-    }
-    
-    NSString *email = self.emailTextField.text;
-    
-    if (email.length > 0) {
-        
-        [self resetPasswordForMail:email];
-    }
-    else {
-        
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:NSLocalizedString(@"QM_STR_EMAIL_FIELD_IS_EMPTY", nil) duration:kQMDefaultNotificationDismissTime];
-    }
-}
-
 - (void)resetPasswordForMail:(NSString *)emailString {
     
-    
-
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
-    
-    __weak UINavigationController *navigationController = self.navigationController;
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     
     @weakify(self);
     self.task = [[QMTasks taskResetPasswordForEmail:emailString] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
@@ -130,11 +108,11 @@
         @strongify(self);
         if (task.isFaulted) {
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:NSLocalizedString(@"QM_STR_USER_WITH_EMAIL_WASNT_FOUND", nil) duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_USER_WITH_EMAIL_WASNT_FOUND", nil)];
         }
         else {
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:NSLocalizedString(@"QM_STR_MESSAGE_WAS_SENT_TO_YOUR_EMAIL", nil) duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_MESSAGE_WAS_SENT_TO_YOUR_EMAIL", nil)];
             [self.navigationController popViewControllerAnimated:YES];
         }
         
@@ -146,7 +124,7 @@
 {
     if (email.length == 0 || phoneNumber.length == 0) {
         
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil) duration:kQMDefaultNotificationDismissTime];
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil)];
         return false;
     }
     return true;
@@ -161,21 +139,17 @@
         return;
     }
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     
-    __weak UINavigationController *navigationController = self.navigationController;
-    
-    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:email phoneNumber:phoneNumber reason:@"from Forget Password form" withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
+    [[QMNetworkManager sharedManager] sendSMSRequestWithEmail:email phoneNumber:phoneNumber reason:@"from Forget Password form" withCompletion:^(BOOL success, NSInteger statusCode, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
         
         if (!success) {
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:error];
         }
         else {
             
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showSuccessWithStatus:@"SMS is sent to your phone"];
         }
 
     }];
@@ -190,19 +164,15 @@
         return;
     }
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
-    
-    __weak UINavigationController *navigationController = self.navigationController;
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
 
     [[QMNetworkManager sharedManager] requestForgetPasswordWithEmail:self.emailTextField.text phoneNumber:self.phoneNumberTextField.text activationCode:self.TACTextField.text withCompletion:^(BOOL success, NSString * _Nonnull error) {
         
         if (!success) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:error duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:error];
         }
         else {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"SMS is sent to your phone" duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showSuccessWithStatus:@"Email is sent"];
         }
     }];
 }

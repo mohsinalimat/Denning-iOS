@@ -7,6 +7,12 @@
 //
 
 #import "ThreeFieldsCell.h"
+@interface ThreeFieldsCell()
+@property (weak, nonatomic) IBOutlet UILabel *firstValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *thirdValuelabel;
+
+@end
 
 @implementation ThreeFieldsCell
 
@@ -19,6 +25,13 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void) configureCellWithValue1: (NSString*) value1 value2:(NSString*) value2 value3: (NSString*) value3
+{
+    self.firstValueLabel.text = value1;
+    self.secondValueLabel.text = value2;
+    self.thirdValuelabel.text = value3;
 }
 
 @end

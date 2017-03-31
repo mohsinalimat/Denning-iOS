@@ -41,5 +41,6 @@
 
 + (NSArray*) getFirmArrayFromResponse: (NSDictionary*) response;
 
++ (NSArray*) getFirmNameArrayFromResponse: (NSDictionary*) response;
 
 @end

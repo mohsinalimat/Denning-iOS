@@ -10,4 +10,28 @@
 
 @interface UpdateModel : NSObject
 
+@property (strong, nonatomic) NSString * URL;
+
+@property (strong, nonatomic) NSString * category;
+
+@property (strong, nonatomic) NSString * newsCode;
+
+@property (strong, nonatomic) NSString * fullDescription;
+
+@property (strong, nonatomic) NSString * imageURL;
+
+@property (strong, nonatomic) NSString * imageData;
+
+@property (strong, nonatomic) NSString * reminder;
+
+@property (strong, nonatomic) NSString * shortDescription;
+
+@property (strong, nonatomic) NSString * theDateTime;
+
+@property (strong, nonatomic) NSString * title;
+
++ (UpdateModel*) getUpdateFromResponse: (NSDictionary*) response;
+
++ (NSArray*) getUpdatesArrayFromResponse: (NSDictionary*) response;
+
 @end

@@ -7,15 +7,18 @@
 //
 
 #import "PropertyViewController.h"
-#import "CommonTextCell.h"
+#import "ContactCell.h"
 #import "SearchResultCell.h"
+#import "CommonTextCell.h"
+#import "RelatedMatterViewController.h"
 
-@interface PropertyViewController ()
-@property (strong, nonatomic) PropertyModel* propertyModel;
+@interface PropertyViewController()
+{
+    __block BOOL isLoading;
+}
+
 @end
-
 @implementation PropertyViewController
-@synthesize responseCell;
 
 - (void) dealloc
 {
@@ -25,31 +28,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self registerNibs];
-    [self loadProperty];
-}
-
-- (IBAction)dismissScreen:(id)sender {
-    [self.navigationController dismissViewControllerAnimated:YES completion:NO];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)registerNibs {
-    
-    [CommonTextCell registerForReuseInTableView:self.tableView];
-    [SearchResultCell registerForReuseInTableView:self.tableView];
-    
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+    if (self.previousScreen.length != 0) {
+        [self prepareUI];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,19 +39,39 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) loadProperty
-{
-    NSString* code = responseCell.searchCode;
-    [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:code completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
-        
-        if (!error) {
-            self.propertyModel = propertyModel;
-            [self.tableView reloadData];
-        } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
+
+- (void) prepareUI {
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    
+    [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
+    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
+
+- (void) popupScreen:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)registerNibs {
+    
+    [ContactCell registerForReuseInTableView:self.tableView];
+    [CommonTextCell registerForReuseInTableView:self.tableView];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+}
+
 
 #pragma mark - Table view data source
 
@@ -79,87 +81,107 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 && self.propertyModel.fullTitle != nil){
+    if (section == 0) {
         return 4;
-    } else {
-        if (self.propertyModel && self.propertyModel.relatedMatter){
-            return self.propertyModel.relatedMatter.count;
-        } else {
-            return 0;
-        }
     }
     
-    return 0;
+    return self.propertyModel.relatedMatter.count;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 1) {
+        if (isLoading) return;
+        isLoading = YES;
+        SearchResultModel* model = self.propertyModel.relatedMatter[indexPath.row];
+        [SVProgressHUD showWithStatus:@"Loading"];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadRelatedMatterWithCode:model.key completion:^(RelatedMatterModel * _Nonnull relatedModel, NSError * _Nonnull error) {
+            
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kRelatedMatterSegue sender:relatedModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+        
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section)
+    {
+        case 0:
+            sectionName = @"";
+            break;
+        case 1:
+            sectionName = @"Related matter";
+            break;
+            // ...
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 0;
+    }
+    return 40;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+
+    return 30;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0){
-        CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
+        ContactCell *contactCell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
         if (indexPath.row == 0){
-            [commonCell configureCellWithFixeLabel:@"LotPt" value:self.propertyModel.lotpt];
+            [contactCell configureCellWithContact:self.propertyModel.lotptType text:self.propertyModel.lotptValue];
         } else if (indexPath.row == 1){
-            [commonCell configureCellWithFixeLabel:@"Full Title" value:self.propertyModel.fullTitle];
+            [contactCell configureCellWithContact:@"Full Title" text:self.propertyModel.fullTitle];
         } else if (indexPath.row == 2){
-            [commonCell configureCellWithFixeLabel:@"Address" value:self.propertyModel.address];
+            [contactCell configureCellWithContact:@"Address" text:self.propertyModel.address];
         } else if (indexPath.row == 3){
-            [commonCell configureCellWithFixeLabel:@"Area" value:self.propertyModel.area];
+            [contactCell configureCellWithContact:@"Area" text:self.propertyModel.area];
         }
         
+        return contactCell;
+    }
+    else {
+        CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
         
+        SearchResultModel *matterModel = self.propertyModel.relatedMatter[indexPath.row];
+        [commonCell configureCellWithValue:matterModel.key];
+        commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return commonCell;
     }
-    
-    SearchResultCell *searchResultCell = [tableView dequeueReusableCellWithIdentifier:[SearchResultCell cellIdentifier] forIndexPath:indexPath];
-    
-    
-    return searchResultCell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:kRelatedMatterSegue]){
+        RelatedMatterViewController* relatedMatterVC = segue.destinationViewController;
+        relatedMatterVC.relatedMatterModel = sender;
+        relatedMatterVC.previousScreen = @"Property";
+    }
 }
-*/
+
 
 @end

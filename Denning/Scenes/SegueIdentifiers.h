@@ -57,3 +57,37 @@ static NSString* const kPropertySearchSegue = @"PropertySearchSegue";
 static NSString* const kContactSearchSegue = @"ContactSearchSegue";
 
 static NSString* const kRelatedMatterSegue = @"RelatedMatterSegue";
+
+static NSString* const kWelcomeSegue = @"WelcomeSegue";
+
+static NSString* const kBankSearchSegue = @"BankSearchSegue";
+
+static NSString* const kGovernmentOfficesSearchSegue = @"GovernmentOfficesSearchSegue";
+
+static NSString* const kLegalFirmSearchSegue = @"LegalFirmSearchSegue";
+
+static NSString* const kLedgerSearchSegue = @"LedgerSearchSegue";
+
+static NSString* const kLedgerDetailSearchSegue = @"LedgerDetailSearchSegue";
+
+static NSString* const kDocumentSearchSegue = @"DocumentSearchSegue";
+
+static NSString* const kBranchSegue = @"BranchSegue";
+
+static NSString* const kPasswordConfirmSegue = @"PasswordConfirmSegue";
+
+static NSString* const kCalculateSegue = @"CalculateSegue";
+
+static NSString* const kNewsSegue = @"NewsSegue";
+
+static NSString* const kUpdateSegue = @"UpdateSegue";
+
+static NSString* const kEventSegue = @"EventSegue";
+
+static NSString* const kPersonalFolderSegue = @"PersonalFolderSegue";
+
+static NSString* const kDocumentSegue = @"DocumentSegue";
+
+static NSString* const kMainSearchSegue = @"MainSearchSegue";
+
+static NSString* const kDocumentPreviewSegue = @"DocumentPreviewSegue";

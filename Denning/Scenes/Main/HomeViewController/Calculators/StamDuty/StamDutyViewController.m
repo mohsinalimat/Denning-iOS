@@ -42,9 +42,9 @@
     self.title = @"Stam Duty";
     self.viewControllersIdentifiers = @[@"SPAViewController", @"LoanViewController", @"TenancyViewController"];
     
-    SPAViewController *SPAVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[0]];
-    LoanViewController *loanVC  = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[1]];
-    TenancyViewController* tenancyVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[2]];
+    SPAViewController *SPAVC = [[UIStoryboard storyboardWithName:@"Calculator" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[0]];
+    LoanViewController *loanVC  = [[UIStoryboard storyboardWithName:@"Calculator" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[1]];
+    TenancyViewController* tenancyVC = [[UIStoryboard storyboardWithName:@"Calculator" bundle:nil] instantiateViewControllerWithIdentifier:self.viewControllersIdentifiers[2]];
     self.viewControllers = @[SPAVC, loanVC, tenancyVC];
 
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 23)];
@@ -90,7 +90,7 @@
 }
 
 - (void) prepareStamDutyTypes {
-    self.stamdutyTypesArray = @[@"SPA & transfer of Property", @"Loan", @"Tenancy / Lease"];
+    self.stamdutyTypesArray = @[@"SPA", @"Loan", @"Tenancy/Lease"];
     self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
     self.selectionList.delegate = self;
     self.selectionList.dataSource = self;
@@ -99,10 +99,10 @@
     self.selectionList.showsEdgeFadeEffect = YES;
     // self.selectionList.snapToCenter = YES;
     
-    self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"2196F3"];
-    [self.selectionList setTitleColor:[UIColor colorWithHexString:@"2196F3"] forState:UIControlStateHighlighted];
+    self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"FF3B2F"];
+    [self.selectionList setTitleColor:[UIColor colorWithHexString:@"FF3B2F"] forState:UIControlStateHighlighted];
     [self.selectionList setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.selectionList setTitleFont:[UIFont systemFontOfSize:17] forState:UIControlStateNormal];
+    [self.selectionList setTitleFont:[UIFont fontWithName:@"SFUIText-Medium" size:15.0f] forState:UIControlStateNormal];
     [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateSelected];
     [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateHighlighted];
     

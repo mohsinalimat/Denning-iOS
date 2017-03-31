@@ -7,21 +7,22 @@
 //
 
 #import "PersonalDocumentViewController.h"
+#import "BranchHeaderCell.h"
+#import "DocumentCell.h"
+#import "DocumentPreviewController.h"
 
-@interface PersonalDocumentViewController ()
+@interface PersonalDocumentViewController ()<BranchHeaderDelegate>
 
 @end
 
 @implementation PersonalDocumentViewController
+@synthesize folderModel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self prepareUI];
+    [self registerNibs];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,27 +30,140 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) prepareUI {
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"splash_background.png"]];
+}
+
+- (void)registerNibs {
+    [BranchHeaderCell registerForReuseInTableView:self.tableView];
+    [DocumentCell registerForReuseInTableView:self.tableView];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+}
+
+#pragma mark - BranchHeaderDelegate
+- (void) didBackBtnTapped:(BranchHeaderCell *)cell
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Table view data source
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return 140;
+    }
+    
+    return 94;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    
+    return folderModel.folders.count + 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    if (section == 0) {
+        return 1;
+    } else if (section == 1) {
+        return folderModel.documents.count;
+    }
+
+    FolderModel* model = folderModel.folders[section-2];
+    return model.documents.count;
 }
 
-/*
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    if (section == 0) {
+        sectionName = @"";
+    } else if (section == 1){
+        sectionName = @"Files";
+    } else {
+        FolderModel* model = folderModel.folders[section-2];
+        sectionName = model.name;
+    }
+
+    return sectionName;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 0;
+    }
+    return 40;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    if (indexPath.section == 0) {
+        BranchHeaderCell *branchCell = [tableView dequeueReusableCellWithIdentifier:[BranchHeaderCell cellIdentifier] forIndexPath:indexPath];
+        [branchCell configureCellWithTitle:@"Documents"];
+        branchCell.delegate = self;
+        branchCell.accessoryType = UITableViewCellAccessoryNone;
+        return branchCell;
+    } else if (indexPath.section == 1) {
+        DocumentCell *cell = [tableView dequeueReusableCellWithIdentifier:[DocumentCell cellIdentifier] forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor clearColor];
+        FileModel* file = folderModel.documents[indexPath.row];
+        [cell configureCellWithFileModel:file
+         ];
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
+    }
+    DocumentCell *cell = [tableView dequeueReusableCellWithIdentifier:[DocumentCell cellIdentifier] forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor clearColor];
     
-    // Configure the cell...
+    FolderModel* model = folderModel.folders[indexPath.section-2];
+    FileModel* file = model.documents[indexPath.row];
+    [cell configureCellWithFileModel:file
+     ];
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
     
     return cell;
 }
-*/
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //    UIApplication.sharedApplication().openURL(NSURL(string: "com.adobe.adobe-reader://")!)
+    FileModel* file;
+    if (indexPath.section == 0) {
+        return;
+    } else if (indexPath.section == 1) {
+        file = self.folderModel.documents[indexPath.row];
+    } else {
+        FolderModel* model = self.folderModel.folders[indexPath.section-2];
+        file = model.documents[indexPath.row];
+    }
+    
+//    NSString *url = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, file.URL];
+    NSString *url = [NSString stringWithFormat:@"http://43.252.215.163/denningwcf/%@", file.URL];
+    
+    [self performSegueWithIdentifier:kDocumentPreviewSegue sender:[NSURL URLWithString:url]];
+    
+//    if ([file.ext isEqualToString:@".pdf"]) {
+//        url = [@"com.adobe.adobe-reader://" stringByAppendingString:url];
+//        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+//            });
+//        }
+//    } else {
+////        url = [@"ms-word://" stringByAppendingString:url];
+//        
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
+//        });
+//    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -85,14 +199,18 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kDocumentPreviewSegue]) {
+        DocumentPreviewController* docPrevVC = segue.destinationViewController;
+        docPrevVC.documentURL = sender;
+    }
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

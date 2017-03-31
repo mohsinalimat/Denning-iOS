@@ -7,7 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
+@protocol SearchDocumentDelegate;
 
-@interface SearchDocumentCell : UITableViewCell
+@interface SearchDocumentCell : DIGeneralCell
+@property (weak, nonatomic) id<SearchDocumentDelegate> delegate;
+
+- (void) configureCellWithSearchModel: (SearchResultModel*) model;
+
+@end
+
+@protocol SearchDocumentDelegate <NSObject>
+
+@optional
+
+- (void) didTapOpenFolder: (SearchDocumentCell*) cell;
+
+- (void) didTapOpenMatter: (SearchDocumentCell*) cell;
 
 @end

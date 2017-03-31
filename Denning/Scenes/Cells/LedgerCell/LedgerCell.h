@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface LedgerCell : UITableViewCell
+@interface LedgerCell : DIGeneralCell
+
+- (void) configureCellWithLedger: (LedgerModel*) ledgerModel;
 
 @end

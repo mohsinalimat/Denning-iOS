@@ -13,8 +13,10 @@
 @property (weak, nonatomic) IBOutlet QMImageView *eventImageView;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
-@property (weak, nonatomic) IBOutlet UILabel *eventStartlabel;
-@property (weak, nonatomic) IBOutlet UILabel *eventEndLabel;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartDatelabel;
+@property (weak, nonatomic) IBOutlet UILabel *eventStartTimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
 @end
 
@@ -33,11 +35,12 @@
 
 - (void) configureCellWithEvent:(EventModel*) event
 {
+    self.titleLabel.text = event.FileNo;
     self.descriptionLabel.text = event.description;
-    self.eventStartlabel.text = event.eventStart;
-    self.eventEndLabel.text = event.eventEnd;
     self.locationLabel.text = event.location;
-    self.reminderLabel.text = event.reminder1;
+    self.eventStartDatelabel.text = [DIHelpers getDateInLongForm:event.eventStart];
+    self.eventStartTimeLabel.text = [DIHelpers getTimeFromDate:event.eventStart];
+    
 }
 
 @end

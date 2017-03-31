@@ -11,7 +11,8 @@
 #import "UINavigationController+QMNotification.h"
 #import "QMChangePasswordViewController.h"
 #import "NewDeviceLoginViewController.h"
-#import "HomeViewController.h"
+#import "BranchViewController.h"
+#import "QMAlert.h"
 
 @interface QMLogInViewController ()
 
@@ -28,21 +29,79 @@
     ILog(@"%@ - %@",  NSStringFromSelector(_cmd), self);
 }
 
+- (IBAction)gotoHome:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    self.navigationController.navigationBarHidden = YES;
+    
+    [self addKeyboardObservers];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self removeKeyboardObservers];
+    [SVProgressHUD dismiss];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.emailField becomeFirstResponder];
+    [self addTapGesture];
+    
+//    [self.emailField becomeFirstResponder];
+}
+
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
+    tap.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)handleTap {
+    [self.view endEditing:YES];
+}
+
+- (void)addKeyboardObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)removeKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShow:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f)
+    {
+        CGFloat y = -keyboardSize.height/2;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f)
+    {
+        CGFloat y = 0;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
 }
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)__unused sender {
+- (IBAction)done:(id) sender {
     
     [self.view endEditing:YES];
     
@@ -56,13 +115,13 @@
     
     if (email.length == 0 || password.length == 0) {
         
-        [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil) duration:kQMDefaultNotificationDismissTime];
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil)];
     }
     else if ([[QMNetworkManager sharedManager].invalidTry intValue] >= 1){
         NSDate* currentTime = [[NSDate alloc] init];
         float duration = [currentTime timeIntervalSinceDate:[QMNetworkManager sharedManager].startTrackTimeForLogin];
         if (fabsf(duration) < 60){
-            [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:@"Locked for 1 minutes. invalid username and password more than 10 times..." duration:kQMDefaultNotificationDismissTime];
+            [SVProgressHUD showErrorWithStatus:@"Locked for 1 minutes. invalid username and password more than 10 times..."];
         } else {
             [self loginWithEmail:email password:password];
         }
@@ -71,59 +130,91 @@
     }
 }
 
+- (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+    });
+}
+
+- (void) manageFirmURL: (NSArray*) firmURLArray {
+    if (firmURLArray.count == 1) {
+        [self registerURLAndGotoMain:firmURLArray[0]];
+    } else {
+        [self performSegueWithIdentifier:kBranchSegue sender:firmURLArray];
+    }
+}
+
+- (void) manageUserType {
+    // Initialize the option for shared folder
+    [DataManager sharedManager].documentView = @"nothing";
+    
+    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+        [DataManager sharedManager].seletedUserType = @"Denning";
+        [self manageFirmURL:[DataManager sharedManager].denningArray];
+    } else if ([DataManager sharedManager].personalArray.count > 0) {
+        [DataManager sharedManager].seletedUserType = @"Personal";
+        [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
+    } else {
+        [DataManager sharedManager].seletedUserType = @"Public";
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+        });
+    }
+}
+
+- (void) manageSuccessResult: (NSInteger) statusCode response:(NSDictionary*) response {
+    [[DataManager sharedManager] setUserInfoFromLogin:response];
+    if (statusCode == 250) {
+        [DataManager sharedManager].statusCode = [NSNumber numberWithInteger:statusCode];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSegueWithIdentifier:kNewDeviceSegue sender:nil];
+        });
+    } else if (statusCode == 280) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self performSegueWithIdentifier:kChangePasswordSegue sender:nil];
+        });
+    } else {
+        [self manageUserType];
+    }
+}
+
+- (void) manageErrorResult: (NSInteger) statusCode error: (NSString*) error {
+    if (statusCode == 401) {
+        int value = [[QMNetworkManager sharedManager].invalidTry intValue];
+        [QMNetworkManager sharedManager].invalidTry = [NSNumber numberWithInt:value+1];
+        
+        if (value >= 10){
+            error = @"Locked for 1 minutes. invalid username and password more than 10 times...";
+            [QMNetworkManager sharedManager].startTrackTimeForLogin = [[NSDate alloc] init];
+        }
+    }
+    [QMAlert showAlertWithMessage:error actionSuccess:NO inViewController:self];
+}
+
 - (void) loginWithEmail: (NSString*) email password:(NSString*) password
 {
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading
-                                                message:NSLocalizedString(@"QM_STR_LOADING", nil)
-                                               duration:0];
+    // Save the user password for the shared folder use
+    [[DataManager sharedManager] setUserPassword:password];
     
-    __weak UINavigationController *navigationController = self.navigationController;
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
     [[QMNetworkManager sharedManager] userSignInWithEmail:email password:password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode, NSDictionary* responseObject) {
         
         @strongify(self)
-        [navigationController dismissNotificationPanel];
+        [SVProgressHUD dismiss];
         if (success){
-            [[DataManager sharedManager] setUserInfoFromLogin:responseObject];
-            if (statusCode == 250) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self performSegueWithIdentifier:kNewDeviceSegue sender:responseObject];
-                });
-            } else if (statusCode == 280) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self performSegueWithIdentifier:kChangePasswordSegue sender:responseObject];
-                });
-            } else {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     [self performSegueWithIdentifier:kQMSceneSegueMain sender:responseObject];
-                 });
-            }
+            [self manageSuccessResult:statusCode response:responseObject];
         } else {
-            if (statusCode == 401) {
-                int value = [[QMNetworkManager sharedManager].invalidTry intValue];
-                [QMNetworkManager sharedManager].invalidTry = [NSNumber numberWithInt:value+1];
-                
-                if (value >= 1){
-                    error = @"Locked for 1 minutes. invalid username and password more than 10 times...";
-                    [QMNetworkManager sharedManager].startTrackTimeForLogin = [[NSDate alloc] init];
-                }
-            } 
-            
-            [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error duration:kQMDefaultNotificationDismissTime*1.5];
+            [self manageErrorResult:statusCode error:error];
         }
     }];
 }
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
-    if ([segue.identifier isEqualToString:kQMSceneSegueMain]){
-        UINavigationController* mainNC = segue.destinationViewController;
-        UITabBarController* mainTC = [mainNC viewControllers].firstObject;
-        UINavigationController* homeNC = [mainTC viewControllers].firstObject;
-        HomeViewController* homeVC = [homeNC viewControllers].firstObject;
-        
-    }
     
-    if ([segue.identifier isEqualToString:kNewDeviceSegue]){
-        
+    if ([segue.identifier isEqualToString:kBranchSegue]){
+        BranchViewController *branchVC = segue.destinationViewController;
+        branchVC.firmArray = sender;
     }
     
     if ([segue.identifier isEqualToString:kChangePasswordSegue]){
