@@ -80,14 +80,6 @@ NYTPhotosViewControllerDelegate
     
     [super viewDidLoad];
     
-    if (self.navigationController.viewControllers.count == 1) {
-        
-        // showing split view display mode buttons
-        // only if controller is first in stack
-        self.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
-        self.navigationItem.leftItemsSupplementBackButton = YES;
-    }
-    
     self.hiddenSections = [NSMutableIndexSet indexSet];
     self.avatarImageView.imageViewType = QMImageViewTypeCircle;
     self.avatarImageView.delegate = self;
@@ -126,6 +118,11 @@ NYTPhotosViewControllerDelegate
     // smooth rows deselection
     [self qm_smoothlyDeselectRowsForTableView:self.tableView];
 }
+
+- (IBAction)dismissScreen:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 #pragma mark - Methods
 

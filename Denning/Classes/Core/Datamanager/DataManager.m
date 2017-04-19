@@ -41,7 +41,7 @@
         user = [UserModel allObjects].firstObject;
         if (!user) {
             [[RLMRealm defaultRealm] transactionWithBlock:^{
-                user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"",  @"", @"", @"", @"", @"", @"", @0]];
+                user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"",  @"", @"", @"", @"", @"", @"", @0, @"Public"]];
             }];
         }
     }
@@ -105,10 +105,12 @@
     [self setUserInfoFromNewDeviceLogin:response];
 }
 
-- (void) setServerAPI: (NSString*) serverAPI
+- (void) setServerAPI: (NSString*) serverAPI withFirmName:(NSString*) firmName
 {
+    self.searchType = @"General";
     [[RLMRealm defaultRealm] transactionWithBlock:^{
         user.serverAPI = serverAPI;
+        user.firmName = firmName;
     }];
 }
 

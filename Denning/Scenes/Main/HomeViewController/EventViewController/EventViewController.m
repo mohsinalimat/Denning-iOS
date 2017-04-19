@@ -9,7 +9,7 @@
 #import "EventViewController.h"
 #import "EventCell.h"
 
-@interface EventViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface EventViewController () <UISearchBarDelegate, UISearchControllerDelegate>
 @property (strong, nonatomic) NSArray* eventsArray;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *eventSummaryLabel;
@@ -43,7 +43,6 @@
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchBar.placeholder = NSLocalizedString(@"Search", nil);
     self.searchController.searchBar.delegate = self;
-    self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
@@ -61,7 +60,6 @@
     
     self.eventSummaryLabel.text = [NSString stringWithFormat:@"%ld upcoming events today", self.eventsArray.count];
 }
-
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -103,7 +101,6 @@
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
 
-
 - (void) filterEventArray
 {
     NSMutableArray* newArray = [NSMutableArray new];
@@ -116,13 +113,6 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - search
-
-- (void)updateSearchResultsForSearchController:(UISearchController *) __unused searchController
-{
-    //  self.navigationController.navigationBarHidden = NO;
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)__unused scrollView {
@@ -131,10 +121,6 @@
 }
 
 #pragma mark - UISearchControllerDelegate
-
-- (void)willPresentSearchController:(UISearchController *) __unused searchController {
-    
-}
 
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";

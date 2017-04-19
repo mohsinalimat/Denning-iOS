@@ -27,7 +27,7 @@
 
 - (void) configureCellWithLedgerDetail: (LedgerDetailModel*) model
 {
-    self.descriptionLabel.text = model.description;
+    self.descriptionLabel.text = model.ledgerDescription;
     self.documentNo.text = model.documentNo;
     self.amount.text = model.amount;
 }

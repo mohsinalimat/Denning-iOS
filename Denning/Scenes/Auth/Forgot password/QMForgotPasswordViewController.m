@@ -8,12 +8,23 @@
 
 #import "QMForgotPasswordViewController.h"
 #import "QMTasks.h"
+#import <NBPhoneNumberUtil.h>
+#import <NBPhoneNumber.h>
 
 @interface QMForgotPasswordViewController ()
+{
+    NSArray *countriesList;
+    NSMutableArray *countriesNameList;
+    NSString* selectedCountryCallingCode;
+    NSString* selectedCountryCode;
+    NSString* myPhoneNumber;
+}
 
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *phoneNumberTextField;
 @property (weak, nonatomic) IBOutlet UITextField *TACTextField;
+
+@property (weak, nonatomic) IBOutlet UIButton *countryBtn;
 
 @property (weak, nonatomic) BFTask *task;
 
@@ -34,9 +45,75 @@
     [QMNetworkManager sharedManager].invalidTry = @0;
     
     [self addTapGesture];
+    [self parseJSON];
+    [self setDefaultCountryCode];
 }
 
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [DIHelpers drawWhiteBorderToTextField:self.emailTextField];
+    [DIHelpers drawWhiteBorderToTextField:self.phoneNumberTextField];
+    [DIHelpers drawWhiteBorderToButton:self.countryBtn];
+}
+
+- (void)parseJSON {
+    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"countries" ofType:@"json"]];
+    NSError *localError = nil;
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
+    
+    if (localError != nil) {
+        NSLog(@"%@", [localError userInfo]);
+    }
+    countriesList = (NSArray *)parsedObject;
+    countriesNameList = [NSMutableArray new];
+    for (id obj in countriesList) {
+        NSString* countryNameAndCode = [NSString stringWithFormat:@"%@ (%@)", [obj objectForKey:kCountryName], [obj objectForKey:kCountryCallingCode]];
+        [countriesNameList addObject:countryNameAndCode];
+    }
+}
+
+- (void) setDefaultCountryCode
+{
+    NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
+    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+    NSString *buttonTitle;
+    for (id obj in countriesList) {
+        if ([[obj objectForKey:kCountryCode] isEqualToString:countryCode]) {
+            buttonTitle = [NSString stringWithFormat:@"(%@)", [obj objectForKey:kCountryCallingCode]];
+            selectedCountryCallingCode = [obj objectForKey:kCountryCallingCode];
+            selectedCountryCode = [obj objectForKey:kCountryCode];
+        }
+    }
+    
+    [self.countryBtn setTitle:buttonTitle forState:UIControlStateNormal];
+}
+
+
 #pragma mark Private
+
+- (IBAction)didTapCountryCode:(id)sender {
+    [self showCountryCodeList];
+}
+
+- (void) showCountryCodeList
+{
+    [ActionSheetStringPicker showPickerWithTitle:@"Select a Contry Code"
+                                            rows:countriesNameList
+                                initialSelection:0
+                                       doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
+                                           selectedCountryCode = [countriesList[selectedIndex] objectForKey:kCountryCode];
+                                           selectedCountryCallingCode = [countriesList[selectedIndex] objectForKey:kCountryCallingCode];
+                                           NSString *buttonTitle = [NSString stringWithFormat:@"(%@)", selectedCountryCallingCode];
+                                           [self.countryBtn setTitle: buttonTitle forState:UIControlStateNormal];
+                                           
+                                       }
+     
+                                     cancelBlock:^(ActionSheetStringPicker *picker) {
+                                         NSLog(@"Block Picker Canceled");
+                                     }
+                                          origin:self.countryBtn];
+}
+
 
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -123,11 +200,21 @@
 - (BOOL) validateInputsWithEmail: (NSString*) email phoneNumber:(NSString*) phoneNumber
 {
     if (email.length == 0 || phoneNumber.length == 0) {
-        
-        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil)];
+        [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_FILL_IN_ALL_THE_FIELDS", nil) actionSuccess:NO inViewController:self];
         return false;
     }
-    return true;
+    
+    // Phone number validation
+    NBPhoneNumberUtil *phoneUtil = [[NBPhoneNumberUtil alloc] init];
+    NSError *anError = nil;
+    myPhoneNumber = [selectedCountryCallingCode stringByAppendingString:self.phoneNumberTextField.text];
+    NBPhoneNumber *myNumber = [phoneUtil parse:self.phoneNumberTextField.text
+                                 defaultRegion:selectedCountryCode error:&anError];
+    if (![phoneUtil isValidNumber:myNumber]) {
+        [QMAlert showAlertWithMessage:@"Please input valid phone number" actionSuccess:NO inViewController:self];
+        return NO;
+    }
+    return YES;
 }
 
 - (IBAction)requestSMS:(id)sender {

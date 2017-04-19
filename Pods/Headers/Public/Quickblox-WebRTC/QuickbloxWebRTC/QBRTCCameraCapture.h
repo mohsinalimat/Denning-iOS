@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCCameraCapture.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCCameraCapture.h

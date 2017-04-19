@@ -11,55 +11,53 @@
 #import "QMContactsSearchDataSource.h"
 #import "QMGlobalSearchDataSource.h"
 #import "QMContactsSearchDataProvider.h"
+#import "MessageViewController.h"
 
 #import "QMUserInfoViewController.h"
-#import "QMSearchResultsController.h"
 
 #import "QMCore.h"
 #import "QMTasks.h"
-#import "QMAlert.h"
 
 #import "QMContactCell.h"
 #import "QMNoContactsCell.h"
 #import "QMNoResultsCell.h"
-#import "QMSearchCell.h"
+#import "ChatContactCell.h"
 
 #import <SVProgressHUD.h>
 
-typedef NS_ENUM(NSUInteger, QMSearchScopeButtonIndex) {
-    
-    QMSearchScopeButtonIndexLocal,
-    QMSearchScopeButtonIndexGlobal
-};
-
-@interface QMContactsViewController ()
-
+@interface DenningContactViewController ()
 <
-QMSearchResultsControllerDelegate,
-
 UISearchControllerDelegate,
-UISearchResultsUpdating,
 UISearchBarDelegate,
 
 QMContactListServiceDelegate,
-QMUsersServiceDelegate
+QMUsersServiceDelegate,
+
+ChatContactDelegate,
+SWTableViewCellDelegate
 >
+{
+    NSMutableArray* originalContacts;
+    NSMutableArray* contactsArray;
+    NSString* selectedFirmCode;
+}
 
 @property (strong, nonatomic) UISearchController *searchController;
-@property (strong, nonatomic) QMSearchResultsController *searchResultsController;
 
 /**
  *  Data sources
  */
 @property (strong, nonatomic) QMContactsDataSource *dataSource;
-@property (strong, nonatomic) QMContactsSearchDataSource *contactsSearchDataSource;
-@property (strong, nonatomic) QMGlobalSearchDataSource *globalSearchDataSource;
+
+@property (strong, nonatomic) NSString* filter;
 
 @property (weak, nonatomic) BFTask *addUserTask;
 
+@property (weak, nonatomic) BFTask *task;
+
 @end
 
-@implementation QMContactsViewController
+@implementation DenningContactViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,16 +67,22 @@ QMUsersServiceDelegate
     
     // search implementation
     [self configureSearch];
-    
-    // setting up data source
-    [self configureDataSources];
-    
+
     // filling data source
-    [self updateItemsFromContactList];
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     
-    // registering nibs for current VC and search results VC
-    [self registerNibs];
+    __weak UINavigationController *navigationController = self.navigationController;
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateItemsFromContactListWithCompletion:^{
+            // registering nibs for current VC and search results VC
+            [navigationController dismissNotificationPanel];
+            
+            [self registerNibs];
+            [self updateFriendList];
+        }];
+    });
+ 
     // subscribing for delegates
     [[QMCore instance].contactListService addDelegate:self];
     [[QMCore instance].usersService addDelegate:self];
@@ -96,18 +100,7 @@ QMUsersServiceDelegate
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.searchController.isActive) {
-        
-        self.tabBarController.tabBar.hidden = YES;
-        
-        // smooth rows deselection
-        [self qm_smoothlyDeselectRowsForTableView:self.searchResultsController.tableView];
-    }
-    else {
-        
-        // smooth rows deselection
-        [self qm_smoothlyDeselectRowsForTableView:self.tableView];
-    }
+    [self qm_smoothlyDeselectRowsForTableView:self.tableView];
     
     if (self.refreshControl.isRefreshing) {
         // fix for freezing refresh control after tab bar switch
@@ -119,17 +112,20 @@ QMUsersServiceDelegate
     }
 }
 
-- (void)configureSearch {
-    
-    self.searchResultsController = [[QMSearchResultsController alloc] init];
-    self.searchResultsController.delegate = self;
-    
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultsController];
-    self.searchController.searchBar.placeholder = NSLocalizedString(@"QM_STR_SEARCH_BAR_PLACEHOLDER", nil);
+- (void) updateFriendList {
+    originalContacts = [DataManager sharedManager].staffContactsArray;
+    contactsArray = originalContacts;
+    [self.tableView reloadData];
+}
+
+- (void) configureSearch
+{
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search", nil);
     self.searchController.searchBar.delegate = self;
-    self.searchController.searchResultsUpdater = self;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
     self.tableView.tableHeaderView = self.searchController.searchBar;
@@ -138,90 +134,358 @@ QMUsersServiceDelegate
 - (void)configureDataSources {
     
     self.dataSource = [[QMContactsDataSource alloc] initWithKeyPath:@keypath(QBUUser.new, fullName)];
-    self.tableView.dataSource = self.dataSource;
-    
-    QMContactsSearchDataProvider *searchDataProvider = [[QMContactsSearchDataProvider alloc] init];
-    searchDataProvider.delegate = self.searchResultsController;
-    
-    self.contactsSearchDataSource = [[QMContactsSearchDataSource alloc] initWithSearchDataProvider:searchDataProvider usingKeyPath:@keypath(QBUUser.new, fullName)];
-    
-    QMGlobalSearchDataProvider *globalSearchDataProvider = [[QMGlobalSearchDataProvider alloc] init];
-    globalSearchDataProvider.delegate = self.searchResultsController;
-    
-    self.globalSearchDataSource = [[QMGlobalSearchDataSource alloc] initWithSearchDataProvider:globalSearchDataProvider];
-    
-    @weakify(self);
-    self.globalSearchDataSource.didAddUserBlock = ^(UITableViewCell *cell) {
+    self.dataSource.didAddUserBlock = ^{
         
-        @strongify(self);
-        if (self.addUserTask) {
-            // task in progress
-            return;
+    };
+    self.tableView.dataSource = self.dataSource;
+}
+
+#pragma mark - UITableView Datasource
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return contactsArray.count;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    ChatFirmModel* chatFirmModel = contactsArray[section];
+    return chatFirmModel.users.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return contactsArray.count > 0 ? [ChatContactCell height] : CGRectGetHeight(tableView.bounds) - tableView.contentInset.top - tableView.contentInset.bottom;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    ChatFirmModel* chatFirmModel = contactsArray[section];
+    
+    return chatFirmModel.firmName;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 10;
+}
+
+#pragma MARK - UITableView Delegate
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (contactsArray.count == 0) {
+        QMNoContactsCell *cell = [tableView dequeueReusableCellWithIdentifier:[QMNoContactsCell cellIdentifier] forIndexPath:indexPath];
+        [cell setTitle:NSLocalizedString(@"QM_STR_NO_CONTACTS", nil)];
+        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        return cell;
+    }
+    
+    tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    ChatContactCell *cell = (ChatContactCell *)[self.tableView dequeueReusableCellWithIdentifier:[ChatContactCell cellIdentifier]
+                                                                                           forIndexPath:indexPath];
+    cell.leftUtilityButtons = [self leftButtons];
+    cell.delegate = self;
+    cell.chatDelegate = self;
+    
+    ChatFirmModel* firmModel = contactsArray[indexPath.section];
+    QBUUser *user = firmModel.users[indexPath.row];
+    [cell configureCellWithContact:user];
+    
+    return cell;
+}
+
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:17.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    NSAttributedString* callString = [[NSAttributedString alloc] initWithString:@"Call" attributes:attributes];
+
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:callString];
+    
+    return leftUtilityButtons;
+}
+
+#pragma mark - SWTableViewDelegate
+
+- (BOOL)swipeableTableViewCellShouldHideUtilityButtonsOnSwipe:(SWTableViewCell *)cell
+{
+    return YES;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    [cell hideUtilityButtonsAnimated:YES];
+    QBUUser* user = contactsArray[cell.tag];
+    switch (index) {
+        case 0:
+            if (![self callsAllowed:user]) {
+                return;
+            }
+            
+            [[QMCore instance].callManager callToUserWithID:user.ID conferenceType:QBRTCConferenceTypeAudio];            break;
+            
+        default:
+            break;
+    }
+}
+
+- (BOOL)callsAllowed:(QBUUser*) selectedUser {
+    
+    if (![self connectionExists]) {
+        return NO;
+    }
+    
+    if (![[QMCore instance].contactManager isFriendWithUserID:selectedUser.ID]) {
+        
+        [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CANT_MAKE_CALLS", nil) actionSuccess:NO inViewController:self];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)connectionExists {
+    
+    if (![[QMCore instance] isInternetConnected]) {
+        
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_CHECK_INTERNET_CONNECTION", nil)];
+        return NO;
+    }
+    
+    if (![QBChat instance].isConnected) {
+        
+        if ([QMCore instance].chatService.chatConnectionState == QMChatConnectionStateConnecting) {
+            
+            [self.navigationController shake];
+        }
+        else {
+            
+            [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CHAT_SERVER_UNAVAILABLE", nil) actionSuccess:NO inViewController:self];
         }
         
-        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void) addContactToFavoriteList:(QBUUser*) user {
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    [[QMNetworkManager sharedManager] addFavoriteContact:user withCompletion:^(NSError * _Nonnull error) {
         
-        NSIndexPath *indexPath = [self.searchResultsController.tableView indexPathForCell:cell];
-        QBUUser *user = self.globalSearchDataSource.items[indexPath.row];
+        [navigationController dismissNotificationPanel];
+        if (error == nil) {
+            [[DataManager sharedManager].favoriteContactsArray addObject:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CHANGE_FAVORITE_CONTACT object:user];
+        } else {
+            [QMAlert showAlertWithMessage:error.localizedDescription actionSuccess:NO inViewController:self];
+        }
+    }];
+}
+
+- (void) removeContactFromFavoriteList:(QBUUser*) user {
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    [[QMNetworkManager sharedManager] removeFavoriteContact:user withCompletion:^(NSError * _Nonnull error) {
         
-        self.addUserTask = [[[QMCore instance].contactManager addUserToContactList:user] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-            
-            [SVProgressHUD dismiss];
-            
-            if (!task.isFaulted
-                && self.searchController.isActive
-                && [self.searchResultsController.tableView.dataSource conformsToProtocol:@protocol(QMGlobalSearchDataSourceProtocol)]) {
-                
-                [self.searchResultsController.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            else {
-                
-                switch ([QMCore instance].chatService.chatConnectionState) {
-                        
-                    case QMChatConnectionStateDisconnected:
-                    case QMChatConnectionStateConnected:
-                        
-                        if ([[QMCore instance] isInternetConnected]) {
-                            
-                            [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CHAT_SERVER_UNAVAILABLE", nil) actionSuccess:NO inViewController:self];
-                        }
-                        else {
-                            
-                            [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CHECK_INTERNET_CONNECTION", nil) actionSuccess:NO inViewController:self];
-                        }
-                        break;
-                        
-                    case QMChatConnectionStateConnecting:
-                        [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CONNECTION_IN_PROGRESS", nil) actionSuccess:NO inViewController:self];
-                        break;
+        [navigationController dismissNotificationPanel];
+        if (error == nil) {
+            [[DataManager sharedManager].favoriteContactsArray removeObject:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CHANGE_FAVORITE_CONTACT object:user];
+        } else {
+            [QMAlert showAlertWithMessage:error.localizedDescription actionSuccess:NO inViewController:self];
+        }
+    }];
+}
+
+#pragma mark - ContactCellDelegate
+- (void) didFavTapped:(ChatContactCell *)cell user:(QBUUser *)user tapType:(NSString *)type
+{
+    if ([type isEqualToString:@"Add"]) {
+        [self addContactToFavoriteList:user];
+    } else {
+        [self removeContactFromFavoriteList:user];
+    }
+}
+
+#pragma mark - Search Delegate
+- (void)willPresentSearchController:(UISearchController *)searchController
+{
+    MessageViewController* messageVC = (MessageViewController*)self.parentViewController;
+    
+    messageVC.navigationController.navigationBarHidden = YES;
+}
+
+- (void)willDismissSearchController:(UISearchController *) __unused searchController {
+    MessageViewController* messageVC = (MessageViewController*)self.parentViewController;
+    messageVC.navigationController.navigationBarHidden = NO;
+    
+    self.filter = @"";
+    searchController.searchBar.text = @"";
+    [self updateFriendList];
+    [self.tableView reloadData];
+}
+
+#pragma mark - searchbar delegate
+- (void) filterContactList
+{
+    NSMutableArray* newArray = [NSMutableArray new];
+    if (self.filter.length == 0) {
+        [self updateFriendList];
+    } else {
+        for (ChatFirmModel* firmModel in originalContacts) {
+            ChatFirmModel* newModel = [ChatFirmModel new];
+            newModel.firmName = firmModel.firmName;
+            newModel.firmCode = firmModel.firmCode;
+            if ([firmModel.firmName localizedCaseInsensitiveContainsString:self.filter]) {
+                newModel.users = firmModel.users;
+            } else {
+                NSMutableArray* userArray = [NSMutableArray new];
+                for(QBUUser* user in firmModel.users) {
+                    if ([user.fullName localizedCaseInsensitiveContainsString:self.filter]) {
+                        [userArray addObject:user];
+                    }
                 }
+                newModel.users = [userArray copy];
             }
-            
-            return nil;
-        }];
-    };
+            [newArray addObject:newModel];
+        }
+        contactsArray = [newArray copy];
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
+{
+    self.filter = searchText;
+    if (self.filter.length == 0) {
+        [self updateFriendList];
+    } else {
+        [self filterContactList];
+    }
 }
 
 #pragma mark - Update items
 
-- (void)updateItemsFromContactList {
-    
-    NSArray *friends = [[QMCore instance].contactManager friends];
-    [self.dataSource replaceItems:friends];
+- (void)updateItemsFromContactListWithCompletion:(void(^)(void)) completion {
+    [[QMNetworkManager sharedManager] getChatContactsWithCompletion:completion];
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)__unused tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return [self.searchDataSource heightForRowAtIndexPath:indexPath];
-}
-
 - (void)tableView:(UITableView *)__unused tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    QBUUser *user = [(id <QMContactsSearchDataSourceProtocol>)self.searchDataSource userAtIndexPath:indexPath];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    [self performSegueWithIdentifier:kQMSceneSegueUserInfo sender:user];
+    ChatFirmModel* firmModel = contactsArray[indexPath.section];
+    selectedFirmCode = firmModel.firmCode;
+    QBUUser *user = firmModel.users[indexPath.row];
+    BOOL isRequestSent = [[QMCore instance].contactManager isContactListItemExistentForUserWithID:user.ID];
+ 
+    if (![[QMCore instance].contactManager isFriendWithUserID: user.ID] && !isRequestSent) {
+        @weakify(self);
+        [self addToContact:user withCompletion:^{
+            @strongify(self);
+            [self gotoChat:user];
+        }];
+    } else {
+        [self gotoChat:user];
+    }
+}
+
+- (IBAction)addToContact:(QBUUser*) user withCompletion:(void(^)(void)) completion {
+    
+    if (self.addUserTask) {
+        // task in progress
+        return;
+    }
+    
+    if (![[QMCore instance].contactManager isFriendWithUserID:user.ID]) {
+        BOOL isRequestSent = [[QMCore instance].contactManager isContactListItemExistentForUserWithID:user.ID];
+        if (isRequestSent) {
+            if (completion != nil) {
+                completion();
+            }
+            return;
+        } else {
+            [SVProgressHUD showWithStatus:@"Sending"];
+            
+            self.addUserTask = [[[QMCore instance].contactManager addUserToContactList:user] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+                
+                [SVProgressHUD dismiss];
+                if (self == nil) return nil;
+                if (!task.isFaulted) {
+                    if (completion != nil) {
+                        completion();
+                    }
+                }
+                else {
+                    switch ([QMCore instance].chatService.chatConnectionState) {
+                            
+                        case QMChatConnectionStateDisconnected:
+                        case QMChatConnectionStateConnected:
+                            if ([[QMCore instance] isInternetConnected]) {
+                                
+                                [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CHAT_SERVER_UNAVAILABLE", nil) actionSuccess:NO inViewController:self];
+                            }
+                            else {
+                                
+                                [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CHECK_INTERNET_CONNECTION", nil) actionSuccess:NO inViewController:self];
+                            }
+                            break;
+                            
+                        case QMChatConnectionStateConnecting:
+                            [QMAlert showAlertWithMessage:NSLocalizedString(@"QM_STR_CONNECTION_IN_PROGRESS", nil) actionSuccess:NO inViewController:self];
+                            break;
+                    }
+                }
+                
+                return nil;
+            }];
+        }
+    }
+}
+
+- (void) gotoChat: (QBUUser*) user {
+    
+    QBChatDialog *privateChatDialog = [[QMCore instance].chatService.dialogsMemoryStorage privateChatDialogWithOpponentID:user.ID];
+    
+    if (privateChatDialog) {
+        
+        [self performSegueWithIdentifier:kQMSceneSegueChat sender:privateChatDialog];
+    }
+    else {
+        
+        if (self.task) {
+            // task in progress
+            return;
+        }
+        
+        [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+        
+        __weak UINavigationController *navigationController = self.navigationController;
+        
+        @weakify(self);
+        self.task = [[[QMCore instance].chatService createPrivateChatDialogWithOpponentID:user.ID] continueWithBlock:^id _Nullable(BFTask<QBChatDialog *> * _Nonnull task) {
+            
+            @strongify(self);
+            [navigationController dismissNotificationPanel];
+            if (!task.isFaulted) {
+                
+                [self performSegueWithIdentifier:kQMSceneSegueChat sender:task.result];
+            }
+            
+            return nil;
+        }];
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -229,77 +493,6 @@ QMUsersServiceDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)__unused scrollView {
     
     [self.searchController.searchBar endEditing:YES];
-}
-
-#pragma mark - UISearchControllerDelegate
-
-- (void)willPresentSearchController:(UISearchController *)searchController {
-    
-    if (searchController.searchBar.scopeButtonTitles.count == 0) {
-        // there is an Apple bug when first time configuring search bar scope buttons
-        // will be displayed no matter what with minimal searchbar
-        // to fix this adding scope buttons right before user activates search bar
-        searchController.searchBar.showsScopeBar = NO;
-        searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"QM_STR_LOCAL_SEARCH", nil), NSLocalizedString(@"QM_STR_GLOBAL_SEARCH", nil)];
-    }
-    
-    [self updateDataSourceByScope:searchController.searchBar.selectedScopeButtonIndex];
-    
-    self.tabBarController.tabBar.hidden = YES;
-}
-
-- (void)willDismissSearchController:(UISearchController *)__unused searchController {
-    
-    self.tableView.dataSource = self.dataSource;
-    [self updateItemsFromContactList];
-    
-    self.tabBarController.tabBar.hidden = NO;
-}
-
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBar:(UISearchBar *)__unused searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-    
-    [self updateDataSourceByScope:selectedScope];
-    [self.searchResultsController performSearch:self.searchController.searchBar.text];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)__unused searchBar {
-    
-    [self.globalSearchDataSource.globalSearchDataProvider cancel];
-}
-
-#pragma mark - QMSearchResultsControllerDelegate
-
-- (void)searchResultsController:(QMSearchResultsController *)__unused searchResultsController willBeginScrollResults:(UIScrollView *)__unused scrollView {
-    
-    [self.searchController.searchBar endEditing:YES];
-}
-
-- (void)searchResultsController:(QMSearchResultsController *)__unused searchResultsController didSelectObject:(id)object {
-    
-    [self performSegueWithIdentifier:kQMSceneSegueUserInfo sender:object];
-}
-
-#pragma mark - Helpers
-
-- (void)updateDataSourceByScope:(NSUInteger)selectedScope {
-    
-    if (selectedScope == QMSearchScopeButtonIndexLocal) {
-        
-        [self.globalSearchDataSource.globalSearchDataProvider cancel];
-        self.searchResultsController.tableView.dataSource = self.contactsSearchDataSource;
-    }
-    else if (selectedScope == QMSearchScopeButtonIndexGlobal) {
-        
-        self.searchResultsController.tableView.dataSource = self.globalSearchDataSource;
-    }
-    else {
-        
-        NSAssert(nil, @"Unknown selected scope");
-    }
-    
-    [self.searchResultsController.tableView reloadData];
 }
 
 - (void)updateContactsAndEndRefreshing {
@@ -325,48 +518,45 @@ QMUsersServiceDelegate
         QMUserInfoViewController *userInfoVC = navigationController.viewControllers.firstObject;
         userInfoVC.user = sender;
     }
-}
-
-#pragma mark - UISearchResultsUpdating
-
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     
-    if (searchController.searchBar.selectedScopeButtonIndex == QMSearchScopeButtonIndexGlobal
-        && ![QMCore instance].isInternetConnected) {
-        
-        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"QM_STR_CHECK_INTERNET_CONNECTION", nil)];
-        return;
+    if ([segue.identifier isEqualToString:kQMSceneSegueChat]) {
+        UINavigationController *navigationController = segue.destinationViewController;
+        QMChatVC *chatViewController = [navigationController viewControllers].firstObject;
+        chatViewController.chatDialog = sender;
+        chatViewController.firmCode = selectedFirmCode;
     }
-    
-    [self.searchResultsController performSearch:searchController.searchBar.text];
 }
 
 #pragma mark - QMContactListServiceDelegate
 
 - (void)contactListService:(QMContactListService *)__unused contactListService contactListDidChange:(QBContactList *)__unused contactList {
     
-    [self updateItemsFromContactList];
-    [self.tableView reloadData];
+    [self updateItemsFromContactListWithCompletion:^{
+        [self updateFriendList];
+    }];
+    
 }
 
 #pragma mark - QMUsersServiceDelegate
 
 - (void)usersService:(QMUsersService *)__unused usersService didLoadUsersFromCache:(NSArray<QBUUser *> *)__unused users {
-    
-    [self updateItemsFromContactList];
-    [self.tableView reloadData];
+    [self updateItemsFromContactListWithCompletion:^{
+        [self updateFriendList];
+    }];
 }
 
 - (void)usersService:(QMUsersService *)__unused usersService didAddUsers:(NSArray<QBUUser *> *)__unused users {
     
-    [self updateItemsFromContactList];
-    [self.tableView reloadData];
+    [self updateItemsFromContactListWithCompletion:^{
+        [self updateFriendList];
+    }];
 }
 
 - (void)usersService:(QMUsersService *)__unused usersService didUpdateUsers:(NSArray<QBUUser *> *)__unused users {
     
-    [self updateItemsFromContactList];
-    [self.tableView reloadData];
+    [self updateItemsFromContactListWithCompletion:^{
+        [self updateFriendList];
+    }];
 }
 
 #pragma mark - QMSearchProtocol
@@ -380,14 +570,9 @@ QMUsersServiceDelegate
 
 - (void)registerNibs {
     
+    [ChatContactCell registerForReuseInTableView:self.tableView];
+    
     [QMContactCell registerForReuseInTableView:self.tableView];
-    [QMContactCell registerForReuseInTableView:self.searchResultsController.tableView];
-    
-    [QMNoResultsCell registerForReuseInTableView:self.tableView];
-    [QMNoResultsCell registerForReuseInTableView:self.searchResultsController.tableView];
-    
-    [QMSearchCell registerForReuseInTableView:self.tableView];
-    [QMSearchCell registerForReuseInTableView:self.searchResultsController.tableView];
     
     [QMNoContactsCell registerForReuseInTableView:self.tableView];
 }

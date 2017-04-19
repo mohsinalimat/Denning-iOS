@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) LegalFirmModel* legalFirmModel;
 @property (strong, nonatomic) NSString* previousScreen;
+@property (strong, nonatomic) NSString* gotoRelatedMatter;
 
 @end

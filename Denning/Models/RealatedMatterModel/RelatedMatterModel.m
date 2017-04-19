@@ -29,6 +29,8 @@
     
     relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKey:@"partyGroup"]];
     
+    relatedMatter.court = [CourtModel getCourtFromResponse:response];
+    
     relatedMatter.solicitorGroupArray = [RelatedMatterModel getSolicitorGroupArrayFromResponse:[response objectForKey:@"solicitorsGroup"]];
     
     relatedMatter.propertyGroupArray = [PropertyModel getPropertyArrayFromResponse:[response objectForKey:@"propertyGroup"]];

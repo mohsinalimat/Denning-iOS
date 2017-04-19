@@ -7,7 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DIGeneralCell.h"
 
-@interface LastTableCell : UITableViewCell
+@class LastTableCell;
+
+@protocol LastTableCellDelegate <NSObject>
+
+@optional
+
+- (void) didTapFirstBtn: (LastTableCell*) cell;
+- (void) didTapSecondBtn: (LastTableCell*) cell;
+
+@end
+
+@interface LastTableCell : DIGeneralCell
+
+@property (weak, nonatomic) id <LastTableCellDelegate> delgate;
+
+-(void) configureCellWithFirstTitle: (NSString*) firstTitle withSecondTitle: (NSString*) secondTitle;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "ChangePasswordViewController.h"
 
-@interface ChangePasswordViewController ()
+@interface ChangePasswordViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *newpasswordTextField;
 @property (weak, nonatomic) IBOutlet UITextField *confirmPasswordTextField;
 
@@ -20,6 +20,38 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self prepareUI];
+    [self addTapGesture];
+}
+
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [DIHelpers drawWhiteBorderToTextField:self.newpasswordTextField];
+    [DIHelpers drawWhiteBorderToTextField:self.confirmPasswordTextField];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+    
+    [self addKeyboardObservers];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self removeKeyboardObservers];
+    [SVProgressHUD dismiss];
+}
+
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
+    tap.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)handleTap {
+    [self.view endEditing:YES];
 }
 
 - (void) prepareUI
@@ -34,11 +66,47 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (void)addKeyboardObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)removeKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShow:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f)
+    {
+        CGFloat y = -keyboardSize.height/2;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification*) notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    if (keyboardSize.height != 0.0f)
+    {
+        CGFloat y = 0;
+        CGRect frame = CGRectMake(self.view.frame.origin.x, y, self.view.frame.size.width, self.view.frame.size.height);
+        [self.view setFrame:frame];
+        [self.view layoutIfNeeded];
+    }
+}
+
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)changePassword:(id)sender {
+    [self.view endEditing:YES];
+    
     NSString *password1 = self.newpasswordTextField.text;
     NSString *password2 = self.confirmPasswordTextField.text;
     
@@ -59,10 +127,18 @@
         if (success){
             [[DataManager sharedManager] setUserInfoFromChangePassword:response];
             [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+            [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
         }
         
         [SVProgressHUD showErrorWithStatus:error];
     }];
+}
+
+#pragma mark - TextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self changePassword:nil];
+    return YES;
 }
 
 - (IBAction)skipChange:(id)sender {

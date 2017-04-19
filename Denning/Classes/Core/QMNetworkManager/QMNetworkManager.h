@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
-#import "APIDataSource.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,7 +30,6 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 @property(nonatomic, strong) AFHTTPSessionManager  *manager;
 
-@property (nonatomic, strong) APIDataSource *searchDataSource;
 
 @property (strong, atomic) NSString       *installDate;
 @property (strong, atomic) NSString       *installDateTemp;
@@ -41,6 +39,13 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @property(strong, atomic) NSString       *stateName;
 @property (strong, atomic) NSNumber      *invalidTry;
 @property (strong, atomic) NSDate       *startTrackTimeForLogin;
+
+@property (strong, nonatomic) NSString* ipWAN;
+@property (strong, nonatomic) NSString* ipLan;
+@property (strong, nonatomic) NSString* os;
+@property (strong, nonatomic) NSString* device;
+@property (strong, nonatomic) NSString* deviceName;
+@property (strong, nonatomic) NSString* MAC;
 
 @property(nonatomic, strong) UserModel*     myProfile;
 
@@ -105,7 +110,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  Get Firm List
  */
 
-- (void) getFirmListWithCompletion: (void(^)(NSArray* resultArray)) completion;
+- (void) getFirmListWithPage: (NSNumber*) page completion: (void(^)(NSArray* resultArray, NSError* error)) completion;
 
 /*
  *  Secondary Log in
@@ -135,7 +140,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  @param: deviceName
  */
 
-- (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email password:(NSString*) password isLayer:(NSNumber*) isLayer firmCode: (NSString*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion;
+- (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email isLayer:(NSNumber*) isLayer firmCode: (NSNumber*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion;
 
 // Home Search
 
@@ -178,6 +183,18 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Document
 - (void) loadDocumentWithCode: (NSString*) code completion: (void(^)(DocumentModel* doumentModel, NSError* error)) completion;
+
+
+/*
+ * Chat
+ */
+
+// Get the contacts
+- (void) getChatContactsWithCompletion:(void(^)(void)) completion;
+
+- (void) addFavoriteContact: (QBUUser*) user withCompletion:(void(^)(NSError* error)) completion;
+
+- (void) removeFavoriteContact: (QBUUser*) user withCompletion:(void(^)(NSError* error)) completion;
 
 
 @end

@@ -51,10 +51,6 @@
     [self.view endEditing:YES];
 }
 
-- (void) addCommaToStaticTF {
-    
-}
-
 - (NSString*) removeCommaFromString: (NSString*) formattedNumber
 {
     NSArray * comps = [formattedNumber componentsSeparatedByString:@","];
@@ -79,22 +75,24 @@
     return [[self removeCommaFromString:formattedNumber] doubleValue];
 }
 
-- (NSString*) getCommaSeparatedValue: (NSString*) string{
-    NSString *mystring = [self removeCommaFromString:string];
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
     NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
     NSNumberFormatter *formatter = [NSNumberFormatter new];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    return [formatter stringFromNumber:number];
+    textField.text = [formatter stringFromNumber:number];
 }
 
 #pragma mark - UITexFieldDelegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        textField.text = [self getCommaSeparatedValue:textField.text];
+        [self applyCommaToTextField:textField];
     }
     
     self.annualRentLabel.text = [NSString stringWithFormat:@"%.2f", [self getActualNumber:self.monthlyRentTextField.text] * 12];
+    [self applyCommaToTextField:self.annualRentLabel];
 }
 
 #pragma mark - Table view data source
@@ -185,6 +183,9 @@
     }
     
     self.legalCostTextField.text = [NSString stringWithFormat:@"%.2f", legalCost];
+    
+    [self applyCommaToTextField:self.resultTextField];
+    [self applyCommaToTextField: self.legalCostTextField];
 }
 
 - (IBAction)didTapReset:(id)sender {

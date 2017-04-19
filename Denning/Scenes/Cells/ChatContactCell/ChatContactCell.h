@@ -7,7 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GeneralContactCell.h"
 
-@interface ChatContactCell : UITableViewCell
+@class ChatContactCell;
+@protocol ChatContactDelegate <NSObject>
+
+@optional
+
+- (void) didFavTapped: (ChatContactCell*) cell user:(QBUUser*) user tapType:(NSString*)type;
+
+@end
+
+@interface ChatContactCell : GeneralContactCell
+
+@property (weak, nonatomic) id<ChatContactDelegate> chatDelegate;
+
+- (void) configureCellWithContact: (QBUUser*) user;
 
 @end

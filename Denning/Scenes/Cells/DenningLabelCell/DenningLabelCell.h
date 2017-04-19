@@ -11,4 +11,6 @@
 
 @interface DenningLabelCell : DIGeneralCell
 
+- (void) configureCellWithText: (NSString*)text;
+
 @end

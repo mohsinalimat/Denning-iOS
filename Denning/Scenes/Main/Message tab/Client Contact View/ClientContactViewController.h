@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QMSearchProtocols.h"
 
-@interface ClientContactViewController : UITableViewController
+@interface ClientContactViewController : UITableViewController<QMSearchProtocol>
 
 @end

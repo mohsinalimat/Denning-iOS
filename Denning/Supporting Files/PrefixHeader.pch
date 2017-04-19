@@ -46,6 +46,8 @@
 #import "NetworkErrors.h"
 #import "NetworkManagerConstants.h"
 #import "PushManager.h"
+#import "MBProgressHUD.h"
+#import "SWTableViewCell.h"
 
 #import "QMCore.h"
 #import "QMNetworkManager.h"
@@ -62,16 +64,13 @@
 #import "DIHelpers.h"
 #import "QMAlert.h"
 #import "NSDictionary+NotNull.h"
+#import <SystemServices.h>
+#import "FCFileManager.h"
 
-@import AutoCompletion;
-#import "APIDataSource.h"
-#import "AutoCompletionUIKitDynamicsAnimation.h"
 
 #import "UserModel.h"
 #import "SearchResultModel.h"
 #import "SearchKeywordModel.h"
-#import "JSONItem.h"
-#import "JSONManager.h"
 #import "FirmModel.h"
 #import "NewsModel.h"
 #import "EventModel.h"
@@ -93,5 +92,8 @@
 #import "FolderModel.h"
 #import "CourtModel.h"
 #import "FirmURLModel.h"
+#import "ChatContactModel.h"
+#import "ChatFirmModel.h"
+#import "ChatUserModel.h"
 
 #endif /* PrefixHeader_pch */

@@ -30,6 +30,7 @@ RLM_ARRAY_TYPE(FirmURLModel)
 @property   NSString    *userType;
 @property   NSString    *serverURL;
 @property   NSInteger    activationCode;
+@property   NSString    *firmName;
 
 @end
 

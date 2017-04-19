@@ -10,4 +10,9 @@
 
 @interface MessageViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIView *companySelectionView;
+@property (weak, nonatomic) IBOutlet UIStackView *chatOptionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pageViewerTopConstraint;
+
+
 @end

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GeneralContactCell : UITableViewCell
-
+@interface GeneralContactCell : SWTableViewCell
++ (void)registerForReuseInTableView:(UITableView *)tableView;
++ (NSString *)cellIdentifier;
++ (CGFloat)height;
 @end

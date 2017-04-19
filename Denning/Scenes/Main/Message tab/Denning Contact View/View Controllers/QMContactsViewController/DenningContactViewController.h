@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "QMSearchProtocols.h"
 
-@interface QMContactsViewController : UITableViewController <QMSearchProtocol>
+@interface DenningContactViewController : UITableViewController<QMSearchProtocol>
 
 @end

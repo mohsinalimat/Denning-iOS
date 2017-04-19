@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -31,97 +31,122 @@
             <rect key="frame" x="0.0" y="0.0" width="499" height="207"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="499" height="206"/>
+                <rect key="frame" x="0.0" y="0.0" width="499" height="207"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5i7-bq-U7K">
-                        <rect key="frame" x="16" y="55.5" width="58" height="98.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5i7-bq-U7K">
+                        <rect key="frame" x="16" y="123" width="55" height="63.5"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Mar 27, 2007" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VsH-y7-tk8">
-                        <rect key="frame" x="401" y="32.5" width="86" height="17"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <rect key="frame" x="410" y="34" width="77" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="3:10 PM" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcf-Xe-hA1">
-                        <rect key="frame" x="401" y="77" width="53.5" height="17"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <rect key="frame" x="329" y="34" width="49" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="court" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkW-EY-2GL">
-                        <rect key="frame" x="16" y="176.5" width="58" height="13.5"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="court" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkW-EY-2GL">
+                        <rect key="frame" x="16" y="80" width="55" height="14"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="12"/>
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="File No" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGJ-OS-AfG">
-                        <rect key="frame" x="16" y="13" width="37" height="14.5"/>
-                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
+                        <rect key="frame" x="16" y="13" width="41" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Start Date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv4-xt-Ruv">
-                        <rect key="frame" x="401" y="13" width="55" height="14.5"/>
-                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
+                        <rect key="frame" x="410" y="13" width="59" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Mar 27, 2007" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hHC-u8-AED">
+                        <rect key="frame" x="410" y="79" width="77" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="End Date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUl-u9-xbv">
+                        <rect key="frame" x="410" y="58" width="54" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Location" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VcH-Ja-fDA">
-                        <rect key="frame" x="16" y="159" width="47" height="14.5"/>
-                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
+                        <rect key="frame" x="16" y="61" width="51" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Start Time" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YlK-h4-P2P">
-                        <rect key="frame" x="401" y="57.5" width="56" height="14.5"/>
-                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
+                        <rect key="frame" x="329" y="13" width="60" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="2000-0077" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vna-L4-OT0">
-                        <rect key="frame" x="16" y="32.5" width="83" height="18"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
+                        <rect key="frame" x="16" y="34" width="77.5" height="19"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="16"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h2j-5S-mIB">
+                        <rect key="frame" x="16" y="102" width="66.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="5i7-bq-U7K" firstAttribute="top" secondItem="Vna-L4-OT0" secondAttribute="bottom" constant="5" id="9Hg-NH-PLA"/>
                     <constraint firstItem="OGJ-OS-AfG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="A0Q-6F-s22"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="DkW-EY-2GL" secondAttribute="bottom" constant="8" id="Abq-j0-C3J"/>
                     <constraint firstItem="pcf-Xe-hA1" firstAttribute="top" secondItem="YlK-h4-P2P" secondAttribute="bottom" constant="5" id="ApQ-Ud-AWp"/>
                     <constraint firstItem="VsH-y7-tk8" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="DA9-ye-PdG"/>
                     <constraint firstItem="Vna-L4-OT0" firstAttribute="leading" secondItem="OGJ-OS-AfG" secondAttribute="leading" id="EJG-09-09A"/>
                     <constraint firstItem="OGJ-OS-AfG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="GyA-l7-BGN"/>
+                    <constraint firstItem="CUl-u9-xbv" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="L3m-aW-AKD"/>
                     <constraint firstItem="VcH-Ja-fDA" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="LVY-GM-SGn"/>
+                    <constraint firstItem="VcH-Ja-fDA" firstAttribute="top" secondItem="Vna-L4-OT0" secondAttribute="bottom" constant="8" id="Mc6-N5-Lcq"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="top" secondItem="VcH-Ja-fDA" secondAttribute="bottom" constant="3" id="Ph0-4G-1En"/>
                     <constraint firstItem="Vna-L4-OT0" firstAttribute="top" secondItem="OGJ-OS-AfG" secondAttribute="bottom" constant="5" id="Scl-Es-yRB"/>
+                    <constraint firstItem="CUl-u9-xbv" firstAttribute="top" secondItem="VsH-y7-tk8" secondAttribute="bottom" constant="8" id="Tbh-wf-RKs"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2" constant="-12" id="UGg-2G-Iny"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="width" secondItem="5i7-bq-U7K" secondAttribute="width" id="UQG-nS-Qww"/>
-                    <constraint firstItem="pcf-Xe-hA1" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="WuB-Ya-FBk"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="5i7-bq-U7K" secondAttribute="bottom" constant="12" id="V1L-Jj-S18"/>
+                    <constraint firstItem="Tv4-xt-Ruv" firstAttribute="leading" secondItem="YlK-h4-P2P" secondAttribute="trailing" constant="21" id="YOD-Vu-ePk"/>
+                    <constraint firstItem="YlK-h4-P2P" firstAttribute="top" secondItem="Tv4-xt-Ruv" secondAttribute="top" id="Z7F-g9-8Sb"/>
                     <constraint firstItem="VsH-y7-tk8" firstAttribute="top" secondItem="Tv4-xt-Ruv" secondAttribute="bottom" constant="5" id="aNP-v8-mD3"/>
                     <constraint firstItem="OGJ-OS-AfG" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2" id="bPA-YD-RiN"/>
-                    <constraint firstItem="YlK-h4-P2P" firstAttribute="top" secondItem="VsH-y7-tk8" secondAttribute="bottom" constant="8" id="ctz-uh-1t2"/>
+                    <constraint firstItem="hHC-u8-AED" firstAttribute="leading" secondItem="CUl-u9-xbv" secondAttribute="leading" id="dIW-Ok-65n"/>
+                    <constraint firstItem="h2j-5S-mIB" firstAttribute="top" secondItem="DkW-EY-2GL" secondAttribute="bottom" constant="8" id="f0D-Pg-ve2"/>
                     <constraint firstItem="Tv4-xt-Ruv" firstAttribute="top" secondItem="OGJ-OS-AfG" secondAttribute="top" id="hHK-fE-s0x"/>
                     <constraint firstAttribute="trailing" secondItem="VsH-y7-tk8" secondAttribute="trailing" constant="12" id="hLB-Bg-1Y6"/>
+                    <constraint firstItem="h2j-5S-mIB" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="iZv-Hy-jFi"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="jFq-cn-WXd"/>
+                    <constraint firstItem="hHC-u8-AED" firstAttribute="top" secondItem="CUl-u9-xbv" secondAttribute="bottom" constant="5" id="kSI-Pf-RRL"/>
                     <constraint firstItem="OGJ-OS-AfG" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="lOq-rL-YfH"/>
-                    <constraint firstItem="VcH-Ja-fDA" firstAttribute="top" secondItem="5i7-bq-U7K" secondAttribute="bottom" constant="5" id="vrp-oy-wLb"/>
-                    <constraint firstItem="YlK-h4-P2P" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="wLE-VM-eGa"/>
+                    <constraint firstItem="5i7-bq-U7K" firstAttribute="top" secondItem="h2j-5S-mIB" secondAttribute="bottom" constant="5" id="ngj-5a-7Ag"/>
+                    <constraint firstItem="pcf-Xe-hA1" firstAttribute="leading" secondItem="YlK-h4-P2P" secondAttribute="leading" id="yxd-Ax-jim"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionLabel" destination="5i7-bq-U7K" id="y8m-kD-9zM"/>
+                <outlet property="eventEndDateLabel" destination="hHC-u8-AED" id="Zz7-D5-NYH"/>
                 <outlet property="eventStartDatelabel" destination="VsH-y7-tk8" id="3ck-Hv-mrt"/>
                 <outlet property="eventStartTimeLabel" destination="pcf-Xe-hA1" id="jRm-RK-zwg"/>
                 <outlet property="locationLabel" destination="DkW-EY-2GL" id="gik-Ov-qZi"/>
                 <outlet property="titleLabel" destination="Vna-L4-OT0" id="Vb0-1b-6Nj"/>
             </connections>
-            <point key="canvasLocation" x="-114.5" y="-279.5"/>
+            <point key="canvasLocation" x="-205" y="-324"/>
         </tableViewCell>
     </objects>
 </document>

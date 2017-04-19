@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/UIDevice+QBPerformance.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/UIDevice+QBPerformance.h

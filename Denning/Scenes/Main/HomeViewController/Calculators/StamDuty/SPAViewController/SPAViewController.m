@@ -28,7 +28,7 @@
 }
 
 - (void) prepareUI {
-    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parenet-Child (50%)", @"Grandparent-Grandchild(50%)", @"Trustee-Beneficiary (+RM10)", @"Administrator-Beneficiary (+RM10)", @"Others (+RM10)", nil];
+    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parenet-Child (50%)", @"Grandparent-Grandchild(50%)", @"Trustee-Beneficiary (+RM10)", @"Administrator-Beneficiary (+RM10)", @"Trustee-Trustee (RM10)flat", @"No consideration(Gift)100%", @"Others (+RM10)", nil];
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
@@ -137,7 +137,7 @@
         [QMAlert showAlertWithMessage:@"There will be a negotiation for the legal cost with such amount of money" actionSuccess:YES inViewController:self];
     }
     
-    if ([self.relationshipLabel.text isEqualToString:@"Seller-Purchaser (100%)"])
+    if ([self.relationshipLabel.text isEqualToString:@"Seller-Purchaser (100%)"] || [self.relationshipLabel.text isEqualToString:@"No consideration(Gift)100%"])
     {
         stamDuty  *= 1; // 100%
         legalCost *= 1;
@@ -151,7 +151,7 @@
     } else if ([self.relationshipLabel.text isEqualToString:@"Grandparent-Grandchild (50%)"]){
         stamDuty  *= .5; // 50%
         legalCost *= .5;
-    } else if ([self.relationshipLabel.text isEqualToString:@"Trustee-Beneficiary (+RM10)"] || [self.relationshipLabel.text isEqualToString:@"Administrator-Beneficiary (+RM10)"]){
+    } else if ([self.relationshipLabel.text isEqualToString:@"Trustee-Beneficiary (+RM10)"] || [self.relationshipLabel.text isEqualToString:@"Administrator-Beneficiary (+RM10)"] ||[self.relationshipLabel.text isEqualToString:@"Trustee-Trustee (RM10)flat"]){
         stamDuty  += 10; // Add RM10
         legalCost += 10;
     } else {
@@ -161,6 +161,9 @@
     
     self.resultTextField.text = [NSString stringWithFormat:@"%.2f", stamDuty ];
     self.legalCostTextField.text = [NSString stringWithFormat:@"%.2f", legalCost];
+    
+    [self applyCommaToTextField:self.resultTextField];
+    [self applyCommaToTextField:self.legalCostTextField];
 }
 
 - (NSString*) removeCommaFromString: (NSString*) formattedNumber
@@ -186,15 +189,20 @@
     return [[self removeCommaFromString:formattedNumber] doubleValue];
 }
 
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    textField.text = [formatter stringFromNumber:number];
+}
+
 #pragma mark - UITexFieldDelegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        NSString *mystring = [self removeCommaFromString:textField.text];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        textField.text = [formatter stringFromNumber:number];
+        [self applyCommaToTextField:textField];
     }
 }
 

@@ -21,6 +21,7 @@
     ledgerDetailModel.ledgerDescription = [response objectForKey:@"description"];
     ledgerDetailModel.documentNo = [response objectForKey:@"documentNo"];
     ledgerDetailModel.drORcr = [response objectForKey:@"drORcr"];
+    ledgerDetailModel.isDebit = [response objectForKey:@"isDebit"];
 
     return ledgerDetailModel;
 }

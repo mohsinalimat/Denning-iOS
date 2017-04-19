@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCBitrateTracker.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCBitrateTracker.h

@@ -6,12 +6,12 @@
 //  Copyright © 2016 Quickblox. All rights reserved.
 //
 
-#import "QMContactsDataSource.h"
+#import "FavContactsDataSource.h"
 #import "QMContactCell.h"
 #import "QMNoContactsCell.h"
 #import "QMCore.h"
 
-@implementation QMContactsDataSource
+@implementation FavContactsDataSource
 
 #pragma mark - methods
 
@@ -45,8 +45,24 @@
     
     NSString *onlineStatus = [[QMCore instance].contactManager onlineStatusForUser:user];
     [cell setBody:onlineStatus];
+    [cell setFavButtonVisible:NO];
     
     return cell;
+}
+
+
+- (BOOL)tableView:(UITableView *)__unused tableView canEditRowAtIndexPath:(NSIndexPath *)__unused indexPath {
+    
+    return YES;
+}
+
+- (void)tableView:(UITableView *)__unused tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        QBUUser *user = [self userAtIndexPath:indexPath];
+        [self.delegate favContactDataSource:self commitDeleteDialog:user];
+    }
 }
 
 @end

@@ -8,10 +8,17 @@
 
 #import "FirmListViewController.h"
 #import "DISignupViewController.h"
+#import "AppDelegate.h"
 
-@interface FirmListViewController ()
-
-@property (strong, nonatomic) NSArray* firmList;
+@interface FirmListViewController () <UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+{
+    __block BOOL isFirstLoading;
+    BOOL initCall;
+}
+@property (strong, nonatomic) UISearchController *searchController;
+@property (copy, nonatomic) NSString *filter;
+@property (strong, nonatomic) NSMutableArray* firmCopyedList;
+@property (strong, nonatomic) NSNumber* page;
 
 @end
 
@@ -21,14 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [self initializeData];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
+    [self prepareUI];
+    [self configureSearch];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,22 +40,143 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self initializeData];
 }
 
-- (void) initializeData
+- (void) configureSearch
 {
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search", nil);
+    self.searchController.searchBar.delegate = self;
+    self.searchController.delegate = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.definesPresentationContext = YES;
+    [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+}
+
+- (void) prepareUI
+{
+    self.firmCopyedList = [self.firmList mutableCopy];
+    self.page = @(0);
+    isFirstLoading = YES;
+    self.filter = @"";
+    initCall = YES;
+    
+    self.tableView.delegate = self;
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor clearColor];
+    self.refreshControl.tintColor = [UIColor blackColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(selectFirmList)
+                  forControlEvents:UIControlEventValueChanged];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.tableFooterView = [UIView new];
+    
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 13, 23)];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(onBackAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+}
+
+- (void) onBackAction: (id) sender
+{
+    [self.view endEditing:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)selectFirmList {
+    isFirstLoading = YES;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getFirmListWithCompletion:^(NSArray * _Nonnull resultArray) {
+    [[QMNetworkManager sharedManager] getFirmListWithPage:self.page completion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
         @strongify(self)
-        if (resultArray != nil) {
-            self.firmList = resultArray;
-        } else {
-            self.firmList = [[NSMutableArray new] copy];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        if (self.refreshControl.isRefreshing) {
+            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
+            [self.refreshControl endRefreshing];
         }
-        [self.tableView reloadData];
+        if (error == nil) {
+            self.firmCopyedList = [[self.firmCopyedList arrayByAddingObjectsFromArray:resultArray] mutableCopy];
+            [self filterFirmList];
+            self->isFirstLoading = false;
+            if (resultArray.count != 0) {
+               self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
+        } else {
+            [QMAlert showAlertWithMessage:error.localizedDescription actionSuccess:NO inViewController:self];
+        }
     }];
 }
+
+#pragma mark - ScrollView Delegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    CGFloat offsetY = scrollView.contentOffset.y;
+//    CGFloat contentHeight = scrollView.contentSize.height;
+    if (offsetY > 10) {
+        
+        [self.searchController.searchBar endEditing:YES];
+    }
+}
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat offsetY = scrollView.contentOffset.y;
+    CGFloat contentHeight = scrollView.contentSize.height;
+    
+    if (offsetY > contentHeight - scrollView.frame.size.height && !isFirstLoading) {
+        
+        [self selectFirmList];
+    }
+}
+
+#pragma mark - Search Delegate
+
+- (void)willDismissSearchController:(UISearchController *) __unused searchController {
+    self.filter = @"";
+    searchController.searchBar.text = @"";
+    self.firmList = self.firmCopyedList;
+    [self.tableView reloadData];
+}
+
+#pragma mark - searchbar delegate
+- (void) filterFirmList
+{
+    NSMutableArray* newArray = [NSMutableArray new];
+    if (self.filter.length == 0) {
+        self.firmList = self.firmCopyedList;
+    } else {
+        for(FirmModel* firmModel in self.firmCopyedList) {
+            if ([firmModel.name localizedCaseInsensitiveContainsString:self.filter]) {
+                [newArray addObject:firmModel];
+            }
+        }
+        self.firmList = newArray;
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
+{
+    self.filter = searchText;
+    if (self.filter.length == 0) {
+        self.firmList = self.firmCopyedList;
+        [self.tableView reloadData];
+    } else {
+        [self filterFirmList];
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -80,9 +202,15 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.firmDelegate didSelectFirm:self withFirmModel:self.firmList[indexPath.row]];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
+    if (indexPath.row == self.firmList.count-1 && initCall) {
+        isFirstLoading = NO;
+        initCall = NO;
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.

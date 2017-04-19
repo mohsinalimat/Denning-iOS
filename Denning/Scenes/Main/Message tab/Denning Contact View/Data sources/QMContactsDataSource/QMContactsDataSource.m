@@ -46,6 +46,10 @@
     NSString *onlineStatus = [[QMCore instance].contactManager onlineStatusForUser:user];
     [cell setBody:onlineStatus];
     
+    [cell setFavButtonVisible:YES];
+    
+    cell.didAddUserBlock = self.didAddUserBlock;
+    
     return cell;
 }
 

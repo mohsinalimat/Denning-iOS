@@ -28,10 +28,14 @@
     self.phoneNumberLabel.text = [DataManager sharedManager].user.phoneNumber;
 }
 
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [DIHelpers drawWhiteBorderToTextField:self.TACTextField];
+}
+
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 - (void)addTapGesture {
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
@@ -52,10 +56,10 @@
     [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
     [[QMNetworkManager sharedManager] sendSMSForNewDeviceWithEmail:[DataManager sharedManager].user.email activationCode:self.TACTextField.text withCompletion:^(BOOL success, NSInteger statusCode, NSString * _Nonnull error, NSDictionary * _Nonnull response) {
+        [SVProgressHUD dismiss];
         @strongify(self);
         if (!success) {
-            
-            [SVProgressHUD showErrorWithStatus:error];
+            [QMAlert showAlertWithMessage:@"Invalid code" actionSuccess:NO inViewController:self];
         }
         else {
             [[DataManager sharedManager] setUserInfoFromNewDeviceLogin:response];
@@ -70,9 +74,10 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+        [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
     });
 }
 
@@ -114,6 +119,13 @@
             [SVProgressHUD showWithStatus:@"SMS is sent to your phone"];
         }
     }];
+}
+
+#pragma mark - TextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self confirmTAC:nil];
+    return YES;
 }
 
 @end

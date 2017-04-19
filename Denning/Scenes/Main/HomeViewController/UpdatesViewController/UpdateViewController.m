@@ -84,7 +84,7 @@
     
     self.topNewsTitle.text = newsModel.title;
     self.topNewsContent.text = newsModel.shortDescription;
-    self.topNewsDate.text = newsModel.theDateTime;
+    self.topNewsDate.text = [DIHelpers getDateInShortForm:newsModel.theDateTime] ;
 }
 
 - (void)registerNibs {

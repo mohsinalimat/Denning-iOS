@@ -14,4 +14,5 @@
 @property (strong, nonatomic) NSString* matterCode;
 
 @property (strong, nonatomic) NSString *previousScreen;
+
 @end

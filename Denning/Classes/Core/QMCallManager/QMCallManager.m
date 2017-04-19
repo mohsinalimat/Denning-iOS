@@ -41,7 +41,7 @@ QBRTCClientDelegate
 - (void)serviceWillStart {
     
     [QBRTCConfig setAnswerTimeInterval:kQMAnswerTimeInterval];
-    [QBRTCConfig setDisconnectTimeInterval:kQMDisconnectTimeInterval];
+//    [QBRTCConfig setDisconnectTimeInterval:kQMDisconnectTimeInterval];
     [QBRTCConfig setDialingTimeInterval:kQMDialingTimeInterval];
     
     [[QBRTCClient instance] addDelegate:self];

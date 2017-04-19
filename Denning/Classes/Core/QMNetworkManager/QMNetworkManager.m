@@ -67,12 +67,13 @@
     
     self.session = [NSURLSession sharedSession];
     
-    // search datasource
-    self.searchDataSource = [[APIDataSource alloc] init];
-    self.searchDataSource.reqKey = @"keyword";         // your key
-    self.searchDataSource.rvalue = @"score";   // Your responce value
-    self.searchDataSource.api_type = APICallTypeGET;
-    self.searchDataSource.requestParams = [[NSMutableDictionary alloc] init];     // Add your request parameters
+    // Get the default params
+    self.ipWAN = [DIHelpers getWANIP];
+    self.ipLan = [DIHelpers getLANIP];
+    self.os = [DIHelpers getOSName];
+    self.device = [DIHelpers getDevice];
+    self.deviceName = [DIHelpers getDeviceName];
+    self.MAC = [DIHelpers getMAC];
 }
 
 - (void) setLoginHTTPHeader
@@ -90,12 +91,12 @@
 - (NSDictionary*) buildRquestParamsFromDictionary: (NSDictionary*) dict
 {
     NSDictionary* basicParams = @{
-                                    @"ipWAN": [DIHelpers getWANIP],
-                                    @"ipLAN": [DIHelpers getLANIP],
-                                    @"OS": [DIHelpers getOSName],
-                                    @"device": [DIHelpers getDevice],
-                                    @"deviceName": [DIHelpers getDeviceName],
-                                    @"MAC": [DIHelpers getMAC]
+                                    @"ipWAN": self.ipWAN,
+                                    @"ipLAN": self.ipLan,
+                                    @"OS": self.os,
+                                    @"device": self.device,
+                                    @"deviceName": self.deviceName,
+                                    @"MAC": self.MAC
                                     };
     NSMutableDictionary* mutableBasicParams = [basicParams mutableCopy];
     
@@ -230,21 +231,23 @@
     }];
 }
 
-- (void) getFirmListWithCompletion: (void(^)(NSArray* resultArray)) completion
+- (void) getFirmListWithPage: (NSNumber*) page completion: (void(^)(NSArray* resultArray, NSError* error)) completion
 {
     [self setLoginHTTPHeader];
     
-    [self.manager GET:SIGNUP_FIRM_LIST_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSString* url = [NSString stringWithFormat:@"%@?page=%@", SIGNUP_FIRM_LIST_URL, page];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSArray* result = [FirmModel getFirmArrayFromResponse:responseObject];
         if (completion != nil) {
-            completion(result);
+            completion(result, nil);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         if (completion != nil) {
-            completion(nil);
+            completion(nil, error);
         }
     }];
 }
@@ -288,13 +291,12 @@
     }];
 }
 
-- (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email password:(NSString*) password isLayer:(NSNumber*) isLayer firmCode: (NSString*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
+- (void) userSignupWithUsername:(NSString*) username phone:(NSString*) phone email:(NSString*) email isLayer:(NSNumber*) isLayer firmCode: (NSNumber*) firmCode withCompletion:(void(^)(BOOL success, NSString* error)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{
                                                                    @"name": username,
-                                                                   @"hpphone": phone,
+                                                                   @"hpNumber": phone,
                                                                    @"email": email,
-                                                                   @"password": password,
                                                                    @"isLawyer": isLayer,
                                                                    @"firmCode": firmCode}];
     
@@ -308,7 +310,7 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)
         {
-            completion(YES, error.localizedDescription);
+            completion(NO, error.localizedDescription);
         }
     }];
 }
@@ -326,7 +328,7 @@
         urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
     }
     
-    if ([searchType isEqualToString:@"Special"]) { // Direct Tap on the search button
+    if ([searchType isEqualToString:@"Normal"]) { // Direct Tap on the search button
         urlString = [urlString stringByAppendingString:@"&isAutoComplete=1"];
     }
     
@@ -414,7 +416,7 @@
 
 - (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Property/%@", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Property/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -441,7 +443,7 @@
 // Contact
 - (void) loadContactFromSearchWithCode: (NSString*) code completion: (void(^)(ContactModel* contactModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Contact/%@", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Contact/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -465,7 +467,7 @@
 // Related Matter
 - (void) loadRelatedMatterWithCode: (NSString*) code completion: (void(^)(RelatedMatterModel* contactModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -488,7 +490,7 @@
 // Bank
 - (void) loadBankFromSearchWithCode: (NSString*) code completion: (void(^)(BankModel* bankModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/bank/branch/%@", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/bank/branch/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -517,7 +519,7 @@
     } else {
         point = @"PTG";
     }
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/GovOffice/%@/%@", self.selectedBaseURLForGeneral, point, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/GovOffice/%@/%@", [DataManager sharedManager].user.serverAPI, point, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -540,7 +542,7 @@
 // Legal firm (Solicitor)
 - (void) loadLegalFirmWithCode: (NSString*) code completion: (void(^)(LegalFirmModel* legalFirmModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Solicitor/%@", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Solicitor/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -563,7 +565,7 @@
 // Ledger
 - (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NSArray* ledgerModelArray, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -586,7 +588,7 @@
 // Ledger detail
 - (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerModelDetailArray, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger/%@", self.selectedBaseURLForGeneral, code, accountType];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/%@/ledger/%@", [DataManager sharedManager].user.serverAPI, code, accountType];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -609,7 +611,7 @@
 // Documents
 - (void) loadDocumentWithCode: (NSString*) code completion: (void(^)(DocumentModel* doumentModel, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@/fileFolder", self.selectedBaseURLForGeneral, code];
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/matter/%@/fileFolder", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -629,36 +631,129 @@
     }];
 }
 
-- (BFTask *) perfomRequestWithPath:(NSString *)path
-                   parameters:(NSDictionary *)parameters{
-    
-    BFTaskCompletionSource* source = [BFTaskCompletionSource taskCompletionSource];
-    
-    NSString *URLString = [baseURLString stringByAppendingString:path];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    
-    NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:URLString parameters:nil error:nil];
-    
-    req.timeoutInterval= [[[NSUserDefaults standardUserDefaults] valueForKey:@"timeoutInterval"] longValue];
-    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [req setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [req setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    
-    [[self.manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull __unused response, id  _Nullable responseObject, NSError * _Nullable error) {
-          
-        if (!error) {
-            [source setResult:responseObject];
-        } else {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            
-            [source setError:error];
-        }
-    }] resume];
+- (void) getChatContactsWithCompletion:(void(^)(void)) completion
+{
+    [self setLoginHTTPHeader];
+    NSString* url = [GET_CHAT_CONTACT_URL stringByAppendingString:[DataManager sharedManager].user.email];
+    __block ChatContactModel* chatContacts;
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 
-    return source.task;
+        chatContacts = [ChatContactModel getChatContactFromResponse:responseObject];
+        QBGeneralResponsePage *page = [QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:100];
+        [QBRequest usersForPage:page successBlock:^(QBResponse *response, QBGeneralResponsePage *pageInformation, NSArray *users) {
+            // Favorite Contact
+            [DataManager sharedManager].favoriteContactsArray = [NSMutableArray new];
+            for (ChatFirmModel *chatFirmModel in chatContacts.favoriteContacts) {
+                ChatFirmModel* newModel = [ChatFirmModel new];
+                newModel.firmName = chatFirmModel.firmName;
+                newModel.firmCode = chatFirmModel.firmCode;
+                NSMutableArray* userArray = [NSMutableArray new];
+                for (ChatUserModel* chatUserModel in chatFirmModel.users) {
+                    for (QBUUser* user in users) {
+                        if ([[chatUserModel.email lowercaseString] isEqualToString:user.email]) {
+                            [userArray addObject:user];
+                        }
+                    }
+                }
+                newModel.users = [userArray copy];
+                [[DataManager sharedManager].favoriteContactsArray addObject:newModel];
+            }
+            
+            // Client Contact
+            [DataManager sharedManager].clientContactsArray = [NSMutableArray new];
+            for (ChatFirmModel *chatFirmModel in chatContacts.clientContacts) {
+                ChatFirmModel* newModel = [ChatFirmModel new];
+                newModel.firmName = chatFirmModel.firmName;
+                newModel.firmCode = chatFirmModel.firmCode;
+                NSMutableArray* userArray = [NSMutableArray new];
+                for (ChatUserModel* chatUserModel in chatFirmModel.users) {
+                    for (QBUUser* user in users) {
+                        if ([[chatUserModel.email lowercaseString] isEqualToString:user.email]) {
+                            [userArray addObject:user];
+                        }
+                    }
+                }
+                newModel.users = [userArray copy];
+                [[DataManager sharedManager].clientContactsArray addObject:newModel];
+            }
+            
+            // Staff Contact
+            [DataManager sharedManager].staffContactsArray = [NSMutableArray new];
+            for (ChatFirmModel *chatFirmModel in chatContacts.staffContacts) {
+                ChatFirmModel* newModel = [ChatFirmModel new];
+                newModel.firmName = chatFirmModel.firmName;
+                newModel.firmCode = chatFirmModel.firmCode;
+                NSMutableArray* userArray = [NSMutableArray new];
+                for (ChatUserModel* chatUserModel in chatFirmModel.users) {
+                    for (QBUUser* user in users) {
+                        if ([[chatUserModel.email lowercaseString] isEqualToString:user.email]) {
+                            [userArray addObject:user];
+                        }
+                    }
+                }
+                newModel.users = [userArray copy];
+                [[DataManager sharedManager].staffContactsArray addObject:newModel];
+            }
+            
+            if (completion != nil) {
+                completion();
+            }
+
+        } errorBlock:^(QBResponse *response) {
+            // Handle error
+            NSLog(@"Retrieve user error%@", response.error);
+        }];
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@", error.localizedDescription);
+        // Error Message
+    }];
 }
+
+- (void) addFavoriteContact: (QBUUser*) user withCompletion:(void(^)(NSError* error)) completion
+{
+    [self setLoginHTTPHeader];
+    NSDictionary* params = @{@"email": [QBSession currentSession].currentUser.email, @"favourite": user.email};
+    NSString* url = PUBLIC_ADD_FAVORITE_CONTACT_URL;
+  /*  if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+        url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:PRIVATE_ADD_FAVORITE_CONTACT_URL];
+        [self.manager.requestSerializer setValue:@"tmho@hotmail.com" forHTTPHeaderField:@"webuser-id"];
+    } */
+    
+    [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
+            
+            NSLog(@"%@, %@", test.allHeaderFields, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
+            completion(error);
+        }
+    }];
+}
+
+- (void) removeFavoriteContact: (QBUUser*) user withCompletion:(void(^)(NSError* error)) completion
+{
+    [self setLoginHTTPHeader];
+    NSDictionary* params = @{@"email": [QBSession currentSession].currentUser.email, @"favourite": user.email};
+    
+    [self.manager DELETE:REMOVE_FAVORITE_CONTACT_URL parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(error);
+        }
+    }];
+}
+
 @end

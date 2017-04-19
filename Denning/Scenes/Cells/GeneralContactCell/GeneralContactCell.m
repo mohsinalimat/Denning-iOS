@@ -10,9 +10,35 @@
 
 @implementation GeneralContactCell
 
+
++ (void)registerForReuseInTableView:(UITableView *)tableView {
+    
+    NSString *nibName = NSStringFromClass([self class]);
+    UINib *nib = [UINib nibWithNibName:nibName bundle:[NSBundle mainBundle]];
+    NSParameterAssert(nib);
+    
+    NSString *cellIdentifier = [self cellIdentifier];
+    NSParameterAssert(cellIdentifier);
+    
+    [tableView registerNib:nib forCellReuseIdentifier:cellIdentifier];
+}
+
++ (NSString *)cellIdentifier {
+    
+    return NSStringFromClass([self class]);
+}
+
++ (CGFloat)height {
+    return 72.0f;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.selectionStyle = UITableViewCellSelectionStyleGray;
+    
+    [self sizeToFit];
+    [self updateConstraintsIfNeeded];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

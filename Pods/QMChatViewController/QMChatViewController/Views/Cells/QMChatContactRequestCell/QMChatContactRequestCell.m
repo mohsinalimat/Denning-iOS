@@ -13,6 +13,11 @@
 
 #pragma mark - Actions
 
+- (void) autoAccept
+{
+    [self pressAcceptBtn:nil];
+}
+
 - (IBAction)pressRejectRequestBtn:(id)sender {
     
     [self.actionsHandler chatContactRequestDidAccept:NO sender:self];

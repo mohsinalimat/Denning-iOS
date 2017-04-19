@@ -67,6 +67,19 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param image        Attachment image
  *  @param completion   Send message result
  */
+- (void)uploadAndSendAttachmentMessage:(QBChatMessage *)message toDialog:(QBChatDialog *)dialog withChatService:(QMChatService *)chatService withAttachedDocument:(NSData *) data withMIMEType: (NSString*) mimeType withType: (NSString*) type completion:(nullable QBChatCompletionBlock)completion;
+
+/**
+ *  Upload and send attachment message to dialog.
+ *
+ *  @param message      QBChatMessage instance
+ *  @param dialog       QBChatDialog instance
+ *  @param chatService  QMChatService instance
+ *  @param data         Attachment document
+ *  @param mimetype     mimetype of document
+ *  @param type         type of document - pdf, work, excel, txt
+ *  @param completion   Send message result
+ */
 - (void)uploadAndSendAttachmentMessage:(QBChatMessage *)message toDialog:(QBChatDialog *)dialog withChatService:(QMChatService *)chatService withAttachedImage:(UIImage *)image completion:(nullable QBChatCompletionBlock)completion;
 
 /**

@@ -15,5 +15,5 @@
 
 @property (strong, nonatomic) id<FirmListDelegate> firmDelegate;
 @property( strong, nonatomic) FirmModel* firmModel;
-
+@property (strong, nonatomic) NSArray* firmList;
 @end

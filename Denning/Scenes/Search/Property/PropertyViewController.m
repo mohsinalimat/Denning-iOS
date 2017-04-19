@@ -72,7 +72,6 @@
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
 }
 
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -82,7 +81,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 4;
+        return 3;
     }
     
     return self.propertyModel.relatedMatter.count;
@@ -142,7 +141,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-
     return 30;
 }
 
@@ -156,8 +154,6 @@
             [contactCell configureCellWithContact:@"Full Title" text:self.propertyModel.fullTitle];
         } else if (indexPath.row == 2){
             [contactCell configureCellWithContact:@"Address" text:self.propertyModel.address];
-        } else if (indexPath.row == 3){
-            [contactCell configureCellWithContact:@"Area" text:self.propertyModel.area];
         }
         
         return contactCell;

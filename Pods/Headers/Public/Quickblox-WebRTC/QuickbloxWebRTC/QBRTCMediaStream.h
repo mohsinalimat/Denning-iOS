@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCMediaStream.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCMediaStream.h

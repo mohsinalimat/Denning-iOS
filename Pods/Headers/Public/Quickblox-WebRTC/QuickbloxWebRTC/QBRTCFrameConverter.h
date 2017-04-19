@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCFrameConverter.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCFrameConverter.h

@@ -25,7 +25,11 @@
 #pragma mark - setters
 
 - (void)setAddButtonVisible:(BOOL)visible {
-    
+
+}
+
+- (void)setFavButtonVisible:(BOOL)visible;
+{
     self.addFriendButton.hidden = !visible;
 }
  

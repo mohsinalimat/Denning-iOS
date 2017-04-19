@@ -128,7 +128,7 @@ static NSString *ViewCellIdentifier = @"ViewCell";
                                                                  metrics:nil
                                                                    views:NSDictionaryOfVariableBindings(_contentView)]];
     _bottomTrim = [[UIView alloc] init];
-    _bottomTrim.backgroundColor = [UIColor blackColor];
+    _bottomTrim.backgroundColor = [UIColor clearColor];
     _bottomTrim.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:_bottomTrim];
 

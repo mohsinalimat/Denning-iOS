@@ -10,4 +10,15 @@
 
 @interface ChatUserModel : NSObject
 
+@property (strong, nonatomic) NSString* email;
+
+@property (strong, nonatomic) NSString* firm;
+
+@property (strong, nonatomic) NSString* firmCode;
+
+@property (strong, nonatomic) NSString* position;
+
++ (ChatUserModel*) getChatUserModelFromResponse: (NSDictionary*) response;
+
++ (NSArray*) getChatUserModelArrayFromResponse: (NSArray*) response;
 @end

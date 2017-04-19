@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class ChatFirmModel;
+
 @interface ChatContactModel : NSObject
+
+@property (strong, nonatomic) NSArray<ChatFirmModel*>* favoriteContacts;
+
+@property (strong, nonatomic) NSArray<ChatFirmModel*>* staffContacts;
+
+@property (strong, nonatomic) NSArray<ChatFirmModel*>* clientContacts;
+
++ (ChatContactModel*) getChatContactFromResponse: (NSDictionary*) response;
 
 @end

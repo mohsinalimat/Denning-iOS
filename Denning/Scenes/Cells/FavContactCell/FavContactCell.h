@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "QMSearchCell.h"
+#import "GeneralContactCell.h"
 
-@interface FavContactCell : QMSearchCell
+@interface FavContactCell : GeneralContactCell
+
+- (void) configureCellWithContact: (QBUUser*) user;
 
 @end

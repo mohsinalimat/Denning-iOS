@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) ContactModel* contactModel;
 @property (strong, nonatomic) NSString* previousScreen;
+@property (strong, nonatomic) NSString* gotoRelatedMatter;
 
 @end

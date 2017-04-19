@@ -7,12 +7,33 @@
 //
 
 #import "FavContactCell.h"
+#import "QMPlaceholder.h"
+
+@interface FavContactCell()
+@property (weak, nonatomic) IBOutlet QMImageView *avatarImageView;
+@property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lastseenLabel;
+
+@end
 
 @implementation FavContactCell
 
-+ (CGFloat)height {
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
+- (void) configureCellWithContact: (QBUUser*) user
+{
+    UIImage *placeholder = [QMPlaceholder placeholderWithFrame:self.avatarImageView.bounds title:user.fullName ID:user.ID];
     
-    return 60.0f;
+    [self.avatarImageView setImageWithURL:[NSURL URLWithString:user.avatarUrl]
+                              placeholder:placeholder
+                                  options:SDWebImageLowPriority
+                                 progress:nil
+                           completedBlock:nil];
+
+    self.userNameLabel.text = user.fullName;
+    self.lastseenLabel.text = [[QMCore instance].contactManager onlineStatusForUser:user];
 }
 
 @end

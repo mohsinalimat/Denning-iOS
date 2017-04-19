@@ -91,3 +91,9 @@ static NSString* const kDocumentSegue = @"DocumentSegue";
 static NSString* const kMainSearchSegue = @"MainSearchSegue";
 
 static NSString* const kDocumentPreviewSegue = @"DocumentPreviewSegue";
+
+static NSString* const kFirmListSegue = @"FirmListSegue";
+
+static NSString* const kGroupChatSegue = @"GroupChatSegue";
+
+static NSString* const kDocumentFileSegue = @"DocumentFileSegue";

@@ -49,10 +49,17 @@
     [SVProgressHUD dismiss];
 }
 
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [DIHelpers drawWhiteBorderToTextField:self.emailField];
+    [DIHelpers drawWhiteBorderToTextField:self.passwordField];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     [self addTapGesture];
+    self.emailField.text = [DataManager sharedManager].user.email;
     
 //    [self.emailField becomeFirstResponder];
 }
@@ -131,9 +138,10 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+        [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
     });
 }
 
@@ -159,12 +167,14 @@
         [DataManager sharedManager].seletedUserType = @"Public";
         dispatch_async(dispatch_get_main_queue(), ^{
             [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+            
         });
     }
 }
 
 - (void) manageSuccessResult: (NSInteger) statusCode response:(NSDictionary*) response {
     [[DataManager sharedManager] setUserInfoFromLogin:response];
+    [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
     if (statusCode == 250) {
         [DataManager sharedManager].statusCode = [NSNumber numberWithInteger:statusCode];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -194,22 +204,59 @@
 
 - (void) loginWithEmail: (NSString*) email password:(NSString*) password
 {
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     // Save the user password for the shared folder use
     [[DataManager sharedManager] setUserPassword:password];
     
-    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
+    
     @weakify(self);
     [[QMNetworkManager sharedManager] userSignInWithEmail:email password:password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode, NSDictionary* responseObject) {
         
         @strongify(self)
-        [SVProgressHUD dismiss];
         if (success){
-            [self manageSuccessResult:statusCode response:responseObject];
+            QBUUser *user = [QBUUser user];
+            user.email = self.emailField.text;
+            user.password = kQBPassword;
+            
+            [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
+            
+            @weakify(self);
+            self.task = [[[QMCore instance].authService loginWithUser:user] continueWithBlock:^id _Nullable(BFTask<QBUUser *> * _Nonnull task) {
+                
+                @strongify(self);
+                [SVProgressHUD dismiss];
+                
+                if (!task.isFaulted) {
+                    
+                    [QMCore instance].currentProfile.accountType = QMAccountTypeEmail;
+                    [[QMCore instance].currentProfile synchronizeWithUserData:task.result];
+                    
+                    [self manageSuccessResult:statusCode response:responseObject];
+                } else {
+                    [QMAlert showAlertWithMessage:task.error.localizedDescription actionSuccess:NO inViewController:self];
+                }
+                
+                
+                
+                return nil;
+            }];
+            
+//            [self manageSuccessResult:statusCode response:responseObject];
+            
         } else {
+            [SVProgressHUD dismiss];
             [self manageErrorResult:statusCode error:error];
         }
     }];
 }
+
+#pragma mark - TextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self done:nil];
+    return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     
     if ([segue.identifier isEqualToString:kBranchSegue]){

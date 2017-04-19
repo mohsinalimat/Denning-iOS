@@ -8,6 +8,12 @@
 
 #import "DenningLabelCell.h"
 
+@interface DenningLabelCell()
+@property (weak, nonatomic) IBOutlet UILabel *firmLabel;
+
+
+@end
+
 @implementation DenningLabelCell
 
 - (void)awakeFromNib {
@@ -21,4 +27,8 @@
     // Configure the view for the selected state
 }
 
+- (void) configureCellWithText: (NSString*)text
+{
+    self.firmLabel.text = text;
+}
 @end

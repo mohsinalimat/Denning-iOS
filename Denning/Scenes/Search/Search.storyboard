@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="a6Z-6h-gxM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="a6Z-6h-gxM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-UI-Text-Bold.otf">
-            <string>SFUIText-Bold</string>
-        </array>
         <array key="SF-UI-Text-Regular.otf">
             <string>SFUIText-Regular</string>
         </array>
@@ -32,8 +29,8 @@
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zRq-Lb-Olq" userLabel="SearchView">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="al5-Qu-IRX">
-                                        <rect key="frame" x="0.0" y="104" width="375" height="499"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="al5-Qu-IRX">
+                                        <rect key="frame" x="0.0" y="113" width="375" height="554"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="sectionIndexBackgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.94509803921568625" alpha="1" colorSpace="calibratedRGB"/>
@@ -50,7 +47,7 @@
                                         </prototypes>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S54-9S-eHH" userLabel="MaskView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="113"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kU-bn-d8P">
                                                 <rect key="frame" x="8" y="24" width="30" height="44"/>
@@ -63,90 +60,60 @@
                                                     <action selector="dismissView:" destination="j8x-DG-mux" eventType="touchUpInside" id="fSl-YI-95Y"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfp-q1-P6X">
+                                                <rect key="frame" x="325" y="35" width="50" height="22"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="50" id="Ezb-EM-GLV"/>
+                                                </constraints>
+                                                <state key="normal" image="icon_searchswitch.png">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="toggleSearchType:" destination="j8x-DG-mux" eventType="touchUpInside" id="eOy-YZ-y3e"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="nfp-q1-P6X" secondAttribute="trailing" id="P4Z-Ar-jta"/>
+                                            <constraint firstItem="nfp-q1-P6X" firstAttribute="centerY" secondItem="6kU-bn-d8P" secondAttribute="centerY" id="Z8c-Ol-ErS"/>
                                             <constraint firstItem="6kU-bn-d8P" firstAttribute="leading" secondItem="S54-9S-eHH" secondAttribute="leading" constant="8" id="aTi-9s-KD8"/>
-                                            <constraint firstAttribute="height" constant="125" id="psh-hm-ZgE"/>
+                                            <constraint firstAttribute="height" constant="113" id="psh-hm-ZgE"/>
                                             <constraint firstItem="6kU-bn-d8P" firstAttribute="top" secondItem="S54-9S-eHH" secondAttribute="top" constant="24" id="re7-hA-TJP"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Etk-LE-cuS" userLabel="search container">
-                                        <rect key="frame" x="45" y="26" width="260" height="280"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asU-Hy-c6f">
+                                        <rect key="frame" x="43" y="24" width="282" height="165"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jLd-DV-vb2">
-                                                <rect key="frame" x="0.0" y="0.0" width="25" height="40"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLs-Qj-2gx">
-                                                        <rect key="frame" x="0.0" y="0.0" width="25" height="40"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <state key="normal" image="icon_search"/>
-                                                    </button>
-                                                </subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Denning Search" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="pBU-Ep-kCK" customClass="MLPAutoCompleteTextField">
+                                                <rect key="frame" x="0.0" y="8" width="282" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstItem="ZLs-Qj-2gx" firstAttribute="top" secondItem="jLd-DV-vb2" secondAttribute="top" id="8Iq-Zm-els"/>
-                                                    <constraint firstItem="ZLs-Qj-2gx" firstAttribute="leading" secondItem="jLd-DV-vb2" secondAttribute="leading" id="EbN-10-9Lq"/>
-                                                    <constraint firstAttribute="width" constant="25" id="NDJ-xe-KJ3"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ZLs-Qj-2gx" secondAttribute="trailing" id="Rq8-0n-SMA"/>
-                                                    <constraint firstAttribute="bottom" secondItem="ZLs-Qj-2gx" secondAttribute="bottom" id="YRG-7K-5tF"/>
-                                                    <constraint firstAttribute="height" constant="40" id="nX6-Wb-R0O"/>
-                                                </constraints>
-                                            </view>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Denning Search" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pBU-Ep-kCK" customClass="AutoCompletionTextField">
-                                                <rect key="frame" x="25" y="0.0" width="235" height="40"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="roj-tG-MFk"/>
-                                                </constraints>
                                                 <color key="textColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="search"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
                                             </textField>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="pBU-Ep-kCK" secondAttribute="trailing" id="4e8-5g-Xx2"/>
-                                            <constraint firstAttribute="height" constant="280" id="CGn-Ih-jJ3"/>
-                                            <constraint firstItem="jLd-DV-vb2" firstAttribute="top" secondItem="Etk-LE-cuS" secondAttribute="top" id="aoF-0x-eMZ"/>
-                                            <constraint firstItem="pBU-Ep-kCK" firstAttribute="top" secondItem="Etk-LE-cuS" secondAttribute="top" id="b0V-jC-bnV"/>
-                                            <constraint firstItem="jLd-DV-vb2" firstAttribute="leading" secondItem="Etk-LE-cuS" secondAttribute="leading" id="c1M-rR-O0b"/>
-                                            <constraint firstItem="pBU-Ep-kCK" firstAttribute="leading" secondItem="jLd-DV-vb2" secondAttribute="trailing" id="hFH-aO-1aq"/>
+                                            <constraint firstItem="pBU-Ep-kCK" firstAttribute="top" secondItem="asU-Hy-c6f" secondAttribute="top" constant="8" id="OaK-Ez-yvY"/>
+                                            <constraint firstAttribute="trailing" secondItem="pBU-Ep-kCK" secondAttribute="trailing" id="Wk0-cc-TUS"/>
+                                            <constraint firstItem="pBU-Ep-kCK" firstAttribute="leading" secondItem="asU-Hy-c6f" secondAttribute="leading" id="XiD-cL-cH9"/>
+                                            <constraint firstAttribute="height" constant="165" id="wPE-0i-MlJ"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfp-q1-P6X">
-                                        <rect key="frame" x="310" y="31" width="60" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="Ezb-EM-GLV"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="SFUIText-Bold" family="SF UI Text" pointSize="15"/>
-                                        <state key="normal" title="Public">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="toggleSearchType:" destination="j8x-DG-mux" eventType="touchUpInside" id="eOy-YZ-y3e"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="Etk-LE-cuS" firstAttribute="leading" secondItem="zRq-Lb-Olq" secondAttribute="leading" constant="45" id="1YH-cZ-j25"/>
                                     <constraint firstItem="al5-Qu-IRX" firstAttribute="leading" secondItem="zRq-Lb-Olq" secondAttribute="leading" id="8Uk-hE-QeV"/>
                                     <constraint firstItem="S54-9S-eHH" firstAttribute="top" secondItem="zRq-Lb-Olq" secondAttribute="top" id="9hV-1J-Yyf"/>
                                     <constraint firstAttribute="trailing" secondItem="al5-Qu-IRX" secondAttribute="trailing" id="B2Q-SY-fAa"/>
                                     <constraint firstItem="S54-9S-eHH" firstAttribute="leading" secondItem="zRq-Lb-Olq" secondAttribute="leading" id="CMQ-Wd-1dA"/>
-                                    <constraint firstItem="Etk-LE-cuS" firstAttribute="top" secondItem="zRq-Lb-Olq" secondAttribute="top" constant="26" id="JWv-j6-9gH"/>
+                                    <constraint firstItem="al5-Qu-IRX" firstAttribute="top" secondItem="S54-9S-eHH" secondAttribute="bottom" id="ICw-1p-tD4"/>
                                     <constraint firstAttribute="trailing" secondItem="S54-9S-eHH" secondAttribute="trailing" id="Pzh-oo-xwy"/>
                                     <constraint firstAttribute="bottom" secondItem="al5-Qu-IRX" secondAttribute="bottom" id="SGz-Aj-brW"/>
-                                    <constraint firstItem="nfp-q1-P6X" firstAttribute="top" secondItem="Etk-LE-cuS" secondAttribute="top" constant="5" id="VcJ-HM-gcP"/>
-                                    <constraint firstItem="nfp-q1-P6X" firstAttribute="leading" secondItem="Etk-LE-cuS" secondAttribute="trailing" constant="5" id="kDU-Zl-I5h"/>
-                                    <constraint firstItem="al5-Qu-IRX" firstAttribute="top" secondItem="Etk-LE-cuS" secondAttribute="top" constant="78" id="sRZ-5s-YTg"/>
-                                    <constraint firstAttribute="trailing" secondItem="nfp-q1-P6X" secondAttribute="trailing" constant="5" id="vCq-A0-a2p"/>
+                                    <constraint firstItem="asU-Hy-c6f" firstAttribute="top" secondItem="zRq-Lb-Olq" secondAttribute="top" constant="24" id="cve-Sv-i3B"/>
+                                    <constraint firstItem="asU-Hy-c6f" firstAttribute="leading" secondItem="6kU-bn-d8P" secondAttribute="trailing" constant="5" id="oar-cx-bxf"/>
+                                    <constraint firstItem="nfp-q1-P6X" firstAttribute="leading" secondItem="asU-Hy-c6f" secondAttribute="trailing" id="rE8-yX-jqX"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -160,7 +127,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="AyV-pA-5Rf"/>
                     <connections>
-                        <outlet property="searchContainerHeight" destination="CGn-Ih-jJ3" id="ife-SE-5pn"/>
+                        <outlet property="searchContainerConstraint" destination="wPE-0i-MlJ" id="5Zf-7f-EAO"/>
+                        <outlet property="searchContainerView" destination="asU-Hy-c6f" id="kjt-dO-TYE"/>
                         <outlet property="searchTextField" destination="pBU-Ep-kCK" id="Vim-r7-WW8"/>
                         <outlet property="searchTypeBtn" destination="nfp-q1-P6X" id="cuj-ab-M9d"/>
                         <outlet property="searchView" destination="zRq-Lb-Olq" id="Vzl-lk-90N"/>
@@ -192,7 +160,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="17T-si-dEd" id="Nls-iR-LCK">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -304,10 +272,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="iOm-74-Mlo">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iOm-74-Mlo" id="VvF-WI-6TQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -348,10 +316,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="sAf-Ny-npU">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sAf-Ny-npU" id="5U7-5U-VLv">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -418,7 +386,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9RR-qe-9uy" id="jsX-03-nez">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -570,10 +538,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fYd-EK-HGY">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fYd-EK-HGY" id="nQS-7e-XZi">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -637,10 +605,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KXd-JB-NhM">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KXd-JB-NhM" id="wIL-km-No9">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -704,10 +672,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VN8-5S-518">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VN8-5S-518" id="ony-VG-LPH">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -748,10 +716,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="M06-PI-Imy">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M06-PI-Imy" id="QHu-HG-Ije">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -801,10 +769,10 @@
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="uwv-oe-Ic4">
-                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uwv-oe-Ic4" id="Zgg-3a-zUf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -895,6 +863,6 @@
     <resources>
         <image name="Back.png" width="11" height="18"/>
         <image name="icon_plus.png" width="19" height="19"/>
-        <image name="icon_search" width="16" height="16"/>
+        <image name="icon_searchswitch.png" width="22" height="17"/>
     </resources>
 </document>

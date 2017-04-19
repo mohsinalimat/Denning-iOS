@@ -18,7 +18,7 @@
 
 @property (strong, nonatomic) AddressModel * address;
 
-@property (strong, nonatomic) NSString * firmCode;
+@property (strong, nonatomic) NSNumber * firmCode;
 
 @property (strong, nonatomic) NSString * emailAddress;
 

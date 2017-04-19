@@ -81,6 +81,10 @@
     self.numberOfMonths.text = [NSString stringWithFormat:@"%ld", (long)n];
     double total = n * A - P;
     self.totalInterest.text = [NSString stringWithFormat:@"%.2f", total];
+    
+    [self applyCommaToTextField:self.monthlyInslament];
+    [self applyCommaToTextField:self.numberOfMonths];
+    [self applyCommaToTextField:self.totalInterest];
 }
 
 - (IBAction)didTapReset:(id)sender {
@@ -115,15 +119,20 @@
     return [[self removeCommaFromString:formattedNumber] doubleValue];
 }
 
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    textField.text = [formatter stringFromNumber:number];
+}
+
 #pragma mark - UITexFieldDelegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        NSString *mystring = [self removeCommaFromString:textField.text];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        textField.text = [formatter stringFromNumber:number];
+        [self applyCommaToTextField:textField];
     }
 }
 

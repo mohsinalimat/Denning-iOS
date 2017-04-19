@@ -9,7 +9,6 @@
 #import "PersonalDocumentViewController.h"
 #import "BranchHeaderCell.h"
 #import "DocumentCell.h"
-#import "DocumentPreviewController.h"
 
 @interface PersonalDocumentViewController ()<BranchHeaderDelegate>
 
@@ -124,46 +123,52 @@
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
-    
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //    UIApplication.sharedApplication().openURL(NSURL(string: "com.adobe.adobe-reader://")!)
-    FileModel* file;
-    if (indexPath.section == 0) {
-        return;
-    } else if (indexPath.section == 1) {
-        file = self.folderModel.documents[indexPath.row];
-    } else {
-        FolderModel* model = self.folderModel.folders[indexPath.section-2];
-        file = model.documents[indexPath.row];
+    FileModel* file = folderModel.documents[indexPath.row];
+
+    NSURL *url = [NSURL URLWithString: file.URL];
+    if (![file.ext isEqualToString:@".url"]) {
+        NSString *urlString = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, file.URL];
+        url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
     }
-    
-//    NSString *url = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, file.URL];
-    NSString *url = [NSString stringWithFormat:@"http://43.252.215.163/denningwcf/%@", file.URL];
-    
-    [self performSegueWithIdentifier:kDocumentPreviewSegue sender:[NSURL URLWithString:url]];
-    
-//    if ([file.ext isEqualToString:@".pdf"]) {
-//        url = [@"com.adobe.adobe-reader://" stringByAppendingString:url];
-//        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-//            });
-//        }
-//    } else {
-////        url = [@"ms-word://" stringByAppendingString:url];
-//        
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
-//        });
-//    }
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                           inDomain:NSUserDomainMask
+                                                                  appropriateForURL:nil
+                                                                             create:NO error:nil];
+        
+        NSString* newPath = [[documentsDirectory absoluteString] stringByAppendingString:@"DenningIT/"];
+        if (![FCFileManager isDirectoryItemAtPath:newPath]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:newPath  withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        
+        return [documentsDirectory URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        [self displayDocument:filePath];
+    }];
+    [downloadTask resume];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)displayDocument:(NSURL*)document {
+    UIDocumentInteractionController *documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:document];
+    documentInteractionController.delegate = self;
+    [documentInteractionController presentPreviewAnimated:YES];
+}
+
+
+- (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controlle
+{
+    return self;
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -204,10 +209,7 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:kDocumentPreviewSegue]) {
-        DocumentPreviewController* docPrevVC = segue.destinationViewController;
-        docPrevVC.documentURL = sender;
-    }
+   
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }

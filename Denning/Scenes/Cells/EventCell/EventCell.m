@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartDatelabel;
+@property (weak, nonatomic) IBOutlet UILabel *eventEndDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
@@ -39,6 +40,7 @@
     self.descriptionLabel.text = event.description;
     self.locationLabel.text = event.location;
     self.eventStartDatelabel.text = [DIHelpers getDateInLongForm:event.eventStart];
+    self.eventEndDateLabel.text = [DIHelpers getDateInLongForm:event.eventEnd];
     self.eventStartTimeLabel.text = [DIHelpers getTimeFromDate:event.eventStart];
     
 }

@@ -90,11 +90,11 @@
 - (IBAction) gotoPasswordConfirm: (UIButton*) sender
 {
     FirmURLModel* urlModel = self.firmArray[sender.tag];
-    [[DataManager sharedManager] setServerAPI:urlModel.firmServerURL];
+    [[DataManager sharedManager] setServerAPI:urlModel.firmServerURL withFirmName:urlModel.name];
     
     if (![[DataManager sharedManager].documentView isEqualToString: @"shared"]) {
         if (![[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
-            if ([[DataManager sharedManager].statusCode  isEqual: @(250)] || YES ) {
+            if ([[DataManager sharedManager].statusCode  isEqual: @(250)]) {
                 [self performSegueWithIdentifier:kPasswordConfirmSegue sender:nil];
             } else {
                 [self performSegueWithIdentifier:kPersonalFolderSegue sender:urlModel.document];
@@ -103,9 +103,24 @@
             [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         }
     } else {
-        [self performSegueWithIdentifier:kPersonalFolderSegue sender:urlModel.document];
+        [self gotoSharedFolder];
     }
-    
+}
+
+- (void) gotoSharedFolder {
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
+    @weakify(self);
+    NSString *password = [DataManager sharedManager].user.password;
+    [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_SIGNIN] password:password withCompletion:^(BOOL success, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
+        
+        [SVProgressHUD dismiss];
+        @strongify(self);
+        if (success) {
+            [self performSegueWithIdentifier:kPersonalFolderSegue sender:doumentModel];
+        } else {
+            [QMAlert showAlertWithMessage:error actionSuccess:NO inViewController:self];
+        }
+    }];
 }
 
 #pragma mark - Navigation

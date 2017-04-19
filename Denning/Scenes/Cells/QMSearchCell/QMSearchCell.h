@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param visible wheter add button should be visible or not
  */
+- (void)setFavButtonVisible:(BOOL)visible;
+
 - (void)setAddButtonVisible:(BOOL)visible;
 
 @end

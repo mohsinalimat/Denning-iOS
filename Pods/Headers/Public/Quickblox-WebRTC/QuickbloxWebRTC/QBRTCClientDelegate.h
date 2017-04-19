@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCClientDelegate.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCClientDelegate.h

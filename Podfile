@@ -14,24 +14,27 @@ target ‘Denning’ do
     	pod 'TTTAttributedLabel', '~> 2.0'
     	pod 'libextobjc/EXTScope', '~> 0.4.1'
     	pod 'libextobjc/EXTKeyPathCoding', '~> 0.4.1'
-    	pod 'Flurry-iOS-SDK/FlurrySDK'
     	pod 'NYTPhotoViewer', '~> 1.1.0'
-    	pod 'QMChatViewController'
-   	pod 'QMServices'
 	pod 'ChameleonFramework'
 	pod 'STPopup'
 	pod 'DZNPhotoPickerController/Editor'
 	pod 'DZNEmptyDataSet'
 	pod 'HTHorizontalSelectionList', '~> 0.7.4'
 	pod 'RWDropdownMenu', '~> 1.0.0'
+	pod 'SystemServices', '~> 1.1.1'
+	pod 'libPhoneNumber-iOS', '~> 0.8'
+	pod 'MBProgressHUD', '~> 1.0.0'
+	pod 'SWTableViewCell', '~> 0.3.7'
 
 	pod 'AFNetworking’
 	pod 'Bolts'
 
 	pod 'Realm'
 
-	pod 'Quickblox-WebRTC', '~> 2.3.1'
+	pod 'Quickblox-WebRTC', '~> 2.4'
 	pod 'QuickBlox'
+    	pod 'QMChatViewController'
+   	pod 'QMServices'
 
 	pod 'ActionSheetPicker-3.0'
 
@@ -39,6 +42,8 @@ target ‘Denning’ do
 	pod 'Digits'
 	pod 'Crashlytics'
     	pod 'TwitterCore', '~> 1.15'
+
+	pod 'Flurry-iOS-SDK/FlurrySDK'
 
     	#Facebook
    	pod 'FBSDKCoreKit', '~> 4.11.0'

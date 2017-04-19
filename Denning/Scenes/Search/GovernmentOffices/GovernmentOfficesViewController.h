@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) GovOfficeModel* govOfficeModel;
 @property (strong, nonatomic) NSString* previousScreen;
+@property (strong, nonatomic) NSString* gotoRelatedMatter;
 
 @end

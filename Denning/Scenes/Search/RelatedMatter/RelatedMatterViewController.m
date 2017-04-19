@@ -10,6 +10,7 @@
 #import "ContactCell.h"
 #import "ContactHeaderCell.h"
 #import "ThreeFieldsCell.h"
+#import "LastTableCell.h"
 #import "PropertyViewController.h"
 #import "LedgerViewController.h"
 #import "BankViewController.h"
@@ -17,7 +18,7 @@
 #import "LegalFirmViewController.h"
 #import "DocumentViewController.h"
 
-@interface RelatedMatterViewController ()
+@interface RelatedMatterViewController ()<LastTableCellDelegate>
 {
     __block BOOL isLoading;
 }
@@ -69,6 +70,7 @@
     [ThreeFieldsCell registerForReuseInTableView:self.tableView];
     [ContactHeaderCell registerForReuseInTableView:self.tableView];
     [ContactCell registerForReuseInTableView:self.tableView];
+    [LastTableCell registerForReuseInTableView:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
@@ -117,7 +119,7 @@
             return relatedMatterModel.textGroupArray.count;
             break;
         case 10: // File Folder & Ledger
-            return 2;
+            return 1;
             break;
             
         default:
@@ -201,41 +203,6 @@
                 [SVProgressHUD dismiss];
                 if (error == nil) {
                     [self performSegueWithIdentifier:kBankSearchSegue sender:bankModel];
-                } else {
-                    [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-                }
-            }];
-        }
-    }
-    
-    if (indexPath.section == 10) { // File Folder & ledger
-        if  (indexPath.row == 0){
-            if (isLoading) return;
-            isLoading = YES;
-            [SVProgressHUD showWithStatus:@"Loading"];
-            @weakify(self);
-            [[QMNetworkManager sharedManager]loadDocumentWithCode:relatedMatterModel.systemNo completion:^(DocumentModel * _Nonnull documentModel, NSError * _Nonnull error) {
-                @strongify(self);
-                self->isLoading = false;
-                [SVProgressHUD dismiss];
-                if (error == nil) {
-                    [self performSegueWithIdentifier:kDocumentSearchSegue sender:documentModel];
-                } else {
-                    [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-                }
-            }];
-        } else if (indexPath.row == 1) {
-            if (isLoading) return;
-            isLoading = YES;
-            [SVProgressHUD showWithStatus:@"Loading"];
-            @weakify(self);
-            [[QMNetworkManager sharedManager] loadLedgerWithCode:self.relatedMatterModel.systemNo completion:^(NSArray * _Nonnull ledgerModelArray, NSError * _Nonnull error) {
-                
-                @strongify(self);
-                self->isLoading = false;
-                [SVProgressHUD dismiss];
-                if (error == nil) {
-                    [self performSegueWithIdentifier:kLedgerSearchSegue sender:ledgerModelArray];
                 } else {
                     [SVProgressHUD showErrorWithStatus:error.localizedDescription];
                 }
@@ -371,18 +338,55 @@
         [cell configureCellWithContact:otherInfo.label text:otherInfo.value];
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 10) { // Other Information
-        if (indexPath.row == 0) {
-            [cell configureCellWithContact:@"File Folder" text:@""];
-        } else {
-            [cell configureCellWithContact:@"Ledger" text:@""];
-        }
         
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        LastTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[LastTableCell cellIdentifier] forIndexPath:indexPath];
+        
+        [cell configureCellWithFirstTitle:@"File Folder" withSecondTitle:@"Ledger"];
+        cell.delgate = self;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        return cell;
     }
 
     return cell;
 }
 
+#pragma mark - LastTableCellDelegate
+- (void) didTapFirstBtn:(LastTableCell *)cell
+{
+    if (isLoading) return;
+    isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager]loadDocumentWithCode:relatedMatterModel.systemNo completion:^(DocumentModel * _Nonnull documentModel, NSError * _Nonnull error) {
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kDocumentSearchSegue sender:documentModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) didTapSecondBtn:(LastTableCell *)cell
+{
+    if (isLoading) return;
+    isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadLedgerWithCode:self.relatedMatterModel.systemNo completion:^(NSArray * _Nonnull ledgerModelArray, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kLedgerSearchSegue sender:ledgerModelArray];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
 
 #pragma mark - Navigation
 

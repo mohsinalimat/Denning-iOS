@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/RTCVideoRenderer.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/RTCVideoRenderer.h

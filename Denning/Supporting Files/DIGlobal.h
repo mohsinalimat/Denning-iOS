@@ -29,6 +29,10 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
     PublicGovernmentOffices = 512
 };
 
+#define kCountryName        @"name"
+#define kCountryCallingCode @"dial_code"
+#define kCountryCode        @"code"
+
 #define FORGOT_PASSWORD_SEND_SMS_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/lostPassword"
 
 #define FORGOT_PASSWORD_REQUEST_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/password/forget"
@@ -66,5 +70,20 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define NEWS_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningNews"
 
 #define EVENT_LATEST_URL        @"http://denningsoft.dlinkddns.com/denningwcf/v1/DenningEvent"
+
+#define GET_CHAT_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v2/chat/contact?userid="
+
+#define PUBLIC_ADD_FAVORITE_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/chat/contact/fav"
+
+#define PRIVATE_ADD_FAVORITE_CONTACT_URL    @"denningwcf/v1/chat/contact/fav"
+
+#define REMOVE_FAVORITE_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/chat/contact/fav"
+
+
+/*
+ *  Notification Names
+ */
+
+#define CHANGE_FAVORITE_CONTACT    @"ChangeFavorite"
 
 #endif /* PreHeader_h */

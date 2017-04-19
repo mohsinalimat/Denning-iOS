@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCStatsReport.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCStatsReport.h

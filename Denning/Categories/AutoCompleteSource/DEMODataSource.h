@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MLPAutoCompleteTextFieldDataSource.h"
-#import <AFNetworking.h>
 
+@class AFHTTPSessionManager;
 @interface DEMODataSource : NSObject <MLPAutoCompleteTextFieldDataSource>
 
 

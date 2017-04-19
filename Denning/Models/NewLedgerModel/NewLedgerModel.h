@@ -10,4 +10,9 @@
 
 @interface NewLedgerModel : NSObject
 
+@property (strong, nonatomic) NSArray* ledgerModelArray;
+@property (strong, nonatomic) NSString* fileName;
+@property (strong, nonatomic) NSString* fileNo;
+
++ (NewLedgerModel*) getNewLedgerModelFromResponse: (NSDictionary*) response;
 @end

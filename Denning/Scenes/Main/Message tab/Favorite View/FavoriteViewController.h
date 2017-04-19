@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QMSearchProtocols.h"
 
-@interface FavoriteViewController : UITableViewController
+@interface FavoriteViewController : UITableViewController<QMSearchProtocol>
 
 @end

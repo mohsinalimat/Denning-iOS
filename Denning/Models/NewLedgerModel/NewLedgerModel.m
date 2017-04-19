@@ -10,4 +10,12 @@
 
 @implementation NewLedgerModel
 
++ (NewLedgerModel*) getNewLedgerModelFromResponse: (NSDictionary*) response
+{
+    NewLedgerModel* newLedgerModel = [NewLedgerModel new];
+    newLedgerModel.fileNo = [response objectForKey:@"fileNo"];
+    newLedgerModel.fileName = [response objectForKey:@"fileName"];
+    newLedgerModel.ledgerModelArray = [LedgerModel getLedgerArrayFromResponse:[response objectForKey:@"accountType"]];
+    return newLedgerModel;
+}
 @end

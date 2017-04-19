@@ -29,7 +29,7 @@
         if ([courtModel.caseNumber isKindOfClass:[NSNull class]]) {
             courtModel.caseNumber = @"";
         }
-        courtModel.judge = [[response objectForKey:@"ourtInfo"] objectForKey:@"Judge"];
+        courtModel.judge = [[response objectForKey:@"courtInfo"] objectForKey:@"Judge"];
         if ([courtModel.judge isKindOfClass:[NSNull class]]) {
             courtModel.judge = @"";
         }

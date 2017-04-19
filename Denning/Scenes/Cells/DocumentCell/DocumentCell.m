@@ -32,13 +32,13 @@
 {
     self.fileNameLabel.text = model.name;
     self.dateLabel.text = model.date;
-    if([model.ext isEqualToString:@".docx"] || [model.ext isEqualToString:@".txt"] || [model.ext isEqualToString:@".doc"] || [model.ext isEqualToString:@".rtf"]){
+    if([DIHelpers isWordFile:model.ext] || [DIHelpers isExcelFile:model.ext] || [DIHelpers isTextFile:model.ext]){
         self.documentIcon.image = [UIImage imageNamed:@"icon_doc"];
-    } else if([model.ext isEqualToString:@".png"] || [model.ext isEqualToString:@".tif"] || [model.ext isEqualToString:@".bmp"] || [model.ext isEqualToString:@".jpg"] || [model.ext isEqualToString:@".jpeg"] || [model.ext isEqualToString:@".gif"]){
+    } else if([DIHelpers isImageFile:model.ext]){
         self.documentIcon.image = [UIImage imageNamed:@"icon_png"];
-    } else if([model.ext isEqualToString:@".pdf"]){
+    } else if([DIHelpers isPDFFile:model.ext]){
         self.documentIcon.image = [UIImage imageNamed:@"icon_pdf"];
-    } else if([model.ext isEqualToString:@".url"]){
+    } else if([DIHelpers isWebFile:model.ext]){
         self.documentIcon.image = [UIImage imageNamed:@"icon_web"];
     }
 }

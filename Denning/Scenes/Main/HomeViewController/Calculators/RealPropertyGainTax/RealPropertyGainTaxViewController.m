@@ -94,8 +94,8 @@
 //    self.saleCommissionTF.delegate = self;
 //    self.legalCostsTF.delegate = self;
 //    self.renovationImprovementTF.delegate = self;
-//    self.netDisposalPriceTF.delegate = self;
-//    
+//    self.disposalPriceTF.delegate = self;
+//
 //    self.purchaseCommisionTF.delegate = self;
 //    self.legalCostsTF.delegate = self;
 //    self.otherCostsIncurredTF.delegate = self;
@@ -137,45 +137,38 @@
     [popupController presentInViewController:self];
 }
 
+- (double) calculateNetDisposalPrice
+{
+    return [self getActualNumber:self.disposalPriceTF.text] - [self getActualNumber:self.saleCommissionTF.text] - [self getActualNumber:self.legalCostsTF.text] - [self getActualNumber:self.renovationImprovementTF.text];
+}
+
+- (double) calculateNetAcquisitionPrice
+{
+    return [self getActualNumber:self.acquisitionPriceTF.text] + [self getActualNumber:self.purchaseCommisionTF.text] + [self getActualNumber:self.legalCostsStampDutyTF.text] + [self getActualNumber:self.otherCostsIncurredTF.text];
+}
+
+- (BOOL) checkInputValidate
+{
+    BOOL isValid = YES;
+    
+    if (self.disposalPriceTF.text.length == 0 || self.saleCommissionTF.text.length == 0 || self.legalCostsTF.text.length == 0 || self.renovationImprovementTF.text.length == 0 || self.acquisitionPriceTF.text.length == 0 || self.purchaseCommisionTF.text.length == 0 || self.legalCostsTF.text.length == 0 || self.otherCostsIncurredTF.text.length == 0 || self.dateOfDisposalTF.text.length == 0 || self.dateOfAcquizition.text.length == 0 || self.statusOfTaxPayerTF.text.length == 0) {
+        return NO;
+    }
+    
+    if (isValid) {
+        [self calculateNumberOfYearHeld];
+    }
+    
+    return isValid;
+}
+
 - (IBAction)didTapCalculate:(id)sender {
-    double netDisposalPrice = [self getActualNumber:self.disposalPriceTF.text] - [self getActualNumber:self.saleCommissionTF.text] - [self getActualNumber:self.legalCostsTF.text] - [self getActualNumber:self.renovationImprovementTF.text];
-    self.netDisposalPriceTF.text = [NSString stringWithFormat:@"%.2f", netDisposalPrice];
-    
-    double netAcquisitionPrice = [self getActualNumber:self.acquisitionPriceTF.text] + [self getActualNumber:self.purchaseCommisionTF.text] + [self getActualNumber:self.legalCostsStampDutyTF.text] + [self getActualNumber:self.otherCostsIncurredTF.text];
-    self.netAcquisitionPriceTF.text = [NSString stringWithFormat:@"%.2f", netAcquisitionPrice];
-    
-    double gainsLoss = netDisposalPrice - netAcquisitionPrice;
-    self.gainsLossTF.text = [NSString stringWithFormat:@"%.2f", gainsLoss];
-    
-    if ([self.dateOfDisposalTF.text isEqualToString:@""]){
-        [QMAlert showAlertWithMessage:@"Please input the date of Disposal!" actionSuccess:NO inViewController:self];
+    if (![self checkInputValidate]) {
+        [QMAlert showAlertWithMessage:@"Please input all the values before calculation." actionSuccess:NO inViewController:self];
         return;
     }
     
-    if ([self.dateOfAcquizition.text isEqualToString:@""]){
-        [QMAlert showAlertWithMessage:@"Please input the date of Acquisition!" actionSuccess:NO inViewController:self];
-        return;
-    }
-    
-    dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    disposalDate = [dateFormat dateFromString:self.dateOfDisposalTF.text];
-    acquisitionDate = [dateFormat dateFromString:self.dateOfAcquizition.text];
-    
-    if (![disposalDate earlierDate:acquisitionDate]) {
-        [QMAlert showAlertWithMessage:@"Opps! there is something. please input valid dates." actionSuccess:NO inViewController:self];
-        return;
-    }
-    
-    NSCalendar *gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSUInteger units = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-    NSDateComponents *components = [gregorian components:units fromDate:acquisitionDate toDate:disposalDate options:0];
-    numberOfYears = [components year];
-    NSInteger numberOfMonths = [components month];
-    NSInteger numberOfDays = [components day];
-    numberOfYears += numberOfMonths / 12 + numberOfDays/365;
-    
-    self.numberOfYearHeldTF.text = [NSString stringWithFormat:@"%.2f", numberOfYears];
+    double gainsLoss = [self getActualNumber:self.gainsLossTF.text];
     
     if ([self.statusOfTaxPayerTF.text isEqualToString:@"Malaysian Company"]) {
         [self calculateTaxRateForLocalCompany];
@@ -195,6 +188,8 @@
     
     self.taxRateTF.text = [NSString stringWithFormat:@"%.2f", taxRate];
     self.taxPayable.text = [NSString stringWithFormat:@"%2.f", realpropertyTax];
+    [self applyCommaToTextField:self.taxRateTF];
+    [self applyCommaToTextField:self.taxPayable];
 }
 
 - (void) applyTaxRestriction
@@ -234,7 +229,6 @@
            taxRate = 5;
         }
     }
-
 }
 
 - (void) calculateTaxRateForLocalPerson
@@ -301,7 +295,6 @@
     }
 }
 
-
 - (IBAction)didTapReset:(id)sender {
     self.disposalPriceTF.text = @"";
     self.saleCommissionTF.text = @"";
@@ -324,16 +317,44 @@
     self.taxPayable.text = @"";
 }
 
+- (void) calculateNumberOfYearHeld
+{
+    if (self.dateOfDisposalTF.text.length == 0 || self.dateOfAcquizition.text.length == 0){
+        return;
+    }
+    
+    dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"dd-MM-yyyy"];
+    disposalDate = [dateFormat dateFromString:self.dateOfDisposalTF.text];
+    acquisitionDate = [dateFormat dateFromString:self.dateOfAcquizition.text];
+    
+    if ([disposalDate compare:acquisitionDate] == NSOrderedAscending) {
+        [QMAlert showAlertWithMessage:@"Opps! there is something wrong. please input valid dates." actionSuccess:NO inViewController:self];
+        return;
+    }
+    
+    NSCalendar *gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSUInteger units = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *components = [gregorian components:units fromDate:acquisitionDate toDate:disposalDate options:0];
+    numberOfYears = [components year];
+    CGFloat numberOfMonths = [components month];
+    CGFloat numberOfDays = [components day];
+    numberOfYears += numberOfMonths / 12.0f + numberOfDays/365.0f;
+    
+    self.numberOfYearHeldTF.text = [NSString stringWithFormat:@"%.2f", numberOfYears];
+}
+
 - (void) updateDateOfDisposal: (NSString*) date
 {
     self.dateOfDisposalTF.text = date;
+    [self calculateNumberOfYearHeld];
 }
 
 - (void) updateDateOfAcquisition: (NSString*) date
 {
     self.dateOfAcquizition.text = date;
+    [self calculateNumberOfYearHeld];
 }
-
 
 - (NSString*) removeCommaFromString: (NSString*) formattedNumber
 {
@@ -358,15 +379,40 @@
     return [[self removeCommaFromString:formattedNumber] doubleValue];
 }
 
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    textField.text = [formatter stringFromNumber:number];
+}
+
 #pragma mark - UITexFieldDelegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        NSString *mystring = [self removeCommaFromString:textField.text];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        textField.text = [formatter stringFromNumber:number];
+        [self applyCommaToTextField:textField];
+        
+        NSNumber* tag = [NSNumber numberWithInteger:textField.tag];
+        if ([@[@(0), @(1), @(2), @(3),@(5), @(6), @(7), @(8)] containsObject:tag]){
+            double netDisposalPrice = 0, netAcquisitionPrice = 0;
+            if ([@[@(0), @(1), @(2), @(3)] containsObject:tag]){
+                netDisposalPrice = [self calculateNetDisposalPrice];
+                self.netDisposalPriceTF.text = [NSString stringWithFormat:@"%.2f", netDisposalPrice];
+                [self applyCommaToTextField:self.netDisposalPriceTF];
+            }
+            if ([@[@(5), @(6), @(7), @(8)] containsObject:tag]){
+                netAcquisitionPrice = [self calculateNetAcquisitionPrice];
+                self.netAcquisitionPriceTF.text = [NSString stringWithFormat:@"%.2f", netAcquisitionPrice];
+                [self applyCommaToTextField:self.netAcquisitionPriceTF];
+            }
+            netDisposalPrice = [self getActualNumber:self.netDisposalPriceTF.text];
+            netAcquisitionPrice = [self getActualNumber:self.netAcquisitionPriceTF.text];
+            double gainsLoss = netDisposalPrice - netAcquisitionPrice;
+            self.gainsLossTF.text = [NSString stringWithFormat:@"%.2f", gainsLoss];
+            [self applyCommaToTextField:self.gainsLossTF];
+        }
     }
 }
 
@@ -395,13 +441,15 @@
 #pragma mark - TextField delegate
 - (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
 {
-    if (textField.tag == 28){
+    if (textField.tag == 11){
         [self showCalendar: @"Date of Disposal"];
-    } else if (textField.tag == 29) {
+    } else if (textField.tag == 12) {
         [self showCalendar: @"Date of Acquisition"];
+    } else {
+        return YES;
     }
     
-    return false;
+    return NO;
 }
 
 #pragma mark - Table view data source

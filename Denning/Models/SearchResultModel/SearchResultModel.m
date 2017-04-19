@@ -39,6 +39,6 @@
         }
     }
     
-    return searchResultArray;
+    return [searchResultArray copy];
 }
 @end

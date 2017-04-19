@@ -10,6 +10,8 @@
 
 @interface DIFileBrowser ()
 
+@property (strong, nonatomic) NSArray* fileURLs;
+
 @end
 
 @implementation DIFileBrowser
@@ -22,6 +24,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self loadFileFromAppDirectory];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,27 +32,67 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSURL*)applicationDataDirectory {
+    NSFileManager* sharedFM = [NSFileManager defaultManager];
+    NSArray* possibleURLs = [sharedFM URLsForDirectory:NSApplicationSupportDirectory
+                                             inDomains:NSUserDomainMask];
+    NSURL* appSupportDir = nil;
+    NSURL* appDirectory = nil;
+    
+    if ([possibleURLs count] >= 1) {
+        // Use the first directory (if multiple are returned)
+        appSupportDir = [possibleURLs objectAtIndex:0];
+    }
+    
+    // If a valid app support directory exists, add the
+    // app's bundle ID to it to specify the final directory.
+    if (appSupportDir) {
+        NSString* appBundleID = [[NSBundle mainBundle] bundleIdentifier];
+        appDirectory = [appSupportDir URLByAppendingPathComponent:appBundleID];
+    }
+    
+    return appDirectory;
+}
+
+- (void) loadFileFromAppDirectory {
+    NSURL* directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                                             inDomain:NSUserDomainMask
+                                                                                    appropriateForURL:nil
+                                                                                               create:NO error:nil];
+    
+    NSError *error = nil;
+    NSArray *properties = [NSArray arrayWithObjects: NSURLLocalizedNameKey,
+                           NSURLCreationDateKey, NSURLLocalizedTypeDescriptionKey, nil];
+    
+    self.fileURLs = [[NSFileManager defaultManager]
+                      contentsOfDirectoryAtURL:directoryURL
+                      includingPropertiesForKeys:properties
+                      options:(NSDirectoryEnumerationSkipsHiddenFiles)
+                      error:&error];
+    if (self.fileURLs == nil) {
+        // Handle the error
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+
+    return self.fileURLs.count;
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DocumentFileCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    cell.textLabel.text = @"____";
     
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.

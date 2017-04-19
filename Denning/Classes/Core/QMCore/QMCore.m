@@ -11,9 +11,13 @@
 #import "QMFacebook.h"
 #import "QMNotification.h"
 #import "QMTasks.h"
-#import <DigitsKit/DigitsKit.h>
 #import <SVProgressHUD.h>
 #import <SDWebImageManager.h>
+#import "QMCallManager.h"
+#import "QMCallManager.h"
+#import <Intents/Intents.h>
+#import "NSString+QMTransliterating.h"
+#import "QMHelpers.h"
 
 static NSString *const kQMLastActivityDateKey = @"last_activity_date";
 static NSString *const kQMErrorKey = @"errors";
@@ -24,6 +28,7 @@ static NSString *const kQMContactListCacheNameKey = @"q-municate-contacts";
 @interface QMCore ()
 
 @property (strong, nonatomic) BFTask *restLoginTask;
+@property (strong, nonatomic) NSMutableOrderedSet *cachedVocabularyStrings;
 
 @end
 
@@ -56,6 +61,9 @@ static NSString *const kQMContactListCacheNameKey = @"q-municate-contacts";
         // Users cache init
         [self.usersService loadFromCache];
         
+        // Vocabulary string cache init
+        _cachedVocabularyStrings = [NSMutableOrderedSet orderedSet];
+        
         // managers
         _contactManager = [[QMContactManager alloc] initWithServiceManager:self];
         _chatManager = [[QMChatManager alloc] initWithServiceManager:self];
@@ -64,6 +72,7 @@ static NSString *const kQMContactListCacheNameKey = @"q-municate-contacts";
         
         // Reachability init
         [self configureReachability];
+        [self.chatService addDelegate:self];
     }
     
     return self;
@@ -252,14 +261,14 @@ static NSString *const kQMContactListCacheNameKey = @"q-municate-contacts";
         [super logoutWithCompletion:^{
             
             @strongify(self);
-            if (self.currentProfile.accountType == QMAccountTypeFacebook) {
-                
-                [QMFacebook logout];
-            }
-            else if (self.currentProfile.accountType == QMAccountTypeDigits) {
-                
-                [[Digits sharedInstance] logOut];
-            }
+//            if (self.currentProfile.accountType == QMAccountTypeFacebook) {
+//                
+//                [QMFacebook logout];
+//            }
+//            else if (self.currentProfile.accountType == QMAccountTypeDigits) {
+//                
+//                [[Digits sharedInstance] logOut];
+//            }
             
             [[SDWebImageManager sharedManager].imageCache clearMemory];
             [[SDWebImageManager sharedManager].imageCache clearDisk];

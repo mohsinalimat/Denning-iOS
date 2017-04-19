@@ -20,6 +20,7 @@
 #import "QMTasks.h"
 #import <SVProgressHUD.h>
 #import "QBChatDialog+OpponentID.h"
+#import "MessageViewController.h"
 
 // category
 #import "UINavigationController+QMNotification.h"
@@ -39,7 +40,9 @@ UISearchResultsUpdating,
 
 QMPushNotificationManagerDelegate,
 QMDialogsDataSourceDelegate,
-QMSearchResultsControllerDelegate
+QMSearchResultsControllerDelegate,
+
+UIGestureRecognizerDelegate
 >
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -81,20 +84,9 @@ QMSearchResultsControllerDelegate
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    // search implementation
-    [self configureSearch];
-    
-    // Data sources init
-    [self configureDataSources];
-    
-    // registering nibs for current VC and search results VC
-    [self registerNibs];
-    
     // Subscribing delegates
     [[QMCore instance].chatService addDelegate:self];
     [[QMCore instance].usersService addDelegate:self];
-    
-    [self performAutoLoginAndFetchData];
     
     // adding refresh control task
     if (self.refreshControl) {
@@ -145,6 +137,9 @@ QMSearchResultsControllerDelegate
         [self.refreshControl beginRefreshing];
         self.tableView.contentOffset = offset;
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performAutoLoginAndFetchData];
+    });
 }
 
 - (void)performAutoLoginAndFetchData {
@@ -152,40 +147,61 @@ QMSearchResultsControllerDelegate
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_CONNECTING", nil) duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
-    
-    @weakify(self);
-    [[[[QMCore instance] login] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+    BFTask *loginTask = [[QMCore instance] login];
+    if (loginTask == nil)
+    {
+        [navigationController dismissNotificationPanel];
+        // search implementation
+        [self configureSearch];
         
-        @strongify(self);
-        if (task.isFaulted) {
+        // Data sources init
+        [self configureDataSources];
+        
+        // registering nibs for current VC and search results VC
+        [self registerNibs];
+        
+    } else {
+        @weakify(self);
+        [[loginTask continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
             
-            [navigationController dismissNotificationPanel];
+            if (task.isFaulted) {
+                [navigationController dismissNotificationPanel];
+                if (task.error.code == kQMUnAuthorizedErrorCode
+                    || (task.error.code == kBFMultipleErrorsError
+                        && ([task.error.userInfo[BFTaskMultipleErrorsUserInfoKey][0] code] == kQMUnAuthorizedErrorCode
+                            || [task.error.userInfo[BFTaskMultipleErrorsUserInfoKey][1] code] == kQMUnAuthorizedErrorCode))) {
+                            
+                            return [[[QMCore instance] logout] continueWithBlock:^id _Nullable(BFTask * _Nonnull __unused logoutTask) {
+                                
+                                [navigationController dismissNotificationPanel];
+                                
+                                [self performSegueWithIdentifier:kQMSceneSegueAuth sender:nil];
+                                return logoutTask;
+                            }];
+                        }
+            }
             
-            if (task.error.code == kQMUnAuthorizedErrorCode
-                || (task.error.code == kBFMultipleErrorsError
-                    && ([task.error.userInfo[BFTaskMultipleErrorsUserInfoKey][0] code] == kQMUnAuthorizedErrorCode
-                        || [task.error.userInfo[BFTaskMultipleErrorsUserInfoKey][1] code] == kQMUnAuthorizedErrorCode))) {
-                        
-                        return [[QMCore instance] logout];
-                    }
-        }
-        
-        if ([QMCore instance].pushNotificationManager.pushNotification != nil) {
+            // search implementation
+            [self configureSearch];
             
-            [[QMCore instance].pushNotificationManager handlePushNotificationWithDelegate:self];
-        }
-        
-        return [BFTask cancelledTask];
-        
-    }] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-        
-        if (!task.isCancelled) {
+            // Data sources init
+            [self configureDataSources];
             
-            [self performSegueWithIdentifier:kQMSceneSegueAuth sender:nil];
-        }
-        
-        return nil;
-    }];
+            // registering nibs for current VC and search results VC
+            [self registerNibs];
+            
+            return [BFTask cancelledTask];
+            
+        }] continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+            @strongify(self);
+            if (!task.isCancelled) {
+                
+                [self performSegueWithIdentifier:kQMSceneSegueAuth sender:nil];
+            }
+            
+            return nil;
+        }];
+    }
 }
 
 #pragma mark - Init methods
@@ -202,6 +218,7 @@ QMSearchResultsControllerDelegate
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
+    self.tableView.tableHeaderView = self.searchController.searchBar;
 }
 
 - (void)configureDataSources {
@@ -210,7 +227,7 @@ QMSearchResultsControllerDelegate
     self.dialogsDataSource.delegate = self;
     self.placeholderDataSource  = [[QMPlaceholderDataSource alloc] init];
     
-    self.tableView.dataSource = self.placeholderDataSource;
+    self.tableView.dataSource = self.dialogsDataSource;
     
     QMDialogsSearchDataProvider *searchDataProvider = [[QMDialogsSearchDataProvider alloc] init];
     searchDataProvider.delegate = self.searchResultsController;
@@ -265,13 +282,23 @@ QMSearchResultsControllerDelegate
 
 - (void)willPresentSearchController:(UISearchController *)__unused searchController {
     
+    MessageViewController* messageVC = (MessageViewController*)self.parentViewController;
+    messageVC.navigationController.navigationBarHidden = YES;
+    
     self.searchResultsController.tableView.dataSource = self.dialogsSearchDataSource;
     self.tabBarController.tabBar.hidden = YES;
+    
 }
 
 - (void)willDismissSearchController:(UISearchController *)__unused searchController {
     
+    MessageViewController* messageVC = (MessageViewController*)self.parentViewController;
+    messageVC.navigationController.navigationBarHidden = NO;
     self.tabBarController.tabBar.hidden = NO;
+
+    CGRect frame = self.searchResultsController.tableView.frame;
+    
+    self.searchResultsController.tableView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
 }
 
 #pragma mark - UISearchResultsUpdating
@@ -279,6 +306,9 @@ QMSearchResultsControllerDelegate
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     
     [self.dialogsSearchDataSource.searchDataProvider performSearch:searchController.searchBar.text];
+    CGRect frame = self.searchResultsController.tableView.frame;
+    
+    self.searchResultsController.tableView.frame = CGRectMake(0, 40, frame.size.width, frame.size.height);
 }
 
 #pragma mark - QMSearchResultsControllerDelegate

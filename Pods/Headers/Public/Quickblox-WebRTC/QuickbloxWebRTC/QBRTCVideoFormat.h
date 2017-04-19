@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCVideoFormat.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCVideoFormat.h

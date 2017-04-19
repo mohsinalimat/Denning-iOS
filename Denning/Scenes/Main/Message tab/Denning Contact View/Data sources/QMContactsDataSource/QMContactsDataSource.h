@@ -10,4 +10,10 @@
 
 @interface QMContactsDataSource : QMAlphabetizedDataSource
 
+
+/**
+ *  Add Favorite user block action.
+ */
+@property (copy, nonatomic) void (^didAddUserBlock)();
+
 @end

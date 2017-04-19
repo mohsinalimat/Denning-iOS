@@ -87,15 +87,20 @@
     return [[self removeCommaFromString:formattedNumber] doubleValue];
 }
 
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    textField.text = [formatter stringFromNumber:number];
+}
+
 #pragma mark - UITexFieldDelegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        NSString *mystring = [self removeCommaFromString:textField.text];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        textField.text = [formatter stringFromNumber:number];
+        [self applyCommaToTextField:textField];
     }
 }
 
@@ -139,7 +144,7 @@
     double stamDuty;
     if ([self.typeLabel.text isEqualToString:@"Conventional"]) {
         stamDuty = [self getActualNumber:self.loanAmount.text]*0.005;
-    } else if ([self.typeLabel.text isEqualToString:@"Islamic"]) {
+    } else { // Islamic
         stamDuty = [self getActualNumber:self.loanAmount.text]*0.005*80/100;
     }
     
@@ -188,6 +193,9 @@
     
     self.resultLabel.text = [NSString stringWithFormat:@"%.2f", stamDuty];
     self.legalCostTextField.text =[NSString stringWithFormat:@"%.2f", legalCost];
+    
+    [self applyCommaToTextField:self.resultLabel];
+    [self applyCommaToTextField: self.legalCostTextField];
 }
 
 - (IBAction)didTapReset:(id)sender {

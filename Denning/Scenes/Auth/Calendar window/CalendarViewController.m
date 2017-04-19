@@ -40,16 +40,16 @@
 - (IBAction)nextBtnDidTap
 {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+    [dateFormat setDateFormat:@"dd-MM-yyyy"];
     NSDate *pickerDate = [_datePicker date];
-    
-    if ([self.typeOfDate isEqualToString:@"Date of Disposal"]) {
-        [self.realVC updateDateOfDisposal:[dateFormat stringFromDate:pickerDate]];
-    } else {
-        [self.realVC updateDateOfAcquisition:[dateFormat stringFromDate:pickerDate]];
-    }
-    
-    [self.popupController dismiss];
+ 
+    [self.popupController dismissWithCompletion:^{
+        if ([self.typeOfDate isEqualToString:@"Date of Disposal"]) {
+            [self.realVC updateDateOfDisposal:[dateFormat stringFromDate:pickerDate]];
+        } else {
+            [self.realVC updateDateOfAcquisition:[dateFormat stringFromDate:pickerDate]];
+        }
+    }];
 }
 
 - (void)viewDidLoad {

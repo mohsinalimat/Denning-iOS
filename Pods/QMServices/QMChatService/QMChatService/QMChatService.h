@@ -450,6 +450,17 @@ typedef NS_ENUM(NSUInteger, QMChatConnectionState) {
          completion:(nullable QBChatCompletionBlock)completion;
 
 /**
+ *  Upload and send attachment message to dialog.
+ *
+ *  @param message      QBChatMessage instance
+ *  @param dialog       QBChatDialog instance
+ *  @param chatService  QMChatService instance
+ *  @param image        Attachment image
+ *  @param completion   Send message result
+ */
+- (void)uploadAndSendAttachmentMessage:(QBChatMessage *)message toDialog:(QBChatDialog *)dialog withChatService:(QMChatService *)chatService withAttachedDocument:(NSData *) data withMIMEType: (NSString*) mimeType withType: (NSString*) type completion:(nullable QBChatCompletionBlock)completion;
+
+/**
  *  Send attachment message to dialog.
  *
  *  @param attachmentMessage    QBChatMessage instance with attachment
@@ -883,6 +894,22 @@ typedef NS_ENUM(NSUInteger, QMChatConnectionState) {
 - (BFTask *)sendAttachmentMessage:(QBChatMessage *)attachmentMessage
                          toDialog:(QBChatDialog *)dialog
               withAttachmentImage:(UIImage *)image;
+
+/**
+ *  Send attachment message to dialog using Bolts.
+ *
+ *  @param attachmentMessage    QBChatMessage instance with attachment
+ *  @param dialog               dialog instance to send message to
+ *  @param image                attachment image to upload
+ *
+ *  @return BFTask with failure error
+ *
+ *  @see In order to know how to work with BFTask's see documentation https://github.com/BoltsFramework/Bolts-iOS#bolts
+ */
+- (BFTask *)sendAttachmentMessage:(QBChatMessage *)attachmentMessage
+                         toDialog:(QBChatDialog *)dialog
+              withAttachedDocument:(NSData *) data withMIMEType: (NSString*) mimeType withType: (NSString*) type;
+
 
 /**
  *  Mark message as delivered.

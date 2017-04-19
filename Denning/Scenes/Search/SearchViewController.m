@@ -18,6 +18,10 @@
 #import "GovernmentOfficesViewController.h"
 #import "LedgerViewController.h"
 #import "DocumentViewController.h"
+#import "MLPAutoCompleteTextField.h"
+#import "DEMOCustomAutoCompleteCell.h"
+#import "DEMOCustomAutoCompleteObject.h"
+#import "AFHTTPSessionOperation.h"
 
 typedef NS_ENUM(NSInteger, DISearchCellType) {
     DIContactCell = 1,
@@ -30,29 +34,33 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     DIDocumentCell = 128,
 };
 
-@interface SearchViewController ()<UITextFieldDelegate, AutoCompletionTextFieldDelegate, UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate, SearchDelegate, SearchMatterDelegate, SearchDocumentDelegate>
+@interface SearchViewController ()<UITextFieldDelegate, MLPAutoCompleteTextFieldDelegate, MLPAutoCompleteTextFieldDataSource,
+UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate, SearchDelegate, SearchMatterDelegate, SearchDocumentDelegate>
 {
     NSInteger category;
     NSString* keyword;
     NSString* searchURL;
+    NSString* searchKeywordURL;
     NSArray* generalKeyArray;
     NSMutableArray* generalValueArray;
     __block BOOL isLoading;
     NSString* _matterCode;
     NSString* searchType;
+    NSString* gotoMatter;
 }
 
-@property (weak, nonatomic) IBOutlet AutoCompletionTextField *searchTextField;
+@property (weak, nonatomic) IBOutlet MLPAutoCompleteTextField *searchTextField;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *searchView;
 @property (nonatomic, strong) HTHorizontalSelectionList *selectionList;
 @property (nonatomic, strong) NSDictionary *generalSearchFilters;
 @property (nonatomic, strong) NSDictionary *publicSearchFilters;
 @property (weak, nonatomic) IBOutlet UIButton *searchTypeBtn;
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchContainerHeight;
 
 @property (strong, nonatomic) NSMutableArray* searchResultArray;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchContainerConstraint;
+@property (weak, nonatomic) IBOutlet UIView *searchContainerView;
 
 @end
 
@@ -75,13 +83,27 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
 
 - (void) prepareSearchTextField
 {
-    [QMNetworkManager sharedManager].searchDataSource.requestURL = PUBLIC_KEYWORD_SEARCH_URL;
-    [QMNetworkManager sharedManager].searchDataSource.manager = [QMNetworkManager sharedManager].manager;
-    
-    self.searchTextField.suggestionsResultDataSource = [QMNetworkManager sharedManager].searchDataSource;
-    self.searchTextField.suggestionsResultDelegate = self;
     self.searchTextField.delegate = self;
+    self.searchTextField.autoCompleteDataSource = self;
+    self.searchTextField.autoCompleteDelegate = self;
     self.searchTextField.backgroundColor = [UIColor whiteColor];
+    [self.searchTextField registerAutoCompleteCellClass:[DEMOCustomAutoCompleteCell class]
+                                       forCellReuseIdentifier:@"CustomCellId"];
+    self.searchTextField.maximumNumberOfAutoCompleteRows = 3;
+    self.searchTextField.applyBoldEffectToAutoCompleteSuggestions = YES;
+    self.searchTextField.showAutoCompleteTableWhenEditingBegins = YES;
+    self.searchTextField.disableAutoCompleteTableUserInteractionWhileFetching = YES;
+    [self.searchTextField setAutoCompleteRegularFontName:@"SFUIText-Regular"];
+    
+    // searchcontainer constraint
+    self.searchContainerView.userInteractionEnabled = YES;
+    self.searchContainerConstraint.constant = 44;
+    
+    // add search icon to the left view
+    self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
+    UIImageView* searchImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_search_black"]];
+    self.searchTextField.leftView = searchImageView;
+    [self.searchTextField becomeFirstResponder];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -157,24 +179,42 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     
     self.selectionList.selectionIndicatorAnimationMode = HTHorizontalSelectionIndicatorAnimationModeLightBounce;
     self.selectionList.showsEdgeFadeEffect = YES;
-   // self.selectionList.snapToCenter = YES;
     
     self.selectionList.selectionIndicatorColor = [UIColor colorWithHexString:@"FF3B2F"];
     [self.selectionList setTitleColor:[UIColor colorWithHexString:@"FF3B2F"] forState:UIControlStateHighlighted];
     [self.selectionList setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.selectionList setTitleFont:[UIFont systemFontOfSize:17] forState:UIControlStateNormal];
-    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateSelected];
-    [self.selectionList setTitleFont:[UIFont boldSystemFontOfSize:17] forState:UIControlStateHighlighted];
+    [self.selectionList setTitleFont:[UIFont fontWithName:@"SFUIText-Regular" size:17] forState:UIControlStateNormal];
+    [self.selectionList setTitleFont:[UIFont fontWithName:@"SFUIText-SemiBold" size:17]  forState:UIControlStateSelected];
+    [self.selectionList setTitleFont:[UIFont fontWithName:@"SFUIText-SemiBold" size:17] forState:UIControlStateHighlighted];
     
     [self.view addSubview:self.selectionList];
-    
-    self.selectionList.hidden = YES;
     self.selectionList.backgroundColor = [UIColor clearColor];
     
-    category = 0;
-    
-    // control search contrainer view
-    self.searchContainerHeight.constant = 44;
+    [self buildSearchKeywordURL];
+}
+
+- (void) buildSearchURL
+{
+    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];
+    } else {
+        searchURL = PUBLIC_SEARCH_URL;
+    }
+}
+
+- (void) buildSearchKeywordURL
+{
+    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
+        [DataManager sharedManager].searchType  = @"General";
+        searchKeywordURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
+        category = 0;
+        self.searchTextField.placeholder = @"General Search";
+    } else {
+        [DataManager sharedManager].searchType  = @"Public";
+        category = -1;
+        searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
+        self.searchTextField.placeholder = @"Public Search";
+    }
 }
 
 - (void)registerNibs {
@@ -212,7 +252,7 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     [self.searchResultArray removeAllObjects];
     [self.tableView reloadData];
     self.searchTextField.text = @"";
-    self.searchTextField.hidden = NO;
+    self.selectionList.hidden = NO;
 }
 
 - (IBAction)toggleSearchType:(UIButton*)sender {
@@ -221,17 +261,18 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     }
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        [self.searchTypeBtn setTitle:@"Public" forState:UIControlStateNormal];
+        self.searchTextField.placeholder = @"Public Search";
         [DataManager sharedManager].searchType = @"Public";
         category = -1;
+       searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
     } else {
         [DataManager sharedManager].searchType = @"General";
-        [self.searchTypeBtn setTitle:@"General" forState:UIControlStateNormal];
+        self.searchTextField.placeholder = @"General Search";
         category = 0;
+         searchKeywordURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
     }
-
-//    [self.searchTypeBtn setTitle:[DataManager sharedManager].searchType forState:UIControlStateNormal];
-    [self updateUI];
+    
+   [self updateUI];
 }
 
 - (IBAction)tapLogoBtn:(id)sender {
@@ -258,6 +299,7 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
         {
             self.searchResultArray = [resultArray mutableCopy];
             [self.tableView reloadData];
+            self.selectionList.hidden = NO;
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -269,7 +311,8 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
 - (void) didTapMatter:(SearchResultCell *)cell
 {
     SearchResultModel* model = self.searchResultArray[cell.tag];
-    [self openRelatedMatter:model];
+    gotoMatter = @"Matter";
+    [self performSearchCellSelect:model];
 }
 
 #pragma mark - SearchDocumentDelegate : Document
@@ -323,11 +366,11 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
         category = [generalValueArray[index] integerValue];
-        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];
     } else {
         category = [self.publicSearchFilters.allValues[index] integerValue];
-        searchURL = PUBLIC_SEARCH_URL;
     }
+    
+    [self buildSearchURL];
     
     if (self.searchResultArray.count != 0) {
         [self.searchResultArray removeAllObjects];
@@ -341,13 +384,14 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
 
 #pragma mark - Search delegate
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    self.selectionList.hidden = YES;
+    return YES;
+}
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]) {
-        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];;
-    } else {
-        searchURL = PUBLIC_SEARCH_URL;
-    }
+    [self buildSearchURL];
     
     keyword = self.searchTextField.text;
     [self.searchTextField resignFirstResponder];
@@ -396,11 +440,18 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 0;
+    }
     return 40;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 0;
+    }
+    
     return 10;
 }
 
@@ -507,160 +558,240 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
     }];
 }
 
-- (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) openContact: (SearchResultModel*) model
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:model.key completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openProperty: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kPropertySearchSegue sender:propertyModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openBank: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadBankFromSearchWithCode:model.key completion:^(BankModel * _Nonnull bankModel, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kBankSearchSegue sender:bankModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openGovLandOffices: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"LandOffice" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openGovPTGOffices: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"PTG" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
+        [SVProgressHUD dismiss];
+        @strongify(self);
+        self->isLoading = false;
+        if (error == nil) {
+            [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) openLegalFirm: (SearchResultModel*) model
+{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadLegalFirmWithCode:model.key completion:^(LegalFirmModel * _Nonnull legalFirmModel, NSError * _Nonnull error) {
+        [SVProgressHUD dismiss];
+        @strongify(self);
+        self->isLoading = false;
+        if (error == nil) {
+            [self performSegueWithIdentifier:kLegalFirmSearchSegue sender:legalFirmModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
+- (void) performSearchCellSelect: (SearchResultModel*) model
+{
     if (isLoading) return;
     isLoading = YES;
-
-    SearchResultModel* model = self.searchResultArray[indexPath.section];
     NSUInteger cellType = [self detectItemType:model.form];
     if (cellType == DIContactCell){ // Contact
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:model.key completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
-            
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
-        
+        [self openContact:model];
     } else if (cellType  == DIRelatedMatterCell){ // Related Matter
         [self openRelatedMatter:model];
     } else if (cellType  == DIPropertyCell){ // Property
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
-            
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kPropertySearchSegue sender:propertyModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+        [self openProperty:model];
     } else if (cellType  == DIBankCell){ // Bank
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadBankFromSearchWithCode:model.key completion:^(BankModel * _Nonnull bankModel, NSError * _Nonnull error) {
-            
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kBankSearchSegue sender:bankModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+        [self openBank:model];
     } else if (cellType  == DIGovernmentLandOfficesCell){ // Government offices
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"LandOffice" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+        [self openGovLandOffices:model];
     } else if (cellType  == DIGovernmentPTGOfficesCell){ // PTG offices
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadGovOfficesFromSearchWithCode:model.key type:@"PTG" completion:^(GovOfficeModel * _Nonnull govOfficeModel, NSError * _Nonnull error) {
-            [SVProgressHUD dismiss];
-            @strongify(self);
-            self->isLoading = false;
-            if (error == nil) {
-                [self performSegueWithIdentifier:kGovernmentOfficesSearchSegue sender:govOfficeModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+        [self openGovPTGOffices:model];
     } else if (cellType  == DILegalFirmCell){ // Legal firm
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadLegalFirmWithCode:model.key completion:^(LegalFirmModel * _Nonnull legalFirmModel, NSError * _Nonnull error) {
-            [SVProgressHUD dismiss];
-            @strongify(self);
-            self->isLoading = false;
-            if (error == nil) {
-                [self performSegueWithIdentifier:kLegalFirmSearchSegue sender:legalFirmModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+        [self openLegalFirm:model];
     } else if (cellType  == DIDocumentCell) // Document
     {
         [self openDocument:model];
     }
 }
 
-#pragma mark - Delegate
-
-- (void)textField:(AutoCompletionTextField*)textField didSelectItem:(id)selectedItem
+- (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSONItem *item = selectedItem;
-    textField.text = item.title;
-    keyword = item.title;
-
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]) {
-        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString:GENERAL_SEARCH_URL];
-    } else {
-        searchURL = PUBLIC_SEARCH_URL;
-    }
-    
-    searchType = @"Normal";
-    [self displaySearchResult];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SearchResultModel* model = self.searchResultArray[indexPath.section];
+    gotoMatter = @"";
+    [self performSearchCellSelect:model];
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+
+#pragma mark - MLPAutoCompleteTextField DataSource
+
+- (NSArray*) parseResponse: (id) response
 {
-    [UIView animateWithDuration:.5f animations:^{
-        self.selectionList.alpha = 0.0f;
+    NSMutableArray* keywords = [NSMutableArray new];
+    for (id obj in response) {
+        [keywords addObject:[obj objectForKey:@"keyword"]];
+    }
+    
+    return keywords;
+}
+
+//example of asynchronous fetch:
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField
+ possibleCompletionsForString:(NSString *)string
+            completionHandler:(void (^)(NSArray *))handler
+{
+    if ([NSOperationQueue mainQueue].operationCount > 0) {
+        [[NSOperationQueue mainQueue] cancelAllOperations];
+    }
+    
+    
+    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
         
-    } completion:^(BOOL finished) {
-        self.selectionList.hidden = YES;
-    }];
+    } else {
+        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
+        
+    }
     
-    // Control the search contrainer
-    self.searchContainerHeight.constant = 280;
+    NSString* url = [searchKeywordURL stringByAppendingString:[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    NSOperation *operation = [AFHTTPSessionOperation operationWithManager:[QMNetworkManager sharedManager].manager
+                                                               HTTPMethod:@"GET"
+                                                                URLString:url
+                                                               parameters:nil
+                                                           uploadProgress:nil
+                                                         downloadProgress:nil
+                                                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+                                                                      NSLog(@"%@", responseObject);
+                                                                      
+                                                                      handler([self parseResponse:responseObject]);                     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+                                                                          NSLog(@"%@", error);
+                                                                      }];
+    [[NSOperationQueue mainQueue] addOperation:operation];
     
+}
+
+#pragma mark - MLPAutoCompleteTextField Delegate
+
+
+- (BOOL)autoCompleteTextField:(MLPAutoCompleteTextField *)textField
+          shouldConfigureCell:(UITableViewCell *)cell
+       withAutoCompleteString:(NSString *)autocompleteString
+         withAttributedString:(NSAttributedString *)boldedString
+        forAutoCompleteObject:(id<MLPAutoCompletionObject>)autocompleteObject
+            forRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    cell.textLabel.text = autocompleteString;
     return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField
+  didSelectAutoCompleteString:(NSString *)selectedString
+       withAutoCompleteObject:(id<MLPAutoCompletionObject>)selectedObject
+            forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [UIView animateWithDuration:.5f animations:^{
-        self.selectionList.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        self.selectionList.hidden = NO;
-    }];
-    
-    // Control the search contrainer
-    self.searchContainerHeight.constant = 44;
-}
-
-#pragma mark - ScrollViewDelegate
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if([scrollView.panGestureRecognizer translationInView:scrollView.superview].y < 0) {
-        // up
-        
+    if(selectedObject){
+        NSLog(@"selected object from autocomplete menu %@ with string %@", selectedObject, [selectedObject autocompleteString]);
     } else {
-        // down
+        [self buildSearchURL];
         
+        searchType = @"Normal";
+        keyword = selectedString;
+        self.selectionList.hidden = NO;
+        [self displaySearchResult];
     }
 }
+
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField willHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {
+    NSLog(@"Autocomplete table view will be removed from the view hierarchy");
+    // searchcontainer constraint
+    self.searchContainerConstraint.constant = 44 ;
+}
+
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField willShowAutoCompleteTableView:(UITableView *)autoCompleteTableView {
+    NSLog(@"Autocomplete table view will be added to the view hierarchy");
+    self.selectionList.hidden = YES;
+    // searchcontainer constraint
+    self.searchContainerConstraint.constant = 165;
+}
+
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {
+    NSLog(@"Autocomplete table view ws removed from the view hierarchy");
+    self.selectionList.hidden = NO;
+    
+}
+
+- (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didShowAutoCompleteTableView:(UITableView *)autoCompleteTableView {
+    NSLog(@"Autocomplete table view was added to the view hierarchy");
+}
+
 
 #pragma mark - Navigation
 
@@ -670,6 +801,7 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
         UINavigationController* navVC = segue.destinationViewController;
         ContactViewController* contactVC = navVC.viewControllers.firstObject;
         contactVC.contactModel = sender;
+        contactVC.gotoRelatedMatter = gotoMatter;
     }
     
     if ([segue.identifier isEqualToString:kRelatedMatterSegue]){

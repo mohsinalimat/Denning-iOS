@@ -29,4 +29,20 @@
 + (NSString*) getDateInShortForm: (NSString*) date;
 
 + (NSString*) getTimeFromDate: (NSString*) date;
+
++ (BOOL) isWordFile:(NSString*) fileExt;
+
++ (BOOL) isImageFile: (NSString*) fileExt;
+
++ (BOOL) isExcelFile: (NSString*) fileExt;
+
++ (BOOL) isPDFFile: (NSString*) fileExt;
+
++ (BOOL) isTextFile: (NSString*) fileExt;
+
++ (BOOL) isWebFile: (NSString*) fileExt;
+
++ (void) drawWhiteBorderToButton: (UIButton*) button;
+
++ (void) drawWhiteBorderToTextField: (UITextField*) textField;
 @end

@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString* ledgerDescription;
 @property (strong, nonatomic) NSString* documentNo;
 @property (strong, nonatomic) NSString* drORcr;
+@property (strong, nonatomic) NSNumber* isDebit;
 
 + (LedgerDetailModel*) getLedgerDetailFromResponse: (NSDictionary*) response;
 

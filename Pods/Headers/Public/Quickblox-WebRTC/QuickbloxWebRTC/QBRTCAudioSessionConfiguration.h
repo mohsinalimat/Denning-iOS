@@ -1,1 +1,1 @@
-../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Versions/A/Headers/QBRTCAudioSessionConfiguration.h
+../../../../Quickblox-WebRTC/QuickbloxWebRTC.framework/Headers/QBRTCAudioSessionConfiguration.h

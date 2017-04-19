@@ -23,6 +23,11 @@
     [self addTapGesture];
 }
 
+- (void) viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [DIHelpers drawWhiteBorderToTextField:self.TACTextField];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -56,7 +61,7 @@
     
     [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
-    NSString *password = @"5566";
+    NSString *password = [DataManager sharedManager].user.password;
     [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_FIRST_SIGNIN] password:password withCompletion:^(BOOL success, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
         
         [SVProgressHUD dismiss];

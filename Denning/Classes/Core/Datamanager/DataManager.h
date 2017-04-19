@@ -18,6 +18,9 @@
 @property (strong, nonatomic) NSString* seletedUserType;
 @property (strong, nonatomic) NSNumber* statusCode;
 @property (strong, nonatomic) NSString* documentView;
+@property (strong, nonatomic) NSMutableArray* favoriteContactsArray;
+@property (strong, nonatomic) NSMutableArray* clientContactsArray;
+@property (strong, nonatomic) NSMutableArray* staffContactsArray;
 
 + (DataManager *)sharedManager;
 
@@ -29,7 +32,7 @@
 
 - (void) setUserInfoFromChangePassword: (NSDictionary*) response;
 
-- (void) setServerAPI: (NSString*) serverAPI;
+- (void) setServerAPI: (NSString*) serverAPI withFirmName:(NSString*) firmName;
 
 
 @end

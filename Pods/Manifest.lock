@@ -46,7 +46,9 @@ PODS:
   - libextobjc/EXTScope (0.4.1):
     - libextobjc/RuntimeExtensions
   - libextobjc/RuntimeExtensions (0.4.1)
+  - libPhoneNumber-iOS (0.9.2)
   - M13BadgeView (1.0.4)
+  - MBProgressHUD (1.0.0)
   - MPGNotification (1.2.4)
   - NYTPhotoViewer (1.1.0):
     - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
@@ -104,7 +106,7 @@ PODS:
     - Bolts (>= 1.5.0)
     - QuickBlox (>= 2.6.5)
   - QuickBlox (2.9.1)
-  - Quickblox-WebRTC (2.3.1):
+  - Quickblox-WebRTC (2.4):
     - QuickBlox (>= 2.7)
   - Reachability (3.2)
   - Realm (2.4.2):
@@ -117,6 +119,8 @@ PODS:
   - SSKeychain (1.2.3)
   - STPopup (1.8.2)
   - SVProgressHUD (1.1.3)
+  - SWTableViewCell (0.3.7)
+  - SystemServices (1.1.1)
   - TTTAttributedLabel (2.0.0)
   - TwitterCore (1.15.3):
     - Fabric
@@ -139,12 +143,14 @@ DEPENDENCIES:
   - HTHorizontalSelectionList (~> 0.7.4)
   - libextobjc/EXTKeyPathCoding (~> 0.4.1)
   - libextobjc/EXTScope (~> 0.4.1)
+  - libPhoneNumber-iOS (~> 0.8)
+  - MBProgressHUD (~> 1.0.0)
   - MPGNotification (~> 1.2)
   - NYTPhotoViewer (~> 1.1.0)
   - QMChatViewController
   - QMServices
   - QuickBlox
-  - Quickblox-WebRTC (~> 2.3.1)
+  - Quickblox-WebRTC (~> 2.4)
   - Reachability (~> 3.2)
   - Realm
   - RWDropdownMenu (~> 1.0.0)
@@ -152,6 +158,8 @@ DEPENDENCIES:
   - SSKeychain (~> 1.2.2)
   - STPopup
   - SVProgressHUD (~> 1.0)
+  - SWTableViewCell (~> 0.3.7)
+  - SystemServices (~> 1.1.1)
   - TTTAttributedLabel (~> 2.0)
   - TwitterCore (~> 1.15)
   - UIDevice-Hardware (~> 0.1.3)
@@ -173,13 +181,15 @@ SPEC CHECKSUMS:
   Flurry-iOS-SDK: 300dc1d78443dea3d433a38e76292f20f14f0a96
   HTHorizontalSelectionList: c38792f4bc87f941ab6c07b02a40abf111c68249
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
+  libPhoneNumber-iOS: a8bffdec18c37728360f6771fe021302f1e0b497
   M13BadgeView: 700dd0714fdc837c0cf1c8c004454963ec22441f
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MPGNotification: f0e3924087afa9b3eccd5ce624e03965ae31ae61
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
   QMChatViewController: 575f0d253d916022b3d35b57b84b38070357c74f
   QMServices: 617057b228eb5e41341e50216fc4af2fce3cfa46
   QuickBlox: 69e1dace6f9fa74e39557b96e0303552654d7707
-  Quickblox-WebRTC: 1f1ac580fc20a8eb862c1e3547d6ee952b680984
+  Quickblox-WebRTC: e08793e554d0337df5bc577c9166e0edc58eb02a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Realm: d27b758e12d62a3371879a065d4c40aa212c5a54
   RWDropdownMenu: c7fda4b7adf4f3f63a46d96359c2f490a7713795
@@ -187,10 +197,12 @@ SPEC CHECKSUMS:
   SSKeychain: 3f42991739c6c60a9cf1bbd4dff6c0d3694bcf3d
   STPopup: b69b3e7484ef7d2baec5f9ab2939f8a7bcdfe218
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
+  SWTableViewCell: 2a94aadc9d47b2b611fa064566bf57948b95b579
+  SystemServices: cc55971fb9b1a5b01ad11e6ae0f46483ca5affa5
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
   TwitterCore: cce24b3c798993ccde72787ea79ea9a478b284e4
   UIDevice-Hardware: ecb52d9a7b223b31f81982358e2b0769ac1a7918
 
-PODFILE CHECKSUM: 7eceed66c09b46052a2be388d0141107ee03528f
+PODFILE CHECKSUM: 1c762e4f64eb12c71b4de1e296341095aa94d381
 
 COCOAPODS: 1.2.0

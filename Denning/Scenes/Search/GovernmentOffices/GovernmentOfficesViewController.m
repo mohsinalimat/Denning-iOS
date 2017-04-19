@@ -26,6 +26,8 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    
+    [self gotoRelatedMatterSection];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +35,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) gotoRelatedMatterSection
+{
+    if ([self.gotoRelatedMatter isEqualToString:@"Matter"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-2)]-1) inSection:([self.tableView numberOfSections]-2)];
+            
+            if (self.govOfficeModel.relatedMatter.count > 0) {
+                indexPath = [NSIndexPath indexPathForRow: 0 inSection:([self.tableView numberOfSections]-1)];
+            }
+            
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        });
+    }
+}
 
 - (void) prepareUI {
     UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
@@ -76,7 +92,7 @@
     if (section == 0) {
         return 2;
     } else if (section == 1) {
-        return 6;
+        return 5;
     }
     return self.govOfficeModel.relatedMatter.count;
 }

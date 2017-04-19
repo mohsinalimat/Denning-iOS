@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor skyBlueColor];
+    accessoryView.tintColor = [UIColor redColor];
     
     accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
@@ -228,6 +228,8 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     }
     
     self.resultLabel.text = [NSString stringWithFormat:@"%.2f", incomeTax];
+    
+    [self applyCommaToTextField:self.resultLabel];
 }
 
 - (IBAction)didTapReset:(id)sender {
@@ -260,140 +262,148 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     self.resultLabel.text = @"0";
 }
 
+- (void) applyCommaToTextField:(UITextField*) textField
+{
+    NSString *mystring = [self removeCommaFromString:textField.text];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    textField.text = [formatter stringFromNumber:number];
+}
+
 #pragma mark - TextField Delegate
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length > 0) {
-        NSString *mystring = [self removeCommaFromString:textField.text];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:mystring];
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        textField.text = [formatter stringFromNumber:number];
+        [self applyCommaToTextField:textField];
     }
 
-    if (textField.text.length == 0 || [textField.text doubleValue] < 0) {
+    double value = [self getActualNumber:textField.text];
+    
+    if (textField.text.length == 0 || value < 0) {
         textField.text = @"0";
     }
     
+    
     switch (textField.tag) {
         case 1:
-            if ([textField.text doubleValue] > DIPersonalReliefMax){
+            if (value > DIPersonalReliefMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             
             break;
         case 2:
-            if ([textField.text doubleValue] > DILifeInsuranceMax){
+            if (value > DILifeInsuranceMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 3:
-            if ([textField.text doubleValue] > DIEDUMedicalInsuranceMax){
+            if (value > DIEDUMedicalInsuranceMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 4:
-            if ([textField.text doubleValue] > DISOCSOMax){
+            if (value > DISOCSOMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 5:
-            if ([textField.text doubleValue] > DISpouceAlimonyPaymentMax){
+            if (value > DISpouceAlimonyPaymentMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 6:
-            if ([textField.text doubleValue] > DIMedicalExpMax){
+            if (value > DIMedicalExpMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 7:
-            if ([textField.text doubleValue] > DIEducationFeeMax){
+            if (value > DIEducationFeeMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 8:
-            if ([textField.text doubleValue] > DIMedicalCheckupMax){
+            if (value > DIMedicalCheckupMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 9:
-            if ([textField.text doubleValue] > DIBooksMagazinesMax){
+            if (value > DIBooksMagazinesMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         case 10:
-            if ([textField.text doubleValue] > DIPCMax){
+            if (value > DIPCMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
 
             break;
         
         case 11:
-            if ([textField.text doubleValue] > DISportEquimentMax){
+            if (value > DISportEquimentMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             
             break;
         case 12:
-            if ([textField.text doubleValue] > DIDiabledIndividualMax){
+            if (value > DIDiabledIndividualMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 13:
-            if ([textField.text doubleValue] > DIBasicSupportingEquimentMax){
+            if (value > DIBasicSupportingEquimentMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 14: // Number of Child Relief
             break;
         case 15:
-            if ([textField.text doubleValue] > DIChildReliefMaxPerEach){
+            if (value > DIChildReliefMaxPerEach){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 16: // Number of Child of 18 + on Pre-Course
             break;
         case 17:
-            if ([textField.text doubleValue] > DIChildOf18PreCourseMaxPerEach){
+            if (value > DIChildOf18PreCourseMaxPerEach){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 18: // number of Child of 18+ in University
             break;
         case 19:
-            if ([textField.text doubleValue] > DIChildOf18InUniversityMaxPerEach){
+            if (value > DIChildOf18InUniversityMaxPerEach){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 20: // number of Diabled Child
             break;
         case 21:
-            if ([textField.text doubleValue] > DIDiabledChildMaxPerEach){
+            if (value > DIDiabledChildMaxPerEach){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 22: // number of Add Disabled child in Uni
             break;
         case 23:
-            if ([textField.text doubleValue] > DIAddDisabledChildInUniMaxPerEach){
+            if (value > DIAddDisabledChildInUniMaxPerEach){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 24:
-            if ([textField.text doubleValue] > DISSPNMax){
+            if (value > DISSPNMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
         case 25:
-            if ([textField.text doubleValue] > DIHouseLoanInterestMax){
+            if (value > DIHouseLoanInterestMax){
                 textField.text = [NSString stringWithFormat:@"%ld", (long)DIPersonalReliefMax ];
             }
             break;
@@ -401,6 +411,8 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
         default:
             break;
     }
+    
+    [self applyCommaToTextField:textField];
 }
 
 

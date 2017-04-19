@@ -19,7 +19,7 @@
 
 #endif
 
-static NSString *const kQBPassword = @"reachanonymous";
+static NSString *const kQBPassword = @"denningIT";
 
 // storyboards
 static NSString *const kQMMainStoryboard = @"Main";

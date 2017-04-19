@@ -500,8 +500,8 @@ withAutoCompleteString:(NSString *)string
     [self setShouldResignFirstResponderFromKeyboardAfterSelectionOfAutoCompleteRows:YES];
     [self setAutoCompleteRowHeight:40];
     [self setAutoCompleteFontSize:13];
-    [self setMaximumNumberOfAutoCompleteRows:3];
-    [self setPartOfAutoCompleteRowHeightToCut:0.5f];
+    [self setMaximumNumberOfAutoCompleteRows:4];
+    [self setPartOfAutoCompleteRowHeightToCut:0.1f];
     
     [self setMaximumEditDistance:100];
     [self setRequireAutoCompleteSuggestionsToMatchInputExactly:NO];

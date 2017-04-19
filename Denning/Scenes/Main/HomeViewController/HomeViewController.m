@@ -14,6 +14,7 @@
 #import "NewsViewController.h"
 #import "UpdateViewController.h"
 #import "BranchViewController.h"
+#import "DenningLabelCell.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 {
@@ -24,6 +25,7 @@
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *headerWrapper;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 @property (strong, nonatomic) UISearchController *searchController;
@@ -34,8 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-  //  [self registerNibs];
-    
+    [self registerNibs];
+    [self configureSearch];
     [self prepareUI];
 }
 
@@ -47,10 +49,36 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    [self configureSearch];
+    [self changeTitle];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    [_headerWrapper setNeedsLayout];
+    [_headerWrapper layoutIfNeeded];
+//    CGFloat height = [_headerWrapper systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    CGFloat parentHeight = [UIScreen mainScreen].bounds.size.height;
+    CGFloat tabbarHeight = self.tabBarController.tabBar.frame.size.height;
+    CGFloat navbarHeight = 64;
+    
+    CGRect headerFrame = _headerWrapper.frame;
+    headerFrame.size.height =  parentHeight - 300 - tabbarHeight - navbarHeight;
+    _headerWrapper.frame = headerFrame;
+    _tableView.tableHeaderView = _headerWrapper;
+}
+
+- (void) changeTitle {
+    UIImage *img = [UIImage imageNamed:@"logo_label"];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 30, 30)];
+    [imgView setImage:img];
+    // setContent mode aspect fit
+    [imgView setContentMode:UIViewContentModeScaleAspectFit];
+    self.tabBarController.navigationItem.titleView = imgView;
+    
+    self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_home"];
+    self.navigationController.tabBarItem.selectedImage = [UIImage imageNamed:@"icon_home"];
+}
 
 - (void) configureSearch
 {
@@ -61,6 +89,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
+    [self.searchController.searchBar setBarTintColor:[UIColor colorWithHexString:@"0f1828"]];
     [self.tableView.tableHeaderView addSubview: self.searchController.searchBar];
 }
 
@@ -71,29 +100,19 @@
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_background.png"]];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    homeIconArray = @[@"icon_news", @"icon_updates", @"icon_event", @"icon_calculator", @"icon_termsOfUses"];
-    homeLabelArray = @[@"News", @"Updates", @"Events", @"Free Calculator", @"Shared Folder"];
+    homeIconArray = @[@"icon_news", @"icon_updates",  @"icon_calculator", @"icon_share", @"icon_calendar"];
+    homeLabelArray = @[@"News", @"Updates", @"Calculators", @"Shared", @"Calendar"];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     NSDate* date = [[NSDate alloc] init];
     self.dateLabel.text = [dateFormatter stringFromDate:date];
-    
-    NSCalendar * calendar = [NSCalendar currentCalendar];
-    NSDateComponents * dateComponents = [calendar components: NSCalendarUnitDay | NSCalendarUnitWeekday fromDate: [NSDate date]];
-    
-    self.dayLabel.text = calendar.weekdaySymbols[dateComponents.weekday - 1];
+    self.dayLabel.text = @"";
 }
 
 - (void)registerNibs {
-    
-    [NewsCell registerForReuseInTableView:self.tableView];
-    [EventCell registerForReuseInTableView:self.tableView];
-    
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+    [DenningLabelCell registerForReuseInTableView:self.tableView];
 }
-
 
 #pragma mark - search
 
@@ -114,26 +133,29 @@
     if (hideCells) {
         return 1;
     }
-    return homeLabelArray.count;
+    return homeLabelArray.count+1;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeCell" forIndexPath:indexPath];
-    UIImageView* homeImageView = [cell viewWithTag:1];
-    UILabel *homeLabel = [cell viewWithTag:0];
     
-    if (hideCells) {
-        if (indexPath.row == 0) {
-            homeImageView.image = [UIImage imageNamed:homeIconArray[3]];
-            homeLabel.text = homeLabelArray[3];
-        }
-    } else {
+    if (indexPath.row < homeIconArray.count) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeCell" forIndexPath:indexPath];
+        UIImageView* homeImageView = [cell viewWithTag:1];
+        UILabel *homeLabel = [cell viewWithTag:0];
+
         homeImageView.image = [UIImage imageNamed:homeIconArray[indexPath.row]];
         homeLabel.text = homeLabelArray[indexPath.row];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        return cell;
+    } else {
+        DenningLabelCell* denningCell = [tableView dequeueReusableCellWithIdentifier:[DenningLabelCell cellIdentifier] forIndexPath:indexPath];
+        [denningCell configureCellWithText:[DataManager sharedManager].user.firmName];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        denningCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return denningCell;
     }
-    
-    return cell;
+    return nil;
 }
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,14 +172,13 @@
                 [self performSegueWithIdentifier:kUpdateSegue sender:array];
             }];
         } else if (indexPath.row == 2) {
+            [self performSegueWithIdentifier:kCalculateSegue sender:nil];
+        } else if (indexPath.row == 3) {
+            [self getSharedFoldersWithCompletion:nil];
+        } else if (indexPath.row == 4) {
             [self geteventsArrayWithCompletion:^(NSArray * array) {
                 [self performSegueWithIdentifier:kEventSegue sender:array];
             }];
-            
-        } else if (indexPath.row == 3) {
-            [self performSegueWithIdentifier:kCalculateSegue sender:nil];
-        } else if (indexPath.row == 4) {
-            [self getSharedFoldersWithCompletion:nil];
         }
     }
     
@@ -196,7 +217,7 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
     });
@@ -208,9 +229,10 @@
         [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
     } else {
         [DataManager sharedManager].seletedUserType = @"Public";
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+//        });
+        [QMAlert showAlertWithMessage:@"Sorry, There is no shared document for you" actionSuccess:NO inViewController:self];
     }
 }
 
