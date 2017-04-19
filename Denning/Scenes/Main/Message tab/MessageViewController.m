@@ -1,38 +1,28 @@
 //
-//  DocumentPreviewController.m
+//  MessageViewController.m
 //  Denning
 //
-//  Created by DenningIT on 31/03/2017.
+//  Created by DenningIT on 04/04/2017.
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
-#import "DocumentPreviewController.h"
+#import "MessageViewController.h"
 
-@interface DocumentPreviewController () <UIWebViewDelegate>
-@property (weak, nonatomic) IBOutlet UIWebView *webview;
+@interface MessageViewController ()
 
 @end
 
-@implementation DocumentPreviewController
+@implementation MessageViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.webview loadRequest:[NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.documentURL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3.0]];
-    self.webview.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-- (void)webView:(UIWebView *)webView
-didFailLoadWithError:(NSError *)error
-{
-    NSLog(@"%@", error.localizedDescription);
-}
-
 
 /*
 #pragma mark - Navigation
