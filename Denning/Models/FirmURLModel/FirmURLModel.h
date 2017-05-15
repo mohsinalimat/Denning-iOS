@@ -10,6 +10,7 @@
 
 @property(strong, nonatomic) NSString      *firmServerURL;
 @property(strong, nonatomic) NSString      *name;
+@property (strong, nonatomic) NSString     *city;
 @property(strong, nonatomic) DocumentModel* document;
 
 + (FirmURLModel*) getFirmModelFromResponse: (NSDictionary*) response;

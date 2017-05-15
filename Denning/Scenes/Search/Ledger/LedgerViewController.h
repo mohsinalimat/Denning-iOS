@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface LedgerViewController : UITableViewController
+@interface LedgerViewController : DICustomTableViewController
 
-@property (strong, nonatomic) NSArray* ledgerArray;
+@property (strong, nonatomic) NewLedgerModel* ledgerModel;
 @property (strong, nonatomic) NSString* matterCode;
-
 @property (strong, nonatomic) NSString *previousScreen;
 
 @end

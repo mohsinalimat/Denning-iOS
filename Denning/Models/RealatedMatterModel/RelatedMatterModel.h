@@ -30,7 +30,7 @@
 @property (strong, nonatomic) NSString * matter;
 
 // Court Information
-@property (strong, nonatomic) CourtModel* court;
+@property (strong, nonatomic) CourtModel* court;    
 
 // Party Group
 @property (strong, nonatomic) NSArray *partyGroupArray;

@@ -38,6 +38,8 @@
 #import "RWDropdownMenu.h"
 #import <Realm/Realm.h>
 #import "ActionSheetPicker.h"
+#import "Masonry.h"
+#import <GLDateUtils.h>
 
 #import "AppDelegate.h"
 #import "BaseViewController.h"
@@ -66,7 +68,13 @@
 #import "NSDictionary+NotNull.h"
 #import <SystemServices.h>
 #import "FCFileManager.h"
+#import "VBFPopFlatButton.h"
+#import "NSDictionary+NotNull.h"
+#import "UIFloatLabelTextField.h"
 
+#import "TimePickerViewController.h"
+#import "FZAccordionTableView.h"
+#import "AccordionHeaderView.h"
 
 #import "UserModel.h"
 #import "SearchResultModel.h"
@@ -86,6 +94,7 @@
 #import "BankModel.h"
 #import "GovOfficeModel.h"
 #import "LedgerModel.h"
+#import "NewLedgerModel.h"
 #import "LedgerDetailModel.h"
 #import "FileModel.h"
 #import "DocumentModel.h"
@@ -95,5 +104,32 @@
 #import "ChatContactModel.h"
 #import "ChatFirmModel.h"
 #import "ChatUserModel.h"
+#import "CodeDescription.h"
+#import "CityModel.h"
+#import "AddContactModel.h"
+#import "AddressModel.h"
+#import "MatterSimple.h"
+#import "StaffModel.h"
+#import "MatterCodeModel.h"
+#import "CoramModel.h"
+#import "ClientModel.h"
+#import "PresetBillModel.h"
+
+@protocol ContactListWithCodeSelectionDelegate <NSObject>
+
+- (void) didSelectList: (UIViewController*) listVC name:(NSString*) name withModel: (CodeDescription*) model;
+@end
+
+@protocol ContactListWithDescSelectionDelegate  <NSObject>
+
+- (void) didSelectListWithDescription:(UIViewController*) listVC name:(NSString*) name withString:(NSString*) description;
+
+@end
+
+@protocol ContactPostCodeDelegate <NSObject>
+
+- (void) didSelectListWithPostcode:(UIViewController*) listVC  withCityModel:(CityModel*) city;
+
+@end
 
 #endif /* PrefixHeader_pch */

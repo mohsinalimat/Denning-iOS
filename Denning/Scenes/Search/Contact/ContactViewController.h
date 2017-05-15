@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface ContactViewController : UITableViewController
+@interface ContactViewController : DICustomTableViewController
 
 @property (strong, nonatomic) ContactModel* contactModel;
 @property (strong, nonatomic) NSString* previousScreen;

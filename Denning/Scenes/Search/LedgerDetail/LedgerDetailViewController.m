@@ -20,6 +20,12 @@
     
     [self registerNibs];
     [self prepareUI];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,7 +49,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
 - (void)registerNibs {
     
     [LedgerDetailCell registerForReuseInTableView:self.tableView];
@@ -63,7 +68,6 @@
 
     return self.ledgerDetailArray.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LedgerDetailModel* ledgerDetailModel = self.ledgerDetailArray[indexPath.row];

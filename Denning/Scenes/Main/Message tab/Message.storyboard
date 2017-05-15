@@ -33,7 +33,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="420"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ayq-lq-4Gs" id="AJy-aw-wv9">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="420"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="419.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY7-W3-4Ed">
@@ -183,6 +183,7 @@ out here.</string>
                     <navigationItem key="navigationItem" id="B05-Hp-CmX">
                         <nil key="title"/>
                     </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="chatOptionView" destination="4cW-an-Q3r" id="9hi-xa-6UH"/>
@@ -220,13 +221,13 @@ out here.</string>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quickblox main channel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uox-4i-XC2">
-                                    <rect key="frame" x="71.5" y="0.0" width="217.5" height="23"/>
+                                    <rect key="frame" x="71" y="0.0" width="217.5" height="23"/>
                                     <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="19"/>
                                     <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4 members, 2 online" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nv1-o8-PMY">
-                                    <rect key="frame" x="117.5" y="23" width="125" height="16"/>
+                                    <rect key="frame" x="117" y="23" width="125" height="16"/>
                                     <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -275,7 +276,7 @@ out here.</string>
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qf7-RQ-60e" id="GkH-yn-ZB8">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -304,7 +305,7 @@ out here.</string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="t5g-eL-0FL" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Le5-X1-1ff" customClass="QMNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Le5-X1-1ff" customClass="QMNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -502,7 +503,7 @@ out here.</string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eGm-Je-XuH" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DxX-ze-oWW" customClass="QMNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DxX-ze-oWW" customClass="QMNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

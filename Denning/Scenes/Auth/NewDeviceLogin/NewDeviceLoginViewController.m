@@ -7,6 +7,7 @@
 //
 
 #import "NewDeviceLoginViewController.h"
+#import "BranchViewController.h"
 
 @interface NewDeviceLoginViewController()
 @property (weak, nonatomic) IBOutlet UITextField *TACTextField;
@@ -74,7 +75,7 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name withFirmCity:firmURLModel.city];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
@@ -126,6 +127,15 @@
 {
     [self confirmTAC:nil];
     return YES;
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kBranchSegue]){
+        UINavigationController* navVC = segue.destinationViewController;
+        BranchViewController *branchVC = navVC.viewControllers.firstObject;
+        branchVC.firmArray = sender;
+    }
 }
 
 @end

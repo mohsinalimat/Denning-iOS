@@ -10,9 +10,11 @@
 #import "ContactHeaderCell.h"
 #import "ContactCell.h"
 #import "CommonTextCell.h"
+#import "NewContactHeaderCell.h"
 #import "RelatedMatterViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ContactViewController ()
+@interface ContactViewController ()<ContactCellDelegate, NewContactHeaderCellDelegate, MFMailComposeViewControllerDelegate>
 {
     __block BOOL isLoading;
 }
@@ -29,7 +31,12 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
-    [self gotoRelatedMatterSection];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,17 +56,14 @@
             
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         });
+        
+        self.title = @"Related Matters";
     }
 }
 
 - (void) prepareUI {
-    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
-    
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -67,16 +71,21 @@
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
 
+- (void) addContact {
+    
+}
+
+- (IBAction) dismissScreen:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void) popupScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)dismissScreen:(id)sender {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)registerNibs {
     [ContactHeaderCell registerForReuseInTableView:self.tableView];
+    [NewContactHeaderCell registerForReuseInTableView:self.tableView];
     [CommonTextCell registerForReuseInTableView:self.tableView];
     [ContactCell registerForReuseInTableView:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -86,15 +95,17 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
+    if([self.gotoRelatedMatter isEqualToString:@"Matter"]) {
+        return 2;
+    }
     return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
-    } else if (section == 1) {
-        return 5;
+        return 1;
+    } else if (section == 1 && ![self.gotoRelatedMatter isEqualToString:@"Matter"]) {
+        return 10;
     }
     return self.contactModel.relatedMatter.count;
 }
@@ -108,10 +119,15 @@
             sectionName = @"";
             break;
         case 1:
-            sectionName = @"Main Information";
+            if (self.gotoRelatedMatter.length == 0) {
+                sectionName = @"Main Information";
+            } else {
+                sectionName = @"Related Matters";
+            }
+            
             break;
         case 2:
-            sectionName = @"Related matter";
+            sectionName = @"Related matters";
             break;
 
             // ...
@@ -127,7 +143,7 @@
     if (section == 0) {
         return 0;
     }
-    return 40;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -135,63 +151,127 @@
     if (section == 0) {
         return 0;
     }
-    return 30;
+    return 10;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            [cell configureCellWithContact:contactModel.name text:@""];
-        } else {
-            [cell configureCellWithContact:contactModel.IDNo text:@""];
-        }
+        NewContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[NewContactHeaderCell cellIdentifier] forIndexPath:indexPath];
+        [cell configureCellWithInfo:contactModel.name number:contactModel.IDNo image:[UIImage imageNamed:@"icon_client"]];
+        cell.delegate = self;
         return cell;
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 1 && ![self.gotoRelatedMatter isEqualToString:@"Matter"]) {
+        [cell setEnableRightBtn:NO image:nil];
         if (indexPath.row == 0) {
-            [cell configureCellWithContact:@"Telephone" text:contactModel.tel];
+            [cell configureCellWithContact:@"Date Of Birth" text:contactModel.dateOfBirth];
         } else if (indexPath.row == 1) {
-            [cell configureCellWithContact:@"mobile" text:contactModel.mobile];
+            [cell configureCellWithContact:@"Citizenship" text:contactModel.citizenShip];
         } else if (indexPath.row == 2) {
-            [cell configureCellWithContact:@"office" text:contactModel.office];
+            [cell configureCellWithContact:@"Phone (mobile)" text:contactModel.mobilePhone];
+            [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_phone_red"]];
+            cell.tag = 1;
         } else if (indexPath.row == 3) {
-            [cell configureCellWithContact:@"email" text:contactModel.email];
+            [cell configureCellWithContact:@"Phone (office)" text:contactModel.officePhone];
+            [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_phone_red"]];
+            cell.tag = 1;
         } else if (indexPath.row == 4) {
+            [cell configureCellWithContact:@"Phone (home)" text:contactModel.homePhone];
+            [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_phone_red"]];
+            cell.tag = 1;
+        } else if (indexPath.row == 5) {
+            [cell configureCellWithContact:@"Fax" text:contactModel.fax];
+        } else if (indexPath.row == 6) {
+            [cell configureCellWithContact:@"Email" text:contactModel.email];
+            [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_email_red"]];
+            cell.tag = 2;
+        } else if (indexPath.row == 7) {
+            [cell configureCellWithContact:@"Tax File No" text:contactModel.tax];
+        } else if (indexPath.row == 8) {
+            [cell configureCellWithContact:@"IRD Branch" text:contactModel.IRDBranch];
+        } else if (indexPath.row == 9) {
+            [cell configureCellWithContact:@"Occupation" text:contactModel.occupation.descriptionValue];
+        } /* else if (indexPath.row == 6) {
             [cell configureCellWithContact:@"address" text:contactModel.address];
-        }
+        }*/
+        cell.delegate = self;
         return cell;
     } else {
         CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
 
         SearchResultModel *matterModel = self.contactModel.relatedMatter[indexPath.row];
-        [commonCell configureCellWithValue:matterModel.key];
+        [commonCell configureCellWithValue:[DIHelpers removeFileNoFromMatterTitle: matterModel.title]];
         commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return commonCell;
     }
 }
 
+#pragma mark - NewContactHeaderCellDelegate
+- (void) didTapMessage:(NewContactHeaderCell *)cell
+{
+    // Go to message
+}
+
+#pragma mark - ContactCellDelegate
+- (void) didTapRightBtn:(ContactCell *)cell value:(NSString *)value
+{
+    if (cell.tag == 1) { // phone call
+        NSString *dialNumber =[@"telprompt://" stringByAppendingString:value];
+        UIApplication *app = [UIApplication sharedApplication];
+        NSURL *url = [NSURL URLWithString:dialNumber];
+        [app openURL:url];
+    } else if (cell.tag == 2) { // email
+        if (![MFMailComposeViewController canSendMail]) {
+            [QMAlert showAlertWithMessage:@"Mail services are not available." actionSuccess:NO inViewController:self];
+            return;
+        }
+        
+        MFMailComposeViewController* composeVC = [[MFMailComposeViewController alloc] init];
+        composeVC.mailComposeDelegate = self;
+        [composeVC setToRecipients:[NSArray arrayWithObject:value]];
+        
+        // Configure the fields of the interface.
+        [composeVC setSubject:@"Denning"];
+        
+        // Present the view controller modally.
+        [self presentViewController:composeVC animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    // Check the result or perform other tasks.
+    
+    // Dismiss the mail compose view controller.
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) loadRelatedMatter:(NSIndexPath*) indexPath {
+    if (isLoading) return;
+    isLoading = YES;
+    SearchResultModel* model = self.contactModel.relatedMatter[indexPath.row];
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self);
+    [[QMNetworkManager sharedManager] loadRelatedMatterWithCode:model.key completion:^(RelatedMatterModel * _Nonnull relatedModel, NSError * _Nonnull error) {
+        
+        @strongify(self);
+        self->isLoading = false;
+        [SVProgressHUD dismiss];
+        if (error == nil) {
+            [self performSegueWithIdentifier:kRelatedMatterSegue sender:relatedModel];
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
 
 #pragma mark - Table view data source
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 2) {
-        if (isLoading) return;
-        isLoading = YES;
-        SearchResultModel* model = self.contactModel.relatedMatter[indexPath.row];
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadRelatedMatterWithCode:model.key completion:^(RelatedMatterModel * _Nonnull relatedModel, NSError * _Nonnull error) {
-            
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kRelatedMatterSegue sender:relatedModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
-
+    if (![self.gotoRelatedMatter isEqualToString:@"Matter"] &&indexPath.section == 2) {
+        [self loadRelatedMatter:indexPath];
+    } else if ([self.gotoRelatedMatter isEqualToString:@"Matter"] &&indexPath.section == 1) {
+        [self loadRelatedMatter:indexPath];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -207,6 +287,5 @@
         relatedMatterVC.previousScreen = @"Contact";
     }
 }
-
 
 @end

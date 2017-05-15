@@ -15,9 +15,23 @@
 + (SearchResultModel*) getSearchResultFromResponse: (NSDictionary*) response
 {
     SearchResultModel* searchResult = [SearchResultModel new];
-    searchResult.description = [response objectForKey:@"Desc"];
+    
+//    NSString *strJson=@"{\"name\":{\"dob\":88,\"age\":61},\"family\" : [{\"location\":\"us\",\"mobile\":\"mobile\"}]}";
+    if ([[response objectForKey:@"JSON"] isKindOfClass:[NSString class]]) {
+        NSData *data = [[response objectForKey:@"JSON"] dataUsingEncoding:NSUTF8StringEncoding];
+        id jsonOutput = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSLog(@"%@",jsonOutput);
+    }
+    
+    
+    searchResult.searchDescription = [response objectForKey:@"Desc"];
     searchResult.form = [response objectForKey:@"Form"];
     searchResult.header = [response objectForKey:@"Header"];
+    
+    if ([searchResult.header isKindOfClass:[NSNull class]]) {
+        searchResult.header  =@"";
+    }
+    
     searchResult.indexData = [response objectForKey:@"IndexData"];
     searchResult.score = [response objectForKey:@"Score"];
     searchResult.title = [response objectForKey:@"Title"];

@@ -11,4 +11,9 @@
 @interface PartyModel : NSObject
 @property (strong, nonatomic) NSString* partyCode;
 @property (strong, nonatomic) NSString* partyName;
+
++ (PartyModel*) getPartyFromResponse:(NSDictionary*) response;
+
++ (NSArray*) getPartyArrayFromResponse:(NSDictionary*) response;
+
 @end

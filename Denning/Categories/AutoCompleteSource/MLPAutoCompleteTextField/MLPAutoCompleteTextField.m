@@ -94,6 +94,12 @@ static NSString *kDefaultAutoCompleteCellIdentifier = @"_DefaultAutoCompleteCell
     return self;
 }
 
+- (CGRect)leftViewRectForBounds:(CGRect)bounds {
+    CGRect textRect = [super leftViewRectForBounds:bounds];
+    textRect.origin.x += 5;
+    return textRect;
+}
+
 - (void)dealloc
 {
     [self closeAutoCompleteTableView];
@@ -913,6 +919,9 @@ withAutoCompleteString:(NSString *)string
             return;
         }
         
+        if ([[DataManager sharedManager].isFirstLoading isEqualToString:@"YES"]) {
+            return;
+        }
         
         if([self.dataSource respondsToSelector:@selector(autoCompleteTextField:possibleCompletionsForString:completionHandler:)]){
             __weak MLPAutoCompleteFetchOperation *operation = self;
@@ -1047,7 +1056,7 @@ withAutoCompleteString:(NSString *)string
 
 - (NSArray *)sortedCompletionsForString:(NSString *)inputString withPossibleStrings:(NSArray *)possibleTerms
 {
-    if([inputString isEqualToString:@""]){
+    if(inputString.length == 0){
         return possibleTerms;
     }
     
@@ -1150,5 +1159,7 @@ withAutoCompleteString:(NSString *)string
     [self setIncompleteString:nil];
     [self setPossibleCompletions:nil];
 }
+
+
 @end
 

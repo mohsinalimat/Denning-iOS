@@ -18,6 +18,11 @@
     [super viewDidLoad];
     
     [self prepareUI];
+    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(gotoHome)];
+}
+
+- (void) gotoHome {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) prepareUI
@@ -29,6 +34,14 @@
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+}
+
+- (void) configureMenuRightBtnWithImagename:(NSString*) imageName withSelector:(SEL) action {
+    UIButton *menuBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
+    [menuBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [menuBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *menuButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
+    [self.navigationItem setRightBarButtonItems:@[menuButtonItem] animated:YES];
 }
 
 - (void) onBackAction: (id) sender

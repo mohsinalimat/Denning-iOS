@@ -23,8 +23,10 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class LegalFirmModel;
 @class GovOfficeModel;
 @class LedgerModel;
+@class NewLedgerModel;
 @class LedgerDetailModel;
 @class DocumentModel;
+@class AddContactModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -154,7 +156,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Event
 
-- (void) getLatestEventWithCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
+- (void) getLatestEventWithStartDate: (NSString*) startDate endDate:(NSString*) endDate filter:(NSString*) filter withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
 
 // Property
 
@@ -176,7 +178,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) loadLegalFirmWithCode: (NSString*) code completion: (void(^)(LegalFirmModel* legalFirmModel, NSError* error)) completion;
 
 // Ledger
-- (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NSArray* ledgerModelArray, NSError* error)) completion;
+- (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NewLedgerModel* newLedgerModel, NSError* error)) completion;
 
 // Ledger detail
 - (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerDetailModelArray, NSError* error)) completion;
@@ -196,6 +198,48 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) removeFavoriteContact: (QBUUser*) user withCompletion:(void(^)(NSError* error)) completion;
 
+
+/*
+ *  Add Contact
+ */
+
+- (void) getCodeDescWithUrl:(NSString*) url withPage:(NSNumber*)page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDescriptionWithUrl: (NSString*) url withPage: (NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getPostCodeWithPage:(NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) saveContactWithData:(NSDictionary*) data withCompletion:(void(^)(ContactModel* addContact, NSError* error)) completion;
+
+- (void) updateContactWithData:(NSDictionary*) data withCompletion:(void(^)(ContactModel* addContact, NSError* error)) completion;
+
+
+/*
+ * Court Diary
+ */
+
+- (void) getSimpleMatter:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getStaffArray:(NSNumber*) page WithURL:(NSString*) url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) saveCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+
+/*
+ * Matter
+ */
+
+- (void) getMatterCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+/*
+ * Quotation
+ */
+
+- (void) getPresetBillCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) calculateTaxInvoiceWithParams: (NSDictionary*) data withCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
+
+- (void) saveQuotationWithParams: (NSDictionary*) data WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
 
 @end
 

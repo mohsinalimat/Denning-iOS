@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface RelatedMatterViewController : UITableViewController
+@interface RelatedMatterViewController : DICustomTableViewController
 
 @property (strong, nonatomic) RelatedMatterModel* relatedMatterModel;
 @property (strong, nonatomic) NSString *previousScreen;
-
 @end

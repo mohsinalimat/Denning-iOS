@@ -17,17 +17,17 @@
     
     id HQ = [response objectForKey:@"HQ"];
     bankModel.name = [HQ objectForKey:@"name"];
-    if ([[response objectForKey:@"name"] isKindOfClass:[NSNull class]]) {
+    if ([bankModel.name isKindOfClass:[NSNull class]]) {
         bankModel.name = @"";
     }
     
     bankModel.IDNo = [HQ objectForKey:@"IDNo"];
-    if ([[response objectForKey:@"IDNo"] isKindOfClass:[NSNull class]]) {
+    if ([bankModel.IDNo isKindOfClass:[NSNull class]]) {
         bankModel.IDNo = @"";
     }
 
-    bankModel.tel = [response objectForKey:@"phoneOffice"];
-    if ([[response objectForKey:@"phoneOffice"] isKindOfClass:[NSNull class]]) {
+    bankModel.tel = [response objectForKey:@"phoneHome"];
+    if ([[response objectForKey:@"phoneHome"] isKindOfClass:[NSNull class]]) {
         bankModel.tel = @"";
     }
     bankModel.fax = [response objectForKey:@"phoneFax"];

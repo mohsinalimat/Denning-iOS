@@ -12,14 +12,17 @@
 
 + (NSString*) getWANIP
 {
-    NSString* WANIP = [[SystemServices sharedServices] externalIPAddress];
+  //  NSString* WANIP = [[SystemServices sharedServices] externalIPAddress];
+    
+    NSString* WANIP = @"10.17.9.2";
     
     return WANIP;
 }
 
 + (NSString*) getLANIP
 {
-    NSString* LANIP = [[SystemServices sharedServices] currentIPAddress];
+//    NSString* LANIP = [[SystemServices sharedServices] currentIPAddress];
+    NSString* LANIP = @"192.168.2.29";
     
     return LANIP;
 }
@@ -40,8 +43,8 @@
 
 + (NSString*) getDeviceName
 {
-    NSString* deviceName = [[SystemServices sharedServices] deviceName];
-    
+   // NSString* deviceName = [[SystemServices sharedServices] deviceName];
+    NSString* deviceName = [UIDevice currentDevice].model;
     return deviceName;
 }
 
@@ -88,7 +91,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     [newFormatter setTimeZone:timeZone];
@@ -118,6 +121,24 @@
     time = [newFormatter stringFromDate:creationDate];
     
     return time;
+}
+
++ (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime
+{
+    NSString* date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    [newFormatter setTimeZone:timeZone];
+    [newFormatter setDateFormat:@"dd-MM-yyyy"];
+    
+    NSDate *creationDate = [formatter dateFromString:dateTime];
+    
+    date = [newFormatter stringFromDate:creationDate];
+    return date;
 }
 
 + (BOOL) isWordFile:(NSString*) fileExt
@@ -206,6 +227,88 @@
         NSLog(@"Cannot set placeholder text's color, because deployment target is earlier than iOS 6.0");
         // TODO: Add fall-back code to set placeholder color.
     }
+}
+
++ (NSString*) removeFileNoFromMatterTitle: (NSString*) title
+{
+    NSString* removedTitle;
+    
+    NSRange range = NSMakeRange(9, title.length-9);
+    removedTitle = [title substringWithRange:range];
+    
+    return removedTitle;
+}
+
++ (NSString*) today {
+    NSString* date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    date = [formatter stringFromDate:[NSDate date]];
+    return date;
+}
+
++ (NSString*) todayWithTime {
+    NSString* date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ii"];
+    
+    date = [formatter stringFromDate:[NSDate date]];
+    return date;
+}
+
++ (NSString*) sevenDaysLater {
+    return [self sevenDaysLaterFromDate:[DIHelpers today]];
+}
+
++ (NSString*) sevenDaysLaterFromDate: (NSString*) date {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    return [formatter stringFromDate:[GLDateUtils dateByAddingDays:6 toDate:[formatter dateFromString:date]]];
+}
+
++ (NSString*) sevenDaysBefore {
+    NSString* date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    date = [formatter stringFromDate:[GLDateUtils dateByAddingDays:-6 toDate:[NSDate date]]];
+    return date;
+}
+
++ (NSString*) currentSunday {
+    NSDate *currentDate  = [NSDate date];
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc]  initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    
+    NSDateComponents *components = [gregorianCalendar components:(NSCalendarUnitYear| NSCalendarUnitMonth
+                                                                  | NSCalendarUnitDay| NSCalendarUnitWeekday|NSCalendarUnitWeekOfMonth)  fromDate:currentDate];
+    
+    NSLog(@"Current week day number %ld",(long)[components weekday]);
+    NSLog(@"Current week number %ld",(long)[components weekOfMonth]);
+    NSLog(@"Current month's day %ld",(long)[components day]);
+    NSLog(@"Current month %ld",(long)[components month]);
+    NSLog(@"Current year %ld",(long)[components year]);
+    
+    NSDateComponents *dt=[[NSDateComponents alloc]init];
+    
+    [dt setWeekOfMonth:[components weekOfMonth]];
+    [dt setWeekday:1];
+    [dt setMonth:[components month]];
+    [dt setYear:[components year]];
+    
+    NSDate *Sunday=[gregorianCalendar dateFromComponents:dt];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    return [formatter stringFromDate:Sunday];
 }
 
 @end

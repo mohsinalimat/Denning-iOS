@@ -75,11 +75,25 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     [super viewDidLoad];
     
     [self prepareUI];
+    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(gotoHome)];
+}
+
+- (void) gotoHome {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void) configureMenuRightBtnWithImagename:(NSString*) imageName withSelector:(SEL) action {
+    UIButton *menuBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
+    [menuBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [menuBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *menuButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
+    [self.navigationItem setRightBarButtonItems:@[menuButtonItem] animated:YES];
 }
 
 - (void) prepareUI {
@@ -146,10 +160,9 @@ typedef NS_ENUM(NSInteger, DIIncomeTaxMaxValues) {
     self.numberOfAddDisabledChildInUniTF.inputAccessoryView = accessoryView;
     self.SSPNTF.inputAccessoryView = accessoryView;
     self.houseLoanInterestTF.inputAccessoryView = accessoryView;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];

@@ -35,6 +35,8 @@
     if (documentModel.folders.count == 0) {
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
     }
+    
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) prepareUI {

@@ -32,6 +32,13 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,10 +51,10 @@
     UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
     CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
+//    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -136,12 +143,12 @@
     if (section == 0) {
         return 0;
     }
-    return 40;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 30;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -151,7 +158,7 @@
         if (indexPath.row == 0){
             [contactCell configureCellWithContact:self.propertyModel.lotptType text:self.propertyModel.lotptValue];
         } else if (indexPath.row == 1){
-            [contactCell configureCellWithContact:@"Full Title" text:self.propertyModel.fullTitle];
+            [contactCell configureCellWithContact:@"Description" text:self.propertyModel.fullTitle];
         } else if (indexPath.row == 2){
             [contactCell configureCellWithContact:@"Address" text:self.propertyModel.address];
         }
@@ -162,7 +169,7 @@
         CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
         
         SearchResultModel *matterModel = self.propertyModel.relatedMatter[indexPath.row];
-        [commonCell configureCellWithValue:matterModel.key];
+        [commonCell configureCellWithValue:[DIHelpers removeFileNoFromMatterTitle: matterModel.title]];
         commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return commonCell;
     }

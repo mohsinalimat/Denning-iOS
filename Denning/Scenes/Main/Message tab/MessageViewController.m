@@ -12,6 +12,7 @@
 #import "QMNewMessageViewController.h"
 #import "ClientContactViewController.h"
 #import "FavoriteViewController.h"
+#import "MainTabBarController.h"
 
 typedef NS_ENUM(NSInteger, DIChatTabIndex) {
     DIChatRecentTab,
@@ -54,11 +55,13 @@ typedef NS_ENUM(NSInteger, DIChatTabIndex) {
 {
     [super viewWillAppear:animated];
     [self changeTitle];
+    [self hideTabBar];
     [self checkLoginState];
+    [self addView:self.viewControllers[0]];
 }
 
 - (void) checkLoginState {
-    if ([DataManager sharedManager].user.username.length == 0 || [QMCore instance].currentProfile.userData == nil) {
+    if ([DataManager sharedManager].user.username.length == 0 || [QBSession currentSession].currentUser.email.length == 0) {
         [QMAlert showAlertWithMessage:@"Please login first to use chat" actionSuccess:NO inViewController:self];
         return;
     }
@@ -66,7 +69,7 @@ typedef NS_ENUM(NSInteger, DIChatTabIndex) {
 
 - (void) changeTitle {
     self.tabBarController.navigationItem.titleView = nil;
-    self.tabBarController.navigationItem.title = @"Message";
+    self.tabBarController.navigationItem.title = @"Chat";
 }
 
 - (void) prepareUI
@@ -86,8 +89,10 @@ typedef NS_ENUM(NSInteger, DIChatTabIndex) {
     
     // Set the recent chat to default
     selectedIndex = DIChatRecentTab;
-    [self addView:self.viewControllers[0]];
     [self.chatRecentBtn setImage:[UIImage imageNamed:@"icon_message_selected"] forState:UIControlStateNormal];
+    
+    self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_chat"];
+    self.navigationController.tabBarItem.selectedImage = [UIImage imageNamed:@"icon_chat_selected"];
 }
 
 - (IBAction)didTapCompanyList:(id)sender {

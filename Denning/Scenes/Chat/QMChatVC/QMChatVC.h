@@ -19,7 +19,7 @@
 @property (strong, nonatomic, nullable) QBChatDialog *chatDialog;
 
 // Firm code that the user belong to
-@property (strong, nonatomic) NSString *firmCode;
+@property (strong, nonatomic) NSString * _Nullable firmCode;
 
 /**
  *  Chat view controller with chat dialog.

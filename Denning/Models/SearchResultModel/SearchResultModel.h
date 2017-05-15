@@ -10,7 +10,7 @@
 
 @interface SearchResultModel : NSObject
 
-@property (strong, nonatomic) NSString * description;
+@property (strong, nonatomic) NSString * searchDescription;
 
 @property (nonatomic, strong) NSString * form;
 

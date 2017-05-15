@@ -1,4 +1,4 @@
-//
+    //
 //  DocumentViewController.m
 //  Denning
 //
@@ -11,9 +11,13 @@
 #import "ContactHeaderCell.h"
 
 @interface DocumentViewController () <
-UIDocumentInteractionControllerDelegate>
+UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate>
 
 @property (strong, nonatomic) UIImageView *postView;
+@property (strong, nonatomic) DocumentModel* originalDocumentModel;
+
+@property (strong, nonatomic) UISearchController *searchController;
+@property (copy, nonatomic) NSString *filter;
 
 @end
 
@@ -23,9 +27,18 @@ UIDocumentInteractionControllerDelegate>
     [super viewDidLoad];
     
     [self registerNibs];
+    [self configureSearch];
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.originalDocumentModel = self.documentModel;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,13 +47,9 @@ UIDocumentInteractionControllerDelegate>
 }
 
 - (void) prepareUI {
-    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -48,6 +57,19 @@ UIDocumentInteractionControllerDelegate>
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
     
     self.tableView.delegate = self;
+}
+
+- (void) configureSearch
+{
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search", nil);
+    self.searchController.searchBar.delegate = self;
+    self.searchController.delegate = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.definesPresentationContext = YES;
+    [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
+    self.tableView.tableHeaderView = self.searchController.searchBar;
 }
 
 - (void) popupScreen:(id)sender {
@@ -64,6 +86,71 @@ UIDocumentInteractionControllerDelegate>
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
+}
+
+- (void) filterDocument {
+    DocumentModel *newDocument = [DocumentModel new];
+    NSMutableArray* newFolders = [NSMutableArray new];
+    for (FolderModel* model in self.originalDocumentModel.folders) {
+        FolderModel* newFolderModel = [FolderModel new];
+        NSMutableArray *fileArray =[NSMutableArray new];
+        for (FileModel* file in model.documents) {
+            if ([file.name localizedCaseInsensitiveContainsString:self.filter]) {
+                [fileArray addObject:file];
+            }
+        }
+        newFolderModel.documents = [fileArray copy];
+        [newFolders addObject:newFolderModel];
+    }
+    
+    NSMutableArray *fileArray =[NSMutableArray new];
+    for (FileModel* file in self.originalDocumentModel.documents) {
+        if ([file.name localizedCaseInsensitiveContainsString:self.filter]) {
+            [fileArray addObject:file];
+        }
+    }
+    newDocument.documents = [fileArray copy];
+    
+    newDocument.folders = [newFolders copy];
+    newDocument.name = self.originalDocumentModel.name;
+    newDocument.date = self.originalDocumentModel.date;
+    
+    self.documentModel = newDocument;
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)__unused scrollView {
+    
+    [self.searchController.searchBar endEditing:YES];
+}
+
+#pragma mark - UISearchControllerDelegate
+
+- (void)willDismissSearchController:(UISearchController *) __unused searchController {
+    self.filter = @"";
+    searchController.searchBar.text = @"";
+    self.documentModel = self.originalDocumentModel;
+    [self.tableView reloadData];
+}
+
+#pragma mark - searchbar delegate
+
+- (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
+{
+    self.filter = searchText;
+    if (self.filter.length == 0) {
+        self.documentModel = self.originalDocumentModel;
+        [self.tableView reloadData];
+    } else {
+        [self filterDocument];
+    }
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
 }
 
 #pragma mark - Table view data source
@@ -104,7 +191,7 @@ UIDocumentInteractionControllerDelegate>
     if (section == 0) {
         return 0;
     }
-    return 40;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -119,7 +206,7 @@ UIDocumentInteractionControllerDelegate>
     
     if (indexPath.section == 0) {
         ContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactHeaderCell cellIdentifier] forIndexPath:indexPath];
-        [cell configureCellWithContact:[NSString stringWithFormat:@"%@ %@", self.documentModel.name, self.documentModel.date]];
+        [cell configureCellWithContact:[NSString stringWithFormat:@"%@", self.documentModel.name]];
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;
     } else if (indexPath.section == 1) {

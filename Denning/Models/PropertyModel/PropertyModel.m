@@ -28,15 +28,14 @@
     if ([[response objectForKey:@"fullTitle"] isKindOfClass:[NSNull class]]) {
         propertyModel.fullTitle = @"";
     }
-    NSDictionary* lotptObject = [response objectForKey:@"lotPt"];
+    NSDictionary* lotptObject = [response objectForKey:@"lotPT"];
     propertyModel.lotptType = [lotptObject objectForKey:@"type"];
-    if ([[response objectForKey:@"lotPt"] isKindOfClass:[NSNull class]]) {
+    if ([lotptObject isKindOfClass:[NSNull class]]) {
         propertyModel.lotptType = @"";
-    }
-    propertyModel.lotptValue = [lotptObject objectForKey:@"value"];
-    if ([[response objectForKey:@"value"] isKindOfClass:[NSNull class]]) {
         propertyModel.lotptValue = @"";
     }
+    propertyModel.lotptValue = [lotptObject objectForKey:@"value"];
+
     NSDictionary* areaObject = [response objectForKey:@"area"];
     propertyModel.area = [NSString stringWithFormat:@"%@(%@)", [areaObject objectForKey:@"type"], [areaObject objectForKey:@"value"]];
     propertyModel.address = [response objectForKey:@"address"];

@@ -26,7 +26,9 @@
 {
     EventModel* eventModel = [EventModel new];
     
+    eventModel.subject = [response objectForKey:@"counsel"];
     eventModel.FileNo = [response objectForKey:@"FileNo"];
+    eventModel.caseNo = [response objectForKey:@"caseNo"];
     eventModel.URL = [response objectForKey:@"URL"];
     eventModel.eventCode = [response objectForKey:@"code"];
     eventModel.description = [response objectForKey:@"description"];
@@ -40,6 +42,8 @@
     eventModel.location = [response objectForKey:@"location"];
     eventModel.reminder1 = [response objectForKey:@"reminder1"];
     eventModel.reminder2 = [response objectForKey:@"reminder2"];
+    
+    eventModel.counsel = [response objectForKey:@"counsel"];
     
     return eventModel;
 }

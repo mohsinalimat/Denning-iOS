@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface PropertyViewController : UITableViewController
+@interface PropertyViewController : DICustomTableViewController
 
 @property (strong, nonatomic) PropertyModel* propertyModel;
 @property (strong, nonatomic) NSString* previousScreen;

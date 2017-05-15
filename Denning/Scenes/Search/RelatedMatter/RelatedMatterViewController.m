@@ -10,15 +10,17 @@
 #import "ContactCell.h"
 #import "ContactHeaderCell.h"
 #import "ThreeFieldsCell.h"
-#import "LastTableCell.h"
+#import "MatterLastCell.h"
 #import "PropertyViewController.h"
 #import "LedgerViewController.h"
+#import "NewLedgerViewController.h"
 #import "BankViewController.h"
 #import "ContactViewController.h"
 #import "LegalFirmViewController.h"
 #import "DocumentViewController.h"
+#import "MatterPropertyCell.h"
 
-@interface RelatedMatterViewController ()<LastTableCellDelegate>
+@interface RelatedMatterViewController ()<MatterLastCellDelegate>
 {
     __block BOOL isLoading;
 }
@@ -35,6 +37,12 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,13 +51,9 @@
 }
 
 - (void) prepareUI {
-    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -61,7 +65,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -70,7 +73,8 @@
     [ThreeFieldsCell registerForReuseInTableView:self.tableView];
     [ContactHeaderCell registerForReuseInTableView:self.tableView];
     [ContactCell registerForReuseInTableView:self.tableView];
-    [LastTableCell registerForReuseInTableView:self.tableView];
+    [MatterLastCell registerForReuseInTableView:self.tableView];
+    [MatterPropertyCell registerForReuseInTableView:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
@@ -79,46 +83,43 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return 11;
+    return 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     switch (section) {
         case 0:
-            return 1;
+            return 5;
             break;
         case 1:
-            return 3;
-            break;
-        case 2:
             if (relatedMatterModel.court == nil) {
                 return 0;
             }
             return 5;
             break;
-        case 3:
+        case 2:
             return relatedMatterModel.partyGroupArray.count;
             break;
-        case 4:
+        case 3:
             return relatedMatterModel.solicitorGroupArray.count;
             break;
-        case 5:
+        case 4:
             return relatedMatterModel.propertyGroupArray.count;
             break;
-        case 6:
+        case 5:
             return relatedMatterModel.bankGroupArray.count;
             break;
-        case 7:
+        case 6:
             return relatedMatterModel.RMGroupArray.count;
             break;
-        case 8:
+        case 7:
             return relatedMatterModel.dateGroupArray.count;
             break;
-        case 9:
+        case 8:
             return relatedMatterModel.textGroupArray.count;
             break;
-        case 10: // File Folder & Ledger
+        case 9: // File Folder & Ledger
             return 1;
             break;
             
@@ -131,8 +132,7 @@
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.section == 0) { // Contact client
+    if (indexPath.section == 0 && indexPath.row == 1) { // Contact client
         if (isLoading) return;
         isLoading = YES;
         [SVProgressHUD showWithStatus:@"Loading"];
@@ -150,7 +150,28 @@
         }];
     }
     
-    if (indexPath.section == 4) { // Solicitor, Legal Firm
+    if (indexPath.section == 2) {
+        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[indexPath.row];
+        if (isLoading) return;
+        isLoading = YES;
+        [SVProgressHUD showWithStatus:@"Loading"];
+        PartyModel* party = partyGroup.partyArray[0];
+        @weakify(self);
+        [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:party.partyCode completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+            
+            @strongify(self);
+            self->isLoading = false;
+            [SVProgressHUD dismiss];
+            if (error == nil) {
+                [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
+            } else {
+                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            }
+        }];
+    }
+    
+    
+    if (indexPath.section == 3) { // Solicitor, Legal Firm
         if (isLoading) return;
         isLoading = YES;
         SolicitorGroup* solicitorGroup = self.relatedMatterModel.solicitorGroupArray[indexPath.row];
@@ -168,7 +189,7 @@
         }];
     }
     
-    if (indexPath.section == 5) { // property
+    if (indexPath.section == 4) { // property
         if (isLoading) return;
         isLoading = YES;
         PropertyModel* model = self.relatedMatterModel.propertyGroupArray[indexPath.row];
@@ -186,7 +207,7 @@
             }
         }];
     }
-    if (indexPath.section == 6) { // Bank
+    if (indexPath.section == 5) { // Bank
         if (isLoading) return;
         isLoading = YES;
         BankGroupModel *bankGroupModel = self.relatedMatterModel.bankGroupArray[indexPath.row];
@@ -219,36 +240,33 @@
     switch (section)
     {
         case 0:
-            sectionName = @"";
-            break;
-        case 1:
             sectionName = @"Matter Information";
             break;
-        case 2:
+        case 1:
             sectionName = @"Court Case Information";
             break;
-        case 3:
+        case 2:
             sectionName = @"Party Group";
             break;
-        case 4:
+        case 3:
             sectionName = @"Solicitor";
             break;
-        case 5:
+        case 4:
             sectionName = @"Property";
             break;
-        case 6:
+        case 5:
             sectionName = @"Bank";
             break;
-        case 7:
+        case 6:
             sectionName = @"Important RM";
             break;
-        case 8:
+        case 7:
             sectionName = @"Important Date";
             break;
-        case 9:
+        case 8:
             sectionName = @"Other Information";
             break;
-        case 10:
+        case 9:
             sectionName = @"Files & Ledger";
             break;
             // ...
@@ -264,12 +282,12 @@
     if (section == 0) {
         return 0;
     }
-    return 40;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 30;
+    return 10;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -277,20 +295,21 @@
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
     
     if (indexPath.section == 0) {
-        ContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactHeaderCell cellIdentifier] forIndexPath:indexPath];
-        [cell configureCellWithContact:relatedMatterModel.clientName];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        return cell;
-    } else if (indexPath.section == 1) { // Matter Information
         if (indexPath.row == 0) {
-            [cell configureCellWithContact:@"Open Date" text:relatedMatterModel.openDate];
+            [cell configureCellWithContact:@"File No" text:relatedMatterModel.systemNo];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         } else if (indexPath.row == 1) {
-            [cell configureCellWithContact:@"Ref" text:relatedMatterModel.ref];
+            [cell configureCellWithContact:@"Client" text:relatedMatterModel.clientName];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else if (indexPath.row == 2) {
+            [cell configureCellWithContact:@"Open Date" text:[DIHelpers getOnlyDateFromDateTime:relatedMatterModel.openDate]];
+        } else if (indexPath.row == 3) {
+            [cell configureCellWithContact:@"Ref 2" text:relatedMatterModel.ref];
+        } else if (indexPath.row == 4) {
             [cell configureCellWithContact:@"Matter" text:relatedMatterModel.matter];
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
-    } else if (indexPath.section == 2) { // Court Case information
+    } else if (indexPath.section == 1) { // Court Case information
         if (indexPath.row == 0) {
             [cell configureCellWithContact:@"Court" text:relatedMatterModel.court.court];
         } else if (indexPath.row == 1) {
@@ -303,46 +322,47 @@
             [cell configureCellWithContact:@"SAR" text:relatedMatterModel.court.SAR];
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
-        
-    } else if (indexPath.section == 3) { // Party Group
+    } else if (indexPath.section == 2) { // Party Group
         PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[indexPath.row];
-        [cell configureCellWithContact:partyGroup.partyGroupName text:partyGroup.party.partyName];
+        PartyModel* party = partyGroup.partyArray[0];
+        [cell configureCellWithContact:partyGroup.partyGroupName text:party.partyName];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if (indexPath.section == 4) { // Solicitor
-         ThreeFieldsCell *cell = [tableView dequeueReusableCellWithIdentifier:[ThreeFieldsCell cellIdentifier] forIndexPath:indexPath];
+    } else if (indexPath.section == 3) { // Solicitor
+        ThreeFieldsCell *cell = [tableView dequeueReusableCellWithIdentifier:[ThreeFieldsCell cellIdentifier] forIndexPath:indexPath];
         SolicitorGroup* solicitorGroup = relatedMatterModel.solicitorGroupArray[indexPath.row];
         [cell configureCellWithValue1:solicitorGroup.solicitorGroupName value2:solicitorGroup.solicitorName value3:solicitorGroup.solicitorReference];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
-    } else if (indexPath.section == 5) { //Property
+    } else if (indexPath.section == 4) { //Property
         PropertyModel* propertyModel = relatedMatterModel.propertyGroupArray[indexPath.row];
-        [cell configureCellWithContact:propertyModel.fullTitle text:propertyModel.address];
+       MatterPropertyCell* cell = [tableView dequeueReusableCellWithIdentifier:[MatterPropertyCell cellIdentifier] forIndexPath:indexPath];
+        [cell configureCellWithFullTitle:propertyModel.fullTitle withAddress:propertyModel.address inNumber:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if (indexPath.section == 6) { // Bank
+        return cell;
+    } else if (indexPath.section == 5) { // Bank
         BankGroupModel* bankGroupModel = relatedMatterModel.bankGroupArray[indexPath.row];
         [cell configureCellWithContact:bankGroupModel.bankGroupName text:bankGroupModel.bankName];
         if (bankGroupModel.bankName.length != 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
-    } else if (indexPath.section == 7) { // Important RM
+    } else if (indexPath.section == 6) { // Important RM
         GeneralGroup* RMGroup = relatedMatterModel.RMGroupArray[indexPath.row];
         [cell configureCellWithContact:RMGroup.label text:RMGroup.value];
         cell.accessoryType = UITableViewCellAccessoryNone;
-    } else if (indexPath.section == 8) { // Important Date
+    } else if (indexPath.section == 7) { // Important Date
         GeneralGroup* dateGroup = relatedMatterModel.dateGroupArray[indexPath.row];
-        [cell configureCellWithContact:dateGroup.label text:dateGroup.value];
+        [cell configureCellWithContact:dateGroup.label text:[DIHelpers getOnlyDateFromDateTime:dateGroup.value]];
         cell.accessoryType = UITableViewCellAccessoryNone;
-    } else if (indexPath.section == 9) { // Other Information
+    } else if (indexPath.section == 8) { // TextGroup Information
         GeneralGroup* otherInfo = relatedMatterModel.textGroupArray[indexPath.row];
         [cell configureCellWithContact:otherInfo.label text:otherInfo.value];
         cell.accessoryType = UITableViewCellAccessoryNone;
-    } else if (indexPath.section == 10) { // Other Information
+    } else if (indexPath.section == 9) { // Other Information
         
-        LastTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[LastTableCell cellIdentifier] forIndexPath:indexPath];
+        MatterLastCell *cell = [tableView dequeueReusableCellWithIdentifier:[MatterLastCell cellIdentifier] forIndexPath:indexPath];
         
-        [cell configureCellWithFirstTitle:@"File Folder" withSecondTitle:@"Ledger"];
-        cell.delgate = self;
+        cell.matterLastCellDelegate = self;
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;
     }
@@ -351,7 +371,7 @@
 }
 
 #pragma mark - LastTableCellDelegate
-- (void) didTapFirstBtn:(LastTableCell *)cell
+- (void) didTapFileFolder:(MatterLastCell *)cell
 {
     if (isLoading) return;
     isLoading = YES;
@@ -369,19 +389,19 @@
     }];
 }
 
-- (void) didTapSecondBtn:(LastTableCell *)cell
+- (void) didTapAccounts:(MatterLastCell *)cell
 {
     if (isLoading) return;
     isLoading = YES;
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
-    [[QMNetworkManager sharedManager] loadLedgerWithCode:self.relatedMatterModel.systemNo completion:^(NSArray * _Nonnull ledgerModelArray, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] loadLedgerWithCode:self.relatedMatterModel.systemNo completion:^(NewLedgerModel * _Nonnull newLedgerModel, NSError * _Nonnull error) {
         
         @strongify(self);
         self->isLoading = false;
         [SVProgressHUD dismiss];
         if (error == nil) {
-            [self performSegueWithIdentifier:kLedgerSearchSegue sender:ledgerModelArray];
+            [self performSegueWithIdentifier:kLedgerSearchSegue sender:newLedgerModel];
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -401,9 +421,9 @@
     
     if ([segue.identifier isEqualToString:kLedgerSearchSegue]){
         LedgerViewController* ledgerVC = segue.destinationViewController;
-        ledgerVC.ledgerArray = sender;
+        ledgerVC.ledgerModel = sender;
+        ledgerVC.previousScreen = @"Matter";
         ledgerVC.matterCode = relatedMatterModel.systemNo;
-        ledgerVC.previousScreen = @"Back";
     }
     
     if ([segue.identifier isEqualToString:kBankSearchSegue]){

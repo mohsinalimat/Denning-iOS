@@ -10,7 +10,11 @@
 
 @interface EventModel : NSObject
 
+@property (strong, nonatomic) NSString * subject;
+
 @property (strong, nonatomic) NSString * FileNo;
+
+@property (strong, nonatomic) NSString * caseNo;
 
 @property (strong, nonatomic) NSString * URL;
 
@@ -31,6 +35,8 @@
 @property (strong, nonatomic) NSString * reminder1;
 
 @property (strong, nonatomic) NSString * reminder2;
+
+@property (strong, nonatomic) NSString * counsel;
 
 + (EventModel*) getEventFromResponse: (NSDictionary*) response;
 

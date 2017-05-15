@@ -28,7 +28,7 @@ QMChatConnectionDelegate>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -43,6 +43,11 @@ QMChatConnectionDelegate>
 {
     [super viewWillDisappear:animated];
     [[QMCore instance].chatService removeDelegate:self];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)performAutoLoginAndFetchData {
@@ -92,43 +97,47 @@ QMChatConnectionDelegate>
         
         _menuItems =
         @[
-          [RWDropdownMenuItem itemWithText:userInfo image:[UIImage imageNamed:@"icon_profile"] action:^{
-              
+          [RWDropdownMenuItem itemWithText:userInfo image:[UIImage imageNamed:@"menu_user"] action:^{
+              [self tapLogin:nil];
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Home" image:[UIImage imageNamed:@"icon_home"] action:^{
-              
+          [RWDropdownMenuItem itemWithText:@"Home" image:[UIImage imageNamed:@"menu_home"] action:^{
+              self.selectedViewController = self.viewControllers[0];
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Add" image:[UIImage imageNamed:@"icon_add"] action:^{
-              
+          [RWDropdownMenuItem itemWithText:@"Add" image:[UIImage imageNamed:@"menu_add"] action:^{
+              self.selectedViewController = self.viewControllers[1];
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Overview" image:[UIImage imageNamed:@"icon_overview"] action:^{
-              
+          [RWDropdownMenuItem itemWithText:@"Overview" image:[UIImage imageNamed:@"menu_overview"] action:^{
+              self.selectedViewController = self.viewControllers[2];
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Our Products" image:[UIImage imageNamed:@"icon_our_product"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Chat" image:[UIImage imageNamed:@"icon_message"] action:^{
+              self.selectedViewController = self.viewControllers[3];
+          }],
+          
+          [RWDropdownMenuItem itemWithText:@"Our Products" image:[UIImage imageNamed:@"menu_our_product"] action:^{
             
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Help" image:[UIImage imageNamed:@"icon_help"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Help" image:[UIImage imageNamed:@"menu_help"] action:^{
               
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Settings" image:[UIImage imageNamed:@"icon_settings"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Settings" image:[UIImage imageNamed:@"menu_settings"] action:^{
               
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Contact Us" image:[UIImage imageNamed:@"icon_phone"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Contact Us" image:[UIImage imageNamed:@"menu_contact_us"] action:^{
               
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Terms of Uses" image:[UIImage imageNamed:@"icon_termsOfUses"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Terms of Uses" image:[UIImage imageNamed:@"menu_terms_of_uses"] action:^{
               
           }],
           
-          [RWDropdownMenuItem itemWithText:@"Log out" image:[UIImage imageNamed:@"icon_signout"] action:^{
+          [RWDropdownMenuItem itemWithText:@"Log out" image:[UIImage imageNamed:@"menu_logout"] action:^{
               
           }],
         ];

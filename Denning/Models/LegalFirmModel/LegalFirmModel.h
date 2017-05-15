@@ -11,6 +11,7 @@
 @interface LegalFirmModel : NSObject
 
 @property (strong, nonatomic) NSString* name;
+@property (strong, nonatomic) NSString* title;
 @property (strong, nonatomic) NSString* IDNo;
 @property (strong, nonatomic) NSString* tel;
 @property (strong, nonatomic) NSString* fax;

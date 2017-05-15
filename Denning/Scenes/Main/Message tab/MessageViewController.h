@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomViewController.h"
 
-@interface MessageViewController : UIViewController
+@interface MessageViewController : DICustomViewController
 
 @property (weak, nonatomic) IBOutlet UIView *companySelectionView;
 @property (weak, nonatomic) IBOutlet UIStackView *chatOptionView;

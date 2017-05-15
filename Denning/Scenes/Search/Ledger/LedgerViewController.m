@@ -7,12 +7,14 @@
 //
 
 #import "LedgerViewController.h"
-#import "LedgerDetailViewController.h"
+#import "NewLedgerViewController.h"
 #import "LedgerCell.h"
+#import "ContactHeaderCell.h"
 
 @interface LedgerViewController ()
 {
     __block BOOL isLoading;
+    __block NSString* selectedAccountType;
 }
 
 @end
@@ -26,6 +28,12 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,13 +42,10 @@
 }
 
 - (void) prepareUI {
-    UIFont *font = [UIFont fontWithName:@"SFUIText-Regular" size:17.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    CGFloat width = [[[NSAttributedString alloc] initWithString:self.previousScreen attributes:attributes] size].width;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, width+15, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
+//    [backButton setTitle:self.previousScreen forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -58,41 +63,33 @@
 
 - (void)registerNibs {
     [LedgerCell registerForReuseInTableView:self.tableView];
+    [ContactHeaderCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
 }
 
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return self.ledgerArray.count;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    if (section == 0) {
+        return 2;
+    }
+    return self.ledgerModel.ledgerModelArray.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (isLoading) return;
-    isLoading = YES;
-    LedgerModel* model = self.ledgerArray[indexPath.row];
-    [SVProgressHUD showWithStatus:@"Loading"];
-    @weakify(self);
-    [[QMNetworkManager sharedManager] loadLedgerDetailWithCode:self.matterCode accountType:model.accountType completion:^(NSArray * _Nonnull ledgerDetailModelArray, NSError * _Nonnull error) {
-        
-        @strongify(self);
-        self->isLoading = false;
-        [SVProgressHUD dismiss];
-        if (error == nil) {
-            [self performSegueWithIdentifier:kLedgerDetailSearchSegue sender:ledgerDetailModelArray];
-        } else {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-        }
-    }];
+    if (indexPath.section == 1) {
+        LedgerModel* model = self.ledgerModel.ledgerModelArray[indexPath.row];
+        selectedAccountType = model.accountType;
+        [self performSegueWithIdentifier:kLedgerDetailSearchSegue sender:selectedAccountType];
+    }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -109,15 +106,27 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    LedgerModel* ledgerModel = self.ledgerArray[section];
-    return ledgerModel.accountName;
+    if (section == 0) {
+        return @"Client Information";
+    }
+    return @"Ledgers";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (indexPath.section == 0) {
+        ContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactHeaderCell cellIdentifier] forIndexPath:indexPath];
+        if (indexPath.row == 0) {
+            [cell configureCellWithContact:self.ledgerModel.fileNo];
+        } else {
+            [cell configureCellWithContact:self.ledgerModel.fileName];
+        }
+        return cell;
+    }
+    
     LedgerCell *cell = [tableView dequeueReusableCellWithIdentifier:[LedgerCell cellIdentifier] forIndexPath:indexPath];
     
-    [cell configureCellWithLedger:self.ledgerArray[indexPath.section]];
+    [cell configureCellWithLedger:self.ledgerModel.ledgerModelArray[indexPath.row]];
 
     return cell;
 }
@@ -127,8 +136,10 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:kLedgerDetailSearchSegue]){
-        LedgerDetailViewController* ledgerDetailVC = segue.destinationViewController;
-        ledgerDetailVC.ledgerDetailArray = sender;
+        NewLedgerViewController* ledgerDetailVC = segue.destinationViewController;
+        ledgerDetailVC.ledgerModelNew = self.ledgerModel;
+        ledgerDetailVC.matterCode = self.ledgerModel.fileNo;
+        ledgerDetailVC.selectedAccountType = selectedAccountType;
     }
 }
 

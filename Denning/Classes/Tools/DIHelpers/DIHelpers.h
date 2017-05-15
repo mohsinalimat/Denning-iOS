@@ -30,6 +30,8 @@
 
 + (NSString*) getTimeFromDate: (NSString*) date;
 
++ (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime;
+
 + (BOOL) isWordFile:(NSString*) fileExt;
 
 + (BOOL) isImageFile: (NSString*) fileExt;
@@ -45,4 +47,18 @@
 + (void) drawWhiteBorderToButton: (UIButton*) button;
 
 + (void) drawWhiteBorderToTextField: (UITextField*) textField;
+
++ (NSString*) removeFileNoFromMatterTitle: (NSString*) title;
+
++ (NSString*) today;
+
++ (NSString*) todayWithTime;
+
++ (NSString*) sevenDaysLater;
+
++ (NSString*) sevenDaysLaterFromDate: (NSString*) date;
+
++ (NSString*) sevenDaysBefore;
+
++ (NSString*) currentSunday;
 @end

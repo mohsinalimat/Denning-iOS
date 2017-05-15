@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface LegalFirmViewController : UITableViewController
+@interface LegalFirmViewController : DICustomTableViewController
 
 @property (strong, nonatomic) LegalFirmModel* legalFirmModel;
 @property (strong, nonatomic) NSString* previousScreen;

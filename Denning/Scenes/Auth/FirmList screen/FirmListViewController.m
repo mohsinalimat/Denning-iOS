@@ -103,10 +103,11 @@
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
             [self.refreshControl endRefreshing];
         }
+        self->isFirstLoading = false;
         if (error == nil) {
             self.firmCopyedList = [[self.firmCopyedList arrayByAddingObjectsFromArray:resultArray] mutableCopy];
             [self filterFirmList];
-            self->isFirstLoading = false;
+            
             if (resultArray.count != 0) {
                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
             }
@@ -177,7 +178,6 @@
     }
 }
 
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -189,7 +189,6 @@
     
     return self.firmList.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FirmListCell" forIndexPath:indexPath];

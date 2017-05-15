@@ -17,7 +17,9 @@
 #import "LegalFirmViewController.h"
 #import "GovernmentOfficesViewController.h"
 #import "LedgerViewController.h"
+#import "NewLedgerViewController.h"
 #import "DocumentViewController.h"
+#import "BankViewController.h"
 #import "MLPAutoCompleteTextField.h"
 #import "DEMOCustomAutoCompleteCell.h"
 #import "DEMOCustomAutoCompleteObject.h"
@@ -38,6 +40,7 @@ typedef NS_ENUM(NSInteger, DISearchCellType) {
 UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UIScrollViewDelegate, SearchDelegate, SearchMatterDelegate, SearchDocumentDelegate>
 {
     NSInteger category;
+    NSInteger selectedIndexOfFilter;
     NSString* keyword;
     NSString* searchURL;
     NSString* searchKeywordURL;
@@ -62,6 +65,8 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchContainerConstraint;
 @property (weak, nonatomic) IBOutlet UIView *searchContainerView;
 
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+
 @end
 
 @implementation SearchViewController
@@ -72,8 +77,14 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     
     [self registerNibs];
     [self prepareUI];
-    [self addTapGesture];
+//    [self addTapGesture];
     [self prepareSearchTextField];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -103,7 +114,12 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
     UIImageView* searchImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_search_black"]];
     self.searchTextField.leftView = searchImageView;
-    [self.searchTextField becomeFirstResponder];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [DataManager sharedManager].isFirstLoading = @"YES";
+        [self.searchTextField becomeFirstResponder];
+        [DataManager sharedManager].isFirstLoading = @"NO";
+    });
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -111,12 +127,12 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden =  YES;
     
-    if (self.tableView.refreshControl.isRefreshing) {
+    if (self.refreshControl.isRefreshing) {
         // fix for freezing refresh control after tab bar switch
         // if it is still active
         CGPoint offset = self.tableView.contentOffset;
-        [self.tableView.refreshControl endRefreshing];
-        [self.tableView.refreshControl beginRefreshing];
+        [self.refreshControl endRefreshing];
+        [self.refreshControl beginRefreshing];
         self.tableView.contentOffset = offset;
     }
 }
@@ -125,21 +141,36 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBarHidden = NO;
+    [self.view endEditing:YES];
 }
 
 - (void) prepareUI
 {
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    CGFloat customRefreshControlHeight = 50.0f;
+    CGFloat customRefreshControlWidth = 320.0f;
+    CGRect customRefreshControlFrame = CGRectMake(0.0f,
+                                                  -customRefreshControlHeight,
+                                                  customRefreshControlWidth,
+                                                  customRefreshControlHeight);
+    
+    self.refreshControl = [[UIRefreshControl alloc] initWithFrame:customRefreshControlFrame];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor clearColor];
+    self.refreshControl.tintColor = [UIColor blackColor];
+    
+    [self.tableView addSubview:self.refreshControl];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView.backgroundColor = [UIColor colorWithHexString:@"EBEBF1"];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    self.tableView.refreshControl = [[UIRefreshControl alloc] init];
-    self.tableView.refreshControl.backgroundColor = [UIColor clearColor];
-    self.tableView.refreshControl.tintColor = [UIColor blackColor];
-    [self.tableView.refreshControl addTarget:self
+//    self.tableView.refreshControl = [[UIRefreshControl alloc] init];
+//    self.tableView.refreshControl.backgroundColor = [UIColor clearColor];
+//    self.tableView.refreshControl.tintColor = [UIColor blackColor];
+    [self.refreshControl addTarget:self
                             action:@selector(displaySearchResult)
                   forControlEvents:UIControlEventValueChanged];
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 69, self.view.frame.size.width, 44)];
     self.selectionList.delegate = self;
@@ -190,13 +221,18 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     [self.view addSubview:self.selectionList];
     self.selectionList.backgroundColor = [UIColor clearColor];
     
-    [self buildSearchKeywordURL];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self buildSearchKeywordURL];
+    });
+    
+    // close the search after click logo on the top right
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissView:) name:@"CloseSearch" object:nil];
 }
 
 - (void) buildSearchURL
 {
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL_V2];
     } else {
         searchURL = PUBLIC_SEARCH_URL;
     }
@@ -213,7 +249,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         [DataManager sharedManager].searchType  = @"Public";
         category = -1;
         searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
-        self.searchTextField.placeholder = @"Public Search";
+        self.searchTextField.placeholder = @"Denning Search";
     }
 }
 
@@ -242,6 +278,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) updateSelectionList
 {
+    self.selectionList.hidden = NO;
     [self.selectionList reloadData];
     self.selectionList.selectedButtonIndex = 0;
 }
@@ -261,7 +298,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     }
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        self.searchTextField.placeholder = @"Public Search";
+        self.searchTextField.placeholder = @"Denning Search";
         [DataManager sharedManager].searchType = @"Public";
         category = -1;
        searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
@@ -281,16 +318,20 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) displaySearchResult
 {
+    self.selectionList.hidden = NO;
+    [self.selectionList reloadData];
+    self.selectionList.selectedButtonIndex = selectedIndexOfFilter;
+    
     @weakify(self)
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
     [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:searchURL forCategory:category searchType:searchType withCompletion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
         
         [SVProgressHUD dismiss];
         
-        if (self.tableView.refreshControl.isRefreshing) {
+        if (self.refreshControl.isRefreshing) {
             CGPoint offset = self.tableView.contentOffset;
-            self.tableView.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.tableView.refreshControl endRefreshing];
+            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
+            [self.refreshControl endRefreshing];
             self.tableView.contentOffset = offset;
         }
         
@@ -299,7 +340,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         {
             self.searchResultArray = [resultArray mutableCopy];
             [self.tableView reloadData];
-            self.selectionList.hidden = NO;
+            
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -363,9 +404,10 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
     // update the view for the corresponding index
-    
+    selectedIndexOfFilter = index;
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
         category = [generalValueArray[index] integerValue];
+        
     } else {
         category = [self.publicSearchFilters.allValues[index] integerValue];
     }
@@ -412,7 +454,6 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     return 1;
 }
 
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
@@ -440,18 +481,11 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 0;
-    }
-    return 40;
+    return 30;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 0;
-    }
-    
     return 10;
 }
 
@@ -545,13 +579,13 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 {
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
-    [[QMNetworkManager sharedManager] loadLedgerWithCode:model.key completion:^(NSArray * _Nonnull ledgerModelArray, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] loadLedgerWithCode:model.key completion:^(NewLedgerModel * _Nonnull newLedgerModel, NSError * _Nonnull error) {
         
         @strongify(self);
         self->isLoading = false;
         [SVProgressHUD dismiss];
         if (error == nil) {
-            [self performSegueWithIdentifier:kLedgerSearchSegue sender:ledgerModelArray];
+            [self performSegueWithIdentifier:kLedgerSearchSegue sender:newLedgerModel];
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -764,7 +798,6 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         
         searchType = @"Normal";
         keyword = selectedString;
-        self.selectionList.hidden = NO;
         [self displaySearchResult];
     }
 }
@@ -784,8 +817,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {
     NSLog(@"Autocomplete table view ws removed from the view hierarchy");
-    self.selectionList.hidden = NO;
-    
+   // [self.searchTextField resignFirstResponder];
 }
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didShowAutoCompleteTableView:(UITableView *)autoCompleteTableView {
@@ -830,8 +862,9 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
     if ([segue.identifier isEqualToString:kLedgerSearchSegue]){
         UINavigationController* navC = segue.destinationViewController;
-        LedgerViewController* ledgerVC = navC.viewControllers.firstObject;
-        ledgerVC.ledgerArray = sender;
+        LedgerViewController* ledgerVC = [navC viewControllers].firstObject;
+        ledgerVC.ledgerModel = sender;
+
         ledgerVC.matterCode = _matterCode;
     }
     
@@ -839,6 +872,12 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         UINavigationController* navC = segue.destinationViewController;
         DocumentViewController* documentVC = navC.viewControllers.firstObject;
         documentVC.documentModel = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kBankSearchSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        BankViewController* bankVC = navC.viewControllers.firstObject;
+        bankVC.bankModel = sender;
     }
 }
 

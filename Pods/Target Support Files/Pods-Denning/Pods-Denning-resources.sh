@@ -78,6 +78,13 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "Digits/iOS/DigitsKit.framework/Versions/A/Resources/DigitsKitResources.bundle"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-magnify-glass.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-magnify-glass@2x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow@2x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow@3x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/GLCalendarDayCell/GLCalendarDayCell.xib"
+  install_resource "GLCalendarView/GLCalendarView/Sources/GLCalendarView.xib"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/NYTPhotoViewer/NYTPhotoViewer.bundle"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/QMChatViewController/QMChatViewController.bundle"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/QMServices/QMChatCacheModel.bundle"
@@ -87,6 +94,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "Digits/iOS/DigitsKit.framework/Versions/A/Resources/DigitsKitResources.bundle"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-magnify-glass.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-magnify-glass@2x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow@2x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/Images/gl-calendar-shadow@3x.png"
+  install_resource "GLCalendarView/GLCalendarView/Sources/GLCalendarDayCell/GLCalendarDayCell.xib"
+  install_resource "GLCalendarView/GLCalendarView/Sources/GLCalendarView.xib"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/NYTPhotoViewer/NYTPhotoViewer.bundle"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/QMChatViewController/QMChatViewController.bundle"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/QMServices/QMChatCacheModel.bundle"

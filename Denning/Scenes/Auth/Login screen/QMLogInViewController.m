@@ -33,7 +33,6 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -59,8 +58,10 @@
     [super viewDidAppear:animated];
     
     [self addTapGesture];
-    self.emailField.text = [DataManager sharedManager].user.email;
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.emailField.text = [DataManager sharedManager].user.email;
+    });
+ 
 //    [self.emailField becomeFirstResponder];
 }
 
@@ -138,7 +139,7 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name withFirmCity:firmURLModel.city];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
@@ -208,7 +209,6 @@
     // Save the user password for the shared folder use
     [[DataManager sharedManager] setUserPassword:password];
     
-    
     @weakify(self);
     [[QMNetworkManager sharedManager] userSignInWithEmail:email password:password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode, NSDictionary* responseObject) {
         
@@ -260,7 +260,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *) segue sender:(id) sender {
     
     if ([segue.identifier isEqualToString:kBranchSegue]){
-        BranchViewController *branchVC = segue.destinationViewController;
+        UINavigationController* navVC = segue.destinationViewController;
+        BranchViewController *branchVC = navVC.viewControllers.firstObject;
         branchVC.firmArray = sender;
     }
     

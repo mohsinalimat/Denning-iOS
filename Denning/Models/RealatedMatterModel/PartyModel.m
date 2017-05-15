@@ -10,4 +10,23 @@
 
 @implementation PartyModel
 
++ (PartyModel*) getPartyFromResponse:(NSDictionary*) response
+{
+    PartyModel* model = [PartyModel new];
+    model.partyName = [response objectForKey:@"name"];
+    model.partyCode = [response objectForKey:@"code"];
+    return model;
+}
+
++ (NSArray*) getPartyArrayFromResponse:(NSDictionary*) response
+{
+    NSMutableArray *result = [NSMutableArray new];
+    
+    for (id obj in response) {
+        [result addObject:[PartyModel getPartyFromResponse:obj]];
+    }
+    
+    return result;
+}
+
 @end

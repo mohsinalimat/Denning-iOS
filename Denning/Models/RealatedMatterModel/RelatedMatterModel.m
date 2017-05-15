@@ -17,8 +17,8 @@
     
     relatedMatter.systemNo = [response objectForKey:@"systemNo"];
     
-    relatedMatter.clientName = [NSString stringWithFormat:@"%@ %@", [response objectForKey:@"systemNo"], [[response objectForKey:@"primaryClient"] objectForKey:@"name"]];
-    relatedMatter.contactCode = [[response objectForKey:@"primaryClient"] objectForKey:@"code"];
+    relatedMatter.clientName = [NSString stringWithFormat:@"%@", [[response objectForKey:@"primaryClient"] objectForKey:@"name"]];
+    relatedMatter.contactCode = [[[response objectForKey:@"primaryClient"] objectForKey:@"code"] stringValue];
     relatedMatter.openDate = [response objectForKey:@"dateOpen"];
     relatedMatter.ref = [response objectForKey:@"referenceNo"];
     if ([relatedMatter.ref isKindOfClass:[NSNull class]]) {
@@ -53,17 +53,7 @@
     for (id group in response) {
          PartyGroupModel* partyGroupModel = [PartyGroupModel new];
         partyGroupModel.partyGroupName = [group objectForKey:@"PartyName"];
-        PartyModel* partyModel = [PartyModel new];
-        NSLog(@"%@", [group objectForKey:@"party"]);
-        if (((NSArray*)[group objectForKey:@"party"]).count != 0) {
-            partyModel.partyName = [[group objectForKey:@"party"][0] objectForKey:@"name"];
-            partyModel.partyCode = [[group objectForKey:@"party"][0] objectForKey:@"code"];
-            partyGroupModel.party = partyModel;
-            [partyGroupArray addObject:partyGroupModel];
-        } else {
-            partyModel.partyName = @"";
-            partyModel.partyCode = @"";
-        }
+        partyGroupModel.partyArray = [PartyModel getPartyArrayFromResponse:[group objectForKeyNotNull:@"party"]];
     }
    
     return partyGroupArray;

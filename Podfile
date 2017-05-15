@@ -25,6 +25,11 @@ target ‘Denning’ do
 	pod 'libPhoneNumber-iOS', '~> 0.8'
 	pod 'MBProgressHUD', '~> 1.0.0'
 	pod 'SWTableViewCell', '~> 0.3.7'
+	pod 'VBFPopFlatButton'
+	pod 'Masonry'
+	pod "GLCalendarView", "~> 1.0.0"
+	pod 'UIFloatLabelTextField'
+	pod 'FZAccordionTableView', '~> 0.2.3'
 
 	pod 'AFNetworking’
 	pod 'Bolts'

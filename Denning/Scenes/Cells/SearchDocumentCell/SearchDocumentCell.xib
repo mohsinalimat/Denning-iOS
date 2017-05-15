@@ -69,19 +69,19 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gtw-2e-DFW">
-                        <rect key="frame" x="20" y="16" width="38.5" height="21"/>
+                        <rect key="frame" x="20" y="9" width="38.5" height="21"/>
                         <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="18"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" text="Header" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="feo-Cj-Tau">
-                        <rect key="frame" x="20" y="42" width="58.5" height="20"/>
+                        <rect key="frame" x="20" y="35" width="58.5" height="20"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfC-KQ-A2v">
-                        <rect key="frame" x="20" y="67" width="92" height="71"/>
+                        <rect key="frame" x="20" y="60" width="92" height="78"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="17"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -99,7 +99,7 @@
                     <constraint firstItem="b5b-Hy-hOC" firstAttribute="width" secondItem="8cH-bW-wZy" secondAttribute="width" id="IDj-CB-xXY"/>
                     <constraint firstItem="8cH-bW-wZy" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.4" id="MZf-SG-fVc"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="cfC-KQ-A2v" secondAttribute="trailing" constant="12" id="Nm3-gP-caj"/>
-                    <constraint firstItem="Gtw-2e-DFW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="UbK-MX-XYH"/>
+                    <constraint firstItem="Gtw-2e-DFW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="UbK-MX-XYH"/>
                     <constraint firstItem="cfC-KQ-A2v" firstAttribute="leading" secondItem="Gtw-2e-DFW" secondAttribute="leading" id="gXK-Px-vCw"/>
                     <constraint firstItem="b5b-Hy-hOC" firstAttribute="bottom" secondItem="8cH-bW-wZy" secondAttribute="bottom" id="mBx-fn-xcG"/>
                     <constraint firstAttribute="bottomMargin" secondItem="8cH-bW-wZy" secondAttribute="bottom" constant="8" id="n9P-RX-5qI"/>

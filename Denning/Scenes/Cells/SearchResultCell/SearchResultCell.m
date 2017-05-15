@@ -35,7 +35,7 @@
 - (void) configureCellWithSearchModel: (SearchResultModel*) searchResult
 {
     self.titleLabel.text = searchResult.title;
-    self.indexData.text = searchResult.indexData;
+    self.indexData.text = searchResult.header;
     self.descriptionLabel.text = searchResult.description;
 }
 

@@ -16,7 +16,7 @@
 @implementation DataManager
 @synthesize user;
 @synthesize denningArray;
-@synthesize bussinessArray;
+//@synthesize bussinessArray;
 @synthesize personalArray;
 @synthesize searchType;
 @synthesize documentView;
@@ -41,7 +41,7 @@
         user = [UserModel allObjects].firstObject;
         if (!user) {
             [[RLMRealm defaultRealm] transactionWithBlock:^{
-                user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"",  @"", @"", @"", @"", @"", @"", @0, @"Public"]];
+                user = [UserModel createInDefaultRealmWithValue:@[@"", @"", @"",  @"", @"", @"", @"", @"", @"", @"", @0, @"Public"]];
             }];
         }
     }
@@ -51,7 +51,7 @@
 
 - (void) getFirmServerArrayFromResponse: (NSDictionary*) response {
     self.denningArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catDenning"]];
-    self.bussinessArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catBussiness"]];
+//    self.bussinessArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catBussiness"]];
     self.personalArray = [FirmURLModel getFirmArrayFromResponse:[response objectForKey:@"catPersonal"]];
 }
 
@@ -105,12 +105,13 @@
     [self setUserInfoFromNewDeviceLogin:response];
 }
 
-- (void) setServerAPI: (NSString*) serverAPI withFirmName:(NSString*) firmName
+- (void) setServerAPI: (NSString*) serverAPI withFirmName:(NSString*) firmName withFirmCity:(NSString*)firmCity
 {
     self.searchType = @"General";
     [[RLMRealm defaultRealm] transactionWithBlock:^{
         user.serverAPI = serverAPI;
         user.firmName = firmName;
+        user.firmCity = firmCity;
     }];
 }
 

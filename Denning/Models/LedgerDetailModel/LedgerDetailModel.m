@@ -16,7 +16,7 @@
     
     ledgerDetailModel.ChequeNo = [response objectForKey:@"ChequeNo"];
     ledgerDetailModel.amount = [response objectForKey:@"amount"];
-    ledgerDetailModel.ledgerCode = [response objectForKey:@"ledgerCode"];
+    ledgerDetailModel.ledgerCode = [response objectForKey:@"code"];
     ledgerDetailModel.date = [response objectForKey:@"date"];
     ledgerDetailModel.ledgerDescription = [response objectForKey:@"description"];
     ledgerDetailModel.documentNo = [response objectForKey:@"documentNo"];

@@ -15,19 +15,25 @@
 #import "UpdateViewController.h"
 #import "BranchViewController.h"
 #import "DenningLabelCell.h"
+#import "UITextField+LeftView.h"
+#import "MenuCell.h"
+#import "ChangeBranchViewController.h"
 
-@interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate,
+    UITextFieldDelegate>
 {
     BOOL hideCells;
     NSArray* homeIconArray;
     NSArray* homeLabelArray;
     __block BOOL isLoading;
 }
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *headerWrapper;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *firmName;
+@property (weak, nonatomic) IBOutlet UILabel *firmCity;
+
+@property (weak, nonatomic) IBOutlet UITextField_LeftView *searchTextField;
 @property (strong, nonatomic) UISearchController *searchController;
 @end
 
@@ -36,8 +42,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self registerNibs];
-    [self configureSearch];
     [self prepareUI];
 }
 
@@ -50,26 +54,11 @@
 {
     [super viewWillAppear:animated];
     [self changeTitle];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    [_headerWrapper setNeedsLayout];
-    [_headerWrapper layoutIfNeeded];
-//    CGFloat height = [_headerWrapper systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    CGFloat parentHeight = [UIScreen mainScreen].bounds.size.height;
-    CGFloat tabbarHeight = self.tabBarController.tabBar.frame.size.height;
-    CGFloat navbarHeight = 64;
-    
-    CGRect headerFrame = _headerWrapper.frame;
-    headerFrame.size.height =  parentHeight - 300 - tabbarHeight - navbarHeight;
-    _headerWrapper.frame = headerFrame;
-    _tableView.tableHeaderView = _headerWrapper;
+    [self displayBranchInfo];
 }
 
 - (void) changeTitle {
-    UIImage *img = [UIImage imageNamed:@"logo_label"];
+    UIImage *img = [UIImage imageNamed:@"denning_logo"];
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 30, 30)];
     [imgView setImage:img];
     // setContent mode aspect fit
@@ -77,41 +66,54 @@
     self.tabBarController.navigationItem.titleView = imgView;
     
     self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_home"];
-    self.navigationController.tabBarItem.selectedImage = [UIImage imageNamed:@"icon_home"];
+    self.navigationController.tabBarItem.selectedImage = [UIImage imageNamed:@"icon_home_selected"];
 }
 
-- (void) configureSearch
-{
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchBar.placeholder = NSLocalizedString(@"Denning Search", nil);
-    self.searchController.searchBar.delegate = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.definesPresentationContext = YES;
-    [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    [self.searchController.searchBar setBarTintColor:[UIColor colorWithHexString:@"0f1828"]];
-    [self.tableView.tableHeaderView addSubview: self.searchController.searchBar];
+- (void) displayBranchInfo {
+    self.firmName.text = [DataManager sharedManager].user.firmName;
+    self.firmCity.text = [DataManager sharedManager].user.firmCity;
 }
 
 - (void) prepareUI
 {
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_background.png"]];
-    self.tableView.tableFooterView = [[UIView alloc] init];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+   
+    homeIconArray = @[@"icon_news", @"icon_updates", @"icon_market", @"icon_delivery", @"icon_calculator", @"icon_shared", @"icon_forum", @"icon_products", @"icon_attendance", @"icon_upload", @"icon_calendar", @"icon_topup"];
+    homeLabelArray = @[@"News", @"Updates", @"Market", @"Delivery", @"Calculators", @"Shared", @"Forum", @"Products", @"Attendance", @"Upload", @"Calendar", @"Top-Up"];
     
-    homeIconArray = @[@"icon_news", @"icon_updates",  @"icon_calculator", @"icon_share", @"icon_calendar"];
-    homeLabelArray = @[@"News", @"Updates", @"Calculators", @"Shared", @"Calendar"];
+    self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
+    UIImageView* searchImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_search_gray"]];
+    self.searchTextField.leftView = searchImageView;
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    NSDate* date = [[NSDate alloc] init];
-    self.dateLabel.text = [dateFormatter stringFromDate:date];
-    self.dayLabel.text = @"";
+    UITapGestureRecognizer *branchTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeBranch:)];
+    branchTap.numberOfTapsRequired = 1;
+    [self.headerWrapper addGestureRecognizer:branchTap];
 }
 
-- (void)registerNibs {
-    [DenningLabelCell registerForReuseInTableView:self.tableView];
+- (IBAction)changeBranch:(id)sender {
+    if ([DataManager sharedManager].user.userType.length == 0) {
+        [QMAlert showAlertWithMessage:@"You cannot access this folder. please subscribe dening user" actionSuccess:NO inViewController:self];
+        return;
+    }
+    
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
+
+    [[QMNetworkManager sharedManager] userSignInWithEmail:[DataManager sharedManager].user.email password:[DataManager sharedManager].user.password withCompletion:^(BOOL success, NSString * _Nonnull error, NSInteger statusCode, NSDictionary* responseObject) {
+        [SVProgressHUD dismiss];
+        if (success){
+           [[DataManager sharedManager] setUserInfoFromLogin:responseObject];
+            if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+                [DataManager sharedManager].seletedUserType = @"Denning";
+                 [self performSegueWithIdentifier:kChangeBranchSegue sender:[DataManager sharedManager].denningArray];
+            } else if ([DataManager sharedManager].personalArray.count > 0) {
+                [DataManager sharedManager].seletedUserType = @"Personal";
+                [self performSegueWithIdentifier:kChangeBranchSegue sender:[DataManager sharedManager].personalArray];
+            } else {
+                [QMAlert showAlertWithMessage:@"No more branches" actionSuccess:NO inViewController:self];
+            }
+        }
+    }];
 }
 
 #pragma mark - search
@@ -122,41 +124,95 @@
     return NO;
 }
 
-#pragma mark - Table view data source
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self performSegueWithIdentifier:kMainSearchSegue sender:nil];
+    return NO;
+}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#pragma mark -
+#pragma mark UICollectionViewDataSource
 
+-(NSInteger)numberOfSectionsInCollectionView:
+(UICollectionView *)collectionView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (hideCells) {
-        return 1;
-    }
-    return homeLabelArray.count+1;
+-(NSInteger)collectionView:(UICollectionView *)collectionView
+    numberOfItemsInSection:(NSInteger)section
+{
+    return homeIconArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                 cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    MenuCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MenuCell" forIndexPath:indexPath];
     
-    if (indexPath.row < homeIconArray.count) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeCell" forIndexPath:indexPath];
-        UIImageView* homeImageView = [cell viewWithTag:1];
-        UILabel *homeLabel = [cell viewWithTag:0];
-
-        homeImageView.image = [UIImage imageNamed:homeIconArray[indexPath.row]];
-        homeLabel.text = homeLabelArray[indexPath.row];
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
-        return cell;
-    } else {
-        DenningLabelCell* denningCell = [tableView dequeueReusableCellWithIdentifier:[DenningLabelCell cellIdentifier] forIndexPath:indexPath];
-        [denningCell configureCellWithText:[DataManager sharedManager].user.firmName];
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        denningCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return denningCell;
-    }
-    return nil;
+    cell.centerLabel.text = homeLabelArray[[indexPath row]];
+    cell.centerImageView.image = [UIImage imageNamed:homeIconArray[[indexPath row]]];;
+    
+    return cell;
 }
+
+#pragma mark -
+#pragma mark UICollectionViewFlowLayoutDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    CGFloat width = self.collectionView.frame.size.width/4-2;
+    return CGSizeMake(width, width);
+}
+
+
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    
+    return UIEdgeInsetsMake(1, 0, 1, 1);
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    
+    return 1.0;
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0.0;
+}
+
+#pragma mark -
+#pragma mark UICollectionViewDelegate
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+    cell.backgroundColor = [UIColor greenColor];
+    if (indexPath.row == 0) {
+        [self getLatestNewsWithCompletion:^(NSArray *array) {
+            [self performSegueWithIdentifier:kNewsSegue sender:array];
+        }];
+    } else if (indexPath.row == 1) {
+        [self getLatestUpdatesWithCompletion:^(NSArray *array) {
+            [self performSegueWithIdentifier:kUpdateSegue sender:array];
+        }];
+    } else if (indexPath.row == 4) {
+        [self performSegueWithIdentifier:kCalculateSegue sender:nil];
+    } else if (indexPath.row == 5) {
+        [self getSharedFoldersWithCompletion:nil];
+    } else if (indexPath.row == 10) {
+        if (![[DataManager sharedManager].user.userType isEqualToString:@""]) {
+            [self geteventsArrayWithCompletion:^(NSArray * array) {
+                [self performSegueWithIdentifier:kEventSegue sender:array];
+            }];
+        } else {
+            [QMAlert showAlertWithMessage:@"You cannot access this folder. please subscribe dening user" actionSuccess:NO inViewController:self];
+        }
+        
+    }
+    cell.backgroundColor = [UIColor whiteColor];
+}
+
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -217,7 +273,7 @@
 }
 
 - (void) registerURLAndGotoMain: (FirmURLModel*) firmURLModel {
-    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name];
+    [[DataManager sharedManager] setServerAPI:firmURLModel.firmServerURL withFirmName:firmURLModel.name withFirmCity:firmURLModel.city];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
     });
@@ -229,9 +285,6 @@
         [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
     } else {
         [DataManager sharedManager].seletedUserType = @"Public";
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
-//        });
         [QMAlert showAlertWithMessage:@"Sorry, There is no shared document for you" actionSuccess:NO inViewController:self];
     }
 }
@@ -269,9 +322,10 @@
 {
     if (isLoading) return;
     isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
     [[QMNetworkManager sharedManager] getLatestUpdatesWithCompletion:^(NSArray * _Nonnull updatesArray, NSError * _Nonnull error) {
-        
+        [SVProgressHUD dismiss];
         @strongify(self);
         self->isLoading = NO;
         if (error == nil) {
@@ -289,9 +343,10 @@
 {
     if (isLoading) return;
     isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self)
     [[QMNetworkManager sharedManager] getLatestNewsWithCompletion:^(NSArray * _Nonnull newsArray, NSError * _Nonnull error) {
-        
+        [SVProgressHUD dismiss];
         @strongify(self)
         self->isLoading = NO;
         if (error == nil) {
@@ -309,16 +364,16 @@
 {
     if (isLoading) return;
     isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestEventWithCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
-        
+    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:[DIHelpers today] endDate:[DIHelpers today] filter:@"0All" withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
+        [SVProgressHUD dismiss];
         @strongify(self)
         self->isLoading = NO;
         if (error == nil) {
             if (completion != nil) {
                 completion(eventsArray);
             }
-            
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -350,8 +405,14 @@
     }
     
     if ([segue.identifier isEqualToString:kBranchSegue]){
-        BranchViewController *branchVC = segue.destinationViewController;
+        UINavigationController* navVC = segue.destinationViewController;
+        BranchViewController *branchVC = navVC.viewControllers.firstObject;
         branchVC.firmArray = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kChangeBranchSegue]){
+        ChangeBranchViewController* changeBranchVC = segue.destinationViewController;
+        changeBranchVC.branchArray = sender;
     }
 }
 

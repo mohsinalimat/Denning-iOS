@@ -10,4 +10,8 @@
 
 @interface MainTabBarController : UITabBarController
 
+- (IBAction)tapMenu:(id)sender;
+
+- (IBAction)tapLogin:(id)sender;
+
 @end

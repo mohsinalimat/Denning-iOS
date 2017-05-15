@@ -50,7 +50,7 @@
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
 
-- (void) onBackAction: (id) sender
+- (IBAction) onBackAction: (id) sender
 {
     [self.view endEditing:YES];
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];

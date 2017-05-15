@@ -29,7 +29,7 @@
 - (void) configureCellWithSearchModel: (SearchResultModel*) model
 {
     self.titleLabel.text = model.title;
-    self.headerLabel.text = model.indexData;
+    self.headerLabel.text = model.header;
     self.descriptionLabel.text = model.description;
 }
 

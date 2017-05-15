@@ -49,6 +49,7 @@
     [super viewDidLoad];
     
     [self prepareUI];
+    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(gotoHome)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,6 +57,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) gotoHome {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void) prepareUI {
     self.statusOfTaxPayerArray = @[@"Malaysian Individual / PR", @"Malaysian Company", @"Foreigner", @"Foreign Company"];
@@ -81,34 +85,26 @@
     self.dateOfDisposalTF.delegate = self;
     self.dateOfAcquizition.delegate = self;
 
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 23)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
     
     [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
-    
-//    self.saleCommissionTF.delegate = self;
-//    self.legalCostsTF.delegate = self;
-//    self.renovationImprovementTF.delegate = self;
-//    self.disposalPriceTF.delegate = self;
-//
-//    self.purchaseCommisionTF.delegate = self;
-//    self.legalCostsTF.delegate = self;
-//    self.otherCostsIncurredTF.delegate = self;
-//    self.netAcquisitionPriceTF.delegate = self;
-//    self.gainsLossTF.delegate = self;
-//    self.numberOfYearHeldTF.delegate = self;
-//    self.taxRateTF.delegate = self;
-//    
-//    self.taxPayable.delegate = self;
 }
 
 - (void) popupScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) configureMenuRightBtnWithImagename:(NSString*) imageName withSelector:(SEL) action {
+    UIButton *menuBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
+    [menuBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [menuBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *menuButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
+    [self.navigationItem setRightBarButtonItems:@[menuButtonItem] animated:YES];
 }
 
 - (void)handleTap {

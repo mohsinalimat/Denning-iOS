@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GLCalendarDateRange.h>
 
-@interface EventViewController : UITableViewController
+@interface EventViewController : UIViewController
 
 @property (strong, nonatomic) NSArray* originalArray;
+@property (strong, nonatomic) GLCalendarDateRange *currentRange;
 @end

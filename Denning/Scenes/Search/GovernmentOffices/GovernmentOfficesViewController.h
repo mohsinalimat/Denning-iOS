@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface GovernmentOfficesViewController : UITableViewController
+@interface GovernmentOfficesViewController : DICustomTableViewController
 
 @property (strong, nonatomic) GovOfficeModel* govOfficeModel;
 @property (strong, nonatomic) NSString* previousScreen;

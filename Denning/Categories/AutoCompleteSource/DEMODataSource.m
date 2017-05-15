@@ -44,7 +44,6 @@
         [[NSOperationQueue mainQueue] cancelAllOperations];
     }
     
-    
     self.manager = [QMNetworkManager sharedManager].manager;
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){

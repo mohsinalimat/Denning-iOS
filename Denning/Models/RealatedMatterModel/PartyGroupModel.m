@@ -10,4 +10,21 @@
 
 @implementation PartyGroupModel
 
++(NSArray*) getPartyGroupArrayFromResponse: (NSArray*) response
+{
+    NSMutableArray* partyGroupArray = [NSMutableArray new];
+    
+    for (id group in response) {
+        PartyGroupModel* partyGroupModel = [PartyGroupModel new];
+        partyGroupModel.partyGroupName = [group valueForKeyNotNull:@"PartyName"];
+        partyGroupModel.partyArray = [ClientModel getClientArrayFromReponse:[group objectForKeyNotNull:@"party"]];
+        if (partyGroupModel.partyArray.count > 0) {
+            [partyGroupArray addObject:partyGroupModel];
+        }
+    }
+    
+    return partyGroupArray;
+}
+
+
 @end

@@ -10,5 +10,7 @@
 
 @interface PartyGroupModel : NSObject
 @property (strong, nonatomic) NSString* partyGroupName;
-@property (strong, nonatomic) PartyModel* party;
+@property (strong, nonatomic) NSArray* partyArray;
+
++(NSArray*) getPartyGroupArrayFromResponse: (NSArray*) response;
 @end

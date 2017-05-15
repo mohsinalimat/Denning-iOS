@@ -97,3 +97,29 @@ static NSString* const kFirmListSegue = @"FirmListSegue";
 static NSString* const kGroupChatSegue = @"GroupChatSegue";
 
 static NSString* const kDocumentFileSegue = @"DocumentFileSegue";
+
+static NSString* const kCalendarRangeSegue = @"CalendarRangeSegue";
+
+static NSString* const kAddContactSegue = @"AddContactSegue";
+
+static NSString* const kListWithCodeSegue = @"ListWithCodeSegue";
+
+static NSString* const kListWithDescriptionSegue = @"ListWithDescriptionSegue";
+
+static NSString* const kListWithPostcodeSegue = @"ListWithPostcodeSegue";
+
+static NSString* const kChangeBranchSegue = @"ChangeBranchSegue";
+
+static NSString* const kContactGetSegue = @"ContactGetSegue";
+
+static NSString* const kStaffSegue = @"StaffSegue";
+
+static NSString* const kDetailAutocompleteSegue = @"DetailAutocompleteSegue";
+
+static NSString* const kSimpleMatterSegue = @"SimpleMatterSegue";
+
+static NSString* const kListofTypeSegue = @"ListofTypeSegue";
+
+static NSString* const kMatterCodeSegue = @"MatterCodeSegue";
+
+static NSString* const kPresetBillSegue = @"PresetBillSegue";

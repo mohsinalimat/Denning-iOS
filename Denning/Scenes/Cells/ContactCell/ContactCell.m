@@ -11,6 +11,9 @@
 @interface ContactCell()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+@property (weak, nonatomic) IBOutlet UIButton *rightBtn;
+
+@property (strong, nonatomic) NSString* value;
 
 @end
 
@@ -19,6 +22,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.rightBtn.hidden = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -30,7 +34,19 @@
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text
 {
     self.titleLabel.text = title;
-    self.contentLabel.text = text;
+    self.contentLabel.text = text ;
+    
+    self.value = text;
+}
+
+- (void) setEnableRightBtn: (BOOL) enabled image:(UIImage*)rightImage
+{
+    self.rightBtn.hidden = !enabled;
+    [self.rightBtn setImage:rightImage forState:UIControlStateNormal];
+}
+
+- (IBAction)didTapPhone:(id)sender {
+    [self.delegate didTapRightBtn:self value:self.value];
 }
 
 @end

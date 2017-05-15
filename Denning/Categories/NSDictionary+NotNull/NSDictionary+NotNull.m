@@ -15,7 +15,7 @@
     id object = [self valueForKey:key];
     if (object != nil && [object isEqual:[NSNull null]])
     {
-        object = nil;
+        object = @"";
     }
     return object;
 }
@@ -23,7 +23,7 @@
 - (id)objectForKeyNotNull:(NSString *)key
 {
     id object = [self objectForKey:key];
-    if (object != nil && [object isEqual:[NSNull null]])
+    if ([object isEqual:[NSNull null]])
     {
         object = nil;
     }

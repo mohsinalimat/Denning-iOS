@@ -10,20 +10,32 @@
 
 @implementation ContactModel
 
-+ (ContactModel*) getCotactFromResponse: (NSDictionary*) response
++ (ContactModel*) getContactFromResponse: (NSDictionary*) response
 {
     ContactModel *contactModel = [ContactModel new];
     
-    contactModel.contactCode = [response objectForKey:@"code"];
-    contactModel.IDNo = [response objectForKey:@"IDNo"];
-    contactModel.name = [response objectForKey:@"name"];
-    contactModel.tel = [response objectForKey:@"phoneHome"];
-    contactModel.mobile = [response objectForKey:@"phoneMobile"];
-    contactModel.office = [response objectForKey:@"phoneOffice"];
-    contactModel.email = [response objectForKey:@"emailAddress"];
-    contactModel.address = [[response objectForKey:@"address"] objectForKey:@"fullAddress"];
+    contactModel.contactCode = [[response objectForKeyNotNull:@"code"] stringValue];
+    contactModel.IDNo = [response objectForKeyNotNull:@"IDNo"];
+    contactModel.name = [response objectForKeyNotNull:@"name"];
+    contactModel.homePhone = [response objectForKeyNotNull:@"phoneHome"];
+    contactModel.mobilePhone = [response objectForKeyNotNull:@"phoneMobile"];
+    contactModel.officePhone = [response objectForKeyNotNull:@"phoneOffice"];
+    contactModel.email = [response objectForKeyNotNull:@"emailAddress"];
+    contactModel.address = [AddressModel getAddressFromResponse:[response objectForKeyNotNull:@"address"]];
     
-    contactModel.relatedMatter = [SearchResultModel getSearchResultArrayFromResponse:[response objectForKey:@"relatedMatter"]];
+    contactModel.dateOfBirth = [response objectForKeyNotNull:@"dateBirth"];
+    contactModel.citizenShip = [response objectForKeyNotNull:@"citizenship"];
+    contactModel.fax = [response objectForKeyNotNull:@"phoneFax"];
+    contactModel.tax = @"";
+    contactModel.IRDBranch = [response objectForKeyNotNull:@"irdBranch"];
+    contactModel.idType = [response objectForKeyNotNull:@"idType"];
+    contactModel.contactTitle = [response objectForKeyNotNull:@"title"];
+    contactModel.contactPerson = [response objectForKeyNotNull:@"contactPerson"];
+    contactModel.InviteDennig = [response objectForKeyNotNull:@"InviteDennig"];
+    contactModel.registeredOffice = [response objectForKeyNotNull:@"registeredOffice"];
+    contactModel.occupation = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"occupation"]];
+    
+    contactModel.relatedMatter = [SearchResultModel getSearchResultArrayFromResponse:[response objectForKeyNotNull:@"relatedMatter"]];
     
     contactModel.matterDescription = @"";
     for(SearchResultModel* model in contactModel.relatedMatter) {
@@ -32,17 +44,17 @@
     return contactModel;
 }
 
-+(NSString*) combineAddress: (NSDictionary*) address
++ (NSString*) combineAddress: (NSDictionary*) address
 {
     NSString *fullAddress;
 
-    NSString *line1 = [address objectForKey:@"line1"];
-    NSString *line2 = [address objectForKey:@"line2"];
-    NSString *line3 = [address objectForKey:@"line3"];
-    NSString *postCode = [address objectForKey:@"postcode"];
-    NSString *city = [address objectForKey:@"city"];
-    NSString *state = [address objectForKey:@"state"];
-    NSString *country = [address objectForKey:@"country"];
+    NSString *line1 = [address objectForKeyNotNull:@"line1"];
+    NSString *line2 = [address objectForKeyNotNull:@"line2"];
+    NSString *line3 = [address objectForKeyNotNull:@"line3"];
+    NSString *postCode = [address objectForKeyNotNull:@"postcode"];
+    NSString *city = [address objectForKeyNotNull:@"city"];
+    NSString *state = [address objectForKeyNotNull:@"state"];
+    NSString *country = [address objectForKeyNotNull:@"country"];
     
     fullAddress = [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@ %@", line1, line2, line3, postCode, city, state, country];
     

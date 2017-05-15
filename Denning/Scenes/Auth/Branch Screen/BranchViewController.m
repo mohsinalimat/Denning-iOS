@@ -21,6 +21,7 @@
     
     [self prepareUI];
     [self registerNibs];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -30,6 +31,16 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) prepareUI {
@@ -46,7 +57,7 @@
 #pragma mark - BranchHeaderDelegate
 - (void) didBackBtnTapped:(BranchHeaderCell *)cell
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -72,7 +83,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
         BranchHeaderCell *branchCell = [tableView dequeueReusableCellWithIdentifier:[BranchHeaderCell cellIdentifier] forIndexPath:indexPath];
-        [branchCell configureCellWithTitle:@"Select a Branch"];
+        [branchCell configureCellWithTitle:@"Select firm"];
         branchCell.delegate = self;
         return branchCell;
     }
@@ -90,7 +101,7 @@
 - (IBAction) gotoPasswordConfirm: (UIButton*) sender
 {
     FirmURLModel* urlModel = self.firmArray[sender.tag];
-    [[DataManager sharedManager] setServerAPI:urlModel.firmServerURL withFirmName:urlModel.name];
+    [[DataManager sharedManager] setServerAPI:urlModel.firmServerURL withFirmName:urlModel.name withFirmCity:urlModel.city];
     
     if (![[DataManager sharedManager].documentView isEqualToString: @"shared"]) {
         if (![[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
@@ -105,6 +116,25 @@
     } else {
         [self gotoSharedFolder];
     }
+}
+
+- (void) confirmGotoSharedFolder {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Denning"
+                                                                   message:@""
+                                                            preferredStyle:UIAlertControllerStyleActionSheet]; // 1
+    UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Document"
+                                                          style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                              [self confirmGotoSharedFolder];
+                                                          }]; // 2
+    UIAlertAction *secondAction = [UIAlertAction actionWithTitle:@"Information"
+                                                           style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                               
+                                                           }]; // 3
+    
+    [alert addAction:firstAction]; // 4
+    [alert addAction:secondAction]; // 5
+    
+    [self presentViewController:alert animated:YES completion:nil]; // 6
 }
 
 - (void) gotoSharedFolder {

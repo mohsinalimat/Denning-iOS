@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DICustomTableViewController.h"
 
-@interface BankViewController : UITableViewController
+@interface BankViewController : DICustomTableViewController
 
 @property (strong, nonatomic) BankModel* bankModel;
 @property (strong, nonatomic) NSString* previousScreen;

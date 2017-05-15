@@ -43,12 +43,6 @@ typedef NS_ENUM(NSInteger, DIUserType) {
         self.denningBtn.hidden = YES;
     }
     
-    if ([DataManager sharedManager].bussinessArray.count > 0) {
-        self.bussinessBtn.hidden = NO;
-    } else {
-        self.bussinessBtn.hidden = YES;
-    }
-    
     if ([DataManager sharedManager].personalArray.count > 0) {
         self.personalBtn.hidden = NO;
     } else {
@@ -66,20 +60,6 @@ typedef NS_ENUM(NSInteger, DIUserType) {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)denningTapped:(id)sender {
-    [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].denningArray];
-    [DataManager sharedManager].seletedUserType = @"denning";
-}
-
-- (IBAction)businessTapped:(id)sender {
-    [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].bussinessArray];
-    [DataManager sharedManager].seletedUserType = @"bussiness";
-}
-
-- (IBAction)personalTapped:(id)sender {
-    [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
-    [DataManager sharedManager].seletedUserType = @"personal";
-}
 
 #pragma mark - Navigation
 

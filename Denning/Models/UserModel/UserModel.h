@@ -27,6 +27,7 @@ RLM_ARRAY_TYPE(FirmURLModel)
 @property   NSString    *password;
 @property   NSString    *status;
 @property   NSString    *serverAPI;
+@property   NSString    *firmCity;
 @property   NSString    *userType;
 @property   NSString    *serverURL;
 @property   NSInteger    activationCode;
