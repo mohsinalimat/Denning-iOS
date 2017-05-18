@@ -16,4 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *postcodeTextField;
 
+@property (strong, nonatomic) ContactModel* contactModel;
+@property(strong, nonatomic) NSString* viewType;
+
 @end

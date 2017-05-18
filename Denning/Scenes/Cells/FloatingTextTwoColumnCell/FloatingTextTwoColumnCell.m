@@ -11,4 +11,8 @@
 @implementation FloatingTextTwoColumnCell
 
 
+- (IBAction)didTapTypeField:(id)sender {
+    self.updateHandler();
+}
+
 @end

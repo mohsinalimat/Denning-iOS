@@ -13,6 +13,7 @@
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
+    __block BOOL isAppending;
     BOOL initCall;
 }
 
@@ -70,7 +71,7 @@
     self.refreshControl.backgroundColor = [UIColor clearColor];
     self.refreshControl.tintColor = [UIColor blackColor];
     [self.refreshControl addTarget:self
-                            action:@selector(getList)
+                            action:@selector(appendList)
                   forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -102,13 +103,18 @@
     [self.tableView reloadData];
 }
 
+- (void) appendList {
+    isAppending = YES;
+    [self getList];
+}
+
 - (void) getList {
     if (isLoading) return;
     isLoading = YES;
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getPresetBillCode:self.page WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getPresetBillCode:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         
         [navigationController dismissNotificationPanel];
         if (self.refreshControl.isRefreshing) {
@@ -117,21 +123,32 @@
         }
         
         @strongify(self)
-        self->isLoading = NO;
         if (error == nil) {
-            self.copyedList = [[self.copyedList arrayByAddingObjectsFromArray:result] mutableCopy];
-            [self filterList];
-            if (result.count != 0) {
-                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
+            if (isAppending) {
+                self.listOfPresetBills = [[self.listOfPresetBills arrayByAddingObjectsFromArray:result] mutableCopy];
+                if (result.count != 0) {
+                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+                }
+            } else {
+                self.listOfPresetBills = [result mutableCopy];
             }
             
-            return;
+            [self.tableView reloadData];
+            
         }
         else {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:0];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
         
+        [self performSelector:@selector(clean) withObject:nil afterDelay:2.0];
+        
     }];
+}
+
+- (void) clean {
+    isLoading = NO;
+    isFirstLoading = NO;
 }
 
 #pragma mark - Table view data source
@@ -185,7 +202,7 @@
     
     if (offsetY > contentHeight - scrollView.frame.size.height && !isFirstLoading && !isLoading) {
         
-        [self getList];
+        [self appendList];
     }
 }
 
@@ -193,23 +210,17 @@
 
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
+    isAppending = NO;
     searchController.searchBar.text = @"";
-    self.listOfPresetBills = self.copyedList;
-    [self.tableView reloadData];
+    [self getList];
 }
-
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
-    if (self.filter.length == 0) {
-        self.listOfPresetBills = self.copyedList;
-        [self.tableView reloadData];
-    } else {
-        [self filterList];
-    }
+    isAppending = NO;
+    [self getList];
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
     if (indexPath.row == self.listOfPresetBills.count-1 && initCall) {

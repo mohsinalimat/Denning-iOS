@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddBillViewController : UITableViewController
+@interface AddBillViewController : UIViewController
 
 @end

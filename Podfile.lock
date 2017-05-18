@@ -24,7 +24,7 @@ PODS:
   - ChameleonFramework (2.1.0):
     - ChameleonFramework/Default (= 2.1.0)
   - ChameleonFramework/Default (2.1.0)
-  - Crashlytics (3.8.3):
+  - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - Digits (1.15.3):
     - TwitterCore (= 1.15.3)
@@ -38,7 +38,6 @@ PODS:
   - FBSDKShareKit (4.11.0):
     - FBSDKCoreKit
   - FLAnimatedImage (1.0.12)
-  - Flurry-iOS-SDK/FlurrySDK (7.9.2)
   - FZAccordionTableView (0.2.3)
   - GLCalendarView (1.0.3)
   - HTHorizontalSelectionList (0.7.4):
@@ -48,7 +47,7 @@ PODS:
   - libextobjc/EXTScope (0.4.1):
     - libextobjc/RuntimeExtensions
   - libextobjc/RuntimeExtensions (0.4.1)
-  - libPhoneNumber-iOS (0.9.2)
+  - libPhoneNumber-iOS (0.9.10)
   - M13BadgeView (1.0.4)
   - Masonry (1.0.2)
   - MBProgressHUD (1.0.0)
@@ -109,13 +108,13 @@ PODS:
   - QMServices (0.4.5):
     - Bolts (>= 1.5.0)
     - QuickBlox (>= 2.6.5)
-  - QuickBlox (2.9.1)
-  - Quickblox-WebRTC (2.4):
+  - QuickBlox (2.9.2)
+  - Quickblox-WebRTC (2.5):
     - QuickBlox (>= 2.7)
   - Reachability (3.2)
-  - Realm (2.4.2):
-    - Realm/Headers (= 2.4.2)
-  - Realm/Headers (2.4.2)
+  - Realm (2.7.0):
+    - Realm/Headers (= 2.7.0)
+  - Realm/Headers (2.7.0)
   - RWDropdownMenu (1.0.3)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -128,8 +127,8 @@ PODS:
   - TTTAttributedLabel (2.0.0)
   - TwitterCore (1.15.3):
     - Fabric
-  - UIDevice-Hardware (0.1.8)
-  - UIFloatLabelTextField (1.2.7)
+  - UIDevice-Hardware (0.1.10)
+  - UIFloatLabelTextField (1.2.9)
   - VBFPopFlatButton (0.0.7):
     - pop
 
@@ -146,7 +145,6 @@ DEPENDENCIES:
   - FBSDKCoreKit (~> 4.11.0)
   - FBSDKLoginKit (~> 4.11.0)
   - FBSDKShareKit (~> 4.11.0)
-  - Flurry-iOS-SDK/FlurrySDK
   - FZAccordionTableView (~> 0.2.3)
   - GLCalendarView (~> 1.0.0)
   - HTHorizontalSelectionList (~> 0.7.4)
@@ -181,7 +179,7 @@ SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Digits: 9823f8aad766c0aa824fac9b08938e22bc635fac
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   DZNPhotoPickerController: 1a9b83a53a2f35094e35c163417ab0aeb8653fd1
@@ -190,12 +188,11 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: bade9fc78277764149ccc5bfaadbf13c83175c6a
   FBSDKShareKit: 2d1746144cfc8a9dbbd24997c34ee0471be51b6a
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  Flurry-iOS-SDK: 300dc1d78443dea3d433a38e76292f20f14f0a96
   FZAccordionTableView: e64f49c71c32d750feda14025b088bcd25d1a71f
   GLCalendarView: f3a71aca59f456b81abad9667dc5985c46810996
   HTHorizontalSelectionList: c38792f4bc87f941ab6c07b02a40abf111c68249
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
-  libPhoneNumber-iOS: a8bffdec18c37728360f6771fe021302f1e0b497
+  libPhoneNumber-iOS: f721ae4d5854bce60934f9fb9b0b28e8e68913cb
   M13BadgeView: 700dd0714fdc837c0cf1c8c004454963ec22441f
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
@@ -204,10 +201,10 @@ SPEC CHECKSUMS:
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   QMChatViewController: 575f0d253d916022b3d35b57b84b38070357c74f
   QMServices: 617057b228eb5e41341e50216fc4af2fce3cfa46
-  QuickBlox: 69e1dace6f9fa74e39557b96e0303552654d7707
-  Quickblox-WebRTC: e08793e554d0337df5bc577c9166e0edc58eb02a
+  QuickBlox: 67cafa5d7b237db7344c506ca5dc38365180cacb
+  Quickblox-WebRTC: 79a88793ce090d2516963fe207f4d8eeecdb8b4f
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: d27b758e12d62a3371879a065d4c40aa212c5a54
+  Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
   RWDropdownMenu: c7fda4b7adf4f3f63a46d96359c2f490a7713795
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SSKeychain: 3f42991739c6c60a9cf1bbd4dff6c0d3694bcf3d
@@ -217,10 +214,10 @@ SPEC CHECKSUMS:
   SystemServices: cc55971fb9b1a5b01ad11e6ae0f46483ca5affa5
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
   TwitterCore: cce24b3c798993ccde72787ea79ea9a478b284e4
-  UIDevice-Hardware: ecb52d9a7b223b31f81982358e2b0769ac1a7918
-  UIFloatLabelTextField: ec6e82ae7cc06185bda955a9dce17e81cf34327c
+  UIDevice-Hardware: 4bb15b9bd9878762ab879ac86185baad17b6c3ff
+  UIFloatLabelTextField: c1df7d4e688a1bd52738513f961df16f94914367
   VBFPopFlatButton: 39e48ab56277f3d056734a9b5ec5d0cc60d69778
 
-PODFILE CHECKSUM: 5d6545a8917c71007fad8c983aaf4475d29ca2ee
+PODFILE CHECKSUM: 9261d57dfcdbb1167759decd09ba2a3860d5318b
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.2.1

@@ -153,8 +153,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    ContactCell *contactCell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
+    
     if (indexPath.section == 0){
-        ContactCell *contactCell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
+        
         if (indexPath.row == 0){
             [contactCell configureCellWithContact:self.propertyModel.lotptType text:self.propertyModel.lotptValue];
         } else if (indexPath.row == 1){
@@ -166,12 +168,17 @@
         return contactCell;
     }
     else {
-        CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
-        
         SearchResultModel *matterModel = self.propertyModel.relatedMatter[indexPath.row];
-        [commonCell configureCellWithValue:[DIHelpers removeFileNoFromMatterTitle: matterModel.title]];
-        commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        return commonCell;
+        NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
+        NSString* fileNo = matter[0];
+        NSString* name = @"";
+        if ([matter count] == 2) {
+            name = matter[1];
+        }
+        [contactCell configureCellWithContact:fileNo text:name];
+        [contactCell setEnableRightBtn:NO image:nil];
+        
+        return contactCell;
     }
 }
 

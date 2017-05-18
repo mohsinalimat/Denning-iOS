@@ -246,28 +246,28 @@
             sectionName = @"Court Case Information";
             break;
         case 2:
-            sectionName = @"Party Group";
+            sectionName = @"Parties Group";
             break;
         case 3:
-            sectionName = @"Solicitor";
+            sectionName = @"Solicitors";
             break;
         case 4:
-            sectionName = @"Property";
+            sectionName = @"Properties";
             break;
         case 5:
-            sectionName = @"Bank";
+            sectionName = @"Banks";
             break;
         case 6:
             sectionName = @"Important RM";
             break;
         case 7:
-            sectionName = @"Important Date";
+            sectionName = @"Important Dates";
             break;
         case 8:
             sectionName = @"Other Information";
             break;
         case 9:
-            sectionName = @"Files & Ledger";
+            sectionName = @"Files & Ledgers";
             break;
             // ...
         default:
@@ -324,7 +324,11 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 2) { // Party Group
         PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[indexPath.row];
-        PartyModel* party = partyGroup.partyArray[0];
+        
+        PartyModel* party = [PartyModel new];
+        if (partyGroup.partyArray.count > 0) {
+           party = partyGroup.partyArray[0];
+        }
         [cell configureCellWithContact:partyGroup.partyGroupName text:party.partyName];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (indexPath.section == 3) { // Solicitor
@@ -352,7 +356,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 7) { // Important Date
         GeneralGroup* dateGroup = relatedMatterModel.dateGroupArray[indexPath.row];
-        [cell configureCellWithContact:dateGroup.label text:[DIHelpers getOnlyDateFromDateTime:dateGroup.value]];
+        [cell configureCellWithContact:dateGroup.label text:dateGroup.value];
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 8) { // TextGroup Information
         GeneralGroup* otherInfo = relatedMatterModel.textGroupArray[indexPath.row];

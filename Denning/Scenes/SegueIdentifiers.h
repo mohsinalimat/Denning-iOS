@@ -120,6 +120,16 @@ static NSString* const kSimpleMatterSegue = @"SimpleMatterSegue";
 
 static NSString* const kListofTypeSegue = @"ListofTypeSegue";
 
+static NSString* const kProjectHousingSegue = @"ProjectHousingSegue";
+
+static NSString* const kPropertyTypeSegue = @"PropertyTypeSegue";
+
+static NSString* const kContactGetListSegue = @"ContactGetListSegue";
+
 static NSString* const kMatterCodeSegue = @"MatterCodeSegue";
 
 static NSString* const kPresetBillSegue = @"PresetBillSegue";
+
+static NSString* const kQuotationSegue = @"QuotationSegue";
+
+static NSString* const kBankBranchSegue = @"BankBranchSegue";

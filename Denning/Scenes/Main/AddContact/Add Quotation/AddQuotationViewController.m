@@ -14,12 +14,12 @@
 #import "ListOfMatterViewController.h"
 #import "PresetBillViewController.h"
 
-@interface AddQuotationViewController ()<UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate>
+@interface AddQuotationViewController ()<UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate>
 {
     NSString *titleOfList;
     NSString* nameOfField;
     __block NSString *isRental;
-    __block NSString* issueToFirstCode;
+    __block NSNumber* issueToFirstCode;
     __block BOOL isLoading;
     __block BOOL isSaved;
 }
@@ -42,6 +42,8 @@ NSMutableDictionary* keyValue;
     [self registerNib];
 }
 - (void) prepareUI {
+    issueToFirstCode = @(0);
+    isRental = @"0";
     self.keyValue = [@{
                        @(0): @(1), @(1):@(0)
                        } mutableCopy];
@@ -83,25 +85,27 @@ NSMutableDictionary* keyValue;
                                @"code": _contents[0][4][1]
                            },
                            @"relatedDocumentNo": @"",
-                           @"rentalMonth": _contents[0][7][1],
-                           @"rentalPrice": _contents[0][8][1],
-                           @"spaLoan": _contents[0][6][1],
-                           @"spaPrice": _contents[0][5][1]
+                           @"spaPrice": [self getValidValue:_contents[0][5][1]],
+                           @"spaLoan": [self getValidValue:_contents[0][6][1]],
+                           @"rentalMonth": [self getValidValue:_contents[0][7][1]],
+                           @"rentalPrice": [self getValidValue:_contents[0][8][1]]
                            };
     if (isLoading) return;
     isLoading = YES;
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self);
-    [[QMNetworkManager sharedManager] saveQuotationWithParams:data WithCompletion:^(NSDictionary * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] saveBillorQuotationWithParams:data inURL:QUOTATION_SAVE_URL WithCompletion:^(NSDictionary * _Nonnull result, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         @strongify(self)
+        self->isLoading = NO;
         if (error == nil) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully saved" duration:1.0];
             self->isSaved = YES;
             [self updateWholeData:result];
             
         } else {
-            [QMAlert showAlertWithMessage:error.localizedDescription actionSuccess:NO inViewController:self];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
     }];
 }
@@ -152,6 +156,7 @@ NSMutableDictionary* keyValue;
     [self replaceContentForSection:0 InRow:2 withValue:matterCode];
     [self replaceContentForSection:0 InRow:3 withValue:issueToName];
     [self replaceContentForSection:0 InRow:4 withValue:presetCode];
+
     [self replaceContentForSection:0 InRow:5 withValue:spaPrice];
     [self replaceContentForSection:0 InRow:6 withValue:spaLoan];
     [self replaceContentForSection:0 InRow:7 withValue:rentalMonth];
@@ -174,6 +179,30 @@ NSMutableDictionary* keyValue;
     [self replaceContentForSection:1 InRow:4 withValue:iTotal];
 }
 
+- (NSString*) getValidValue: (NSString*) value
+{
+    if (value.length == 0) {
+        return @"0";
+    }
+    else {
+        return value;
+    }
+    
+    return value;
+}
+
+
+- (void)displayDocument:(NSURL*)document {
+    UIDocumentInteractionController *documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:document];
+    documentInteractionController.delegate = self;
+    [documentInteractionController presentPreviewAnimated:YES];
+}
+
+- (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controlle
+{
+    return self;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0 && indexPath.row == 9) {
@@ -181,14 +210,15 @@ NSMutableDictionary* keyValue;
         cell.calculateHandler = ^{
             NSDictionary* data = @{
                                    @"isRental": isRental,
-                                   @"spaPrice": _contents[0][5][1],
-                                   @"spaLoan": _contents[0][6][1],
-                                   @"rentalMonth": _contents[0][7][1],
-                                   @"rentalPrice": _contents[0][8][1],
+                                   @"spaPrice": [self getValidValue:_contents[0][5][1]],
+                                   @"spaLoan": [self getValidValue:_contents[0][6][1]],
+                                   @"rentalMonth": [self getValidValue:_contents[0][7][1]],
+                                   @"rentalPrice": [self getValidValue:_contents[0][8][1]],
                                    @"presetCode": @{
                                        @"code": _contents[0][4][1]
                                    }
                                    };
+            
             if (isLoading) return;
             isLoading = YES;
             [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
@@ -200,12 +230,11 @@ NSMutableDictionary* keyValue;
                 @strongify(self)
                 self->isLoading = NO;
                 if (error == nil) {
+                    [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:2.0];
                     [self updateBelowViewWithData:result];
-                    
                 } else {
-                    [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:0];
+                    [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:2.0];
                 }
-                
             }];
         };
         return cell;
@@ -215,13 +244,40 @@ NSMutableDictionary* keyValue;
         AddLastTwoButtonsCell *cell = [tableView dequeueReusableCellWithIdentifier:[AddLastTwoButtonsCell cellIdentifier] forIndexPath:indexPath];
         cell.viewHandler = ^{
             if (!isSaved) {
-                [self.navigationController  showNotificationWithType:QMNotificationPanelTypeWarning message:@"Please save quotaion first to view" duration:0];
-//                [QMAlert showAlertWithMessage:@"Please save quotaion first to view" actionSuccess:NO inViewController:self];
+                [QMAlert showAlertWithMessage:@"Please save your quotaion first to view" actionSuccess:NO inViewController:self];
+                
                 return;
             }
+            
+            NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
+            NSURL *url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+            NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+            configuration.HTTPAdditionalHeaders = @{@"Content-Type":@"application/json", @"webuser-sessionid":@"testdenningSkySea",
+                                                    @"webuser-id":@"email@com.my"};
+            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                                   inDomain:NSUserDomainMask
+                                                                          appropriateForURL:nil
+                                                                                     create:NO error:nil];
+                
+                NSString* newPath = [[documentsDirectory absoluteString] stringByAppendingString:@"DenningIT/"];
+                if (![FCFileManager isDirectoryItemAtPath:newPath]) {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:newPath  withIntermediateDirectories:YES attributes:nil error:nil];
+                }
+                
+                return [documentsDirectory URLByAppendingPathComponent:[response suggestedFilename]];
+            } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                if (filePath != nil)
+                    [self displayDocument:filePath];
+            }];
+            [downloadTask resume];
         };
+        
         cell.convertHandler = ^{
             
+
         };
         return cell;
     }
@@ -239,7 +295,7 @@ NSMutableDictionary* keyValue;
     
     int rows = (int)indexPath.row;
     cell.floatingTextField.placeholder = self.contents[indexPath.section][rows][0];
-    cell.floatingTextField.text = self.contents[indexPath.section][rows][1];
+    cell.floatingTextField.text = [NSString stringWithFormat:@"%@", self.contents[indexPath.section][rows][1]];
     cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.inputAccessoryView = accessoryView;
@@ -260,6 +316,7 @@ NSMutableDictionary* keyValue;
             if (indexPath.row == 5 || indexPath.row == 6) {
                 cell.hidden = NO;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
+                
             }
         } else {
             if (indexPath.row == 7 || indexPath.row == 8) {
@@ -267,6 +324,8 @@ NSMutableDictionary* keyValue;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
             }
         }
+        cell.floatingTextField.tag = indexPath.row;
+        cell.floatingTextField.delegate = self;
     } else if (indexPath.section == 1) {
         cell.floatingTextField.userInteractionEnabled = NO;
     }
@@ -420,6 +479,10 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) replaceContentForSection:(NSInteger) section InRow:(NSInteger) row withValue:(NSString*) value{
+    if (value == nil) {
+        value = @"";
+    }
+    
     NSMutableArray *newArray = [NSMutableArray new];
     for (int i = 0; i < self.tableView.numberOfSections; i++) {
         newArray[i] = [NSMutableArray new];
@@ -443,11 +506,19 @@ NSMutableDictionary* keyValue;
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kQuotationSegue]) {
+        ListOfMatterViewController* matterVC = segue.destinationViewController;
+        matterVC.updateHandler = ^(MatterCodeModel *model) {
+            [self replaceContentForSection:0 InRow:2 withValue:model.matterCode];
+            isRental = model.isRental;
+        };
+    }
+    
     if ([segue.identifier isEqualToString:kSimpleMatterSegue]) {
         SimpleMatterViewController* matterVC = segue.destinationViewController;
         matterVC.updateHandler = ^(MatterSimple *model) {
             PartyGroupModel* partyGroup = model.partyGroupArray[0];
-            issueToFirstCode = ((ClientModel*)partyGroup.partyArray[0]).IDNo;
+            issueToFirstCode = [NSNumber numberWithInteger: [((ClientModel*)partyGroup.partyArray[0]).clientCode integerValue]];
             
             NSString *issueToName = @"";
             

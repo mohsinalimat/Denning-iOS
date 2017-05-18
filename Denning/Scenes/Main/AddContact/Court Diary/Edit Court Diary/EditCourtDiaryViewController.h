@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EditCourtDiaryViewController : UITableViewController
+@interface EditCourtDiaryViewController : UIViewController
+
+@property (strong, nonatomic) EditCourtModel* courtModel;
 
 @end

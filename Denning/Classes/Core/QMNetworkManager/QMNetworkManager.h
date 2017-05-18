@@ -27,6 +27,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class LedgerDetailModel;
 @class DocumentModel;
 @class AddContactModel;
+@class EditCourtModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -203,11 +204,13 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  *  Add Contact
  */
 
-- (void) getCodeDescWithUrl:(NSString*) url withPage:(NSNumber*)page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getCodeDescWithUrl:(NSString*) url withPage:(NSNumber*)page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
-- (void) getDescriptionWithUrl: (NSString*) url withPage: (NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getDescriptionWithUrl: (NSString*) url withPage: (NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
-- (void) getPostCodeWithPage:(NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getPostCodeWithPage:(NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getBankBranchWithPage:(NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) saveContactWithData:(NSDictionary*) data withCompletion:(void(^)(ContactModel* addContact, NSError* error)) completion;
 
@@ -218,28 +221,45 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  * Court Diary
  */
 
-- (void) getSimpleMatter:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getSimpleMatter:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
-- (void) getStaffArray:(NSNumber*) page WithURL:(NSString*) url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getStaffArray:(NSNumber*) page withSearch:(NSString*)search WithURL:(NSString*) url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getCourtWithCode:(NSString*) code WithCompletion:(void(^)(EditCourtModel* model, NSError* error)) completion;
 
 - (void) saveCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
+/*
+ * Property
+ */
+
+- (void) getPropertyProjectHousingWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getPropertyContactListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getPropertyType: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 /*
  * Matter
  */
 
-- (void) getMatterCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getMatterCode:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 /*
  * Quotation
  */
 
-- (void) getPresetBillCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+- (void) getPresetBillCode:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) calculateTaxInvoiceWithParams: (NSDictionary*) data withCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
 
-- (void) saveQuotationWithParams: (NSDictionary*) data WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
+- (void) saveBillorQuotationWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
+
+/*
+ * Bill
+ */
+
+- (void) getQuotationListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 @end
 

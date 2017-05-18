@@ -774,7 +774,6 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 #pragma mark - MLPAutoCompleteTextField Delegate
 
-
 - (BOOL)autoCompleteTextField:(MLPAutoCompleteTextField *)textField
           shouldConfigureCell:(UITableViewCell *)cell
        withAutoCompleteString:(NSString *)autocompleteString

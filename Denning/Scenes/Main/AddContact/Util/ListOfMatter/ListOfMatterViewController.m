@@ -7,15 +7,17 @@
 //
 
 #import "ListOfMatterViewController.h"
+#import "TwoColumnCell.h"
 
 @interface ListOfMatterViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
+    __block BOOL isAppending;
     BOOL initCall;
 }
 
-@property (strong, nonatomic) NSArray* listOfMatters;
+@property (strong, nonatomic) NSMutableArray* listOfMatters;
 @property (strong, nonatomic) NSArray* copyedList;
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -30,6 +32,7 @@
     [super viewDidLoad];
     
     [self prepareUI];
+    [self registerNib];
     [self configureSearch];
     [self getList];
 }
@@ -39,7 +42,10 @@
 }
 
 - (void) registerNib {
+    [TwoColumnCell registerForReuseInTableView:self.tableView];
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
 }
 
 - (void) configureSearch
@@ -62,6 +68,7 @@
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
+    isAppending = NO;
     
     self.tableView.delegate = self;
     
@@ -69,7 +76,7 @@
     self.refreshControl.backgroundColor = [UIColor clearColor];
     self.refreshControl.tintColor = [UIColor blackColor];
     [self.refreshControl addTarget:self
-                            action:@selector(getList)
+                            action:@selector(appendList)
                   forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -78,26 +85,15 @@
     self.tableView.tableFooterView = [UIView new];
 }
 
+- (void) appendList {
+    isAppending = YES;
+    [self getList];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void) filterList {
-    NSMutableArray* newArray = [NSMutableArray new];
-    if (self.filter.length == 0) {
-        self.listOfMatters = self.copyedList;
-    } else {
-        for(MatterCodeModel* model in self.listOfMatters) {
-            if ([model.matterCode localizedCaseInsensitiveContainsString:self.filter] || model.matterDescription) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfMatters = newArray;
-    }
-    
-    [self.tableView reloadData];
 }
 
 - (void) getList {
@@ -106,28 +102,38 @@
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getMatterCode:self.page WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
- 
-        [navigationController dismissNotificationPanel];
+    [[QMNetworkManager sharedManager] getMatterCode:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
             [self.refreshControl endRefreshing];
         }
         @strongify(self)
-        self->isLoading = NO;
         if (error == nil) {
-            self.copyedList = [[self.copyedList arrayByAddingObjectsFromArray:result] mutableCopy];
-            [self filterList];
-            if (result.count != 0) {
-                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
+            if (isAppending) {
+                self.listOfMatters = [[self.listOfMatters arrayByAddingObjectsFromArray:result] mutableCopy];
+                if (result.count != 0) {
+                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+                }
+            } else {
+                self.listOfMatters = [result mutableCopy];
             }
+           
+            [self.tableView reloadData];
             
-            return;
         }
         else {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:0];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
+        
+        [self performSelector:@selector(clean) withObject:nil afterDelay:2.0];
+        
     }];
+}
+
+- (void) clean {
+    isLoading = NO;
 }
 
 #pragma mark - Table view data source
@@ -143,13 +149,11 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MatterCodeCell" forIndexPath:indexPath];
-    
+    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
     MatterCodeModel *model = self.listOfMatters[indexPath.row];
-    UILabel* fileNo = [cell viewWithTag:1];
-    UILabel* caseName = [cell viewWithTag:2];
-    fileNo.text = model.matterCode;
-    caseName.text = model.matterDescription;
+    [cell configureCellWithCodeLabel:@"Matter Code" codeValue:model.matterCode  descLabel:@"Description" descValue:model.matterDescription];
+    return cell;
+
     
     return cell;
 }
@@ -178,9 +182,8 @@
     CGFloat offsetY = scrollView.contentOffset.y;
     CGFloat contentHeight = scrollView.contentSize.height;
     
-    if (offsetY > contentHeight - scrollView.frame.size.height && !isFirstLoading) {
-        
-        [self getList];
+    if (offsetY > contentHeight - scrollView.frame.size.height && !isFirstLoading && !isLoading) {
+        [self appendList];
     }
 }
 
@@ -189,20 +192,16 @@
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
     searchController.searchBar.text = @"";
-    self.listOfMatters = self.copyedList;
-    [self.tableView reloadData];
+    isAppending = NO;
+    [self getList];
 }
 
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
-    if (self.filter.length == 0) {
-        self.listOfMatters = self.copyedList;
-        [self.tableView reloadData];
-    } else {
-        [self filterList];
-    }
+    isAppending = NO;
+    [self getList];
 }
 
 

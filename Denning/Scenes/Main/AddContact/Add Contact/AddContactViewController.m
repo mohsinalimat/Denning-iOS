@@ -12,6 +12,7 @@
 #import "ListWithPostCodeViewController.h"
 #import "BirthdayCalendarViewController.h"
 #import "ContactViewController.h"
+#import "BranchListViewController.h"
 #import <NBPhoneNumberUtil.h>
 #import <NBPhoneNumber.h>
 
@@ -72,7 +73,6 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *taxFileNo;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *IRDBranch;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *registeredOffice;
-
 
 @end
 
@@ -233,13 +233,11 @@
         return;
     }
     
-    NSString* fullAddress = [[self.address1.text stringByAppendingString:self.address2.text] stringByAppendingPathComponent:self.address3.text];
-    
     NSDictionary* address = @{@"city": self.town.text,
                               @"state": self.state.text,
                               @"country": self.country.text,
                               @"postcode": self.postcode.text,
-                              @"fullAddress":fullAddress,
+                              @"fullAddress":@"",
                               @"line1": self.address1.text,
                               @"line2": self.address2.text,
                               @"line2": self.address3.text};
@@ -276,16 +274,20 @@
     [[QMNetworkManager sharedManager] saveContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         if (error == nil) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:0];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:2.0];
             [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
             return;
         } else {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:0];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:2.0];
         }
     }];
 }
 
 - (void) prepareUI {
+    if (self.viewType.length == 0) {
+        self.contactModel = [ContactModel new];
+    }
+    
     self.IDType.floatLabelPassiveColor = self.IDType.floatLabelActiveColor = [UIColor redColor];
     self.IDNo.floatLabelActiveColor = self.IDNo.floatLabelPassiveColor = [UIColor redColor];
     self.oldIC.floatLabelActiveColor = self.oldIC.floatLabelPassiveColor = [UIColor redColor];
@@ -332,6 +334,7 @@
     self.phoneMobile.inputAccessoryView = accessoryView;
     self.phoneOffice.inputAccessoryView = accessoryView;
     self.fax.inputAccessoryView = accessoryView;
+    self.taxFileNo.inputAccessoryView = accessoryView;
     self.contactPerson.inputAccessoryView = accessoryView;
     self.website.inputAccessoryView = accessoryView;
     self.registeredOffice.inputAccessoryView = accessoryView;
@@ -406,12 +409,12 @@
     [self.view endEditing:YES];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) { // ID type
-            titleOfList = @"List of ID Type";
+            titleOfList = @"Select ID Type";
             nameOfField = @"IDType";
             [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_IDTYPE_URL];
         }
         else if (indexPath.row == 4) { // title
-            titleOfList = @"List Of Title";
+            titleOfList = @"Select Title";
             nameOfField = @"Title";
             [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_TITLE_URL];
         }
@@ -419,17 +422,17 @@
     
     if (indexPath.section == 1) {
         if (indexPath.row == 3) { // City
-            titleOfList = @"List of Cities";
+            titleOfList = @"Select City";
             nameOfField = @"Town";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_CITY_URL];
         } else if (indexPath.row == 4) { // State
-            titleOfList = @"List of States";
+            titleOfList = @"Select State";
             nameOfField = @"State";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_STATE_URL];
         } else if (indexPath.row == 5) { // Postcode
             [self performSegueWithIdentifier:kListWithPostcodeSegue sender:CONTACT_POSTCODE_URL];
         } else if (indexPath.row == 10) { // Postcode
-            titleOfList = @"List of Countries";
+            titleOfList = @"Select Country";
             nameOfField = @"Country";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_COUNTRY_URL];
         }
@@ -437,19 +440,18 @@
     
     if (indexPath.section == 2) {
         if (indexPath.row == 0) { // Citizenship
-            titleOfList = @"List of Citizens";
+            titleOfList = @"Select Citizen";
             nameOfField = @"Citizen";
             [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_CITIZENSHIP_URL];
         } else if (indexPath.row == 1) {
             [self showCalendar];
         } else if (indexPath.row == 2) { // Occupation
-            titleOfList = @"List of Occupations";
+            titleOfList = @"Select Occupation";
             nameOfField = @"Occupation";
             [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_OCCUPATION_URL];
         } else if (indexPath.row == 4) { // Occupation
-            titleOfList = @"List of IRD Branches";
-            nameOfField = @"IRD Branch";
-            [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_IRDBRANCH_URL];
+          
+            [self performSegueWithIdentifier:kBankBranchSegue sender:CONTACT_IRDBRANCH_URL];
         }
     }
     
@@ -485,11 +487,22 @@
         listPostcodeVC.delegate = self;
     }
     
+    if ([segue.identifier isEqualToString:kBankBranchSegue]) {
+        UINavigationController *navVC =segue.destinationViewController;
+        
+        BranchListViewController *listVC = navVC.viewControllers.firstObject;
+        listVC.updateHandler = ^(BankBranchModel *model) {
+            self.IRDBranch.text = model.name;
+            selectedIRDBranchCode = model.bankBranchCode;
+        };
+    }
+    
     if ([segue.identifier isEqualToString:kContactSearchSegue]){
 //        UINavigationController* navVC = segue.destinationViewController;
         ContactViewController* contactVC = segue.destinationViewController;
         contactVC.contactModel = sender;
         contactVC.gotoRelatedMatter = @"";
+        contactVC.previousScreen = @"Add Contact";
     }
 }
 
@@ -508,9 +521,6 @@
     } else if ([name isEqualToString:@"Occupation"]) {
         self.occupation.text = model.descriptionValue;
         selectedOccupationCode = model.codeValue;
-    } else if ([name isEqualToString:@"IRD Branch"]) {
-        self.IRDBranch.text = model.descriptionValue;
-        selectedIRDBranchCode = model.codeValue;
     }
 }
 

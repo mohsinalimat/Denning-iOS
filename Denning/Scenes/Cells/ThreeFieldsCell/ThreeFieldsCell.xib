@@ -31,15 +31,15 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value2" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r3J-Gu-EGR">
-                        <rect key="frame" x="23" y="35" width="48" height="51.5"/>
+                        <rect key="frame" x="23" y="35" width="48" height="53.5"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="15"/>
                         <color key="textColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Value3" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Be0-iq-ZVP">
-                        <rect key="frame" x="23" y="94.5" width="48.5" height="18"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="15"/>
-                        <color key="textColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <rect key="frame" x="23" y="96.5" width="42" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -47,11 +47,11 @@
                     <constraint firstItem="fZr-li-skG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="2VY-9C-yqY"/>
                     <constraint firstItem="fZr-li-skG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="9jM-t5-bOz"/>
                     <constraint firstItem="Be0-iq-ZVP" firstAttribute="top" secondItem="r3J-Gu-EGR" secondAttribute="bottom" constant="8" id="DNn-be-EeY"/>
-                    <constraint firstItem="Be0-iq-ZVP" firstAttribute="leading" secondItem="fZr-li-skG" secondAttribute="leading" constant="5" id="EUP-g2-7cf"/>
                     <constraint firstItem="r3J-Gu-EGR" firstAttribute="top" secondItem="fZr-li-skG" secondAttribute="bottom" constant="8" id="ULB-OK-R1D"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="Be0-iq-ZVP" secondAttribute="trailing" constant="20" id="V1V-o0-RL5"/>
                     <constraint firstItem="r3J-Gu-EGR" firstAttribute="leading" secondItem="fZr-li-skG" secondAttribute="leading" constant="5" id="ab1-jM-clA"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Be0-iq-ZVP" secondAttribute="bottom" constant="1" id="l0Q-F8-gZg"/>
+                    <constraint firstItem="Be0-iq-ZVP" firstAttribute="leading" secondItem="r3J-Gu-EGR" secondAttribute="leading" id="pIK-tB-dIq"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="fZr-li-skG" secondAttribute="trailing" constant="20" id="uFk-lo-l8r"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="r3J-Gu-EGR" secondAttribute="trailing" constant="20" id="z4q-fJ-z0b"/>
                 </constraints>

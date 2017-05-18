@@ -210,12 +210,17 @@
         cell.delegate = self;
         return cell;
     } else {
-        CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
+        SearchResultModel *matterModel = self.legalFirmModel.relatedMatter[indexPath.row];
+        NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
+        NSString* fileNo = matter[0];
+        NSString* name = @"";
+        if ([matter count] == 2) {
+            name = matter[1];
+        }
+        [cell configureCellWithContact:fileNo text:name];
+        [cell setEnableRightBtn:NO image:nil];
         
-        SearchResultModel *matterModel = self.self.legalFirmModel.relatedMatter[indexPath.row];
-        [commonCell configureCellWithValue:[DIHelpers removeFileNoFromMatterTitle: matterModel.title]];
-        commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        return commonCell;
+        return cell;
     }
 }
 

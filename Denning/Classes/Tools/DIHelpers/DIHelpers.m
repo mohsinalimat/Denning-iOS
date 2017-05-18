@@ -229,14 +229,20 @@
     }
 }
 
-+ (NSString*) removeFileNoFromMatterTitle: (NSString*) title
++ (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title
 {
     NSString* removedTitle;
     
     NSRange range = NSMakeRange(9, title.length-9);
     removedTitle = [title substringWithRange:range];
     
-    return removedTitle;
+    NSMutableArray *items = [[removedTitle componentsSeparatedByString:@"("] mutableCopy];
+    
+    if (items.count == 2) {
+        items[1] = [@"(" stringByAppendingString:items[1]];
+    }
+   
+    return items;
 }
 
 + (NSString*) today {

@@ -54,6 +54,7 @@
          PartyGroupModel* partyGroupModel = [PartyGroupModel new];
         partyGroupModel.partyGroupName = [group objectForKey:@"PartyName"];
         partyGroupModel.partyArray = [PartyModel getPartyArrayFromResponse:[group objectForKeyNotNull:@"party"]];
+        [partyGroupArray addObject:partyGroupModel];
     }
    
     return partyGroupArray;

@@ -19,11 +19,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="434" height="69.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="textfield" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-qk-CiH" customClass="UIFloatLabelTextField">
+                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="textfield" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-qk-CiH" customClass="UIFloatLabelTextField">
                         <rect key="frame" x="8" y="8" width="196.5" height="53.5"/>
                         <nil key="textColor"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <action selector="didTapTypeField:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KrT-36-W2M"/>
+                        </connections>
                     </textField>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="toc-cr-JdY">
                         <rect key="frame" x="216.5" y="5" width="1" height="59.5"/>
@@ -38,6 +41,13 @@
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="qm-ic-disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="40p-kS-3sW">
+                        <rect key="frame" x="194.5" y="28.5" width="8" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="13" id="6c5-hj-aFy"/>
+                            <constraint firstAttribute="width" constant="8" id="ICu-iA-W2E"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="dvR-qk-CiH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="0VT-4L-T4t"/>
@@ -49,8 +59,10 @@
                     <constraint firstAttribute="trailingMargin" secondItem="9qo-W2-pE9" secondAttribute="trailing" constant="12" id="W76-tl-0HW"/>
                     <constraint firstItem="9qo-W2-pE9" firstAttribute="leading" secondItem="toc-cr-JdY" secondAttribute="trailing" constant="20" id="bZc-Eo-JoR"/>
                     <constraint firstAttribute="bottomMargin" secondItem="dvR-qk-CiH" secondAttribute="bottom" id="fQK-ff-ZMf"/>
+                    <constraint firstItem="40p-kS-3sW" firstAttribute="centerY" secondItem="dvR-qk-CiH" secondAttribute="centerY" id="gM9-F5-0mt"/>
                     <constraint firstAttribute="bottom" secondItem="toc-cr-JdY" secondAttribute="bottom" constant="5" id="hLR-Ns-jaP"/>
                     <constraint firstItem="dvR-qk-CiH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="nM9-yc-oeN"/>
+                    <constraint firstItem="toc-cr-JdY" firstAttribute="leading" secondItem="40p-kS-3sW" secondAttribute="trailing" constant="14" id="ybc-pm-Lde"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -60,4 +72,7 @@
             <point key="canvasLocation" x="-68" y="-111"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="qm-ic-disclosure" width="8" height="13"/>
+    </resources>
 </document>

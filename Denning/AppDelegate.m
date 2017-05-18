@@ -15,7 +15,7 @@
 #import "DataManager.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import <Flurry.h>
+//#import <Flurry.h>
 
 
 static NSString * const kQMNotificationActionTextAction = @"TEXT_ACTION";
@@ -89,10 +89,10 @@ static NSString * const kQMAccountKey = @"NuMeyx3adrFZURAvoA5j";
     // Configuring external frameworks
     [Fabric with:@[CrashlyticsKit,  [Answers class]]];
     
-    [Flurry startSession:@"S8MJ4SRBDZ3BDJRM6M39"
-      withSessionBuilder:[[[FlurrySessionBuilder new]
-                           withCrashReporting:YES]
-                          withLogLevel:FlurryLogLevelDebug]];
+//    [Flurry startSession:@"S8MJ4SRBDZ3BDJRM6M39"
+//      withSessionBuilder:[[[FlurrySessionBuilder new]
+//                           withCrashReporting:YES]
+//                          withLogLevel:FlurryLogLevelDebug]];
 
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];

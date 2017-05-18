@@ -114,6 +114,13 @@
 #import "CoramModel.h"
 #import "ClientModel.h"
 #import "PresetBillModel.h"
+#import "QuotationModel.h"
+#import "ProjectHousingModel.h"
+#import "EditCourtModel.h"
+#import "FullPropertyModel.h"
+#import "CACModel.h"
+#import "HQModel.h"
+#import "BankBranchModel.h"
 
 @protocol ContactListWithCodeSelectionDelegate <NSObject>
 

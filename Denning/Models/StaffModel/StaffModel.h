@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSString *phoneOffice;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *webSite;
+@property (strong, nonatomic) NSString *nickName;
 @property (strong, nonatomic) NSString *chatStatus;
 @property (strong, nonatomic) NSString *userID;
 

@@ -48,7 +48,7 @@
 
 + (void) drawWhiteBorderToTextField: (UITextField*) textField;
 
-+ (NSString*) removeFileNoFromMatterTitle: (NSString*) title;
++ (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title;
 
 + (NSString*) today;
 

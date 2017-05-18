@@ -31,6 +31,7 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    [self gotoRelatedMatter];
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -105,7 +106,7 @@
     if (section == 0) {
         return 1;
     } else if (section == 1 && ![self.gotoRelatedMatter isEqualToString:@"Matter"]) {
-        return 10;
+        return 11;
     }
     return self.contactModel.relatedMatter.count;
 }
@@ -191,18 +192,24 @@
             [cell configureCellWithContact:@"IRD Branch" text:contactModel.IRDBranch];
         } else if (indexPath.row == 9) {
             [cell configureCellWithContact:@"Occupation" text:contactModel.occupation.descriptionValue];
-        } /* else if (indexPath.row == 6) {
-            [cell configureCellWithContact:@"address" text:contactModel.address];
-        }*/
+        }  else if (indexPath.row == 10) {
+            [cell configureCellWithContact:@"Address" text:contactModel.address.fullAddress];
+            [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_location"]];
+        }
         cell.delegate = self;
         return cell;
     } else {
-        CommonTextCell *commonCell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
-
         SearchResultModel *matterModel = self.contactModel.relatedMatter[indexPath.row];
-        [commonCell configureCellWithValue:[DIHelpers removeFileNoFromMatterTitle: matterModel.title]];
-        commonCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        return commonCell;
+        NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
+        NSString* fileNo = matter[0];
+        NSString* name = @"";
+        if ([matter count] == 2) {
+            name = matter[1];
+        }
+        [cell configureCellWithContact:fileNo text:name];
+        [cell setEnableRightBtn:NO image:nil];
+        
+        return cell;
     }
 }
 

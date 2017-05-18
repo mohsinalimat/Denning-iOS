@@ -53,6 +53,7 @@
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
 
+
 - (void) popupScreen:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -107,7 +108,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return @"Client Information";
+        return @"Matter";
     }
     return @"Ledgers";
 }

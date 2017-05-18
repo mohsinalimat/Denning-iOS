@@ -13,22 +13,23 @@
 + (StaffModel*) getStaffFromResponse: (NSDictionary*) response
 {
     StaffModel *staff = [StaffModel new];
-    staff.IDNo = [response objectForKeyNotNull:@"IDNo"];
-    staff.address = [AddressModel getAddressFromResponse:[response objectForKey:@"address"]];
-    staff.citizenship = [response objectForKeyNotNull:@"citizenship"];
-    staff.staffCode = [response objectForKeyNotNull:@"code"];
-    staff.dateBirth = [response objectForKeyNotNull:@"dateBirth"];
-    staff.emailAddress = [response objectForKeyNotNull:@"emailAddress"];
-    staff.idTypeCode = [[response objectForKey:@"idType"] objectForKey:@"code"];
-    staff.idTypeDescription = [[response objectForKey:@"idType"] objectForKey:@"description"];
-    staff.name = [response objectForKeyNotNull:@"name"];
-    staff.phoneFax = [response objectForKeyNotNull:@"phoneFax"];
-    staff.phoneHome = [response objectForKeyNotNull:@"phoneHome"];
-    staff.phoneOffice = [response objectForKey:@"phoneOffice"];
-    staff.title = [response objectForKeyNotNull:@"title"];
-    staff.webSite = [response objectForKeyNotNull:@"webSite"];
-    staff.chatStatus = [response objectForKeyNotNull:@"chatStatus"];
-    staff.userID = [response objectForKeyNotNull:@"userID"];
+    staff.IDNo = [response valueForKeyNotNull:@"IDNo"];
+    staff.address = [AddressModel getAddressFromResponse:[response valueForKeyNotNull:@"address"]];
+    staff.citizenship = [response valueForKeyNotNull:@"citizenship"];
+    staff.staffCode = [response valueForKeyNotNull:@"code"];
+    staff.dateBirth = [response valueForKeyNotNull:@"dateBirth"];
+    staff.emailAddress = [response valueForKeyNotNull:@"emailAddress"];
+    staff.idTypeCode = [[response objectForKeyNotNull:@"idType"] valueForKeyNotNull:@"code"];
+    staff.idTypeDescription = [[response objectForKeyNotNull:@"idType"] valueForKeyNotNull:@"description"];
+    staff.name = [response valueForKeyNotNull:@"name"];
+    staff.phoneFax = [response valueForKeyNotNull:@"phoneFax"];
+    staff.phoneHome = [response valueForKeyNotNull:@"phoneHome"];
+    staff.phoneOffice = [response valueForKeyNotNull:@"phoneOffice"];
+    staff.title = [response valueForKeyNotNull:@"title"];
+    staff.webSite = [response valueForKeyNotNull:@"webSite"];
+    staff.chatStatus = [response valueForKeyNotNull:@"chatStatus"];
+    staff.nickName = [response valueForKeyNotNull:@"nickName"];
+    staff.userID = [response valueForKeyNotNull:@"userID"];
     
     return staff;
 }

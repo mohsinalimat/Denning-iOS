@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "DIGeneralCell.h"
 
+typedef void (^UpdateTypeHandler)(void);
+
 @interface FloatingTextTwoColumnCell : DIGeneralCell
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *leftFloatingText;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *rightFloatingText;
 
+@property (strong, nonatomic) UpdateTypeHandler updateHandler;
 @end

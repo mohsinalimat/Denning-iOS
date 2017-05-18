@@ -22,6 +22,11 @@
     
     NSString* selectedNatureOfHearing;
     NSString* selectedDetails;
+    
+    CGFloat autocompleteCellHeight;
+    
+    __block BOOL isLoading;
+    NSString* serverAPI;
 }
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *fileNo;
@@ -34,6 +39,8 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *councilAssigned;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *details;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *Remarks;
+
+@property (strong, nonatomic) UIToolbar *accessoryView;
 
 @end
 
@@ -54,7 +61,11 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 - (void) prepareUI {
+    autocompleteCellHeight = 58;
+    serverAPI = [DataManager sharedManager].user.serverAPI;
+    
     self.fileNo.floatLabelActiveColor = self.fileNo.floatLabelPassiveColor = [UIColor redColor];
     self.caseNo.floatLabelActiveColor = [UIColor redColor];
     self.caseName.floatLabelActiveColor =  [UIColor redColor];
@@ -64,20 +75,20 @@
     self.enclosureNo.floatLabelActiveColor = self.enclosureNo.floatLabelPassiveColor = [UIColor redColor];
     self.natureOfHearing.floatLabelActiveColor = self.natureOfHearing.floatLabelPassiveColor = [UIColor redColor];
     self.councilAssigned.floatLabelActiveColor = self.councilAssigned.floatLabelPassiveColor = [UIColor redColor];
-    self.details.floatLabelActiveColor = self.details.floatLabelPassiveColor = [UIColor redColor];
+//    self.details.floatLabelActiveColor = self.details.floatLabelPassiveColor = [UIColor redColor];
     self.Remarks.floatLabelActiveColor = self.Remarks.floatLabelPassiveColor = [UIColor redColor];
     
-    UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
-    accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
-    accessoryView.tintColor = [UIColor babyRed];
+    _accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
+    _accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
+    _accessoryView.tintColor = [UIColor babyRed];
     
-    accessoryView.items = @[
+    _accessoryView.items = @[
                             [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
-    [accessoryView sizeToFit];
+    [_accessoryView sizeToFit];
     
-    self.enclosureNo.inputAccessoryView = accessoryView;
-    self.Remarks.inputAccessoryView = accessoryView;
+    self.enclosureNo.inputAccessoryView = _accessoryView;
+    self.Remarks.inputAccessoryView = _accessoryView;
     
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -88,8 +99,51 @@
 }
 
 - (IBAction)saveCourt:(id)sender {
-//    NSDictionary* data = @{@""};
+    NSDictionary* data = @{
+                           @"attendedStatus": @{
+                               @"code": @"",
+                               @"description": @"Postponed"
+                           },
+                           @"coram":
+                               @{
+                                   @"code": @""},
+                           @"counselAssigned": self.councilAssigned.text,
+                           @"counselAttended": @"",
+                           @"court": @"",
+                           @"courtDecision": @"",
+                           @"enclosureDetails": self.details.text,
+                           @"enclosureNo": self.enclosureNo.text,
+                           @"fileNo1": self.fileNo.text,
+                           @"hearingDate": [NSString stringWithFormat:@"%@ %@", self.hearingDate.text, self.time.text],
+                           @"hearingType": self.natureOfHearing.text,
+                           @"nextDate": @"",
+                           @"nextDateType": @{
+                               @"code": @"0",
+                               @"description":@"Yes, set next appointment"
+                           },
+                           @"opponentCounsel": @"bla bla",
+                           @"previousDate": @"2016-12-09 00:00:00",
+                           @"remark": self.Remarks.text
+                           };
+    if (isLoading) return;
+    isLoading = YES;
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    __weak UINavigationController *navigationController = self.navigationController;
+    @weakify(self);
+    [[QMNetworkManager sharedManager] saveCourtDiaryWithData:data WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+        [navigationController dismissNotificationPanel];
+        @strongify(self)
+        self->isLoading = NO;
+        if (error == nil) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully saved" duration:1.0];
+            
+        } else {
+            [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:1.0];
+        }
+ 
+    }];
 }
+
 
 
 #pragma mark - Table view data source
@@ -98,6 +152,8 @@
 {
     if (indexPath.row == 0) {
         return 120;
+    } else if(indexPath.row == 6) {
+        return autocompleteCellHeight;
     }
     return 58;
 }
@@ -112,14 +168,8 @@
     return 8;
 }
 
-- (void) showTimePicker {
-    [self.view endEditing:YES];
-    
-    TimePickerViewController *timeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TimePickerView"];
-    timeViewController.updateHandler =  ^(NSString* date) {
-        self.time.text = date;
-    };
-    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:timeViewController];
+- (void) showPopup: (UIViewController*) vc {
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
     [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
     [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
     [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
@@ -134,6 +184,17 @@
     [popupController presentInViewController:self];
 }
 
+- (void) showTimePicker {
+    [self.view endEditing:YES];
+    
+    TimePickerViewController *timeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TimePickerView"];
+    timeViewController.updateHandler =  ^(NSString* date) {
+        self.time.text = date;
+    };
+    
+    [self showPopup:timeViewController];
+}
+
 - (void) showCalendar {
     [self.view endEditing:YES];
     
@@ -141,19 +202,17 @@
     calendarViewController.updateHandler =  ^(NSString* date) {
         self.hearingDate.text = date;
     };
-    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:calendarViewController];
-    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
-    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
-    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
-    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };
-    popupController.transitionStyle = STPopupTransitionStyleFade;;
-    popupController.containerView.layer.cornerRadius = 4;
-    popupController.containerView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
-    popupController.containerView.layer.shadowOffset = CGSizeMake(4, 4);
-    popupController.containerView.layer.shadowOpacity = 1;
-    popupController.containerView.layer.shadowRadius = 1.0;
+    [self showPopup:calendarViewController];
+}
+
+- (void) showAutocomplete {
+    [self.view endEditing:YES];
     
-    [popupController presentInViewController:self];
+    DetailWithAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailWithAutocomplete"];
+    vc.updateHandler =  ^(NSString* selectedString) {
+        self.details.text = selectedString;
+    };
+    [self showPopup:vc];
 }
 
 #pragma mark - Table view data source
@@ -169,13 +228,10 @@
         titleOfList = @"List of Hearing Type";
         nameOfField = @"natureOfHearing";
         [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_HEARINGTYPE_GET_URL];
-
     } else if (indexPath.row == 5) {
         [self performSegueWithIdentifier:kStaffSegue sender:@"attest"];
-    } else if (indexPath.row == 6) {
-        titleOfList = @"List of Hearing Detail";
-        url = COURT_HEARINGDETAIL_GET_URL;
-        [self performSegueWithIdentifier:kDetailAutocompleteSegue sender:COURT_HEARINGTYPE_GET_URL];
+    } if (indexPath.row == 6) {
+        [self showAutocomplete];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -195,7 +251,6 @@
         selectedNatureOfHearing = model.codeValue;
     }
 }
-
 
 #pragma mark - Navigation
 
@@ -226,17 +281,6 @@
         staffVC.typeOfStaff = sender;
         staffVC.updateHandler = ^(NSString* value) {
             self.councilAssigned.text = value;
-        };
-    }
-    
-    if ([segue.identifier isEqualToString:kDetailAutocompleteSegue]) {
-        UINavigationController *navVC =segue.destinationViewController;
-        DetailWithAutocomplete* detailVC = navVC.viewControllers.firstObject;
-        detailVC.url = url;
-        detailVC.title = titleOfList;
-        detailVC.updateHandler = ^(CodeDescription *model) {
-            self.details.text = model.descriptionValue;
-            selectedDetails = model.codeValue;
         };
     }
 }

@@ -48,7 +48,7 @@ target ‘Denning’ do
 	pod 'Crashlytics'
     	pod 'TwitterCore', '~> 1.15'
 
-	pod 'Flurry-iOS-SDK/FlurrySDK'
+#	pod 'Flurry-iOS-SDK/FlurrySDK'
 
     	#Facebook
    	pod 'FBSDKCoreKit', '~> 4.11.0'

@@ -14,6 +14,7 @@
 #import "NSError+Network.h"
 #import "DIGlobal.h"
 #import "DIHelpers.h"
+#import "ClientModel.h"
 
 @interface QMNetworkManager ()
 
@@ -771,9 +772,9 @@
  *  Add Contact
  */
 
-- (void) getCodeDescWithUrl:(NSString*) url withPage:(NSNumber*)page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+- (void) getCodeDescWithUrl:(NSString*) url withPage:(NSNumber*)page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* _url = [NSString stringWithFormat:@"%@%@?page=%@", [DataManager sharedManager].user.serverAPI, url, page];
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, url,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     [self setAddContactLoginHTTPHeader];
     
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -793,9 +794,9 @@
     }];
 }
 
-- (void) getDescriptionWithUrl: (NSString*) url withPage: (NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion
+- (void) getDescriptionWithUrl: (NSString*) url withPage: (NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* _url = [NSString stringWithFormat:@"%@%@?page=%@", [DataManager sharedManager].user.serverAPI, url, page];
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, url,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     [self setAddContactLoginHTTPHeader];
     
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -814,14 +815,36 @@
     }];
 }
 
-- (void) getPostCodeWithPage:(NSNumber*) page withCompletion:(void(^)(NSArray* result, NSError* error)) completion
+- (void) getPostCodeWithPage:(NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:CONTACT_POSTCODE_URL];
+    NSString* url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, CONTACT_POSTCODE_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     [self setAddContactLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSArray* result = [CityModel getCityModelArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+- (void) getBankBranchWithPage:(NSNumber*) page withSearch:(NSString*)search withCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, BANK_BRANCH_GET_LIST_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    [self setAddContactLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [BankBranchModel getBankBranchArrayFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }
@@ -876,9 +899,9 @@
  * Court Diary
  */
 
-- (void) getSimpleMatter:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+- (void) getSimpleMatter:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* url = [NSString stringWithFormat:@"%@%@?page=%@", [DataManager sharedManager].user.serverAPI, MATTERSIMPLE_GET_URL, page];
+    NSString* url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, MATTERSIMPLE_GET_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     [self setAddContactLoginHTTPHeader];
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -894,9 +917,9 @@
     }];
 }
 
-- (void) getStaffArray:(NSNumber*) page WithURL:(NSString*) url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+- (void) getStaffArray:(NSNumber*) page withSearch:(NSString*)search WithURL:(NSString*) url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* _url = [NSString stringWithFormat:@"%@%@&page=%@", [DataManager sharedManager].user.serverAPI,url, page];
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI,url, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     
     [self setAddContactLoginHTTPHeader];
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -913,17 +936,49 @@
     }];
 }
 
+- (void) getCourtWithCode:(NSString*) code WithCompletion:(void(^)(EditCourtModel* model, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/v1/courtDiary/%@", [DataManager sharedManager].user.serverAPI,code];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            EditCourtModel *result = [EditCourtModel getEditCourtFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
 - (void) saveCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
 {
-    
+    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:COURT_SAVE_UPATE_URL];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
 }
 
 /*
- * Matter
+ * Property
  */
 
-- (void) getMatterCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion{
-    NSString* _url = [NSString stringWithFormat:@"%@%@", [DataManager sharedManager].user.serverAPI, MATTER_LIST_GET_URL];
+- (void) getPropertyType: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, PROPERTY_TYPE_GET_LIST_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     
     [self setAddContactLoginHTTPHeader];
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -941,11 +996,76 @@
 }
 
 /*
+ * Matter
+ */
+
+- (void) getMatterCode:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, MATTER_LIST_GET_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [MatterCodeModel getMatterCodeArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+/*
+ * Property
+ */
+
+- (void) getPropertyProjectHousingWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, PROPERTY_PROJECT_HOUSING_GET_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [ProjectHousingModel getProjectHousingArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) getPropertyContactListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, CONTACT_GETLIST_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [ClientModel getClientArrayFromReponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+/*
  * Quotation
  */
 
-- (void) getPresetBillCode:(NSNumber*) page WithCompletion:(void(^)(NSArray* result, NSError* error)) completion{
-    NSString* _url = [NSString stringWithFormat:@"%@%@", [DataManager sharedManager].user.serverAPI, PRESET_BILL_GET_URL];
+- (void) getPresetBillCode:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, PRESET_BILL_GET_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
     
     [self setAddContactLoginHTTPHeader];
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -979,14 +1099,39 @@
     }];
 }
 
-- (void) saveQuotationWithParams: (NSDictionary*) data WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion
+- (void) saveBillorQuotationWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion
 {
-    NSString* url = [@"http://43.252.215.163/" stringByAppendingString:QUOTATION_SAVE_URL];
+    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
     [self setAddContactLoginHTTPHeader];
-    [self.manager POST:url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
             completion(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+
+
+/*
+ * Bill
+ */
+
+- (void) getQuotationListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, QUOTATION_GET_LIST_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [QuotationModel getQuotationArrayFromResponse:responseObject];
+            completion(result, nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)
