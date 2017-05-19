@@ -73,6 +73,8 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *taxFileNo;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *IRDBranch;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *registeredOffice;
+@property (weak, nonatomic) IBOutlet UISwitch *inviteDenning;
+@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
 @end
 
@@ -286,6 +288,40 @@
 - (void) prepareUI {
     if (self.viewType.length == 0) {
         self.contactModel = [ContactModel new];
+        [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    } else {
+        self.IDType.text = self.contactModel.idType.descriptionValue;
+        selectedIDTypeCode = self.contactModel.idType.codeValue;
+        self.IDNo.text = self.contactModel.IDNo;
+//        self.oldIC.text = self.contactModel
+        self.name.text = self.contactModel.name;
+        self.contactTitle.text = self.contactModel.contactTitle;
+        self.address1.text = self.contactModel.address.line1;
+        self.address2.text = self.contactModel.address.line2;
+        self.address3.text = self.contactModel.address.line3;
+        self.town.text = self.contactModel.address.city;
+        self.state.text = self.contactModel.address.state;
+        self.country.text = self.contactModel.address.country;
+        self.postcode.text = self.contactModel.address.postCode;
+        self.email.text = self.contactModel.email;
+        self.phoneHome.text = self.contactModel.homePhone;
+        self.phoneMobile.text = self.contactModel.mobilePhone;
+        self.phoneOffice.text = self.contactModel.officePhone;
+        self.fax.text = self.contactModel.fax;
+        self.contactPerson.text = self.contactModel.contactPerson;
+        self.citizenship.text = self.contactModel.citizenShip;
+        self.dateOfBirth.text = self.contactModel.dateOfBirth;
+        self.occupation.text = self.contactModel.occupation.descriptionValue;
+        self.taxFileNo.text = self.contactModel.tax;
+        self.IRDBranch.text = self.contactModel.IRDBranch;
+        self.website.text = self.contactModel.website;
+        if ([self.contactModel.InviteDennig isEqualToString:@"1"]) {
+            [self.inviteDenning setOn:YES];
+        } else {
+            [self.inviteDenning setOn:NO];
+        }
+        
+        [self.saveBtn setTitle:@"Update" forState:UIControlStateNormal];
     }
     
     self.IDType.floatLabelPassiveColor = self.IDType.floatLabelActiveColor = [UIColor redColor];

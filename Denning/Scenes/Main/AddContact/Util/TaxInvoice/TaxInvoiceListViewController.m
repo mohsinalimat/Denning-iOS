@@ -1,15 +1,15 @@
 //
-//  QuotationGetListViewController.m
+//  TaxInvoiceListViewController.m
 //  Denning
 //
-//  Created by DenningIT on 16/05/2017.
+//  Created by DenningIT on 19/05/2017.
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
-#import "QuotationGetListViewController.h"
+#import "TaxInvoiceListViewController.h"
 #import "BillCell.h"
 
-@interface QuotationGetListViewController ()
+@interface TaxInvoiceListViewController ()
 <UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
 {
     __block BOOL isFirstLoading;
@@ -18,7 +18,7 @@
     BOOL initCall;
 }
 
-@property (strong, nonatomic) NSMutableArray* listOfAccountTypes;
+@property (strong, nonatomic) NSMutableArray* listOfQuotations;
 @property (strong, nonatomic) NSArray* copyedList;
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation QuotationGetListViewController
+@implementation TaxInvoiceListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -111,12 +111,12 @@
         if (error == nil) {
             [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
             if (isAppending) {
-                self.listOfAccountTypes = [[self.listOfAccountTypes arrayByAddingObjectsFromArray:result] mutableCopy];
+                self.listOfQuotations = [[self.listOfQuotations arrayByAddingObjectsFromArray:result] mutableCopy];
                 if (result.count != 0) {
                     self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
                 }
             } else {
-                self.listOfAccountTypes = [result mutableCopy];
+                self.listOfQuotations = [result mutableCopy];
             }
             
             [self.tableView reloadData];
@@ -143,13 +143,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.listOfAccountTypes.count;
+    return self.listOfQuotations.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BillCell *cell = [tableView dequeueReusableCellWithIdentifier:[BillCell cellIdentifier] forIndexPath:indexPath];
     
-    QuotationModel *model = self.listOfAccountTypes[indexPath.row];
+    QuotationModel *model = self.listOfQuotations[indexPath.row];
     [cell configureCellWithMatterSimple:model];
     
     return cell;
@@ -157,7 +157,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    QuotationModel *model = self.listOfAccountTypes[indexPath.row];
+    TaxModel *model = self.listOfQuotations[indexPath.row];
     self.updateHandler(model);
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -204,7 +204,7 @@
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
-    if (indexPath.row == self.listOfAccountTypes.count-1 && initCall) {
+    if (indexPath.row == self.listOfQuotations.count-1 && initCall) {
         isFirstLoading = NO;
         initCall = NO;
     }

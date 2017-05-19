@@ -1,27 +1,27 @@
 //
-//  DetailWithAutocomplete.m
+//  SimpleAutocomplete.m
 //  Denning
 //
-//  Created by DenningIT on 09/05/2017.
+//  Created by DenningIT on 19/05/2017.
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
-#import "DetailWithAutocomplete.h"
+#import "SimpleAutocomplete.h"
 #import "MLPAutoCompleteTextField.h"
 #import "DEMOCustomAutoCompleteCell.h"
 #import "DEMOCustomAutoCompleteObject.h"
 #import "AFHTTPSessionOperation.h"
 
-@interface DetailWithAutocomplete ()<UITextFieldDelegate,MLPAutoCompleteTextFieldDelegate, MLPAutoCompleteTextFieldDataSource
+@interface SimpleAutocomplete ()<UITextFieldDelegate,MLPAutoCompleteTextFieldDelegate, MLPAutoCompleteTextFieldDataSource
 >
 {
     NSString* customString;
     NSString* serverAPI;
 }
-
+@property (weak, nonatomic) IBOutlet MLPAutoCompleteTextField *autocompleteTF;
 @end
 
-@implementation DetailWithAutocomplete
+@implementation SimpleAutocomplete
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -59,7 +59,7 @@
     self.autocompleteTF.autoCompleteDelegate = self;
     self.autocompleteTF.backgroundColor = [UIColor whiteColor];
     [self.autocompleteTF registerAutoCompleteCellClass:[DEMOCustomAutoCompleteCell class]
-                         forCellReuseIdentifier:@"CustomCellId"];
+                                forCellReuseIdentifier:@"CustomCellId"];
     self.autocompleteTF.maximumNumberOfAutoCompleteRows = 7;
     self.autocompleteTF.applyBoldEffectToAutoCompleteSuggestions = YES;
     self.autocompleteTF.showAutoCompleteTableWhenEditingBegins = YES;
@@ -106,7 +106,7 @@
 {
     NSMutableArray* keywords = [NSMutableArray new];
     for (id obj in response) {
-        [keywords addObject:[obj objectForKey:@"description"]];
+        [keywords addObject:obj];
     }
     
     return keywords;
@@ -166,7 +166,7 @@
 }
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField willShowAutoCompleteTableView:(UITableView *)autoCompleteTableView {
-
+    
 }
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {

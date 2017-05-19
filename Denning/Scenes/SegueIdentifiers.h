@@ -133,3 +133,7 @@ static NSString* const kPresetBillSegue = @"PresetBillSegue";
 static NSString* const kQuotationSegue = @"QuotationSegue";
 
 static NSString* const kBankBranchSegue = @"BankBranchSegue";
+
+static NSString* const kTaxInvoiceSegue = @"TaxInvoiceSegue";
+
+static NSString* const kAccountTypeSegue = @"AccountTypeSegue";

@@ -179,7 +179,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     StaffModel *model = self.listOfStaff[indexPath.row];
-    self.updateHandler(model.name);
+    self.updateHandler(self.typeOfStaff, model);
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 

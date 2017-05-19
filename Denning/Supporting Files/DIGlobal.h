@@ -109,7 +109,11 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define MATTERSIMPLE_GET_URL @"denningwcf/v1/matter/simpleList?search="
 
+#define MATTER_FILE_STATUS_GET_LIST_URL @"denningwcf/v1/FileStatus?search="
+
 #define MATTER_LIST_GET_URL    @"denningwcf/v1/matter?search="
+
+#define MATTER_SAVE_URL @"denningwcf/v1/file"
 
 #define COURT_HEARINGTYPE_GET_URL @"denningwcf/v1/courtDiary/hearingType?search="
 
@@ -186,7 +190,15 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define BANK_BRANCH_GET_LIST_URL    @"denningwcf/v1/bank/Branch?search="
 
+#define RECEIPT_TAX_INVOICE_GET_LIST_URL    @"denningwcf/v1/TaxInvoice?FileNo="
 
+#define RECEIPT_TRANS_DESC_GET_LIST_URL @"denningwcf/v1/account/receipt/transDesc?search="
+
+#define ACCOUNT_TYPE_GET_LIST_URL   @"denningwcf/v1/account/type?search="
+
+#define ACCOUNT_PAYMENT_MODE_GET_URL    @"denningwcf/v1/account/paymentMode?search="
+
+#define ACCOUNT_CHEQUE_ISSUEER_GET_URL  @"denningwcf/v1/account/ChequeIssuerBank?search="
 /*
  *  Notification Names
  */

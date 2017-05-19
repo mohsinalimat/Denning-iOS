@@ -17,6 +17,11 @@
     {
         object = @"";
     }
+    
+    if (object == nil) {
+        object = @"";
+    }
+    
     return object;
 }
 

@@ -35,6 +35,7 @@
     
     [self prepareUI];
     [self configureSearch];
+    [self registerNib];
     [self getList];
 }
 
@@ -43,7 +44,7 @@
 }
 
 - (void) registerNib {
-    
+    [PropertyContactCell registerForReuseInTableView:self.tableView];
 }
 
 - (void) configureSearch
@@ -148,20 +149,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PropertyContactCell" forIndexPath:indexPath];
+    PropertyContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[PropertyContactCell cellIdentifier] forIndexPath:indexPath];
     
-    ClientModel *model = self.listOfContacts[indexPath.row];
-    UILabel* fileNo = [cell viewWithTag:1];
-    UILabel* caseName = [cell viewWithTag:2];
-    fileNo.text = model.clientCode;
-    caseName.text = model.name;
-    
+    StaffModel *model = self.listOfContacts[indexPath.row];
+    [cell configureCellWithStaffModel:model];
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ClientModel *model = self.listOfContacts[indexPath.row];
+    StaffModel *model = self.listOfContacts[indexPath.row];
     self.updateHandler(model);
     [self.navigationController popViewControllerAnimated:YES];
 }

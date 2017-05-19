@@ -1018,6 +1018,23 @@
     }];
 }
 
+- (void) saveMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion
+{
+    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([RelatedMatterModel getRelatedMatterFromResponse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
 /*
  * Property
  */
@@ -1049,7 +1066,7 @@
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            NSArray *result = [ClientModel getClientArrayFromReponse:responseObject];
+            NSArray *result = [StaffModel getStaffArrayFromRepsonse:responseObject];
             completion(result, nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -1131,6 +1148,29 @@
         if  (completion != nil)
         {
             NSArray *result = [QuotationModel getQuotationArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+/*
+ * Receipt
+ */
+
+- (void) getAccountTypeListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, ACCOUNT_TYPE_GET_LIST_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [AccountTypeModel getAccountTypeArrayFromResponse:responseObject];
             completion(result, nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

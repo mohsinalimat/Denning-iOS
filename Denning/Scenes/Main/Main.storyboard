@@ -19,7 +19,7 @@
             <objects>
                 <navigationController id="sR8-X8-fSi" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="MzL-UN-PCJ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MzL-UN-PCJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529411764705" green="0.094117647058823528" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,10 +46,10 @@
             </objects>
             <point key="canvasLocation" x="2409" y="385"/>
         </scene>
-        <!--AddContactNavigation-->
+        <!--AddNavigation-->
         <scene sceneID="P1L-aH-XJK">
             <objects>
-                <viewControllerPlaceholder storyboardName="AddContact" referencedIdentifier="AddContactNavigation" id="Fif-5t-FUM" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="AddContact" referencedIdentifier="AddNavigation" id="Fif-5t-FUM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="icon_add.png" id="Zwb-WX-6No"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e0h-wM-BcT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -157,7 +157,7 @@
                     <tabBarItem key="tabBarItem" title="Chat" image="icon_chat.png" id="KPI-pW-0Q2"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="9uk-SV-XqD" customClass="QMNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9uk-SV-XqD" customClass="QMNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

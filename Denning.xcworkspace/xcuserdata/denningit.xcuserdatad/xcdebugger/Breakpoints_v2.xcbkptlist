@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Search/Contact/ContactViewController.m"
-            timestampString = "516717990.754882"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Search/Contact/ContactViewController.m"
-            timestampString = "516719193.925427"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "-didTapRightBtn:value:"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Search/Contact/ContactViewController.m"
-            timestampString = "516719193.925427"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "-didTapRightBtn:value:"
             landmarkType = "7">
          </BreakpointContent>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Search/Contact/ContactViewController.m"
-            timestampString = "516717990.754882"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "-addContact"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516596243.482174"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "470"
-            endingLineNumber = "470"
+            startingLineNumber = "506"
+            endingLineNumber = "506"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516596243.482174"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "516"
+            endingLineNumber = "516"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516596243.482174"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "487"
-            endingLineNumber = "487"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -634,11 +634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "-didTapMobileBtn:"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,11 +698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "-checkPhoneValidation:selectedCountryCode:textfield:"
             landmarkType = "7">
          </BreakpointContent>
@@ -906,11 +906,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Court Diary/Add Court Diary/AddCourtDiaryViewController.m"
-            timestampString = "516790373.965584"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -922,11 +922,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Court Diary/Add Court Diary/AddCourtDiaryViewController.m"
-            timestampString = "516790373.965584"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -954,11 +954,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "542"
-            endingLineNumber = "542"
+            startingLineNumber = "578"
+            endingLineNumber = "578"
             landmarkName = "-didSelectListWithPostcode:withCityModel:"
             landmarkType = "7">
          </BreakpointContent>
@@ -970,11 +970,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "-saveContact:"
             landmarkType = "7">
             <Locations>
@@ -1034,11 +1034,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Models/ContactModel/ContactModel.m"
-            timestampString = "515995334.184711"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "+getContactFromResponse:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1204,7 +1204,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "350"
@@ -1220,11 +1236,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
             landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1236,27 +1252,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
-            landmarkName = "-tableView:heightForRowAtIndexPath:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516770557.460524"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "519"
-            endingLineNumber = "519"
+            startingLineNumber = "518"
+            endingLineNumber = "518"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1476,11 +1476,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "433"
-            endingLineNumber = "433"
+            startingLineNumber = "432"
+            endingLineNumber = "432"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1492,11 +1492,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516770557.460524"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
+            startingLineNumber = "545"
+            endingLineNumber = "545"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
             <Locations>
@@ -1572,11 +1572,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
             landmarkName = "-saveContact:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1588,11 +1588,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516845534.97631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "-saveContact:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1604,11 +1604,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516775682.220445"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "503"
-            endingLineNumber = "503"
+            startingLineNumber = "539"
+            endingLineNumber = "539"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1620,11 +1620,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516596243.482174"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "463"
-            endingLineNumber = "463"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1684,11 +1684,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "298"
-            endingLineNumber = "298"
+            startingLineNumber = "297"
+            endingLineNumber = "297"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1776,7 +1776,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Search/RelatedMatter/RelatedMatterViewController.m"
@@ -1812,11 +1812,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Models/ContactModel/ContactModel.m"
-            timestampString = "516724603.724682"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "+getContactFromResponse:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1828,11 +1828,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516749154.518139"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
             landmarkName = "-textFieldDidEndEditing:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1892,11 +1892,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Quotation/AddQuotationViewController.m"
-            timestampString = "516745433.231143"
+            timestampString = "516850849.173597"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -2068,11 +2068,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Denning/Scenes/Main/AddContact/Add Contact/AddContactViewController.m"
-            timestampString = "516778460.523636"
+            timestampString = "516853235.278844"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -2090,22 +2090,6 @@
             startingLineNumber = "157"
             endingLineNumber = "157"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Denning/Scenes/Main/AddContact/Add Property/AddPropertyViewController.m"
-            timestampString = "516781613.985617"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
-            landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2138,6 +2122,246 @@
             startingLineNumber = "152"
             endingLineNumber = "152"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Add Receipt/AddReceiptViewController.m"
+            timestampString = "516842400.297266"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Add Receipt/AddReceiptViewController.m"
+            timestampString = "516842400.297266"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Add Receipt/AddReceiptViewController.m"
+            timestampString = "516842448.735787"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "-didSelectList:name:withModel:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Search/Contact/ContactViewController.m"
+            timestampString = "516845716.850777"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516862020.032225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Util/PropertyContactList/PropertyContactListViewController.m"
+            timestampString = "516855884.188858"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "-getList"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Util/PropertyContactList/PropertyContactListViewController.m"
+            timestampString = "516855884.188858"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "-getList"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Util/Staff View/StaffViewController.m"
+            timestampString = "516855515.293604"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "-getList"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516862020.032225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "454"
+            endingLineNumber = "454"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AddMatterViewController prepareForSegue:sender:]"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/iOS-DenningIT/Denning/Denning/Scenes/Main/AddContact/Matter/Add%20Matter/AddMatterViewController.m"
+                  timestampString = "516855594.849543"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "345"
+                  endingLineNumber = "345"
+                  offsetFromSymbolStart = "1340">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__50-[AddMatterViewController prepareForSegue:sender:]_block_invoke.498"
+                  moduleName = "Denning"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/denningit/Documents/iOS-DenningIT/Denning/Denning/Scenes/Main/AddContact/Matter/Add%20Matter/AddMatterViewController.m"
+                  timestampString = "516855594.852097"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "346"
+                  endingLineNumber = "346"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516859687.061676"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "-replaceContentForSection:InRow:withValue:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516862020.032225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516862020.032225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "445"
+            endingLineNumber = "445"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Denning/Scenes/Main/AddContact/Matter/Add Matter/AddMatterViewController.m"
+            timestampString = "516862020.032225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "-textFieldDidEndEditing:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

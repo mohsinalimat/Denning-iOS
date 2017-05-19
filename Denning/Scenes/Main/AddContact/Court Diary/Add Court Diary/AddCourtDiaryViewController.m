@@ -41,6 +41,7 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *Remarks;
 
 @property (strong, nonatomic) UIToolbar *accessoryView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedCtrl;
 
 @end
 
@@ -209,6 +210,7 @@
     [self.view endEditing:YES];
     
     DetailWithAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailWithAutocomplete"];
+    vc.url = COURT_HEARINGDETAIL_GET_URL;
     vc.updateHandler =  ^(NSString* selectedString) {
         self.details.text = selectedString;
     };
@@ -279,8 +281,8 @@
         UINavigationController *navVC =segue.destinationViewController;
         StaffViewController* staffVC = navVC.viewControllers.firstObject;
         staffVC.typeOfStaff = sender;
-        staffVC.updateHandler = ^(NSString* value) {
-            self.councilAssigned.text = value;
+        staffVC.updateHandler = ^(NSString* typeOfStaff, StaffModel* model) {
+            self.councilAssigned.text = model.name;
         };
     }
 }

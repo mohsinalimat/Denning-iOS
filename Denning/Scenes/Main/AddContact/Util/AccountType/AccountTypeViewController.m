@@ -1,15 +1,14 @@
 //
-//  QuotationGetListViewController.m
+//  AccountTypeViewController.m
 //  Denning
 //
-//  Created by DenningIT on 16/05/2017.
+//  Created by DenningIT on 19/05/2017.
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
-#import "QuotationGetListViewController.h"
-#import "BillCell.h"
+#import "AccountTypeViewController.h"
 
-@interface QuotationGetListViewController ()
+@interface AccountTypeViewController ()
 <UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
 {
     __block BOOL isFirstLoading;
@@ -27,13 +26,12 @@
 
 @end
 
-@implementation QuotationGetListViewController
+@implementation AccountTypeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self prepareUI];
-    [self registerNibs];
     [self configureSearch];
     [self getList];
 }
@@ -78,13 +76,6 @@
     self.tableView.tableFooterView = [UIView new];
 }
 
-- (void)registerNibs {
-    [BillCell registerForReuseInTableView:self.tableView];
-    
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -101,7 +92,7 @@
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getQuotationListWithPage:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getAccountTypeListWithPage:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         @strongify(self)
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
@@ -147,17 +138,18 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    BillCell *cell = [tableView dequeueReusableCellWithIdentifier:[BillCell cellIdentifier] forIndexPath:indexPath];
-    
-    QuotationModel *model = self.listOfAccountTypes[indexPath.row];
-    [cell configureCellWithMatterSimple:model];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AccountTypeCell" forIndexPath:indexPath];
+    UILabel* code = [cell viewWithTag:1];
+    UILabel* description = [cell viewWithTag:2];
+    code.text = ((AccountTypeModel*)self.listOfAccountTypes[indexPath.row]).accountTypeCode;
+    description.text = ((AccountTypeModel*)self.listOfAccountTypes[indexPath.row]).descriptionValue;
     
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    QuotationModel *model = self.listOfAccountTypes[indexPath.row];
+    AccountTypeModel *model = self.listOfAccountTypes[indexPath.row];
     self.updateHandler(model);
     [self.navigationController popViewControllerAnimated:YES];
 }

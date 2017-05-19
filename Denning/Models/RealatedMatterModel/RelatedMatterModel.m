@@ -17,8 +17,8 @@
     
     relatedMatter.systemNo = [response objectForKey:@"systemNo"];
     
-    relatedMatter.clientName = [NSString stringWithFormat:@"%@", [[response objectForKey:@"primaryClient"] objectForKey:@"name"]];
-    relatedMatter.contactCode = [[[response objectForKey:@"primaryClient"] objectForKey:@"code"] stringValue];
+    relatedMatter.clientName = [NSString stringWithFormat:@"%@", [[response objectForKeyNotNull:@"primaryClient"] valueForKeyNotNull:@"name"]];
+    relatedMatter.contactCode = [[[response objectForKeyNotNull:@"primaryClient"] valueForKeyNotNull:@"code"] stringValue];
     relatedMatter.openDate = [response objectForKey:@"dateOpen"];
     relatedMatter.ref = [response objectForKey:@"referenceNo"];
     if ([relatedMatter.ref isKindOfClass:[NSNull class]]) {
@@ -27,21 +27,21 @@
     relatedMatter.matter = [[response objectForKey:@"matter"] objectForKey:@"description"];
     
     
-    relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKey:@"partyGroup"]];
+    relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKeyNotNull:@"partyGroup"]];
     
     relatedMatter.court = [CourtModel getCourtFromResponse:response];
     
-    relatedMatter.solicitorGroupArray = [RelatedMatterModel getSolicitorGroupArrayFromResponse:[response objectForKey:@"solicitorsGroup"]];
+    relatedMatter.solicitorGroupArray = [RelatedMatterModel getSolicitorGroupArrayFromResponse:[response objectForKeyNotNull:@"solicitorsGroup"]];
     
-    relatedMatter.propertyGroupArray = [PropertyModel getPropertyArrayFromResponse:[response objectForKey:@"propertyGroup"]];
+    relatedMatter.propertyGroupArray = [PropertyModel getPropertyArrayFromResponse:[response objectForKeyNotNull:@"propertyGroup"]];
     
-    relatedMatter.bankGroupArray = [BankGroupModel getBankGroupArrayFromResponse:[response objectForKey:@"bankGroup"]];
+    relatedMatter.bankGroupArray = [BankGroupModel getBankGroupArrayFromResponse:[response objectForKeyNotNull:@"bankGroup"]];
     
-    relatedMatter.RMGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKey:@"RMGroup"]];
+    relatedMatter.RMGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKeyNotNull:@"RMGroup"]];
     
-    relatedMatter.dateGroupArray =  [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKey:@"dateGroup"]];
+    relatedMatter.dateGroupArray =  [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKeyNotNull:@"dateGroup"]];
     
-    relatedMatter.textGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKey:@"textGroup"]];
+    relatedMatter.textGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKeyNotNull:@"textGroup"]];
     
     return relatedMatter;
 }

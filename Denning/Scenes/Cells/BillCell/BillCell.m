@@ -31,4 +31,14 @@
     self.titleLabel.text = model.propertyTitle;
 }
 
+- (void) configureCellWithModel:(TaxModel*) model
+{
+    self.quotationNo.text = model.documentNo;
+    self.fileNo.text = model.fileNo;
+    self.issueTo.text = model.issueToName;
+    self.issueBy.text = model.issueBy;
+    self.primaryClient.text = model.primaryClient;
+    self.titleLabel.text = model.propertyTitle;
+}
+
 @end

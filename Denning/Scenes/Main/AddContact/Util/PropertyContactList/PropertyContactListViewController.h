@@ -8,7 +8,7 @@
 
 @class ClientModel;
 #import <UIKit/UIKit.h>
-typedef void (^UpdatePropertyContactHandler)(ClientModel* model);
+typedef void (^UpdatePropertyContactHandler)(StaffModel* model);
 
 @interface PropertyContactListViewController : UITableViewController
 

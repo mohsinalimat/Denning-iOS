@@ -100,7 +100,7 @@
     isLoading = YES;
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
-    [[QMNetworkManager sharedManager] getPropertyType:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getPropertyContactListWithPage:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];

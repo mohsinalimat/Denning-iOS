@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^UpdateStaffHandler)(NSString *value);
+typedef void (^UpdateStaffHandler)(NSString* type, StaffModel *model);
 
 @interface StaffViewController : UITableViewController
 

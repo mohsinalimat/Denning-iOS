@@ -245,6 +245,9 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getMatterCode:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
+- (void) saveMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion;
+
+
 /*
  * Quotation
  */
@@ -260,6 +263,13 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  */
 
 - (void) getQuotationListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+
+/*
+ * Receipt
+ */
+
+- (void) getAccountTypeListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 @end
 

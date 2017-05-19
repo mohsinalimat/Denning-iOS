@@ -262,7 +262,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="a6Z-6h-gxM" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ddh-Ml-OcV">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ddh-Ml-OcV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -369,7 +369,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Srh-0F-Bbf" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="wQ4-zx-dEN">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wQ4-zx-dEN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -428,11 +428,12 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <segue destination="hJl-ak-VyK" kind="show" identifier="RelatedMatterSegue" id="nkk-rR-ueX"/>
+                        <segue destination="mJy-Sm-dt1" kind="show" identifier="AddContactSegue" id="TzU-0z-esV"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bfu-vD-hjs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6775" y="-1213"/>
+            <point key="canvasLocation" x="6841" y="-1213"/>
         </scene>
         <!--RelatedMatterViewController-->
         <scene sceneID="vpG-6Y-YxS">
@@ -441,6 +442,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DeS-69-2B7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7489" y="-1361"/>
+        </scene>
+        <!--AddContactNavigation-->
+        <scene sceneID="xip-BX-jOt">
+            <objects>
+                <viewControllerPlaceholder storyboardName="AddContact" referencedIdentifier="AddContactNavigation" id="mJy-Sm-dt1" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xpb-Gk-b07" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7457" y="-1093"/>
         </scene>
         <!--RelatedMatterViewController-->
         <scene sceneID="b6y-fK-Ski">
@@ -480,7 +489,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="otr-bn-xcJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="9SO-TB-UM3">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9SO-TB-UM3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -508,7 +517,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="I9t-RB-7G3" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="a0u-9X-P4Z">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="a0u-9X-P4Z">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -532,7 +541,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lib-hj-uPp" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="3ka-xi-Bu2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3ka-xi-Bu2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -600,7 +609,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lD9-2J-l1i" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YuN-Ot-afy">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YuN-Ot-afy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -668,7 +677,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="G93-68-FfG" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="tkd-Nn-DhZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tkd-Nn-DhZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -928,7 +937,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JeE-0C-4Q9" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Xlv-AL-x6H">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xlv-AL-x6H">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -1029,7 +1038,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gea-U5-wLg" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="J8S-rc-ciR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="J8S-rc-ciR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>

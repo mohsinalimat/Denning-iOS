@@ -16,6 +16,8 @@
 
 - (void) didTapMessage: (NewContactHeaderCell*) cell;
 
+- (void) didTapEdit: (NewContactHeaderCell*) cell;
+
 @end
 
 @interface NewContactHeaderCell : DIGeneralCell

@@ -14,7 +14,7 @@
 {
     StaffModel *staff = [StaffModel new];
     staff.IDNo = [response valueForKeyNotNull:@"IDNo"];
-    staff.address = [AddressModel getAddressFromResponse:[response valueForKeyNotNull:@"address"]];
+    staff.address = [AddressModel getAddressFromResponse:[response objectForKeyNotNull:@"address"]];
     staff.citizenship = [response valueForKeyNotNull:@"citizenship"];
     staff.staffCode = [response valueForKeyNotNull:@"code"];
     staff.dateBirth = [response valueForKeyNotNull:@"dateBirth"];

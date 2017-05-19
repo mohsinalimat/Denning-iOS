@@ -19,7 +19,7 @@
 
 @property (strong, nonatomic) NSString* fax;
 
-@property (strong, nonatomic) NSString* IRDBranch;
+@property (strong, nonatomic) CodeDescription* IRDBranch;
 
 @property (strong, nonatomic) CodeDescription* occupation;
 
@@ -27,11 +27,13 @@
 
 @property (strong, nonatomic) NSString* IDNo;
 
-@property (strong, nonatomic) NSString *idType;
+@property (strong, nonatomic) CodeDescription *idType;
 
 @property (strong, nonatomic) NSString *contactTitle;
 
 @property (strong, nonatomic) NSString *InviteDennig;
+
+@property (strong, nonatomic) NSString *website;
 
 @property (strong, nonatomic) NSString *homePhone;
 

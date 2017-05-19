@@ -19,4 +19,6 @@
 
 - (void) configureCellWithMatterSimple:(QuotationModel*) model;
 
+- (void) configureCellWithModel:(TaxModel*) model;
+
 @end

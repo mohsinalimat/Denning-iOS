@@ -30,4 +30,9 @@
     [self.delegate didTapMessage:self];
 }
 
+- (IBAction)didTapEdit:(id)sender {
+    [self.delegate didTapEdit:self];
+}
+
+
 @end

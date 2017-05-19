@@ -12,6 +12,7 @@
 #import "CommonTextCell.h"
 #import "NewContactHeaderCell.h"
 #import "RelatedMatterViewController.h"
+#import "AddContactViewController.h"
 #import <MessageUI/MessageUI.h>
 
 @interface ContactViewController ()<ContactCellDelegate, NewContactHeaderCellDelegate, MFMailComposeViewControllerDelegate>
@@ -219,6 +220,11 @@
     // Go to message
 }
 
+- (void) didTapEdit:(NewContactHeaderCell *)cell
+{
+    [self performSegueWithIdentifier:kAddContactSegue sender:nil];
+}
+
 #pragma mark - ContactCellDelegate
 - (void) didTapRightBtn:(ContactCell *)cell value:(NSString *)value
 {
@@ -292,6 +298,14 @@
         RelatedMatterViewController* relatedMatterVC = segue.destinationViewController;
         relatedMatterVC.relatedMatterModel = sender;
         relatedMatterVC.previousScreen = @"Contact";
+    }
+    
+    if ([segue.identifier isEqualToString:kAddContactSegue]) {
+        UINavigationController* nav = [[UIStoryboard storyboardWithName:@"AddContact" bundle:nil] instantiateViewControllerWithIdentifier:@"AddContactNavigation"];
+        AddContactViewController* addVC = nav.viewControllers.firstObject;
+        addVC.viewType = @"Update";
+        addVC.title = @"Update Contact";
+        addVC.contactModel = self.contactModel;
     }
 }
 

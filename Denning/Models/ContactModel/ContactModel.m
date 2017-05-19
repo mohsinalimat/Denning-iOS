@@ -15,6 +15,7 @@
     ContactModel *contactModel = [ContactModel new];
     
     contactModel.contactCode = [[response objectForKeyNotNull:@"code"] stringValue];
+    contactModel.idType = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"IDType"]];
     contactModel.IDNo = [response objectForKeyNotNull:@"IDNo"];
     contactModel.name = [response objectForKeyNotNull:@"name"];
     contactModel.homePhone = [response objectForKeyNotNull:@"phoneHome"];
@@ -26,11 +27,12 @@
     contactModel.dateOfBirth = [response objectForKeyNotNull:@"dateBirth"];
     contactModel.citizenShip = [response objectForKeyNotNull:@"citizenship"];
     contactModel.fax = [response objectForKeyNotNull:@"phoneFax"];
-    contactModel.tax = @"";
-    contactModel.IRDBranch = [response objectForKeyNotNull:@"irdBranch"];
+    contactModel.tax = [response valueForKeyNotNull:@"taxFileNo"];
+    contactModel.IRDBranch = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"irdBranch"]];
     contactModel.idType = [response objectForKeyNotNull:@"idType"];
     contactModel.contactTitle = [response objectForKeyNotNull:@"title"];
     contactModel.contactPerson = [response objectForKeyNotNull:@"contactPerson"];
+    contactModel.website = [response objectForKeyNotNull:@"website"];
     contactModel.InviteDennig = [response objectForKeyNotNull:@"InviteDennig"];
     contactModel.registeredOffice = [response objectForKeyNotNull:@"registeredOffice"];
     contactModel.occupation = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"occupation"]];

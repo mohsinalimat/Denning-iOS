@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="93" id="KGk-i7-Jjw" customClass="AddMatterCell">
+            <rect key="frame" x="0.0" y="0.0" width="475" height="93"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="475" height="92.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cj3-cJ-CFQ">
+                        <rect key="frame" x="428" y="35" width="19" height="22"/>
+                        <state key="normal" image="menu_add.png"/>
+                        <connections>
+                            <action selector="didTapAdd:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="qYS-V5-Ich"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add New Party" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxw-rg-y1u">
+                        <rect key="frame" x="32" y="36.5" width="122" height="20"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="0.65490196079999996" green="0.66274509800000003" blue="0.67450980390000004" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstItem="Cj3-cJ-CFQ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="G7A-MH-kn2"/>
+                    <constraint firstItem="Nxw-rg-y1u" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="LFl-Bb-Fkj"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Cj3-cJ-CFQ" secondAttribute="trailing" constant="20" id="vBg-Ct-cYA"/>
+                    <constraint firstItem="Nxw-rg-y1u" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="24" id="vqM-qe-NGF"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="label" destination="Nxw-rg-y1u" id="MhZ-ND-ajI"/>
+            </connections>
+            <point key="canvasLocation" x="255" y="-192"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="menu_add.png" width="19" height="19"/>
+    </resources>
+</document>

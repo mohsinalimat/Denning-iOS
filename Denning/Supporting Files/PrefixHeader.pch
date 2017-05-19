@@ -121,6 +121,8 @@
 #import "CACModel.h"
 #import "HQModel.h"
 #import "BankBranchModel.h"
+#import "TaxModel.h"
+#import "AccountTypeModel.h"
 
 @protocol ContactListWithCodeSelectionDelegate <NSObject>
 

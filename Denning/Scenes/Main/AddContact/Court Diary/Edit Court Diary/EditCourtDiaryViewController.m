@@ -398,7 +398,7 @@ NSMutableDictionary* keyValue;
         UINavigationController *navVC =segue.destinationViewController;
         StaffViewController* staffVC = navVC.viewControllers.firstObject;
         staffVC.typeOfStaff = sender;
-        staffVC.updateHandler = ^(NSString* value) {
+        staffVC.updateHandler = ^(NSString*  typeOfStaff, StaffModel* model) {
 //            self.councilAssigned.text = value;
         };
     }

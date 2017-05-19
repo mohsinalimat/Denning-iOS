@@ -532,10 +532,10 @@ NSMutableDictionary* keyValue;
     } else if (indexPath.section == 4) {
         if (indexPath.row == 0) {
             [self performSegueWithIdentifier:kProjectHousingSegue sender:PROPERTY_PROJECT_HOUSING_GET_URL];
-        } else if (indexPath.row == 2) {
+        } else if (indexPath.row == 1) {
             selectedContactRow = indexPath.row;
             [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
-        } else if (indexPath.row == 3) {
+        } else if (indexPath.row == 2) {
             selectedContactRow = indexPath.row;
             [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
         }
@@ -627,7 +627,7 @@ NSMutableDictionary* keyValue;
     
     if ([segue.identifier isEqualToString:kContactGetListSegue]) {
         PropertyContactListViewController* contactVC = segue.destinationViewController;
-        contactVC.updateHandler = ^(ClientModel *model) {
+        contactVC.updateHandler = ^(StaffModel *model) {
             [self replaceContentForSection:4 InRow:selectedContactRow withValue:model.name];
         };
     }
