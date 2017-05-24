@@ -181,6 +181,10 @@
     return 0.0;
 }
 
+- (void) showComingSoon {
+    [QMAlert showAlertWithMessage:@"Coming Soon. Thank you for your support." actionSuccess:YES inViewController:self];
+}
+
 #pragma mark -
 #pragma mark UICollectionViewDelegate
 
@@ -196,10 +200,28 @@
         [self getLatestUpdatesWithCompletion:^(NSArray *array) {
             [self performSegueWithIdentifier:kUpdateSegue sender:array];
         }];
+    } else if (indexPath.row == 2) {
+        [self showComingSoon];
+
+    } else if (indexPath.row == 3) {
+        [self showComingSoon];
+        
     } else if (indexPath.row == 4) {
         [self performSegueWithIdentifier:kCalculateSegue sender:nil];
     } else if (indexPath.row == 5) {
         [self getSharedFoldersWithCompletion:nil];
+    } else if (indexPath.row == 6) {
+        [self showComingSoon];
+        
+    } else if (indexPath.row == 7) {
+        [self showComingSoon];
+        
+    } else if (indexPath.row == 8) {
+        [self showComingSoon];
+        
+    } else if (indexPath.row == 9) {
+        [self showComingSoon];
+        
     } else if (indexPath.row == 10) {
         if (![[DataManager sharedManager].user.userType isEqualToString:@""]) {
             [self geteventsArrayWithCompletion:^(NSArray * array) {
@@ -208,6 +230,9 @@
         } else {
             [QMAlert showAlertWithMessage:@"You cannot access this folder. please subscribe dening user" actionSuccess:NO inViewController:self];
         }
+        
+    } else if (indexPath.row == 11) {
+        [self showComingSoon];
         
     }
     cell.backgroundColor = [UIColor whiteColor];

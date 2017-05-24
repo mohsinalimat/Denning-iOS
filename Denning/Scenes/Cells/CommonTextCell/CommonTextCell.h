@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "DIGeneralCell.h"
+#import "GeneralContactCell.h"
 
-@interface CommonTextCell : DIGeneralCell
+@interface CommonTextCell : GeneralContactCell
+
+@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 
 - (void) configureCellWithValue: (NSString*) value;
 @end

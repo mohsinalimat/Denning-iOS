@@ -15,7 +15,7 @@
 #import "AddContactViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface ContactViewController ()<ContactCellDelegate, NewContactHeaderCellDelegate, MFMailComposeViewControllerDelegate>
+@interface ContactViewController ()<ContactCellDelegate, NewContactHeaderCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate>
 {
     __block BOOL isLoading;
 }
@@ -32,7 +32,7 @@
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
-    [self gotoRelatedMatter];
+    [self showOnlyMatter];
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -46,7 +46,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) gotoRelatedMatterSection
+- (void) showOnlyMatter
 {
     if ([self.gotoRelatedMatter isEqualToString:@"Matter"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -93,6 +93,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
+
 
 #pragma mark - Table view data source
 
@@ -190,7 +191,7 @@
         } else if (indexPath.row == 7) {
             [cell configureCellWithContact:@"Tax File No" text:contactModel.tax];
         } else if (indexPath.row == 8) {
-            [cell configureCellWithContact:@"IRD Branch" text:contactModel.IRDBranch];
+            [cell configureCellWithContact:@"IRD Branch" text:contactModel.IRDBranch.descriptionValue];
         } else if (indexPath.row == 9) {
             [cell configureCellWithContact:@"Occupation" text:contactModel.occupation.descriptionValue];
         }  else if (indexPath.row == 10) {
@@ -202,14 +203,9 @@
     } else {
         SearchResultModel *matterModel = self.contactModel.relatedMatter[indexPath.row];
         NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
-        NSString* fileNo = matter[0];
-        NSString* name = @"";
-        if ([matter count] == 2) {
-            name = matter[1];
-        }
-        [cell configureCellWithContact:fileNo text:name];
+        [cell configureCellWithContact:matter[0] text:matter[1]];
         [cell setEnableRightBtn:NO image:nil];
-        
+      
         return cell;
     }
 }
@@ -222,7 +218,7 @@
 
 - (void) didTapEdit:(NewContactHeaderCell *)cell
 {
-    [self performSegueWithIdentifier:kAddContactSegue sender:nil];
+    [self performSegueWithIdentifier:kAddContactSegue sender:self.contactModel];
 }
 
 #pragma mark - ContactCellDelegate
@@ -301,11 +297,11 @@
     }
     
     if ([segue.identifier isEqualToString:kAddContactSegue]) {
-        UINavigationController* nav = [[UIStoryboard storyboardWithName:@"AddContact" bundle:nil] instantiateViewControllerWithIdentifier:@"AddContactNavigation"];
+        UINavigationController* nav = segue.destinationViewController;
         AddContactViewController* addVC = nav.viewControllers.firstObject;
         addVC.viewType = @"Update";
         addVC.title = @"Update Contact";
-        addVC.contactModel = self.contactModel;
+        addVC.contactModel = sender;
     }
 }
 

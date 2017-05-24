@@ -123,6 +123,10 @@
 #import "BankBranchModel.h"
 #import "TaxModel.h"
 #import "AccountTypeModel.h"
+#import "SoliciorModel.h"
+#import "TypeValueModel.h"
+#import "MatterLitigationModel.h"
+#import "CourtDiaryModel.h"
 
 @protocol ContactListWithCodeSelectionDelegate <NSObject>
 

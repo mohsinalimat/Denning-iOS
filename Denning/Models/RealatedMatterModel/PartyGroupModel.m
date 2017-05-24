@@ -10,6 +10,14 @@
 
 @implementation PartyGroupModel
 
++ (PartyGroupModel*) getPartyGroupFromResponse: (NSDictionary*) response{
+    PartyGroupModel *model = [PartyGroupModel new];
+    
+    model.partyGroupName = [response valueForKeyNotNull:@"PartyName"];
+    model.partyArray = [ClientModel getClientArrayFromReponse:[response objectForKeyNotNull:@"party"]];
+    
+    return model;
+}
 +(NSArray*) getPartyGroupArrayFromResponse: (NSArray*) response
 {
     NSMutableArray* partyGroupArray = [NSMutableArray new];

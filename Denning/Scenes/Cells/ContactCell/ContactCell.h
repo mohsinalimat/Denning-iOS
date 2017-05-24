@@ -21,6 +21,7 @@
 @interface ContactCell : DIGeneralCell
 
 @property (weak, nonatomic) id<ContactCellDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text;
 

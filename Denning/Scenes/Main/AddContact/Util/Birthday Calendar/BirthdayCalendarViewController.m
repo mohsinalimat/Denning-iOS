@@ -32,7 +32,7 @@
 - (IBAction)nextBtnDidTap
 {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+    [dateFormat setDateFormat:@"MM/dd/yyyy"];
     NSDate *pickerDate = [_datePicker date];
  
     [self.popupController dismissWithCompletion:^{

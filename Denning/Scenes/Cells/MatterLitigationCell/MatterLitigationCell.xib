@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
+        </array>
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="88" id="KGk-i7-Jjw" customClass="MatterLitigationCell">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="87.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="File No" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxh-JB-ZD9">
+                        <rect key="frame" x="20" y="8" width="43.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Case Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KDA-8Z-3fQ">
+                        <rect key="frame" x="75.5" y="8" width="71.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xUi-oi-kEY">
+                        <rect key="frame" x="20" y="25" width="36" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="51m-zJ-BYi">
+                        <rect key="frame" x="75.5" y="25" width="36" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Case No" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FhZ-sh-GzQ">
+                        <rect key="frame" x="20" y="50" width="52.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZtI-6K-ivw">
+                        <rect key="frame" x="20" y="67" width="36" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="FhZ-sh-GzQ" firstAttribute="top" secondItem="xUi-oi-kEY" secondAttribute="bottom" constant="8" id="1DJ-mR-E7F"/>
+                    <constraint firstItem="KDA-8Z-3fQ" firstAttribute="leading" secondItem="pxh-JB-ZD9" secondAttribute="trailing" constant="12" id="5c5-Hz-iqm"/>
+                    <constraint firstItem="pxh-JB-ZD9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="9GD-Bt-kdN"/>
+                    <constraint firstItem="pxh-JB-ZD9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="Dmf-a1-23G"/>
+                    <constraint firstItem="FhZ-sh-GzQ" firstAttribute="leading" secondItem="xUi-oi-kEY" secondAttribute="leading" id="EPw-jJ-sfS"/>
+                    <constraint firstItem="xUi-oi-kEY" firstAttribute="leading" secondItem="pxh-JB-ZD9" secondAttribute="leading" id="NFd-gJ-2K0"/>
+                    <constraint firstItem="ZtI-6K-ivw" firstAttribute="top" secondItem="FhZ-sh-GzQ" secondAttribute="bottom" constant="1" id="W4L-UY-nsS"/>
+                    <constraint firstItem="KDA-8Z-3fQ" firstAttribute="leading" secondItem="51m-zJ-BYi" secondAttribute="leading" id="bYB-x9-iIH"/>
+                    <constraint firstItem="51m-zJ-BYi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xUi-oi-kEY" secondAttribute="trailing" constant="12" id="hUI-ra-Wk8"/>
+                    <constraint firstAttribute="bottom" secondItem="ZtI-6K-ivw" secondAttribute="bottom" constant="3.5" id="nhV-cU-lhj"/>
+                    <constraint firstItem="KDA-8Z-3fQ" firstAttribute="top" secondItem="pxh-JB-ZD9" secondAttribute="top" id="owL-e1-MnI"/>
+                    <constraint firstItem="xUi-oi-kEY" firstAttribute="top" secondItem="51m-zJ-BYi" secondAttribute="top" id="ozh-qc-fmj"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="51m-zJ-BYi" secondAttribute="trailing" constant="12" id="pas-rb-6ov"/>
+                    <constraint firstItem="xUi-oi-kEY" firstAttribute="top" secondItem="pxh-JB-ZD9" secondAttribute="bottom" constant="1" id="sKZ-Rq-AVG"/>
+                    <constraint firstItem="51m-zJ-BYi" firstAttribute="bottom" secondItem="xUi-oi-kEY" secondAttribute="bottom" id="uHA-MJ-llZ"/>
+                    <constraint firstItem="ZtI-6K-ivw" firstAttribute="leading" secondItem="FhZ-sh-GzQ" secondAttribute="leading" id="xSX-h1-cGh"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="courtCaseName" destination="51m-zJ-BYi" id="vqy-rr-YyA"/>
+                <outlet property="courtCaseNo" destination="ZtI-6K-ivw" id="iV3-20-iCh"/>
+                <outlet property="systemNo" destination="xUi-oi-kEY" id="77S-cr-TUX"/>
+            </connections>
+            <point key="canvasLocation" x="30" y="43"/>
+        </tableViewCell>
+    </objects>
+</document>

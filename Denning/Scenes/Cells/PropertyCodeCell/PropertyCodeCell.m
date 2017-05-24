@@ -27,7 +27,8 @@
     self.propertyTitle.text = model.fullTitle;
     self.projectName.text = model.projectName;
     self.address.text = model.address.fullAddress;
-    self.parcelNo.text = [NSString stringWithFormat:@"%@ %@", model.spaParcel.codeValue, model.spaParcel.descriptionValue];
+    self.parcelNo.text = [NSString stringWithFormat:@"%@ %@", model.spaParcel.type, model.spaParcel.value];
+    self.condoName.text = model.spaCondoName;
 }
 
 @end

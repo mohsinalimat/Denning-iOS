@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DIGeneralCell.h"
+#import "GeneralContactCell.h"
 
-@interface FloatingTextCell : DIGeneralCell
+@interface FloatingTextCell : GeneralContactCell
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *floatingTextField;
 
 - (void) configurePlaceholder:(NSString*)placeHolder withType:(NSString*)type;

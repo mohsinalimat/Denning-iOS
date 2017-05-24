@@ -100,9 +100,11 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define CONTACT_IRDBRANCH_URL   @"denningwcf/v1/IRDBranch?search="
 
-#define CONTACT_SAVE_URL    @"/denningwcf/v1/app/contact?search="
+#define CONTACT_SAVE_URL    @"/denningwcf/v1/app/contact"
 
 #define CONTACT_GETLIST_URL @"denningwcf/v1/party?search="
+
+#define CONTACT_SOLICITOR_GET_LIST_URL   @"denningwcf/v1/Solicitor?search="
 
 #define CONTACT_UPDATE_URL    @"/denningwcf/v1/contact?search="
 
@@ -113,13 +115,26 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define MATTER_LIST_GET_URL    @"denningwcf/v1/matter?search="
 
+#define MATTER_LITIGATION_GET_LIST_URL @"denningwcf/v1/matter/litigationCase?search="
+
 #define MATTER_SAVE_URL @"denningwcf/v1/file"
 
 #define COURT_HEARINGTYPE_GET_URL @"denningwcf/v1/courtDiary/hearingType?search="
 
+#define COURTDIARY_GET_LIST_URL @"denningwcf/v1/courtDiary/court?search="
+
+
 #define COURT_HEARINGDETAIL_GET_URL @"denningwcf/v1/courtDiary/hearingDetails?search="
 
+#define COURT_OFFICE_APPOINTMENT_GET_LIST_URL   @"denningwcf/v1/OfficeDiary/AppointmentDetails?search="
+
+#define COURT_OFFICE_PLACE_GET_LIST_URL @"denningwcf/v1/OfficeDiary/AppointmentPlace?search="
+
 #define COURT_ATTENDED_STATUS_GET_URL @"denningwcf/v1/generalSelection/frmCourtDiary/attendedStatus?search="
+
+#define COURT_PERSONAL_PLACE_GET_LIST_URL   @"denningwcf/v1/PersonalDiary/AppointmentPlace?search="
+
+#define COURT_PERSONAL_DETAIL_GET_LIST_URL  @"denningwcf/v1/PersonalDiary/AppointmentDetails?search="
 
 #define COURT_CORAM_GET_URL @"denningwcf/v1/courtDiary/coram?search="
 
@@ -127,7 +142,11 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define COURT_NEXTDATE_TYPE_GET_URL @"denningwcf/v1/generalSelection/frmCourtDiary/nextDateType?search="
 
-#define COURT_SAVE_UPATE_URL  @"denningwcf/v1/CourtDiary?search="
+#define COURT_SAVE_UPATE_URL  @"denningwcf/v1/CourtDiary"
+
+#define OFFICE_DIARY_SAVE_URL   @"denningwcf/v1/OfficeDiary"
+
+#define PERSONAL_DIARY_SAVE_URL @"denningwcf/v1/PersonalDiary"
 
 #define COURT_COUNSEL_GET_URL   @"denningwcf/v1/Staff?type=attest"
 
@@ -141,6 +160,7 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define STAFF_PARTNER_GET_URL   @"denningwcf/v1/Staff?type=partner"
 
+#define PROPERTY_GET_LIST_URL   @"denningwcf/v1/Property?search="
 
 #define PROPERTY_TYPE_GET_URL   @"denningwcf/v1/Property/PropertyType?search="
 
@@ -199,6 +219,8 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define ACCOUNT_PAYMENT_MODE_GET_URL    @"denningwcf/v1/account/paymentMode?search="
 
 #define ACCOUNT_CHEQUE_ISSUEER_GET_URL  @"denningwcf/v1/account/ChequeIssuerBank?search="
+
+#define RECEIPT_SAVE_URL @"denningwcf/v1/ClientReceipt"
 /*
  *  Notification Names
  */

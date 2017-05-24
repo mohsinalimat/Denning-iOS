@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
+        </array>
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="87" id="KGk-i7-Jjw" customClass="SolicitorCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firm Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbS-aN-EcB">
+                        <rect key="frame" x="16" y="8" width="68" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Branch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kho-Dt-yKZ">
+                        <rect key="frame" x="96" y="8" width="44.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8y-ze-ozv">
+                        <rect key="frame" x="16" y="25" width="36" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXI-Nr-hGU">
+                        <rect key="frame" x="96" y="25" width="36" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone / Fax" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nXq-d0-Udj">
+                        <rect key="frame" x="16" y="50" width="73" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNh-K5-Us4">
+                        <rect key="frame" x="16" y="67" width="36" height="19.5"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="RNh-K5-Us4" firstAttribute="leading" secondItem="nXq-d0-Udj" secondAttribute="leading" id="0pb-Jb-bZN"/>
+                    <constraint firstItem="nXq-d0-Udj" firstAttribute="top" secondItem="Q8y-ze-ozv" secondAttribute="bottom" constant="8" id="2na-47-7PV"/>
+                    <constraint firstItem="qbS-aN-EcB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="37d-3g-IuX"/>
+                    <constraint firstItem="nXq-d0-Udj" firstAttribute="leading" secondItem="Q8y-ze-ozv" secondAttribute="leading" id="Bfc-8P-3xO"/>
+                    <constraint firstItem="hXI-Nr-hGU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Q8y-ze-ozv" secondAttribute="trailing" constant="12" id="IHg-Sl-Vg0"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="hXI-Nr-hGU" secondAttribute="trailing" id="PJW-7b-ZOK"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="leading" secondItem="qbS-aN-EcB" secondAttribute="leading" id="SH7-XW-ydD"/>
+                    <constraint firstItem="hXI-Nr-hGU" firstAttribute="bottom" secondItem="Q8y-ze-ozv" secondAttribute="bottom" id="VUB-jJ-5oS"/>
+                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="top" secondItem="qbS-aN-EcB" secondAttribute="top" id="W2i-qo-3Di"/>
+                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="leading" secondItem="qbS-aN-EcB" secondAttribute="trailing" constant="12" id="k9C-t2-SWO"/>
+                    <constraint firstItem="qbS-aN-EcB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="m4I-7S-72J"/>
+                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="leading" secondItem="hXI-Nr-hGU" secondAttribute="leading" id="sJ4-Lb-9WO"/>
+                    <constraint firstItem="RNh-K5-Us4" firstAttribute="top" secondItem="nXq-d0-Udj" secondAttribute="bottom" constant="1" id="u6g-bq-tFb"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="top" secondItem="hXI-Nr-hGU" secondAttribute="top" id="uo2-rR-Ojk"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="top" secondItem="qbS-aN-EcB" secondAttribute="bottom" constant="1" id="v4h-dg-fIf"/>
+                    <constraint firstAttribute="bottom" secondItem="RNh-K5-Us4" secondAttribute="bottom" id="y7e-nK-kur"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="branch" destination="hXI-Nr-hGU" id="T71-VL-cgJ"/>
+                <outlet property="firmName" destination="Q8y-ze-ozv" id="fFv-9h-qAY"/>
+                <outlet property="phoneAndFax" destination="RNh-K5-Us4" id="QHr-ZH-4XZ"/>
+            </connections>
+            <point key="canvasLocation" x="25" y="73.5"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Code" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F16-OK-aHi">
@@ -62,6 +62,7 @@
                     <constraint firstItem="wdc-KO-qbx" firstAttribute="leading" secondItem="4t0-BJ-ZS0" secondAttribute="trailing" constant="12" id="l1j-P2-C4q"/>
                     <constraint firstAttribute="trailingMargin" secondItem="wdc-KO-qbx" secondAttribute="trailing" id="lO4-12-BXn"/>
                     <constraint firstItem="QME-T8-BLH" firstAttribute="top" secondItem="F16-OK-aHi" secondAttribute="top" id="t0m-X3-pFB"/>
+                    <constraint firstItem="QME-T8-BLH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="F16-OK-aHi" secondAttribute="trailing" constant="12" id="u74-wY-SvF"/>
                     <constraint firstItem="4t0-BJ-ZS0" firstAttribute="top" secondItem="wdc-KO-qbx" secondAttribute="top" id="wD7-ut-UtZ"/>
                     <constraint firstItem="wdc-KO-qbx" firstAttribute="bottom" secondItem="4t0-BJ-ZS0" secondAttribute="bottom" id="xgz-3h-AMv"/>
                 </constraints>

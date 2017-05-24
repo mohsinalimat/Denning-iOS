@@ -40,6 +40,9 @@ PODS:
   - FLAnimatedImage (1.0.12)
   - FZAccordionTableView (0.2.3)
   - GLCalendarView (1.0.3)
+  - HNKGooglePlacesAutocomplete (1.2.0):
+    - AFNetworking (~> 3.0)
+    - Mantle (~> 2.0)
   - HTHorizontalSelectionList (0.7.4):
     - M13BadgeView (~> 1.0.4)
   - libextobjc/EXTKeyPathCoding (0.4.1):
@@ -49,6 +52,9 @@ PODS:
   - libextobjc/RuntimeExtensions (0.4.1)
   - libPhoneNumber-iOS (0.9.10)
   - M13BadgeView (1.0.4)
+  - Mantle (2.1.0):
+    - Mantle/extobjc (= 2.1.0)
+  - Mantle/extobjc (2.1.0)
   - Masonry (1.0.2)
   - MBProgressHUD (1.0.0)
   - MPGNotification (1.2.4)
@@ -147,6 +153,7 @@ DEPENDENCIES:
   - FBSDKShareKit (~> 4.11.0)
   - FZAccordionTableView (~> 0.2.3)
   - GLCalendarView (~> 1.0.0)
+  - HNKGooglePlacesAutocomplete (~> 1.1)
   - HTHorizontalSelectionList (~> 0.7.4)
   - libextobjc/EXTKeyPathCoding (~> 0.4.1)
   - libextobjc/EXTScope (~> 0.4.1)
@@ -190,10 +197,12 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FZAccordionTableView: e64f49c71c32d750feda14025b088bcd25d1a71f
   GLCalendarView: f3a71aca59f456b81abad9667dc5985c46810996
+  HNKGooglePlacesAutocomplete: 1977cf89b41080aba06ff0e934eb72c01efb8e03
   HTHorizontalSelectionList: c38792f4bc87f941ab6c07b02a40abf111c68249
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   libPhoneNumber-iOS: f721ae4d5854bce60934f9fb9b0b28e8e68913cb
   M13BadgeView: 700dd0714fdc837c0cf1c8c004454963ec22441f
+  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MPGNotification: f0e3924087afa9b3eccd5ce624e03965ae31ae61
@@ -218,6 +227,6 @@ SPEC CHECKSUMS:
   UIFloatLabelTextField: c1df7d4e688a1bd52738513f961df16f94914367
   VBFPopFlatButton: 39e48ab56277f3d056734a9b5ec5d0cc60d69778
 
-PODFILE CHECKSUM: 9261d57dfcdbb1167759decd09ba2a3860d5318b
+PODFILE CHECKSUM: 6f505b004c376dc51fc0f93735cd1b9844071bda
 
 COCOAPODS: 1.2.1

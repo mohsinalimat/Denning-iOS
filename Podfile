@@ -1,5 +1,5 @@
 platform :ios, ’10.2’
-xcodeproj ‘Denning.xcodeproj'
+project ‘Denning.xcodeproj’
 source 'https://github.com/CocoaPods/Specs.git'
 'use_frameworks!'
 
@@ -30,6 +30,7 @@ target ‘Denning’ do
 	pod "GLCalendarView", "~> 1.0.0"
 	pod 'UIFloatLabelTextField'
 	pod 'FZAccordionTableView', '~> 0.2.3'
+	pod "HNKGooglePlacesAutocomplete", "~> 1.1"
 
 	pod 'AFNetworking’
 	pod 'Bolts'

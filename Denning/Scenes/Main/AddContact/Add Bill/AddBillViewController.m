@@ -14,8 +14,9 @@
 #import "ListOfMatterViewController.h"
 #import "PresetBillViewController.h"
 #import "QuotationGetListViewController.h"
+#import "AddReceiptViewController.h"
 
-@interface AddBillViewController ()<UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate>
+@interface AddBillViewController ()<UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate, SWTableViewCellDelegate>
 {
     NSString *titleOfList;
     NSString* nameOfField;
@@ -87,10 +88,10 @@ NSMutableDictionary* keyValue;
                                    @"code": _contents[0][5][1]
                                    },
                            @"relatedDocumentNo": _contents[0][0][1],
-                           @"spaPrice": [self getValidValue:_contents[0][6][1]],
-                           @"spaLoan": [self getValidValue:_contents[0][7][1]],
+                           @"spaPrice": [self getActualNumber: [self getValidValue:_contents[0][6][1]]],
+                           @"spaLoan": [self getActualNumber:[self getValidValue:_contents[0][7][1]]],
                            @"rentalMonth": [self getValidValue:_contents[0][8][1]],
-                           @"rentalPrice": [self getValidValue:_contents[0][9][1]]
+                           @"rentalPrice": [self getActualNumber:[self getValidValue:_contents[0][9][1]]]
                            };
     if (isLoading) return;
     isLoading = YES;
@@ -188,7 +189,7 @@ NSMutableDictionary* keyValue;
         return @"0";
     }
     else {
-        return value;
+        return [value stringByReplacingOccurrencesOfString:@"," withString:@""];
     }
     
     return value;
@@ -257,13 +258,16 @@ NSMutableDictionary* keyValue;
             }
         };
         cell.convertHandler = ^{
-            NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
+            NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163/", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
             NSURL *url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-            configuration.HTTPAdditionalHeaders = @{@"Content-Type":@"application/json", @"webuser-sessionid":@"testdenningSkySea",
-                                    @"webuser-id":@"email@com.my"};
             AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+            
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
+            [request setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
             NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                 NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
                                                                                    inDomain:NSUserDomainMask
@@ -281,6 +285,10 @@ NSMutableDictionary* keyValue;
                     [self displayDocument:filePath];
             }];
             [downloadTask resume];
+        };
+        
+        cell.viewHandler = ^{
+            [self performSegueWithIdentifier:kAddReceiptSegue sender:nil];
         };
         return cell;
     }
@@ -303,6 +311,8 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.inputAccessoryView = accessoryView;
     cell.floatingTextField.tag = indexPath.row;
+    cell.leftUtilityButtons = [self leftButtons];
+    cell.delegate = self;
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
@@ -341,11 +351,54 @@ NSMutableDictionary* keyValue;
     [self.view endEditing:YES];
 }
 
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString* clearString = [[NSAttributedString alloc] initWithString:@"Clear" attributes:attributes];
+    
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:clearString];
+    
+    return leftUtilityButtons;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    [cell hideUtilityButtonsAnimated:YES];
+    [self replaceContentForSection:indexPath.section InRow:indexPath.row withValue:@""];
+}
+
 #pragma mark - UITextField Delegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     [self replaceContentForSection:0 InRow:textField.tag withValue:textField.text];
+}
+
+- (NSString*) getActualNumber: (NSString*) formattedNumber
+{
+    return [formattedNumber stringByReplacingOccurrencesOfString:@"," withString:@""];
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    string = string.uppercaseString;
+    if (textField.tag == 6 || textField.tag == 7 || textField.tag == 8 || textField.tag == 9) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
+        textField.text = formattedNumberString;
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 #pragma mark - UITableView Datasource
@@ -377,11 +430,6 @@ NSMutableDictionary* keyValue;
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return kDefaultAccordionHeaderViewHeight;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 10;
 }
 
 - (void)reloadHeaders {
@@ -452,11 +500,7 @@ NSMutableDictionary* keyValue;
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView didOpenSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    });
+    
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView willCloseSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
@@ -513,6 +557,7 @@ NSMutableDictionary* keyValue;
         QuotationGetListViewController* quotationVC = segue.destinationViewController;
         quotationVC.updateHandler = ^(QuotationModel* model){
             [self replaceContentForSection:0 InRow:0 withValue:model.relatedDocumentNo];
+            [self replaceContentForSection:0 InRow:1 withValue:model.documentNo];
         };
     }
     

@@ -2,7 +2,7 @@
 //  PropertyListViewController.m
 //  Denning
 //
-//  Created by DenningIT on 18/05/2017.
+//  Created by DenningIT on 19/05/2017.
 //  Copyright © 2017 DenningIT. All rights reserved.
 //
 
@@ -98,9 +98,9 @@
 - (void) getList {
     if (isLoading) return;
     isLoading = YES;
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
-    [[QMNetworkManager sharedManager] getPropertyContactListWithPage:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getPropertyList:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
@@ -108,7 +108,6 @@
         }
         
         if (error == nil) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
             if (isAppending) {
                 self.listOfProperties = [[self.listOfProperties arrayByAddingObjectsFromArray:result] mutableCopy];
                 if (result.count != 0) {
@@ -140,7 +139,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    
     return self.listOfProperties.count;
 }
 

@@ -170,12 +170,7 @@
     else {
         SearchResultModel *matterModel = self.propertyModel.relatedMatter[indexPath.row];
         NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
-        NSString* fileNo = matter[0];
-        NSString* name = @"";
-        if ([matter count] == 2) {
-            name = matter[1];
-        }
-        [contactCell configureCellWithContact:fileNo text:name];
+        [contactCell configureCellWithContact:matter[0] text:matter[1]];
         [contactCell setEnableRightBtn:NO image:nil];
         
         return contactCell;

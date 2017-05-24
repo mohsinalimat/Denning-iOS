@@ -30,8 +30,8 @@
 - (void) configureCellWithValue1: (NSString*) value1 value2:(NSString*) value2 value3: (NSString*) value3
 {
     self.firstValueLabel.text = value1;
-    self.secondValueLabel.text = value2;
-    self.thirdValuelabel.text = value3;
+    self.secondValueLabel.text = value2.uppercaseString;
+    self.thirdValuelabel.text = value3.uppercaseString;
 }
 
 @end

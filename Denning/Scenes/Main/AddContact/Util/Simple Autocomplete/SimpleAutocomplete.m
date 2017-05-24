@@ -84,6 +84,11 @@
     return YES;
 }
 
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    customString = textField.text;
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -91,6 +96,7 @@
     self.contentSizeInPopup = CGSizeMake(250, 250);
     self.landscapeContentSizeInPopup = CGSizeMake(250, 250);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStylePlain target:self action:@selector(nextBtnDidTap)];
+    self.navigationController.title = @"Autocomplete / Select";
 }
 
 - (void) nextBtnDidTap

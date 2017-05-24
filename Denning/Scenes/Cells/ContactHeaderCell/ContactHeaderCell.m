@@ -28,7 +28,7 @@
 
 - (void) configureCellWithContact:(NSString*) contactID
 {
-    self.titleLabel.text = contactID;
+    self.titleLabel.text = contactID.uppercaseString;
 }
 
 @end

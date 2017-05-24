@@ -24,12 +24,11 @@
     if ([relatedMatter.ref isKindOfClass:[NSNull class]]) {
         relatedMatter.ref = @"";
     }
-    relatedMatter.matter = [[response objectForKey:@"matter"] objectForKey:@"description"];
-    
+    relatedMatter.matter = [[response objectForKeyNotNull:@"matter"] valueForKeyNotNull:@"description"];
     
     relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKeyNotNull:@"partyGroup"]];
     
-    relatedMatter.court = [CourtModel getCourtFromResponse:response];
+    relatedMatter.court = [CourtModel getCourtFromResponse:[response objectForKeyNotNull:@"courtInfo"]];
     
     relatedMatter.solicitorGroupArray = [RelatedMatterModel getSolicitorGroupArrayFromResponse:[response objectForKeyNotNull:@"solicitorsGroup"]];
     

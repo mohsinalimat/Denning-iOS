@@ -14,10 +14,11 @@
 #import "BirthdayCalendarViewController.h"
 #import "ProjectHousingViewController.h"
 #import "PropertyContactListViewController.h"
-#import "PropertyListViewController.h"
+#import "PropertyTypeListViewController.h"
+#import "SimpleAutocomplete.h"
+#import "PropertyAutoComplete.h"
 
-@interface AddPropertyViewController ()<UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, ContactListWithCodeSelectionDelegate,
-UITextFieldDelegate>
+@interface AddPropertyViewController ()<UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate,ContactListWithCodeSelectionDelegate, UITextFieldDelegate, SWTableViewCellDelegate>
 {
     NSString *titleOfList;
     NSString* nameOfField;
@@ -26,9 +27,11 @@ UITextFieldDelegate>
     NSString* selectedAreaTypeCode;
     NSString* selectedRestrictionCode;
     NSString* selectedPropertyCode;
+    NSNumber* selectedProjectCode;
     __block BOOL isLoading;
     NSInteger selectedContactRow;
 }
+
 @property (weak, nonatomic) IBOutlet FZAccordionTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contents;
 @property (nonatomic, strong) NSArray *headers;
@@ -58,10 +61,10 @@ NSMutableDictionary* keyValue;
                       } mutableCopy];
     NSArray* temp = @[
                   @[@[@"Property Description", @""], @[@"Individual/Strata Title", @""]],
-                  @[@[@"ID", @""], @[@"Title Type", @""], @[@"Title No.", @""], @[@"Lot Type", @""], @[@"Lot/PT No.", @""], @[@"Mukim Type", @""], @[@"Mukim Value", @""], @[@"Daerah", @""], @[@"Negeri", @""], @[@"Area Type", @""], @[@"Area Value", @""], @[@"Tenure", @""], @[@"Address/Place", @""], @[@"Lease Expiry Date", @""], @[@"Restriction in Interest", @""], @[@"Restriction Against", @""], @[@"Approving Authority", @""], @[@"Category of Land Use", @""]
+                  @[@[@"ID", @""], @[@"Title Type", @""], @[@"Title No.", @""], @[@"Lot Type", @""], @[@"Lot/PT No.", @""], @[@"Mukim Type", @""], @[@"Mukim", @""], @[@"Daerah", @""], @[@"Negeri", @""], @[@"Area Type", @""], @[@"Area Value", @""], @[@"Tenure", @""], @[@"Address/Place", @""], @[@"Lease Expiry Date", @""], @[@"Restriction in Interest", @""], @[@"Restriction Against", @""], @[@"Approving Authority", @""], @[@"Category of Land Use", @""]
                     ],
                   @[@[@"Parcel No.", @""], @[@"Storey No.", @""], @[@"Building No", @""], @[@"Accessory Prcel No.", @""], @[@"Accessory Storey No.", @""], @[@"Accessory Building No.", @""], @[@"Units of Shares", @""], @[@"Total Shares", @""]],
-                  @[@[@"Parcel Type", @""], @[@"Unit/Parcel No.", @""], @[@"Storey No.", @""], @[@"Building/Block No.", @""], @[@"Apt/Condo name", @""], @[@"Accessory Parcel No", @""], @[@"SPA Area Type", @""], @[@"SPA Area Value", @""]],
+                  @[@[@"Parcel Type", @""], @[@"Unit/Parcel No.", @""], @[@"Storey No.", @""], @[@"Building/Block No.", @""], @[@"Apt/Condo name", @""], @[@"Accessory Parcel No", @""], @[@"Measurement Unit", @""], @[@"SPA Area", @""]],
                   @[@[@"Project Name", @""], @[@"Developer", @""], @[@"Proprietor", @""], @[@"Block/Master Title", @""]],
                   ];
     _contents = [temp mutableCopy];
@@ -105,6 +108,50 @@ NSMutableDictionary* keyValue;
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+- (void) showPopup: (UIViewController*) vc {
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
+    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
+    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
+    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
+    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    popupController.transitionStyle = STPopupTransitionStyleFade;;
+    popupController.containerView.layer.cornerRadius = 4;
+    popupController.containerView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
+    popupController.containerView.layer.shadowOffset = CGSizeMake(4, 4);
+    popupController.containerView.layer.shadowOpacity = 1;
+    popupController.containerView.layer.shadowRadius = 1.0;
+    
+    [popupController presentInViewController:self];
+}
+
+- (void) showPropertyAutocomplete: (NSString*) url {
+    [self.view endEditing:YES];
+    
+    PropertyAutoComplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"PropertyAutoComplete"];
+    vc.url = url;
+    vc.title = @"";
+    vc.updateHandler =  ^(NSString* selectedString) {
+        [self didSelectListWithDescription:nil name:nameOfField withString:selectedString];
+        
+    };
+    
+    [self showPopup:vc];
+}
+
+- (void) showAutocomplete:(NSString*) url {
+    [self.view endEditing:YES];
+    
+    SimpleAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"SimpleAutocomplete"];
+    vc.url = url;
+    vc.title = @"";
+    vc.updateHandler =  ^(NSString* selectedString) {
+        [self didSelectListWithDescription:nil name:nameOfField withString:selectedString];
+    };
+    
+    [self showPopup:vc];
+}
+
 - (IBAction)saveProperty:(id)sender {
     NSDictionary* data = @{
                            @"accBuildingNo": _contents[2][5][1],
@@ -119,7 +166,7 @@ NSMutableDictionary* keyValue;
                            @"daerah": _contents[1][7][1],
                            @"fullTitle": @"H.S.(M) 11043, P.T. 19042, Mukim Triang, Daerah Bera",
                            @"landUse": _contents[1][17][1],
-                           @"leaseExpiryDate": _contents[1][13][1],
+                           @"leaseExpiryDate": [DIHelpers convertDateToMySQLFormat:_contents[1][13][1]],
                            @"lotPT": @{
                                @"type": _contents[1][3][1],
                                @"value": _contents[1][4][1]
@@ -222,14 +269,13 @@ NSMutableDictionary* keyValue;
     NSInteger remain = tag;
     for (int i = 0; i < self.tableView.numberOfSections; i++) {
         section = i;
-        if (remain - [self.tableView numberOfRowsInSection:i] < 0) {
+        if (remain - (NSInteger)[_contents[i] count] < 0) {
             break;
         }
-        remain = (remain - [self.tableView numberOfRowsInSection:i]);
+        remain = (remain - (NSInteger)[_contents[i] count]);
     }
     
     return @[@(section), @(remain)];
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -261,8 +307,10 @@ NSMutableDictionary* keyValue;
             cell.rightFloatingText.tag = [self calcPrevRowCount:1] + rows+1; // consider section 0
         }
         
-        if (indexPath.section == 3 && indexPath.row == 5) {
-            rows += 1;
+        if (indexPath.section == 3) {
+            if (indexPath.row == 5) {
+                rows += 1;  
+            }
             cell.rightFloatingText.tag = [self calcPrevRowCount:3] + rows+1;
         }
 
@@ -312,6 +360,8 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
     
     cell.floatingTextField.inputAccessoryView = accessoryView;
+    cell.leftUtilityButtons = [self leftButtons];
+    cell.delegate = self;
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
@@ -332,24 +382,27 @@ NSMutableDictionary* keyValue;
         
         cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
     } else if (indexPath.section == 2) {
-        if (indexPath.row == 6 || indexPath.row == 6) {
-            cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
+        if (indexPath.row == 6) {
+            cell.floatingTextField.keyboardType = UIKeyboardTypeNumberPad;
+            cell.floatingTextField.tag == 10;
         } else {
-            cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
         }
     } else if (indexPath.section == 3) {
         if (indexPath.row == 5) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.floatingTextField.userInteractionEnabled = NO;
         }
-        if (indexPath.row == 3) {
-            cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
-        } else {
+        if (indexPath.row == 4) {
             cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
+        } else {
+            cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
         }
     } else if (indexPath.section == 4) {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.floatingTextField.userInteractionEnabled = NO;
+        if (indexPath.row == 0 || indexPath.row == 3) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.floatingTextField.userInteractionEnabled = NO;
+        }
     }
     
     return cell;
@@ -359,7 +412,41 @@ NSMutableDictionary* keyValue;
     [self.view endEditing:YES];
 }
 
+
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString* clearString = [[NSAttributedString alloc] initWithString:@"Clear" attributes:attributes];
+    
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:clearString];
+    
+    return leftUtilityButtons;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    [cell hideUtilityButtonsAnimated:YES];
+    [self replaceContentForSection:indexPath.section InRow:indexPath.row withValue:@""];
+}
+
 #pragma mark - UITextField Delegate
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == 10) {
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:string];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
+        textField.text = formattedNumberString;
+        return NO;
+    }
+    
+    return YES;
+}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
@@ -437,19 +524,7 @@ NSMutableDictionary* keyValue;
     calendarViewController.updateHandler =  ^(NSString* date) {
         [self replaceContentForSection:1 InRow:13 withValue:date];
     };
-    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:calendarViewController];
-    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
-    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
-    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
-    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };
-    popupController.transitionStyle = STPopupTransitionStyleFade;;
-    popupController.containerView.layer.cornerRadius = 4;
-    popupController.containerView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
-    popupController.containerView.layer.shadowOffset = CGSizeMake(4, 4);
-    popupController.containerView.layer.shadowOpacity = 1;
-    popupController.containerView.layer.shadowRadius = 1.0;
-    
-    [popupController presentInViewController:self];
+    [self showPopup:calendarViewController];
 }
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -482,11 +557,11 @@ NSMutableDictionary* keyValue;
         if (indexPath.row == 1) {
             titleOfList = @"Type of Property";
             nameOfField = self.contents[indexPath.section][rows][0];
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:PROPERTY_TITLE_TYPE_GET_URL];
+            [self showAutocomplete:PROPERTY_TITLE_TYPE_GET_URL];
         } else if (indexPath.row == 2) {
             titleOfList = @"Lot Type of Property";
             nameOfField = self.contents[indexPath.section][rows][0];
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:PROPERTY_LOT_TYPE_GET_URL];
+            [self showAutocomplete:PROPERTY_LOT_TYPE_GET_URL];
         } else if (indexPath.row == 3) {
             titleOfList = @"Mukim Type of Property";
             nameOfField = self.contents[indexPath.section][rows][0];
@@ -523,7 +598,7 @@ NSMutableDictionary* keyValue;
         if (indexPath.row == 0) {
             titleOfList = @"Parcel Type of Property";
             nameOfField = self.contents[indexPath.section][rows][0];
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:PROPERTY_AREA_TYPE_GET_URL];
+            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:PROPERTY_PARCEL_TYPE_GETLIST_URL];
         } else if (indexPath.row == 5) {
             titleOfList = @"Area Type of Property";
             nameOfField = self.contents[indexPath.section][rows][0];
@@ -531,13 +606,8 @@ NSMutableDictionary* keyValue;
         }
     } else if (indexPath.section == 4) {
         if (indexPath.row == 0) {
-            [self performSegueWithIdentifier:kProjectHousingSegue sender:PROPERTY_PROJECT_HOUSING_GET_URL];
-        } else if (indexPath.row == 1) {
-            selectedContactRow = indexPath.row;
-            [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
-        } else if (indexPath.row == 2) {
-            selectedContactRow = indexPath.row;
-            [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
+            nameOfField = self.contents[indexPath.section][indexPath.row][0];
+            [self showPropertyAutocomplete:PROPERTY_PROJECT_HOUSING_GET_URL];
         }
     }
 }
@@ -550,11 +620,7 @@ NSMutableDictionary* keyValue;
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView didOpenSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    });
+
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView willCloseSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
@@ -577,7 +643,7 @@ NSMutableDictionary* keyValue;
         [self replaceContentForSection:0 InRow:1 withValue:model.descriptionValue];
         selectedTitleIssuedCode = model.codeValue;
     } else if ([name isEqualToString:@"Restriction in Interest"]) {
-        [self replaceContentForSection:1 InRow:11 withValue:model.descriptionValue];
+        [self replaceContentForSection:1 InRow:14 withValue:model.descriptionValue];
         selectedRestrictionCode = model.codeValue;
     }
 }
@@ -618,25 +684,10 @@ NSMutableDictionary* keyValue;
         listCodeVC.url = sender;
     }
     
-    if ([segue.identifier isEqualToString:kProjectHousingSegue]) {
-        ProjectHousingViewController* housingVC = segue.destinationViewController;
-        housingVC.updateHandler = ^(ProjectHousingModel *model) {
-            [self replaceContentForSection:4 InRow:0 withValue:model.housingCode];
-        };
-    }
-    
     if ([segue.identifier isEqualToString:kContactGetListSegue]) {
         PropertyContactListViewController* contactVC = segue.destinationViewController;
         contactVC.updateHandler = ^(StaffModel *model) {
             [self replaceContentForSection:4 InRow:selectedContactRow withValue:model.name];
-        };
-    }
-    
-    if ([segue.identifier isEqualToString:kPropertyTypeSegue]) {
-        PropertyListViewController* propertyVC = segue.destinationViewController;
-        propertyVC.updateHandler = ^(FullPropertyModel *model) {
-            [self replaceContentForSection:0 InRow:0 withValue:model.fullTitle];
-            selectedPropertyType = model.propertyCode;
         };
     }
     

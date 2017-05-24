@@ -33,7 +33,7 @@
 
 - (void) changeTitle {
     self.tabBarController.navigationItem.titleView = nil;
-    self.tabBarController.navigationItem.title = @"Dashboard";
+    self.tabBarController.navigationItem.title = @"DASHBOARD";
 }
 
 - (void) viewWillAppear:(BOOL)animated {

@@ -9,7 +9,6 @@
 #import "CommonTextCell.h"
 @interface CommonTextCell()
 @property (weak, nonatomic) IBOutlet UILabel *fixedLabel;
-@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 
 @end
 
@@ -28,7 +27,7 @@
 
 - (void) configureCellWithValue: (NSString*) value
 {
-    self.valueLabel.text = value;
+    self.valueLabel.text = value.uppercaseString;
 }
 
 @end

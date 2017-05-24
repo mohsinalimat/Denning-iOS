@@ -27,7 +27,7 @@
 
 - (void) configureCellWithLedgerDetail: (LedgerDetailModel*) model
 {
-    self.descriptionLabel.text = model.ledgerDescription;
+    self.descriptionLabel.text = model.ledgerDescription.uppercaseString;
     self.documentNo.text = model.documentNo;
     self.amount.text = model.amount;
 }

@@ -48,7 +48,13 @@
 
 + (void) drawWhiteBorderToTextField: (UITextField*) textField;
 
++ (NSArray*) separateNameIntoTwo:(NSString*) title;
+
 + (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title;
+
++ (NSString*) convertDateToMySQLFormat: (NSString*)date;
+
++ (NSString*) convertDateToCustomFormat: (NSString*) date;
 
 + (NSString*) today;
 

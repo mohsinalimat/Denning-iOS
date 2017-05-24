@@ -13,10 +13,11 @@
 #import "BirthdayCalendarViewController.h"
 #import "ContactViewController.h"
 #import "BranchListViewController.h"
+#import "SimpleAutocomplete.h"
 #import <NBPhoneNumberUtil.h>
 #import <NBPhoneNumber.h>
 
-@interface AddContactViewController()
+@interface AddContactViewController() <SWTableViewCellDelegate>
 {
     NSString* titleOfList;
     NSString* nameOfField;
@@ -37,9 +38,13 @@
     NSString* officeCountryCallingCode;
     NSString* officeCountryCode;
     
+    NSString* faxCountryCallingCode;
+    NSString* faxCountryCode;
+    
     NSString* selectedPhoneHome;
     NSString* selectedPhoneMobile;
     NSString* selectedPhoneOffice;
+    NSString* selectedPhoneFax;
 }
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *IDType;
@@ -62,6 +67,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *phoneMobileBtn;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *phoneOffice;
 @property (weak, nonatomic) IBOutlet UIButton *phoneOfficeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *faxBtn;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *country;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *fax;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *contactPerson;
@@ -75,6 +81,34 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *registeredOffice;
 @property (weak, nonatomic) IBOutlet UISwitch *inviteDenning;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
+
+@property (weak, nonatomic) IBOutlet SWTableViewCell *IDTypeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *IDNoCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *OldICCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *nameCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *titleCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *address1Cell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *address2Cell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *address3Cell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *townCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *stateCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *postCodeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *emailCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *phoneHomeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *phoneMobileCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *phoneOfficeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *countryCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *faxCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *contactPersonCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *websiteCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *citizenshipCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *dateOfBirthCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *occupationCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *taxFileNoCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *IRDBranchCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *registeredOfficeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *inviteDenningCell;
+
 
 @end
 
@@ -121,9 +155,10 @@
     [self.phoneHomeBtn setTitle:buttonTitle forState:UIControlStateNormal];
     [self.phoneMobileBtn setTitle:buttonTitle forState:UIControlStateNormal];
     [self.phoneOfficeBtn setTitle:buttonTitle forState:UIControlStateNormal];
+    [self.faxBtn setTitle:buttonTitle forState:UIControlStateNormal];
     
-    homeCountryCode = mobileCountryCode = officeCountryCode = selectedCountryCode;
-    homeCountryCallingCode = mobileCountryCallingCode = officeCountryCallingCode = selectedCountryCallingCode;
+    homeCountryCode = mobileCountryCode = officeCountryCode = faxCountryCode= selectedCountryCode;
+    homeCountryCallingCode = mobileCountryCallingCode = officeCountryCallingCode = faxCountryCallingCode= selectedCountryCallingCode;
 }
 
 - (IBAction)didTapHomeBtn:(id)sender {
@@ -143,6 +178,13 @@
     officeCountryCallingCode = [dataSet allObjects].firstObject;
     officeCountryCode =  [dataSet allObjects].lastObject;
 }
+
+- (IBAction)didTapFaxbtn:(id)sender {
+    NSSet* dataSet = [self showCountryCodeList:self.faxBtn];
+    faxCountryCallingCode = [dataSet allObjects].firstObject;
+    faxCountryCode =  [dataSet allObjects].lastObject;
+}
+
 
 - (NSSet*) showCountryCodeList:(UIButton*) countryBtn {
     __block NSString* selectedCountryCallingCode;
@@ -230,19 +272,41 @@
     return YES;
 }
 
+- (NSString*) getNotNull: (NSString*) value {
+    if (value == nil) {
+        return @"";
+    }
+    else {
+        return value;
+    }
+    return value;
+}
+
+- (NSString*) getValidValue: (NSString*) value
+{
+    if (value.length == 0) {
+        return @"0";
+    }
+    else {
+       return value;
+    }
+    
+    return value;
+}
+
 - (IBAction)saveContact:(id)sender {
     if (![self checkValidation]) {
         return;
     }
     
-    NSDictionary* address = @{@"city": self.town.text,
-                              @"state": self.state.text,
-                              @"country": self.country.text,
-                              @"postcode": self.postcode.text,
+    NSDictionary* address = @{@"city": [self getValidValue:self.town.text],
+                              @"state": [self getValidValue:self.state.text],
+                              @"country": [self getNotNull:self.country.text],
+                              @"postcode": [self getValidValue:self.postcode.text],
                               @"fullAddress":@"",
-                              @"line1": self.address1.text,
-                              @"line2": self.address2.text,
-                              @"line2": self.address3.text};
+                              @"line1": [self getNotNull:self.address1.text],
+                              @"line2": [self getNotNull:self.address2.text],
+                              @"line3": [self getNotNull:self.address3.text]};
     
     selectedPhoneHome = @"";
     if (self.phoneHome.text.length > 0) {
@@ -257,23 +321,76 @@
         selectedPhoneOffice = [officeCountryCallingCode stringByAppendingString: self.phoneOffice.text];
     }
     
-    NSDictionary *data = @{@"IDNo": self.IDNo.text,
-                           @"IDType": selectedIDTypeCode,
+    selectedPhoneFax = @"";
+    if (self.fax.text.length > 0) {
+        selectedPhoneFax = [faxCountryCallingCode stringByAppendingString: self.fax.text];
+    }
+    
+    NSNumber* inviteToDenning = @(0);
+    if (self.inviteDenning.isOn) {
+        inviteToDenning = @(1);
+    }
+    
+    NSMutableDictionary *data = [@{@"IDNo": self.IDNo.text,
+                           @"idType": @{
+                                   @"code":[self getValidValue:selectedIDTypeCode]
+                           },
                            @"address": address,
-                           @"emailAddress": self.email.text,
-                           @"name": self.name.text,
-                           @"phoneFax": self.fax.text,
-                           @"phoneHome":selectedPhoneHome,
-                           @"phoneMobile": selectedPhoneMobile,
-                           @"phoneOffice": selectedPhoneOffice,
-                           @"title": self.contactTitle.text,
-                           @"webSite": self.website.text,
-                           @"KPLama": self.oldIC.text};
+                           @"emailAddress": [self getNotNull:self.email.text],
+                           @"name": [self getNotNull:self.name.text],
+                           @"phoneFax": [self getNotNull:selectedPhoneFax],
+                           @"phoneHome":[self getNotNull:selectedPhoneHome],
+                           @"phoneMobile": [self getNotNull:selectedPhoneMobile],
+                           @"phoneOffice": [self getNotNull:selectedPhoneOffice],
+                           @"dateBirth":[DIHelpers convertDateToMySQLFormat:self.dateOfBirth.text],
+                           @"title": [self getNotNull:self.contactTitle.text],
+                           @"webSite": [self getNotNull:self.website.text],
+                           @"citizenship": [self getNotNull:self.citizenship.text],
+                           @"contactPerson": [self getNotNull:self.contactPerson.text],
+                           @"irdBranch": @{
+                                   @"code":[self getValidValue:selectedIRDBranchCode]
+                                   },
+                           @"occupation": @{
+                                   @"code":[self getValidValue:selectedOccupationCode]
+                                   },
+                           @"registeredOffice":[self getNotNull:self.registeredOffice.text],
+                           @"taxFileNo":[self getNotNull:self.taxFileNo.text],
+                           @"KPLama": [self getNotNull:self.oldIC.text],
+                           @"InviteToDenning":inviteToDenning
+                           } mutableCopy];
+    
+    if (self.viewType.length == 0) {
+        [self _save:data];
+    } else {
+        [self _update:data];
+    }
+}
+
+- (void) _save: (NSDictionary*)data {
+    
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
-
+    
     [[QMNetworkManager sharedManager] saveContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+        [navigationController dismissNotificationPanel];
+        if (error == nil) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:1.0];
+            [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
+            return;
+        } else {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:1.0];
+        }
+    }];
+}
+
+- (void) _update:  (NSMutableDictionary*)data {
+    [data addEntriesFromDictionary:@{@"code":self.contactModel.contactCode}];
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    
+    [[QMNetworkManager sharedManager] updateContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         if (error == nil) {
             [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:2.0];
@@ -290,8 +407,8 @@
         self.contactModel = [ContactModel new];
         [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
     } else {
-        self.IDType.text = self.contactModel.idType.descriptionValue;
-        selectedIDTypeCode = self.contactModel.idType.codeValue;
+        self.IDType.text = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"description"];
+        selectedIDTypeCode = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"code"];
         self.IDNo.text = self.contactModel.IDNo;
 //        self.oldIC.text = self.contactModel
         self.name.text = self.contactModel.name;
@@ -310,10 +427,10 @@
         self.fax.text = self.contactModel.fax;
         self.contactPerson.text = self.contactModel.contactPerson;
         self.citizenship.text = self.contactModel.citizenShip;
-        self.dateOfBirth.text = self.contactModel.dateOfBirth;
+        self.dateOfBirth.text = [DIHelpers convertDateToCustomFormat:self.contactModel.dateOfBirth];
         self.occupation.text = self.contactModel.occupation.descriptionValue;
         self.taxFileNo.text = self.contactModel.tax;
-        self.IRDBranch.text = self.contactModel.IRDBranch;
+        self.IRDBranch.text = self.contactModel.IRDBranch.descriptionValue;
         self.website.text = self.contactModel.website;
         if ([self.contactModel.InviteDennig isEqualToString:@"1"]) {
             [self.inviteDenning setOn:YES];
@@ -375,6 +492,8 @@
     self.website.inputAccessoryView = accessoryView;
     self.registeredOffice.inputAccessoryView = accessoryView;
     
+    self.oldIC.delegate = self.name.delegate = self.address1.delegate = self.address2.delegate = self.address3.delegate = self.registeredOffice.delegate = self.postcode.delegate = self.town.delegate = self.state.delegate = self.country.delegate = self.contactTitle.delegate = self.IDType.delegate = self.contactPerson.delegate = self.citizenship.delegate = self.IRDBranch.delegate = self;
+    
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
@@ -382,6 +501,148 @@
 - (void)handleTap {
     [self.view endEditing:YES];
 }
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+//    textField.text = string.uppercaseString;
+    return YES;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            self.IDTypeCell.leftUtilityButtons = [self leftButtons];
+            self.IDTypeCell.delegate = self;
+            return self.IDTypeCell;
+        } else if (indexPath.row == 1) {
+            
+            return self.IDNoCell;
+        } else if (indexPath.row == 2) {
+            return self.OldICCell;
+        } else if (indexPath.row == 3) {
+            return self.nameCell;;
+        } else if (indexPath.row == 4) {
+            self.titleCell.leftUtilityButtons = [self leftButtons];
+            self.titleCell.delegate = self;
+            return self.titleCell;
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            return self.address1Cell;
+        } else if (indexPath.row == 1) {
+            return self.address2Cell;
+        } else if (indexPath.row == 2) {
+            return self.address3Cell;
+        } else if (indexPath.row == 3) {
+            self.postCodeCell.leftUtilityButtons = [self leftButtons];
+            self.postCodeCell.delegate = self;
+            return self.postCodeCell;
+        } else if (indexPath.row == 4) {
+            self.townCell.leftUtilityButtons = [self leftButtons];
+            self.townCell.delegate = self;
+            return self.townCell;;
+        } else if (indexPath.row == 5) {
+            self.stateCell.leftUtilityButtons = [self leftButtons];
+            self.stateCell.delegate = self;
+            return self.stateCell;
+        } else if (indexPath.row == 6) {
+            self.countryCell.leftUtilityButtons = [self leftButtons];
+            self.countryCell.delegate = self;
+            return self.countryCell;
+        } else if (indexPath.row == 7) {
+            return self.phoneHomeCell;
+        } else if (indexPath.row == 8) {
+            return self.phoneMobileCell;
+        } else if (indexPath.row == 9) {
+            return self.phoneOfficeCell;;
+        } else if (indexPath.row == 10) {
+            return self.faxCell;
+        } else if (indexPath.row == 11) {
+            return self.emailCell;
+        } else if (indexPath.row == 12) {
+            return self.websiteCell;
+        } else if (indexPath.row == 13) {
+            return self.contactPersonCell;
+        }
+    } else if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            self.citizenshipCell.leftUtilityButtons = [self leftButtons];
+            self.citizenshipCell.delegate = self;
+            return self.citizenshipCell;
+        } else if (indexPath.row == 1) {
+            self.dateOfBirthCell.leftUtilityButtons = [self leftButtons];
+            self.dateOfBirthCell.delegate = self;
+            return self.dateOfBirthCell;
+        } else if (indexPath.row == 2) {
+            self.occupationCell.leftUtilityButtons = [self leftButtons];
+            self.occupationCell.delegate = self;
+            return self.occupationCell;
+        } else if (indexPath.row == 3) {
+            return self.taxFileNoCell;;
+        } else if (indexPath.row == 4) {
+            self.IRDBranchCell.leftUtilityButtons = [self leftButtons];
+            self.IRDBranchCell.delegate = self;
+            return self.IRDBranchCell;
+        }
+    } else if (indexPath.section == 3) {
+        if (indexPath.row == 0) {
+            return self.registeredOfficeCell;
+        }
+    } else if (indexPath.section == 4) {
+        if (indexPath.row == 0) {
+            return self.inviteDenningCell;
+        }
+    }
+    
+    return nil;
+}
+
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString* clearString = [[NSAttributedString alloc] initWithString:@"Clear" attributes:attributes];
+    
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:clearString];
+    
+    return leftUtilityButtons;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    [cell hideUtilityButtonsAnimated:YES];
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            self.IDType.text = @"";
+        } else if (indexPath.row == 4) {
+            self.contactTitle.text = @"";
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 3) {
+            self.postcode.text = @"";
+        } else if (indexPath.row == 4) {
+            self.town.text = @"";
+        } else if (indexPath.row == 5) {
+            self.state.text = @"";
+        } else if (indexPath.row == 6) {
+            self.country.text = @"";
+        }
+    } else if (indexPath.section == 2) {
+        if (indexPath.row == 1) {
+            self.citizenship.text = @"";
+        } else if (indexPath.row == 2) {
+            self.dateOfBirth.text = @"";
+        } else if (indexPath.row == 3) {
+            self.occupation.text = @"";
+        } else if (indexPath.row == 5) {
+            self.IRDBranch.text = @"";
+        }
+    }
+}
+
 
 - (void) showCalendar {
     [self.view endEditing:YES];
@@ -457,17 +718,18 @@
     }
     
     if (indexPath.section == 1) {
-        if (indexPath.row == 3) { // City
+        if (indexPath.row == 3) { // Postcode
+            [self performSegueWithIdentifier:kListWithPostcodeSegue sender:CONTACT_POSTCODE_URL];
+        } else if (indexPath.row == 4) { // City
             titleOfList = @"Select City";
             nameOfField = @"Town";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_CITY_URL];
-        } else if (indexPath.row == 4) { // State
+            
+        } else if (indexPath.row == 5) { // State
             titleOfList = @"Select State";
             nameOfField = @"State";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_STATE_URL];
-        } else if (indexPath.row == 5) { // Postcode
-            [self performSegueWithIdentifier:kListWithPostcodeSegue sender:CONTACT_POSTCODE_URL];
-        } else if (indexPath.row == 10) { // Postcode
+        } else if (indexPath.row == 6) { // Postcode
             titleOfList = @"Select Country";
             nameOfField = @"Country";
             [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_COUNTRY_URL];
@@ -485,7 +747,7 @@
             titleOfList = @"Select Occupation";
             nameOfField = @"Occupation";
             [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_OCCUPATION_URL];
-        } else if (indexPath.row == 4) { // Occupation
+        } else if (indexPath.row == 4) { // branch
           
             [self performSegueWithIdentifier:kBankBranchSegue sender:CONTACT_IRDBRANCH_URL];
         }

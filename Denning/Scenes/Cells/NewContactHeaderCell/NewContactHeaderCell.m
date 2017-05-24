@@ -22,9 +22,8 @@
 }
 
 - (void) configureCellWithInfo:(NSString*) name number:(NSString*) number image:(UIImage*) image {
-    self.nameLabel.text = name;
-    self.fileNumberLable.text = number;
- //   self.mainImageView.image = image;
+    self.nameLabel.text = name.uppercaseString;
+    self.fileNumberLable.text = number.uppercaseString;
 }
 - (IBAction)didTapMessage:(id)sender {
     [self.delegate didTapMessage:self];

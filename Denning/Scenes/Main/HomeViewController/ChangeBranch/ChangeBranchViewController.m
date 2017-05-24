@@ -40,6 +40,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChangeBranchCell" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     FirmURLModel* model = self.branchArray[indexPath.row];
     UILabel* branchName = [cell viewWithTag:1];
@@ -54,6 +55,7 @@
 {
     FirmURLModel* model = self.branchArray[indexPath.row];
     [[DataManager sharedManager] setServerAPI:model.firmServerURL withFirmName:model.name withFirmCity:model.city];
+    [self.navigationController popViewControllerAnimated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

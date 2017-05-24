@@ -51,12 +51,12 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="SEl-k9-1jE" secondAttribute="trailing" constant="22" id="5jg-YH-kiy"/>
                     <constraint firstItem="SEl-k9-1jE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="19" id="6RY-dh-2Tk"/>
                     <constraint firstItem="SEl-k9-1jE" firstAttribute="top" secondItem="wTY-20-Nkv" secondAttribute="bottom" constant="1" id="9jD-Ar-wON"/>
+                    <constraint firstItem="VWM-4p-Tnm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="wTY-20-Nkv" secondAttribute="trailing" constant="12" id="LAo-KD-tFU"/>
                     <constraint firstItem="wTY-20-Nkv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="LiZ-0I-KHE"/>
-                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="wTY-20-Nkv" secondAttribute="trailing" constant="19" id="NIw-wJ-gas"/>
                     <constraint firstAttribute="trailingMargin" secondItem="VWM-4p-Tnm" secondAttribute="trailing" constant="8" id="U9E-1F-L5n"/>
+                    <constraint firstItem="VWM-4p-Tnm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SEl-k9-1jE" secondAttribute="trailing" constant="12" id="WJa-74-FyD"/>
                     <constraint firstItem="VWM-4p-Tnm" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="dtb-sJ-8Mq"/>
                     <constraint firstAttribute="bottomMargin" secondItem="SEl-k9-1jE" secondAttribute="bottom" constant="1" id="hoo-NJ-xwa"/>
                     <constraint firstItem="wTY-20-Nkv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="it8-KA-mUJ"/>
@@ -67,7 +67,7 @@
                 <outlet property="rightBtn" destination="VWM-4p-Tnm" id="hg7-lD-HOd"/>
                 <outlet property="titleLabel" destination="wTY-20-Nkv" id="LMZ-6c-nex"/>
             </connections>
-            <point key="canvasLocation" x="-509" y="-307"/>
+            <point key="canvasLocation" x="-457" y="-348"/>
         </tableViewCell>
     </objects>
     <resources>

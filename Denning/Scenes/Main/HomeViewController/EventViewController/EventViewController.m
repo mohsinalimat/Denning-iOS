@@ -101,7 +101,7 @@
     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
     self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
     
-    self.eventSummaryLabel.text = [NSString stringWithFormat:@"%ld upcoming events today", self.eventsArray.count];
+    self.eventSummaryLabel.text = [NSString stringWithFormat:@"%ld upcoming events today", (unsigned long)self.eventsArray.count];
 }
 
 - (void) viewWillAppear:(BOOL)animated

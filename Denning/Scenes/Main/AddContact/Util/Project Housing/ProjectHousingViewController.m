@@ -87,22 +87,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) filterList {
-    NSMutableArray* newArray = [NSMutableArray new];
-    if (self.filter.length == 0) {
-        self.listOfHousings = self.copyedList;
-    } else {
-        for(MatterCodeModel* model in self.listOfHousings) {
-            if ([model.matterCode localizedCaseInsensitiveContainsString:self.filter] || model.matterDescription) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfHousings = newArray;
-    }
-    
-    [self.tableView reloadData];
-}
-
 - (void) appendList {
     isAppending = YES;
     [self getList];
@@ -111,12 +95,12 @@
 - (void) getList {
     if (isLoading) return;
     isLoading = YES;
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
     [[QMNetworkManager sharedManager] getPropertyProjectHousingWithPage:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         
-        [navigationController dismissNotificationPanel];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
@@ -124,7 +108,6 @@
         }
         
         if (error == nil) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
             if (isAppending) {
                 self.listOfHousings = [[self.listOfHousings arrayByAddingObjectsFromArray:result] mutableCopy];
                 if (result.count != 0) {
@@ -141,7 +124,7 @@
             [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
         
-        [self performSelector:@selector(clean) withObject:nil afterDelay:2.0];
+        [self performSelector:@selector(clean) withObject:nil afterDelay:1.0];
     }];
 }
 
@@ -167,7 +150,7 @@
     ProjectHousingModel *model = self.listOfHousings[indexPath.row];
     UILabel* fileNo = [cell viewWithTag:1];
     UILabel* caseName = [cell viewWithTag:2];
-    fileNo.text = model.housingCode;
+    fileNo.text = [NSString stringWithFormat:@"%@", model.housingCode];
     caseName.text = model.masterTitle;
     
     return cell;

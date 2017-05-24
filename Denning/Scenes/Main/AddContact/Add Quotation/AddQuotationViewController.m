@@ -14,7 +14,7 @@
 #import "ListOfMatterViewController.h"
 #import "PresetBillViewController.h"
 
-@interface AddQuotationViewController ()<UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate>
+@interface AddQuotationViewController ()<UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, UITextFieldDelegate, SWTableViewCellDelegate>
 {
     NSString *titleOfList;
     NSString* nameOfField;
@@ -58,6 +58,46 @@ NSMutableDictionary* keyValue;
                  ];
     
     isRental = @"0";
+}
+
+-(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state != UIGestureRecognizerStateEnded) {
+        return;
+    }
+    CGPoint p = [gestureRecognizer locationInView:self.tableView];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
+    if (indexPath != nil) {
+        UIAlertController * alert=   [UIAlertController
+                                      alertControllerWithTitle:@"Info"
+                                      message:@"Do you want to clear the input"
+                                      preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* ok = [UIAlertAction
+                             actionWithTitle:@"OK"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [self replaceContentForSection:indexPath.section InRow:indexPath.row withValue:@""];
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+        UIAlertAction* cancel = [UIAlertAction
+                                 actionWithTitle:@"Cancel"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     [alert dismissViewControllerAnimated:YES completion:nil];
+                                     
+                                 }];
+        
+        [alert addAction:ok];
+        [alert addAction:cancel];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -185,7 +225,7 @@ NSMutableDictionary* keyValue;
         return @"0";
     }
     else {
-        return value;
+        return [value stringByReplacingOccurrencesOfString:@"," withString:@""];
     }
     
     return value;
@@ -248,13 +288,17 @@ NSMutableDictionary* keyValue;
                 return;
             }
             
-            NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
+            NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163/", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
             NSURL *url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-            configuration.HTTPAdditionalHeaders = @{@"Content-Type":@"application/json", @"webuser-sessionid":@"testdenningSkySea",
-                                                    @"webuser-id":@"email@com.my"};
             AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+            
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
+            [request setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
+            
             NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                 NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
                                                                                    inDomain:NSUserDomainMask
@@ -299,6 +343,8 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.inputAccessoryView = accessoryView;
     cell.floatingTextField.tag = indexPath.row;
+    cell.leftUtilityButtons = [self leftButtons];
+    cell.delegate = self;
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
@@ -331,6 +377,25 @@ NSMutableDictionary* keyValue;
     return cell;
 }
 
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString* clearString = [[NSAttributedString alloc] initWithString:@"Clear" attributes:attributes];
+    
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:clearString];
+    
+    return leftUtilityButtons;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    [cell hideUtilityButtonsAnimated:YES];
+     [self replaceContentForSection:indexPath.section InRow:indexPath.row withValue:@""];
+}
+
 - (void)handleTap {
     [self.view endEditing:YES];
 }
@@ -340,6 +405,29 @@ NSMutableDictionary* keyValue;
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     [self replaceContentForSection:0 InRow:textField.tag withValue:textField.text];
+}
+- (NSString*) getActualNumber: (NSString*) formattedNumber
+{
+    return [formattedNumber stringByReplacingOccurrencesOfString:@"," withString:@""];
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    string = string.uppercaseString;
+    if (textField.tag == 6 || textField.tag == 7 || textField.tag == 8 || textField.tag == 9) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
+        textField.text = formattedNumberString;
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 #pragma mark - UITableView Datasource
@@ -373,10 +461,6 @@ NSMutableDictionary* keyValue;
     return kDefaultAccordionHeaderViewHeight;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 10;
-}
 
 - (void)reloadHeaders {
     for (NSInteger i = 0; i < [self numberOfSectionsInTableView:self.tableView]; i++) {
@@ -444,11 +528,7 @@ NSMutableDictionary* keyValue;
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView didOpenSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    });
+    
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView willCloseSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {

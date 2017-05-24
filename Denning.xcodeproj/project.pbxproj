@@ -28,7 +28,6 @@
 		7903CF7D1ECD37510090206C /* PropertyCodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF7B1ECD37510090206C /* PropertyCodeCell.m */; };
 		7903CF7E1ECD37510090206C /* PropertyCodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7903CF7C1ECD37510090206C /* PropertyCodeCell.xib */; };
 		7903CF821ECD3B1C0090206C /* FullPropertyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF811ECD3B1C0090206C /* FullPropertyModel.m */; };
-		7903CF8A1ECD42C30090206C /* PropertyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF891ECD42C30090206C /* PropertyListViewController.m */; };
 		7903CF931ECD57D50090206C /* BankBranchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF911ECD57D50090206C /* BankBranchCell.m */; };
 		7903CF941ECD57D50090206C /* BankBranchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7903CF921ECD57D50090206C /* BankBranchCell.xib */; };
 		7903CF981ECD58A60090206C /* BranchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF971ECD58A60090206C /* BranchListViewController.m */; };
@@ -43,6 +42,13 @@
 		7903D0751ECE5F340090206C /* SimpleAutocomplete.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0741ECE5F340090206C /* SimpleAutocomplete.m */; };
 		7903D07A1ECE7EFF0090206C /* AddMatterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0781ECE7EFF0090206C /* AddMatterCell.m */; };
 		7903D07B1ECE7EFF0090206C /* AddMatterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7903D0791ECE7EFF0090206C /* AddMatterCell.xib */; };
+		7903D0811ECEC9680090206C /* PropertyTypeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0801ECEC9680090206C /* PropertyTypeListViewController.m */; };
+		7903D0841ECECBA10090206C /* PropertyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0831ECECBA10090206C /* PropertyListViewController.m */; };
+		7903D0881ECF1C7C0090206C /* SolicitorListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0871ECF1C7C0090206C /* SolicitorListViewController.m */; };
+		7903D08D1ECF1D380090206C /* SolicitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D08B1ECF1D380090206C /* SolicitorCell.m */; };
+		7903D08E1ECF1D380090206C /* SolicitorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7903D08C1ECF1D380090206C /* SolicitorCell.xib */; };
+		7903D0921ECF8D520090206C /* SoliciorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0911ECF8D520090206C /* SoliciorModel.m */; };
+		7903D0961ECF9B520090206C /* TypeValueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903D0951ECF9B520090206C /* TypeValueModel.m */; };
 		790B23A61E373A090037A187 /* AddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23A51E373A090037A187 /* AddressModel.m */; };
 		790B23A91E373A140037A187 /* FirmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23A81E373A140037A187 /* FirmModel.m */; };
 		790B23AD1E37B0130037A187 /* DISignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 790B23AC1E37B0130037A187 /* DISignupViewController.m */; };
@@ -189,7 +195,6 @@
 		793FF1AE1EBF893C001F83A5 /* ClientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1AD1EBF893C001F83A5 /* ClientModel.m */; };
 		793FF1B21EBF8D46001F83A5 /* StaffModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1B11EBF8D46001F83A5 /* StaffModel.m */; };
 		793FF1B61EBF9079001F83A5 /* CoramModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1B51EBF9079001F83A5 /* CoramModel.m */; };
-		793FF1BC1EC04E74001F83A5 /* AddCourtDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1BA1EC04E74001F83A5 /* AddCourtDiaryViewController.m */; };
 		793FF1C11EC04EB0001F83A5 /* EditCourtDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1C01EC04EB0001F83A5 /* EditCourtDiaryViewController.m */; };
 		793FF1C41EC04EBF001F83A5 /* AddMatterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1C31EC04EBF001F83A5 /* AddMatterViewController.m */; };
 		793FF1D71EC382DA001F83A5 /* AddQuotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 793FF1D61EC382DA001F83A5 /* AddQuotationViewController.m */; };
@@ -701,6 +706,18 @@
 		79FF353B1E9CB1DC001BECFB /* LastTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 79FF35391E9CB1DC001BECFB /* LastTableCell.m */; };
 		79FF353C1E9CB1DC001BECFB /* LastTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79FF353A1E9CB1DC001BECFB /* LastTableCell.xib */; };
 		79FF5B5A1E6FBB4000A27907 /* RelatedMatterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79FF5B591E6FBB4000A27907 /* RelatedMatterViewController.m */; };
+		962082A01ED2C6DA00BB595C /* PropertyAutoComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620829F1ED2C6DA00BB595C /* PropertyAutoComplete.m */; };
+		962082AB1ED3C76E00BB595C /* CourtDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082AA1ED3C76E00BB595C /* CourtDiaryViewController.m */; };
+		962082AE1ED3C7D800BB595C /* OfficeDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082AD1ED3C7D800BB595C /* OfficeDiaryViewController.m */; };
+		962082B11ED3CEB900BB595C /* PersonalDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082B01ED3CEB900BB595C /* PersonalDiaryViewController.m */; };
+		962082B71ED3D03800BB595C /* AddDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082B61ED3D03800BB595C /* AddDiaryViewController.m */; };
+		962082BB1ED40C3000BB595C /* MatterLitigationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082BA1ED40C3000BB595C /* MatterLitigationModel.m */; };
+		962082C01ED417C200BB595C /* MatterLitigationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082BE1ED417C200BB595C /* MatterLitigationCell.m */; };
+		962082C11ED417C200BB595C /* MatterLitigationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962082BF1ED417C200BB595C /* MatterLitigationCell.xib */; };
+		962082C51ED4828E00BB595C /* MatterLitigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082C41ED4828E00BB595C /* MatterLitigationViewController.m */; };
+		962082C91ED48D2E00BB595C /* CourtDiaryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082C81ED48D2E00BB595C /* CourtDiaryModel.m */; };
+		962082CD1ED48FE100BB595C /* CourtDiaryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */; };
+		962082D11ED5209100BB595C /* HNKDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082D01ED5209100BB595C /* HNKDemoViewController.m */; };
 		F4A8F1784F1A06AAD47D5D01 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */; };
 /* End PBXBuildFile section */
 
@@ -760,8 +777,6 @@
 		7903CF7C1ECD37510090206C /* PropertyCodeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PropertyCodeCell.xib; sourceTree = "<group>"; };
 		7903CF801ECD3B1C0090206C /* FullPropertyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullPropertyModel.h; sourceTree = "<group>"; };
 		7903CF811ECD3B1C0090206C /* FullPropertyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullPropertyModel.m; sourceTree = "<group>"; };
-		7903CF881ECD42C30090206C /* PropertyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyListViewController.h; sourceTree = "<group>"; };
-		7903CF891ECD42C30090206C /* PropertyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyListViewController.m; sourceTree = "<group>"; };
 		7903CF901ECD57D50090206C /* BankBranchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankBranchCell.h; sourceTree = "<group>"; };
 		7903CF911ECD57D50090206C /* BankBranchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankBranchCell.m; sourceTree = "<group>"; };
 		7903CF921ECD57D50090206C /* BankBranchCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BankBranchCell.xib; sourceTree = "<group>"; };
@@ -788,6 +803,19 @@
 		7903D0771ECE7EFF0090206C /* AddMatterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMatterCell.h; sourceTree = "<group>"; };
 		7903D0781ECE7EFF0090206C /* AddMatterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMatterCell.m; sourceTree = "<group>"; };
 		7903D0791ECE7EFF0090206C /* AddMatterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddMatterCell.xib; sourceTree = "<group>"; };
+		7903D07F1ECEC9680090206C /* PropertyTypeListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyTypeListViewController.h; sourceTree = "<group>"; };
+		7903D0801ECEC9680090206C /* PropertyTypeListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyTypeListViewController.m; sourceTree = "<group>"; };
+		7903D0821ECECBA10090206C /* PropertyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyListViewController.h; sourceTree = "<group>"; };
+		7903D0831ECECBA10090206C /* PropertyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyListViewController.m; sourceTree = "<group>"; };
+		7903D0861ECF1C7C0090206C /* SolicitorListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolicitorListViewController.h; sourceTree = "<group>"; };
+		7903D0871ECF1C7C0090206C /* SolicitorListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolicitorListViewController.m; sourceTree = "<group>"; };
+		7903D08A1ECF1D380090206C /* SolicitorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SolicitorCell.h; sourceTree = "<group>"; };
+		7903D08B1ECF1D380090206C /* SolicitorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SolicitorCell.m; sourceTree = "<group>"; };
+		7903D08C1ECF1D380090206C /* SolicitorCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SolicitorCell.xib; sourceTree = "<group>"; };
+		7903D0901ECF8D520090206C /* SoliciorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoliciorModel.h; sourceTree = "<group>"; };
+		7903D0911ECF8D520090206C /* SoliciorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoliciorModel.m; sourceTree = "<group>"; };
+		7903D0941ECF9B520090206C /* TypeValueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeValueModel.h; sourceTree = "<group>"; };
+		7903D0951ECF9B520090206C /* TypeValueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TypeValueModel.m; sourceTree = "<group>"; };
 		790B23A41E373A090037A187 /* AddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressModel.h; sourceTree = "<group>"; };
 		790B23A51E373A090037A187 /* AddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressModel.m; sourceTree = "<group>"; };
 		790B23A71E373A140037A187 /* FirmModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmModel.h; sourceTree = "<group>"; };
@@ -966,8 +994,6 @@
 		793FF1B11EBF8D46001F83A5 /* StaffModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaffModel.m; sourceTree = "<group>"; };
 		793FF1B41EBF9079001F83A5 /* CoramModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoramModel.h; sourceTree = "<group>"; };
 		793FF1B51EBF9079001F83A5 /* CoramModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoramModel.m; sourceTree = "<group>"; };
-		793FF1B91EC04E74001F83A5 /* AddCourtDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCourtDiaryViewController.h; sourceTree = "<group>"; };
-		793FF1BA1EC04E74001F83A5 /* AddCourtDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddCourtDiaryViewController.m; sourceTree = "<group>"; };
 		793FF1BF1EC04EB0001F83A5 /* EditCourtDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditCourtDiaryViewController.h; sourceTree = "<group>"; };
 		793FF1C01EC04EB0001F83A5 /* EditCourtDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditCourtDiaryViewController.m; sourceTree = "<group>"; };
 		793FF1C21EC04EBF001F83A5 /* AddMatterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMatterViewController.h; sourceTree = "<group>"; };
@@ -1736,6 +1762,29 @@
 		79FF353A1E9CB1DC001BECFB /* LastTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LastTableCell.xib; sourceTree = "<group>"; };
 		79FF5B581E6FBB4000A27907 /* RelatedMatterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelatedMatterViewController.h; sourceTree = "<group>"; };
 		79FF5B591E6FBB4000A27907 /* RelatedMatterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelatedMatterViewController.m; sourceTree = "<group>"; };
+		9620829E1ED2C6DA00BB595C /* PropertyAutoComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAutoComplete.h; sourceTree = "<group>"; };
+		9620829F1ED2C6DA00BB595C /* PropertyAutoComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyAutoComplete.m; sourceTree = "<group>"; };
+		962082A91ED3C76E00BB595C /* CourtDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourtDiaryViewController.h; sourceTree = "<group>"; };
+		962082AA1ED3C76E00BB595C /* CourtDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourtDiaryViewController.m; sourceTree = "<group>"; };
+		962082AC1ED3C7D800BB595C /* OfficeDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfficeDiaryViewController.h; sourceTree = "<group>"; };
+		962082AD1ED3C7D800BB595C /* OfficeDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfficeDiaryViewController.m; sourceTree = "<group>"; };
+		962082AF1ED3CEB900BB595C /* PersonalDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalDiaryViewController.h; sourceTree = "<group>"; };
+		962082B01ED3CEB900BB595C /* PersonalDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalDiaryViewController.m; sourceTree = "<group>"; };
+		962082B51ED3D03800BB595C /* AddDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDiaryViewController.h; sourceTree = "<group>"; };
+		962082B61ED3D03800BB595C /* AddDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDiaryViewController.m; sourceTree = "<group>"; };
+		962082B91ED40C3000BB595C /* MatterLitigationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatterLitigationModel.h; sourceTree = "<group>"; };
+		962082BA1ED40C3000BB595C /* MatterLitigationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatterLitigationModel.m; sourceTree = "<group>"; };
+		962082BD1ED417C200BB595C /* MatterLitigationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatterLitigationCell.h; sourceTree = "<group>"; };
+		962082BE1ED417C200BB595C /* MatterLitigationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatterLitigationCell.m; sourceTree = "<group>"; };
+		962082BF1ED417C200BB595C /* MatterLitigationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatterLitigationCell.xib; sourceTree = "<group>"; };
+		962082C31ED4828E00BB595C /* MatterLitigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatterLitigationViewController.h; sourceTree = "<group>"; };
+		962082C41ED4828E00BB595C /* MatterLitigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatterLitigationViewController.m; sourceTree = "<group>"; };
+		962082C71ED48D2E00BB595C /* CourtDiaryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourtDiaryModel.h; sourceTree = "<group>"; };
+		962082C81ED48D2E00BB595C /* CourtDiaryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourtDiaryModel.m; sourceTree = "<group>"; };
+		962082CB1ED48FE100BB595C /* CourtDiaryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourtDiaryListViewController.h; sourceTree = "<group>"; };
+		962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourtDiaryListViewController.m; sourceTree = "<group>"; };
+		962082CF1ED5209100BB595C /* HNKDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNKDemoViewController.h; sourceTree = "<group>"; };
+		962082D01ED5209100BB595C /* HNKDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNKDemoViewController.m; sourceTree = "<group>"; };
 		B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1938,15 +1987,6 @@
 			path = FullPropertyModel;
 			sourceTree = "<group>";
 		};
-		7903CF871ECD42C30090206C /* PropertyList */ = {
-			isa = PBXGroup;
-			children = (
-				7903CF881ECD42C30090206C /* PropertyListViewController.h */,
-				7903CF891ECD42C30090206C /* PropertyListViewController.m */,
-			);
-			path = PropertyList;
-			sourceTree = "<group>";
-		};
 		7903CF8F1ECD57C70090206C /* BankBranchCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2055,6 +2095,61 @@
 				7903D0791ECE7EFF0090206C /* AddMatterCell.xib */,
 			);
 			path = AddMatterCell;
+			sourceTree = "<group>";
+		};
+		7903D07D1ECEC9680090206C /* PropertyList */ = {
+			isa = PBXGroup;
+			children = (
+				7903D0821ECECBA10090206C /* PropertyListViewController.h */,
+				7903D0831ECECBA10090206C /* PropertyListViewController.m */,
+			);
+			path = PropertyList;
+			sourceTree = "<group>";
+		};
+		7903D07E1ECEC9680090206C /* PropertyTypeList */ = {
+			isa = PBXGroup;
+			children = (
+				7903D07F1ECEC9680090206C /* PropertyTypeListViewController.h */,
+				7903D0801ECEC9680090206C /* PropertyTypeListViewController.m */,
+			);
+			path = PropertyTypeList;
+			sourceTree = "<group>";
+		};
+		7903D0851ECF1C610090206C /* Solicitor List */ = {
+			isa = PBXGroup;
+			children = (
+				7903D0861ECF1C7C0090206C /* SolicitorListViewController.h */,
+				7903D0871ECF1C7C0090206C /* SolicitorListViewController.m */,
+			);
+			path = "Solicitor List";
+			sourceTree = "<group>";
+		};
+		7903D0891ECF1D1F0090206C /* SolicitorCell */ = {
+			isa = PBXGroup;
+			children = (
+				7903D08A1ECF1D380090206C /* SolicitorCell.h */,
+				7903D08B1ECF1D380090206C /* SolicitorCell.m */,
+				7903D08C1ECF1D380090206C /* SolicitorCell.xib */,
+			);
+			path = SolicitorCell;
+			sourceTree = "<group>";
+		};
+		7903D08F1ECF8D320090206C /* SolicitorModel */ = {
+			isa = PBXGroup;
+			children = (
+				7903D0901ECF8D520090206C /* SoliciorModel.h */,
+				7903D0911ECF8D520090206C /* SoliciorModel.m */,
+			);
+			path = SolicitorModel;
+			sourceTree = "<group>";
+		};
+		7903D0931ECF9B460090206C /* TypeValueModel */ = {
+			isa = PBXGroup;
+			children = (
+				7903D0941ECF9B520090206C /* TypeValueModel.h */,
+				7903D0951ECF9B520090206C /* TypeValueModel.m */,
+			);
+			path = TypeValueModel;
 			sourceTree = "<group>";
 		};
 		790B23A21E3738C20037A187 /* FirmModel */ = {
@@ -2308,19 +2403,10 @@
 		793FF1B71EC04E74001F83A5 /* Court Diary */ = {
 			isa = PBXGroup;
 			children = (
-				793FF1B81EC04E74001F83A5 /* Add Court Diary */,
+				962082A21ED3C6A100BB595C /* Add Diary */,
 				793FF1BB1EC04E74001F83A5 /* Edit Court Diary */,
 			);
 			path = "Court Diary";
-			sourceTree = "<group>";
-		};
-		793FF1B81EC04E74001F83A5 /* Add Court Diary */ = {
-			isa = PBXGroup;
-			children = (
-				793FF1B91EC04E74001F83A5 /* AddCourtDiaryViewController.h */,
-				793FF1BA1EC04E74001F83A5 /* AddCourtDiaryViewController.m */,
-			);
-			path = "Add Court Diary";
 			sourceTree = "<group>";
 		};
 		793FF1BB1EC04E74001F83A5 /* Edit Court Diary */ = {
@@ -2399,11 +2485,17 @@
 		793FF2291EC48E22001F83A5 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				962082CE1ED5208000BB595C /* GoogleMapAutocomplete */,
+				962082CA1ED48FCE00BB595C /* CourtDiaryViewController */,
+				962082C21ED4827600BB595C /* MatterLitigateViewController */,
+				9620829D1ED2C6BC00BB595C /* PropertyAutoComplete */,
+				7903D0851ECF1C610090206C /* Solicitor List */,
+				7903D07D1ECEC9680090206C /* PropertyList */,
+				7903D07E1ECEC9680090206C /* PropertyTypeList */,
 				7903D0721ECE5F230090206C /* Simple Autocomplete */,
 				7903D06B1ECE41BD0090206C /* AccountType */,
 				7903CFAC1ECE3D0D0090206C /* TaxInvoice */,
 				7903CF951ECD58960090206C /* BranchListViewController */,
-				7903CF871ECD42C30090206C /* PropertyList */,
 				7903CF561ECC00E20090206C /* SimpleMatterView */,
 				7903CF4E1ECC00CE0090206C /* Staff View */,
 				7903CF511ECC00CE0090206C /* Time Picker */,
@@ -4223,6 +4315,10 @@
 		79FBE01C1E304E0E00448FE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				962082C61ED48D2200BB595C /* CourtDiaryModel */,
+				962082B81ED40C2200BB595C /* MatterLitigationModel */,
+				7903D0931ECF9B460090206C /* TypeValueModel */,
+				7903D08F1ECF8D320090206C /* SolicitorModel */,
 				7903D0671ECE40B10090206C /* AccountTypeModel */,
 				7903D0631ECE3E2F0090206C /* TaxModel */,
 				7903CFA11ECD5CA10090206C /* BankBranchModel */,
@@ -4587,6 +4683,8 @@
 		79FBE09B1E304F5000448FE3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				962082BC1ED417A900BB595C /* MatterLitigationCell */,
+				7903D0891ECF1D1F0090206C /* SolicitorCell */,
 				7903D0761ECE7EEC0090206C /* AddMatterCell */,
 				7903CF8F1ECD57C70090206C /* BankBranchCell */,
 				7903CF791ECD37420090206C /* PropertyCodeCell */,
@@ -5301,6 +5399,109 @@
 			path = LastTableCell;
 			sourceTree = "<group>";
 		};
+		9620829D1ED2C6BC00BB595C /* PropertyAutoComplete */ = {
+			isa = PBXGroup;
+			children = (
+				9620829E1ED2C6DA00BB595C /* PropertyAutoComplete.h */,
+				9620829F1ED2C6DA00BB595C /* PropertyAutoComplete.m */,
+			);
+			path = PropertyAutoComplete;
+			sourceTree = "<group>";
+		};
+		962082A21ED3C6A100BB595C /* Add Diary */ = {
+			isa = PBXGroup;
+			children = (
+				962082A81ED3C6C700BB595C /* Personal Diary */,
+				962082A51ED3C6A100BB595C /* CourtDiary */,
+				962082A61ED3C6A100BB595C /* OfficeDiary */,
+				962082B51ED3D03800BB595C /* AddDiaryViewController.h */,
+				962082B61ED3D03800BB595C /* AddDiaryViewController.m */,
+			);
+			path = "Add Diary";
+			sourceTree = "<group>";
+		};
+		962082A51ED3C6A100BB595C /* CourtDiary */ = {
+			isa = PBXGroup;
+			children = (
+				962082A91ED3C76E00BB595C /* CourtDiaryViewController.h */,
+				962082AA1ED3C76E00BB595C /* CourtDiaryViewController.m */,
+			);
+			path = CourtDiary;
+			sourceTree = "<group>";
+		};
+		962082A61ED3C6A100BB595C /* OfficeDiary */ = {
+			isa = PBXGroup;
+			children = (
+				962082AC1ED3C7D800BB595C /* OfficeDiaryViewController.h */,
+				962082AD1ED3C7D800BB595C /* OfficeDiaryViewController.m */,
+			);
+			path = OfficeDiary;
+			sourceTree = "<group>";
+		};
+		962082A81ED3C6C700BB595C /* Personal Diary */ = {
+			isa = PBXGroup;
+			children = (
+				962082AF1ED3CEB900BB595C /* PersonalDiaryViewController.h */,
+				962082B01ED3CEB900BB595C /* PersonalDiaryViewController.m */,
+			);
+			path = "Personal Diary";
+			sourceTree = "<group>";
+		};
+		962082B81ED40C2200BB595C /* MatterLitigationModel */ = {
+			isa = PBXGroup;
+			children = (
+				962082B91ED40C3000BB595C /* MatterLitigationModel.h */,
+				962082BA1ED40C3000BB595C /* MatterLitigationModel.m */,
+			);
+			path = MatterLitigationModel;
+			sourceTree = "<group>";
+		};
+		962082BC1ED417A900BB595C /* MatterLitigationCell */ = {
+			isa = PBXGroup;
+			children = (
+				962082BD1ED417C200BB595C /* MatterLitigationCell.h */,
+				962082BE1ED417C200BB595C /* MatterLitigationCell.m */,
+				962082BF1ED417C200BB595C /* MatterLitigationCell.xib */,
+			);
+			path = MatterLitigationCell;
+			sourceTree = "<group>";
+		};
+		962082C21ED4827600BB595C /* MatterLitigateViewController */ = {
+			isa = PBXGroup;
+			children = (
+				962082C31ED4828E00BB595C /* MatterLitigationViewController.h */,
+				962082C41ED4828E00BB595C /* MatterLitigationViewController.m */,
+			);
+			path = MatterLitigateViewController;
+			sourceTree = "<group>";
+		};
+		962082C61ED48D2200BB595C /* CourtDiaryModel */ = {
+			isa = PBXGroup;
+			children = (
+				962082C71ED48D2E00BB595C /* CourtDiaryModel.h */,
+				962082C81ED48D2E00BB595C /* CourtDiaryModel.m */,
+			);
+			path = CourtDiaryModel;
+			sourceTree = "<group>";
+		};
+		962082CA1ED48FCE00BB595C /* CourtDiaryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				962082CB1ED48FE100BB595C /* CourtDiaryListViewController.h */,
+				962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */,
+			);
+			path = CourtDiaryViewController;
+			sourceTree = "<group>";
+		};
+		962082CE1ED5208000BB595C /* GoogleMapAutocomplete */ = {
+			isa = PBXGroup;
+			children = (
+				962082CF1ED5209100BB595C /* HNKDemoViewController.h */,
+				962082D01ED5209100BB595C /* HNKDemoViewController.m */,
+			);
+			path = GoogleMapAutocomplete;
+			sourceTree = "<group>";
+		};
 		EA4300F6D243812CDEACE5C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -5446,6 +5647,7 @@
 				7920E7A51E9FA747002FEFF3 /* icon_message_selected@3x.png in Resources */,
 				79EC0ED81E8C85F100320A28 /* icon_our_product@3x.png in Resources */,
 				79EC0E361E89F55400320A28 /* DocumentCell.xib in Resources */,
+				962082C11ED417C200BB595C /* MatterLitigationCell.xib in Resources */,
 				79FBE1DD1E315D7A00448FE3 /* Main.storyboard in Resources */,
 				79556DBF1E9323D000A16CB8 /* Message.storyboard in Resources */,
 				79EC0D1B1E77013A00320A28 /* SF-UI-Display-Thin.otf in Resources */,
@@ -5715,6 +5917,7 @@
 				79FBE0FC1E304F5000448FE3 /* QMNoContactsCell.xib in Resources */,
 				795DF24F1E6E563B006D617D /* Back@3x.png in Resources */,
 				79EC0D961E87420200320A28 /* icon_plus.png in Resources */,
+				7903D08E1ECF1D380090206C /* SolicitorCell.xib in Resources */,
 				79EC0D5D1E85520700320A28 /* splash_background@2x.png in Resources */,
 				79EC0DA91E8745A600320A28 /* home_background@2x.png in Resources */,
 				7920E7AA1E9FA747002FEFF3 /* icon_staff_selected@2x.png in Resources */,
@@ -5890,7 +6093,9 @@
 				79EC0EAF1E8BE7F700320A28 /* RealPropertyGainTaxViewController.m in Sources */,
 				79F9FC7A1E4183B30097CB23 /* HomeViewController.m in Sources */,
 				79FBDFA91E30421A00448FE3 /* UINavigationController+QMNotification.m in Sources */,
+				962082C91ED48D2E00BB595C /* CourtDiaryModel.m in Sources */,
 				79EC0EB61E8BE7F700320A28 /* UpdateViewController.m in Sources */,
+				962082B11ED3CEB900BB595C /* PersonalDiaryViewController.m in Sources */,
 				79F732291E96A929004F88DF /* DEMOCustomAutoCompleteCell.m in Sources */,
 				79FBE10B1E304F5000448FE3 /* QMGroupOccupantsDataSource.m in Sources */,
 				79EC0DE51E88098400320A28 /* ContactHeaderCell.m in Sources */,
@@ -5912,6 +6117,7 @@
 				79FBE0811E304EAA00448FE3 /* QMSearchResultsController.m in Sources */,
 				79FF35191E97FC1B001BECFB /* DenningLabelCell.m in Sources */,
 				793FF2171EC3A9A7001F83A5 /* FloatingTextCell.m in Sources */,
+				962082CD1ED48FE100BB595C /* CourtDiaryListViewController.m in Sources */,
 				7903D0751ECE5F340090206C /* SimpleAutocomplete.m in Sources */,
 				79FBE07E1E304EAA00448FE3 /* QMLinkViewController.m in Sources */,
 				79FBDFD01E30421A00448FE3 /* QMMessageNotification.m in Sources */,
@@ -5925,6 +6131,7 @@
 				79E5FF061E71B22700E32AF8 /* PropertyModel.m in Sources */,
 				79FBE08B1E304EAB00448FE3 /* QMCornerButton.m in Sources */,
 				79F9FC961E420C040097CB23 /* EventCell.m in Sources */,
+				962082D11ED5209100BB595C /* HNKDemoViewController.m in Sources */,
 				79FBE1FA1E31600F00448FE3 /* QMLicenseAgreementViewController.m in Sources */,
 				7903CF821ECD3B1C0090206C /* FullPropertyModel.m in Sources */,
 				79FBE1491E30EF0B00448FE3 /* SearchKeywordModel.m in Sources */,
@@ -5988,14 +6195,15 @@
 				793FF2351EC49A0A001F83A5 /* FloatingTextTwoColumnCell.m in Sources */,
 				79FBDFB41E30421A00448FE3 /* QMCore.m in Sources */,
 				79FBDFDA1E30421A00448FE3 /* QMImagePicker.m in Sources */,
-				7903CF8A1ECD42C30090206C /* PropertyListViewController.m in Sources */,
 				79EC0E851E8B822100320A28 /* BranchViewController.m in Sources */,
 				7903CF6B1ECD2B2D0090206C /* BillCell.m in Sources */,
 				7903CF7D1ECD37510090206C /* PropertyCodeCell.m in Sources */,
+				962082BB1ED40C3000BB595C /* MatterLitigationModel.m in Sources */,
 				79D929C81E8D84B0000A53D2 /* PersonalDocumentViewController.m in Sources */,
 				793C1A0F1EC5314C00271B7F /* PresetBillModel.m in Sources */,
 				79F7322A1E96A929004F88DF /* DEMOCustomAutoCompleteObject.m in Sources */,
 				79FBDFD51E30421A00448FE3 /* QMTasks.m in Sources */,
+				962082C01ED417C200BB595C /* MatterLitigationCell.m in Sources */,
 				79FBDFDE1E30421A00448FE3 /* QMPermissions.m in Sources */,
 				79FBDF9D1E30421A00448FE3 /* BaseTextInputView.m in Sources */,
 				79EC0EB21E8BE7F700320A28 /* StamDutyViewController.m in Sources */,
@@ -6007,6 +6215,7 @@
 				79FBE08E1E304EAB00448FE3 /* QMLocationPinView.m in Sources */,
 				793FF1AE1EBF893C001F83A5 /* ClientModel.m in Sources */,
 				79FBDF9F1E30421A00448FE3 /* NSArray+Intersection.m in Sources */,
+				962082B71ED3D03800BB595C /* AddDiaryViewController.m in Sources */,
 				79FBDFE61E30421A00448FE3 /* REMessageUI.m in Sources */,
 				790B23AD1E37B0130037A187 /* DISignupViewController.m in Sources */,
 				79FBE0FF1E304F5000448FE3 /* QMSearchCell.m in Sources */,
@@ -6016,6 +6225,7 @@
 				79FBDFA71E30421A00448FE3 /* UIImage+fixOrientation.m in Sources */,
 				79FBDFA81E30421A00448FE3 /* UIImage+Base64.m in Sources */,
 				79EC0E811E8B5B2700320A28 /* FirmURLModel.m in Sources */,
+				962082C51ED4828E00BB595C /* MatterLitigationViewController.m in Sources */,
 				7903CF481ECC00BB0090206C /* BirthdayCalendarViewController.m in Sources */,
 				793C19FB1EC4E8A900271B7F /* MatterCodeModel.m in Sources */,
 				79FBDFB11E30421A00448FE3 /* QMCallManager.m in Sources */,
@@ -6048,11 +6258,11 @@
 				79FBE14A1E30EF0B00448FE3 /* SearchResultModel.m in Sources */,
 				79FBE1031E304F5000448FE3 /* QMSeparatorCell.m in Sources */,
 				79FBE0801E304EAA00448FE3 /* QMSearchDataSource.m in Sources */,
-				793FF1BC1EC04E74001F83A5 /* AddCourtDiaryViewController.m in Sources */,
 				79EC0EAD1E8BE7F700320A28 /* IncomeTaxViewController.m in Sources */,
 				7920E7B51EA0512C002FEFF3 /* DIFileBrowser.m in Sources */,
 				793FF1B61EBF9079001F83A5 /* CoramModel.m in Sources */,
 				79FBDFB51E30421A00448FE3 /* QMNetworkManager.m in Sources */,
+				7903D0811ECEC9680090206C /* PropertyTypeListViewController.m in Sources */,
 				79EC0E101E89AD8400320A28 /* ThreeFieldsCell.m in Sources */,
 				79D59A161E94762B00CD3821 /* QMContactsSearchDataProvider.m in Sources */,
 				79EC0EAB1E8BE7F700320A28 /* CalculatorSelectionViewController.m in Sources */,
@@ -6069,6 +6279,7 @@
 				79FBDFD91E30421A00448FE3 /* QMHelpers.m in Sources */,
 				79FBDFA31E30421A00448FE3 /* QBChatMessage+QMCallNotifications.m in Sources */,
 				79FBE0FB1E304F5000448FE3 /* QMNoContactsCell.m in Sources */,
+				7903D0921ECF8D520090206C /* SoliciorModel.m in Sources */,
 				7931B5171EAADFA60090BDE0 /* MatterPropertyCell.m in Sources */,
 				79E5FF011E71A3B500E32AF8 /* CommonTextCell.m in Sources */,
 				793FF1B21EBF8D46001F83A5 /* StaffModel.m in Sources */,
@@ -6079,8 +6290,10 @@
 				79FBE1F91E31600F00448FE3 /* QMForgotPasswordViewController.m in Sources */,
 				7920E7AE1EA01295002FEFF3 /* ChatFirmModel.m in Sources */,
 				79FBDFA11E30421A00448FE3 /* NSString+Validation.m in Sources */,
+				7903D08D1ECF1D380090206C /* SolicitorCell.m in Sources */,
 				7903CFA01ECD5BE50090206C /* CACModel.m in Sources */,
 				79F732271E96A929004F88DF /* AFURLSessionOperation.m in Sources */,
+				962082AB1ED3C76E00BB595C /* CourtDiaryViewController.m in Sources */,
 				79EC0E011E89617A00320A28 /* BankViewController.m in Sources */,
 				79FBDEB41E30410000448FE3 /* main.m in Sources */,
 				79EC0DDC1E8802E400320A28 /* ContactModel.m in Sources */,
@@ -6127,6 +6340,7 @@
 				797ED5031EAED9F2009C20C4 /* NewContactHeaderCell.m in Sources */,
 				79FBE10D1E304F5000448FE3 /* QMGroupNameViewController.m in Sources */,
 				790DD4821ECA73A1009D5634 /* QuotationGetListViewController.m in Sources */,
+				962082A01ED2C6DA00BB595C /* PropertyAutoComplete.m in Sources */,
 				79EC0E3A1E8A0A2600320A28 /* FolderModel.m in Sources */,
 				79F9FC8E1E41BDB50097CB23 /* EventModel.m in Sources */,
 				790DD47E1ECA7087009D5634 /* QuotationModel.m in Sources */,
@@ -6136,6 +6350,7 @@
 				79D59A311E955B6D00CD3821 /* FavoriteViewController.m in Sources */,
 				79F9FC801E4184AC0097CB23 /* NewsCell.m in Sources */,
 				79EC0E051E89655A00320A28 /* GovernmentOfficesViewController.m in Sources */,
+				7903D0881ECF1C7C0090206C /* SolicitorListViewController.m in Sources */,
 				793FF2411EC4D12A001F83A5 /* AddLastTwoButtonsCell.m in Sources */,
 				79D59A251E95245E00CD3821 /* QMNewMessageContactListSearchDataSource.m in Sources */,
 				7903CF771ECD34610090206C /* PostCodeCell.m in Sources */,
@@ -6166,6 +6381,8 @@
 				79FBDFBB1E30421A00448FE3 /* QMMessagesHelper.m in Sources */,
 				7903CFAF1ECE3D1F0090206C /* TaxInvoiceListViewController.m in Sources */,
 				793FF1DB1EC382F8001F83A5 /* AddBillViewController.m in Sources */,
+				7903D0841ECECBA10090206C /* PropertyListViewController.m in Sources */,
+				7903D0961ECF9B520090206C /* TypeValueModel.m in Sources */,
 				795DF25A1E6F04E0006D617D /* CategorySelectViewController.m in Sources */,
 				79FBDFA61E30421A00448FE3 /* UIColor+CustomColors.m in Sources */,
 				79FBDFCA1E30421A00448FE3 /* QMCallNotificationItem.m in Sources */,
@@ -6180,6 +6397,7 @@
 				79D599FD1E9473D500CD3821 /* QMDialogsDataSource.m in Sources */,
 				79D59A1B1E94762B00CD3821 /* DenningContactViewController.m in Sources */,
 				79FBDF9B1E30421A00448FE3 /* CustomTaBBarController.m in Sources */,
+				962082AE1ED3C7D800BB595C /* OfficeDiaryViewController.m in Sources */,
 				79EC0E291E89E45D00320A28 /* DocumentModel.m in Sources */,
 				79FBE10A1E304F5000448FE3 /* QMGroupInfoViewController.m in Sources */,
 				79FBDFB61E30421A00448FE3 /* QMPushNotificationManager.m in Sources */,

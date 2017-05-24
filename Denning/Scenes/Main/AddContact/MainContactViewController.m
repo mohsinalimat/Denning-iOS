@@ -8,6 +8,7 @@
 
 #import "MainContactViewController.h"
 #import "MainTabBarController.h"
+#import "AddDiaryViewController.h"
 
 @interface MainContactViewController ()
 
@@ -26,7 +27,7 @@
 
 - (void) changeTitle {
     self.tabBarController.navigationItem.titleView = nil;
-    self.tabBarController.navigationItem.title = @"Add";
+    self.tabBarController.navigationItem.title = @"ADD";
     
     self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_add"];
 }
@@ -97,17 +98,23 @@
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1 && indexPath.row == 1) {
+        [self performSegueWithIdentifier:kDiarySegue sender:@"OfficeDiary"];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:kDiarySegue]) {
+        UINavigationController* navVC = segue.destinationViewController;
+        AddDiaryViewController* diaryVC = navVC.viewControllers.firstObject;
+        diaryVC.type = sender;
+    }
 }
-*/
+
 
 @end

@@ -12,5 +12,7 @@
 @property (strong, nonatomic) NSString* partyGroupName;
 @property (strong, nonatomic) NSArray* partyArray;
 
++ (PartyGroupModel*) getPartyGroupFromResponse: (NSDictionary*) response;
+
 +(NSArray*) getPartyGroupArrayFromResponse: (NSArray*) response;
 @end

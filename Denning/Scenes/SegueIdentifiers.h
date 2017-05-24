@@ -118,6 +118,8 @@ static NSString* const kDetailAutocompleteSegue = @"DetailAutocompleteSegue";
 
 static NSString* const kSimpleMatterSegue = @"SimpleMatterSegue";
 
+static NSString* const kMatterLitigationSegue = @"MatterLitigationSegue";
+
 static NSString* const kListofTypeSegue = @"ListofTypeSegue";
 
 static NSString* const kProjectHousingSegue = @"ProjectHousingSegue";
@@ -137,3 +139,13 @@ static NSString* const kBankBranchSegue = @"BankBranchSegue";
 static NSString* const kTaxInvoiceSegue = @"TaxInvoiceSegue";
 
 static NSString* const kAccountTypeSegue = @"AccountTypeSegue";
+
+static NSString* const kPropertyListSegue = @"PropertyListSegue";
+
+static NSString* const kSolicitorListSegue = @"SolicitorListSegue";
+
+static NSString* const kCourtDiarySegue = @"CourtDiarySegue";
+
+static NSString* const kDiarySegue = @"DiarySegue";
+
+static NSString* const kAddReceiptSegue = @"AddReceiptSegue";

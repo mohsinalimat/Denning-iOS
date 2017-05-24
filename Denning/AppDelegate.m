@@ -15,6 +15,9 @@
 #import "DataManager.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import <HNKGooglePlacesAutocomplete/HNKGooglePlacesAutocompleteQuery.h>
+
+static NSString *const kHNKDemoGooglePlacesAutocompleteApiKey = @"AIzaSyDayovtQxks7uTgf4UiPaTWOA66hZdZceU";
 //#import <Flurry.h>
 
 
@@ -93,6 +96,9 @@ static NSString * const kQMAccountKey = @"NuMeyx3adrFZURAvoA5j";
 //      withSessionBuilder:[[[FlurrySessionBuilder new]
 //                           withCrashReporting:YES]
 //                          withLogLevel:FlurryLogLevelDebug]];
+    
+    // Map Autocomplete
+    [HNKGooglePlacesAutocompleteQuery setupSharedQueryWithAPIKey: kHNKDemoGooglePlacesAutocompleteApiKey];
 
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];

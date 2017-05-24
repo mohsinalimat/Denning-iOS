@@ -195,12 +195,7 @@
     } else {
         SearchResultModel *matterModel = self.govOfficeModel.relatedMatter[indexPath.row];
         NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
-        NSString* fileNo = matter[0];
-        NSString* name = @"";
-        if ([matter count] == 2) {
-            name = matter[1];
-        }
-        [cell configureCellWithContact:fileNo text:name];
+        [cell configureCellWithContact:matter[0] text:matter[1]];
         [cell setEnableRightBtn:NO image:nil];
         
         return cell;

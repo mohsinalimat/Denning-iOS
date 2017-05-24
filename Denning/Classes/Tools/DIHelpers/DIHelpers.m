@@ -103,6 +103,39 @@
     return formattedDate;
 }
 
++ (NSString*) convertDateToMySQLFormat: (NSString*)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"MM/dd/yyyy"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    [newFormatter setTimeZone:timeZone];
+    [newFormatter setDateFormat:@"yyyy-MM-dd"];
+    
+    NSDate *creationDate = [formatter dateFromString:date];
+    
+    return [newFormatter stringFromDate:creationDate];
+}
+
++ (NSString*) convertDateToCustomFormat: (NSString*) date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    [newFormatter setTimeZone:timeZone];
+    [newFormatter setDateFormat:@"MM/dd/yyyy"];
+    
+    NSDate *creationDate = [formatter dateFromString:date];
+    
+    return [newFormatter stringFromDate:creationDate];
+
+}
+
 + (NSString*) getTimeFromDate: (NSString*) date
 {
     NSString* time;
@@ -229,6 +262,14 @@
     }
 }
 
++ (NSArray*) separateNameIntoTwo:(NSString*) title
+{
+    NSMutableArray *items = [[title componentsSeparatedByString:@"("] mutableCopy];
+    items[1] = [items[1] substringToIndex:((NSString*)items[1]).length-2];
+    
+    return items;
+}
+
 + (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title
 {
     NSString* removedTitle;
@@ -240,6 +281,8 @@
     
     if (items.count == 2) {
         items[1] = [@"(" stringByAppendingString:items[1]];
+    } else {
+        [items addObject:@""];
     }
    
     return items;

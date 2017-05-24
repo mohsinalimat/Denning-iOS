@@ -93,6 +93,7 @@
                     <constraint firstItem="Y1s-us-bat" firstAttribute="top" secondItem="XJb-BZ-hVV" secondAttribute="bottom" constant="5" id="3W5-VF-S14"/>
                     <constraint firstItem="thp-iX-5Ie" firstAttribute="top" secondItem="69C-yR-qdU" secondAttribute="bottom" constant="1" id="6OJ-g4-xX4"/>
                     <constraint firstItem="oG8-Qk-sEw" firstAttribute="leading" secondItem="H89-Bz-7Ig" secondAttribute="leading" id="Gc4-ec-Acf"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="XJb-BZ-hVV" secondAttribute="trailing" id="HLC-bk-AqF"/>
                     <constraint firstItem="oG8-Qk-sEw" firstAttribute="top" secondItem="H89-Bz-7Ig" secondAttribute="bottom" constant="1" id="Ife-dQ-u3q"/>
                     <constraint firstItem="TA3-rY-W6E" firstAttribute="top" secondItem="lf8-OV-Mgi" secondAttribute="bottom" constant="1" id="Q8h-kA-89v"/>
                     <constraint firstItem="oG8-Qk-sEw" firstAttribute="leading" secondItem="thp-iX-5Ie" secondAttribute="leading" id="QGX-Kg-fhx"/>
@@ -106,6 +107,7 @@
                     <constraint firstAttribute="bottom" secondItem="TA3-rY-W6E" secondAttribute="bottom" constant="5" id="k7F-Vj-J3B"/>
                     <constraint firstItem="69C-yR-qdU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="kYG-e8-rRe"/>
                     <constraint firstItem="CSG-TM-Cb3" firstAttribute="leading" secondItem="Y1s-us-bat" secondAttribute="leading" id="q24-R1-Wbx"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="thp-iX-5Ie" secondAttribute="trailing" id="qYv-q9-p4L"/>
                     <constraint firstItem="TA3-rY-W6E" firstAttribute="leading" secondItem="lf8-OV-Mgi" secondAttribute="leading" id="rA3-12-biu"/>
                     <constraint firstItem="lf8-OV-Mgi" firstAttribute="top" secondItem="CSG-TM-Cb3" secondAttribute="bottom" constant="5" id="wCe-PV-zxe"/>
                     <constraint firstItem="lf8-OV-Mgi" firstAttribute="leading" secondItem="H89-Bz-7Ig" secondAttribute="leading" id="wiq-Io-bse"/>
@@ -119,7 +121,7 @@
                 <outlet property="projectName" destination="oG8-Qk-sEw" id="evG-Cm-oVy"/>
                 <outlet property="propertyTitle" destination="thp-iX-5Ie" id="PTu-x4-Hpn"/>
             </connections>
-            <point key="canvasLocation" x="141" y="-16.5"/>
+            <point key="canvasLocation" x="127" y="-37"/>
         </tableViewCell>
     </objects>
 </document>

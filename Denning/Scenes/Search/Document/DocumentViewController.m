@@ -8,7 +8,7 @@
 
 #import "DocumentViewController.h"
 #import "DocumentCell.h"
-#import "ContactHeaderCell.h"
+#import "NewContactHeaderCell.h"
 
 @interface DocumentViewController () <
 UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate>
@@ -81,7 +81,7 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
 }
 
 - (void)registerNibs {
-    [ContactHeaderCell registerForReuseInTableView:self.tableView];
+    [NewContactHeaderCell registerForReuseInTableView:self.tableView];
     [DocumentCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -205,8 +205,11 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        ContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactHeaderCell cellIdentifier] forIndexPath:indexPath];
-        [cell configureCellWithContact:[NSString stringWithFormat:@"%@", self.documentModel.name]];
+        NewContactHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[NewContactHeaderCell cellIdentifier] forIndexPath:indexPath];
+        NSArray *info = [DIHelpers separateNameIntoTwo: self.documentModel.name];
+        [cell configureCellWithInfo:info[0] number:info[1] image:nil];
+        cell.editBtn.hidden = YES;
+        cell.chatBtn.hidden = YES;
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;
     } else if (indexPath.section == 1) {
@@ -228,8 +231,6 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
-
-
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

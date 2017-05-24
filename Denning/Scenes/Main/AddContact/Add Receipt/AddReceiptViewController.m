@@ -14,7 +14,7 @@
 #import "AccountTypeViewController.h"
 #import "SimpleAutocomplete.h"
 
-@interface AddReceiptViewController ()<ContactListWithCodeSelectionDelegate, ContactListWithDescSelectionDelegate>
+@interface AddReceiptViewController ()<ContactListWithCodeSelectionDelegate, ContactListWithDescSelectionDelegate, SWTableViewCellDelegate, UITextFieldDelegate>
 {
     NSString* titleOfList;
     NSString* nameOfField;
@@ -37,6 +37,20 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *chequeNo;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *checqueAmount;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *remarks;
+
+@property (weak, nonatomic) IBOutlet SWTableViewCell *fileNoCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *billNoCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *accountTypeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *receivedFromCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *amountCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *transactionCell;
+
+@property (weak, nonatomic) IBOutlet SWTableViewCell *modeCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *issuerBankCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *bankBranchCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *chequeNoCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *chequeAmountCell;
+@property (weak, nonatomic) IBOutlet SWTableViewCell *remarksCell;
 
 @end
 
@@ -99,6 +113,132 @@
     [self.view endEditing:YES];
 }
 
+- (IBAction)saveReceipt:(id)sender {
+    NSDictionary* data = @{
+                           @"accountType": @{
+                               @"ID": selectedID
+                           },
+                           @"amount": self.amount.text,
+                           @"description": @"Fees and Disbursements",
+                           @"fileNo": self.fileNo.text,
+                           @"invoiceNo": self.billNo.text,
+                           @"payment": @{
+                               @"bankBranch": self.bankBranch.text,
+                               @"chequeAmount": self.checqueAmount.text,
+                               @"chequeRef": self.chequeNo.text,
+                               @"issuerBank": selectedIssuerBankCode,
+                               @"mode": self.mode.text
+                           },
+                           @"receivedForm": self.receivedFrom,
+                           @"remarks": self.remarks.text
+                           };
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    [[QMNetworkManager sharedManager] saveReceiptWithParams:data WithCompletion:^(NSDictionary * _Nonnull result, NSError * _Nonnull error) {
+        if (error == nil) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:1.0];
+            
+            return;
+        } else {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:1.0];
+        }
+    }];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+   
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            self.fileNoCell.leftUtilityButtons = [self leftButtons];
+            self.fileNoCell.delegate = self;
+            return self.fileNoCell;
+        } else if (indexPath.row == 1) {
+            self.billNoCell.leftUtilityButtons = [self leftButtons];
+            self.billNoCell.delegate = self;
+            return self.billNoCell;
+        } else if (indexPath.row == 2) {
+            self.accountTypeCell.leftUtilityButtons = [self leftButtons];
+            self.accountTypeCell.delegate = self;
+            return self.accountTypeCell;
+        } else if (indexPath.row == 3) {
+            self.receivedFromCell.leftUtilityButtons = [self leftButtons];
+            self.receivedFromCell.delegate = self;
+            return self.receivedFromCell;;
+        } else if (indexPath.row == 4) {
+            return self.amountCell;
+        } else if (indexPath.row == 5) {
+            return self.transactionCell;
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            self.modeCell.leftUtilityButtons = [self leftButtons];
+            self.modeCell.delegate = self;
+            return self.modeCell;
+        } else if (indexPath.row == 1) {
+            self.issuerBankCell.leftUtilityButtons = [self leftButtons];
+            self.issuerBankCell.delegate = self;
+            return self.issuerBankCell;
+        } else if (indexPath.row == 2) {
+            return self.bankBranchCell;
+        } else if (indexPath.row == 3) {
+            return self.chequeNoCell;;
+        } else if (indexPath.row == 4) {
+            return self.chequeAmountCell;
+        } else if (indexPath.row == 5) {
+            return self.remarksCell;
+        }
+    }
+    
+    return nil;
+}
+
+- (NSArray *)leftButtons
+{
+    NSMutableArray *leftUtilityButtons = [NSMutableArray new];
+    
+    UIFont *font = [UIFont fontWithName:@"SFUIText-Medium" size:16.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+    NSAttributedString* clearString = [[NSAttributedString alloc] initWithString:@"Clear" attributes:attributes];
+    
+    [leftUtilityButtons sw_addUtilityButtonWithColor:[UIColor redColor] attributedTitle:clearString];
+    
+    return leftUtilityButtons;
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    [cell hideUtilityButtonsAnimated:YES];
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            self.fileNo.text = @"";
+        } else if (indexPath.row == 1) {
+            self.billNo.text = @"";
+        } else if (indexPath.row == 2) {
+            self.accountType.text = @"";
+        } else if (indexPath.row == 3) {
+            self.receivedFrom.text = @"";
+        } else if (indexPath.row == 4) {
+            self.amount.text = @"";
+        } else if (indexPath.row == 5) {
+            self.transaction.text = @"";
+        }
+    } else if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            self.mode.text = @"";
+        } else if (indexPath.row == 1) {
+            self.issuerBank.text = @"";
+        } else if (indexPath.row == 2) {
+            self.bankBranch.text = @"";
+        } else if (indexPath.row == 3) {
+            self.chequeNo.text = @"";
+        } else if (indexPath.row == 4) {
+            self.checqueAmount.text = @"";
+        } else if (indexPath.row == 5) {
+            self.remarks.text = @"";
+        }
+    }
+}
 
 - (void) showPopup: (UIViewController*) vc {
     STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
@@ -123,10 +263,20 @@
     vc.url = RECEIPT_TRANS_DESC_GET_LIST_URL;
     vc.title = @"";
     vc.updateHandler =  ^(NSString* selectedString) {
-        self.transaction.text = selectedString;
+        [self didSelectListWithDescription:nil name:nameOfField withString:selectedString];
     };
     
     [self showPopup:vc];
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    string = string.uppercaseString;
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+    double number = [text intValue] * 0.01;
+    textField.text = [NSString stringWithFormat:@"%.2lf", number];
+    return NO;
 }
 
 
@@ -175,7 +325,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-
 #pragma mark - ContactListWithCodeSelectionDelegate
 - (void) didSelectList:(UIViewController *)listVC name:(NSString*) name withModel:(CodeDescription *)model
 {
@@ -192,7 +341,6 @@
         self.mode.text = description;
     }
 }
-
 
 #pragma mark - Navigation
 

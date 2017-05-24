@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,27 +38,35 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kYI-FS-UkN">
-                        <rect key="frame" x="424" y="26.5" width="24" height="24"/>
+                        <rect key="frame" x="416" y="24.5" width="28" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="28" id="Sly-ix-b8H"/>
+                            <constraint firstAttribute="width" secondItem="kYI-FS-UkN" secondAttribute="height" multiplier="1:1" id="vwM-LL-vLl"/>
+                        </constraints>
                         <state key="normal" image="icon_chat_blue.png"/>
                         <connections>
                             <action selector="didTapMessage:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="htO-Pj-DYh"/>
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIN-Qg-EvT">
-                        <rect key="frame" x="464" y="26.5" width="24" height="24"/>
+                        <rect key="frame" x="460" y="24.5" width="28" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="fIN-Qg-EvT" secondAttribute="height" multiplier="1:1" id="bUF-ay-tAI"/>
+                            <constraint firstAttribute="width" constant="28" id="dEW-51-ghe"/>
+                        </constraints>
                         <state key="normal" image="icon_edit_red.png"/>
                         <connections>
                             <action selector="didTapEdit:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="g4I-lL-d9O"/>
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KpQ-T4-2Yw">
-                        <rect key="frame" x="467" y="51.5" width="18" height="12"/>
+                        <rect key="frame" x="465" y="53.5" width="18" height="12"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="10"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2q7-GJ-0rp">
-                        <rect key="frame" x="425.5" y="51.5" width="22.5" height="12"/>
+                        <rect key="frame" x="419.5" y="53.5" width="22.5" height="12"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="10"/>
                         <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -72,9 +81,11 @@
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="3hQ-M8-pHG" secondAttribute="bottom" constant="5" id="20b-Wv-W41"/>
                     <constraint firstItem="fIN-Qg-EvT" firstAttribute="leading" secondItem="kYI-FS-UkN" secondAttribute="trailing" constant="16" id="ADf-4w-Rfq"/>
+                    <constraint firstItem="kYI-FS-UkN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3hQ-M8-pHG" secondAttribute="trailing" constant="15" id="DOM-DN-5ai"/>
                     <constraint firstItem="3hQ-M8-pHG" firstAttribute="top" secondItem="6hE-KU-PhC" secondAttribute="bottom" constant="8" id="J7S-qm-3J6"/>
                     <constraint firstItem="KpQ-T4-2Yw" firstAttribute="centerX" secondItem="fIN-Qg-EvT" secondAttribute="centerX" id="M0d-gJ-ovL"/>
                     <constraint firstItem="6hE-KU-PhC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="P1S-c1-def"/>
+                    <constraint firstItem="kYI-FS-UkN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6hE-KU-PhC" secondAttribute="trailing" constant="12" id="Zts-Se-ppr"/>
                     <constraint firstItem="kYI-FS-UkN" firstAttribute="centerX" secondItem="2q7-GJ-0rp" secondAttribute="centerX" id="ak1-m2-5Yb"/>
                     <constraint firstItem="fIN-Qg-EvT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="hSC-re-BI2"/>
                     <constraint firstItem="2q7-GJ-0rp" firstAttribute="top" secondItem="kYI-FS-UkN" secondAttribute="bottom" constant="1" id="i2T-lx-PoH"/>
@@ -86,10 +97,12 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="chatBtn" destination="kYI-FS-UkN" id="b6k-ZC-zmE"/>
+                <outlet property="editBtn" destination="fIN-Qg-EvT" id="QX8-3k-h1k"/>
                 <outlet property="fileNumberLable" destination="3hQ-M8-pHG" id="fPj-54-Qm2"/>
                 <outlet property="nameLabel" destination="6hE-KU-PhC" id="Pjh-t2-l9e"/>
             </connections>
-            <point key="canvasLocation" x="-284" y="-290"/>
+            <point key="canvasLocation" x="-284" y="-290.5"/>
         </tableViewCell>
     </objects>
     <resources>

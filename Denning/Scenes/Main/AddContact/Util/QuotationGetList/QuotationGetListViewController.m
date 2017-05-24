@@ -98,10 +98,11 @@
 - (void) getList {
     if (isLoading) return;
     isLoading = YES;
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
     [[QMNetworkManager sharedManager] getQuotationListWithPage:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
         if (self.refreshControl.isRefreshing) {
             self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
@@ -109,7 +110,6 @@
         }
         
         if (error == nil) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
             if (isAppending) {
                 self.listOfAccountTypes = [[self.listOfAccountTypes arrayByAddingObjectsFromArray:result] mutableCopy];
                 if (result.count != 0) {
@@ -126,7 +126,7 @@
             [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
         
-        [self performSelector:@selector(clean) withObject:nil afterDelay:2.0];
+        [self performSelector:@selector(clean) withObject:nil afterDelay:1.0];
     }];
 }
 

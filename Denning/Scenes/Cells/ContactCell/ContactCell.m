@@ -10,7 +10,6 @@
 
 @interface ContactCell()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *rightBtn;
 
 @property (strong, nonatomic) NSString* value;
@@ -34,7 +33,7 @@
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text
 {
     self.titleLabel.text = title;
-    self.contentLabel.text = text ;
+    self.contentLabel.text = text.uppercaseString ;
     
     self.value = text;
 }
