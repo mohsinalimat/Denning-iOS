@@ -13,7 +13,7 @@
 @property(strong, nonatomic) NSString *codeValue;
 @property (strong, nonatomic) NSString *descriptionValue;
 
-+ (CodeDescription*) getCodeDescriptionFromResponse: (NSDictionary*) resposne;
++ (CodeDescription*) getCodeDescriptionFromResponse: (NSDictionary*) response;
 
 + (NSArray*) getCodeDescriptionArrayFromResponse: (NSDictionary*) response;
 @end

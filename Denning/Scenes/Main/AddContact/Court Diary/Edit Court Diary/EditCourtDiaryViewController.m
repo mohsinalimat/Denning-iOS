@@ -11,6 +11,7 @@
 #import "StaffViewController.h"
 #import "BirthdayCalendarViewController.h"
 #import "ListWithCodeTableViewController.h"
+#import "CoramListViewController.h"
 
 @interface EditCourtDiaryViewController ()
 <UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate, ContactListWithCodeSelectionDelegate, UITextFieldDelegate>
@@ -21,18 +22,27 @@
     __block NSString* issueToFirstCode;
     __block BOOL isLoading;
     __block BOOL isSaved;
+    
+    NSInteger selectedRow;
+    NSInteger selectedIndexPath;
+    
+    NSString* selectedCoramCode;
+    NSString* attendedStatusCode;
+    NSString* nextDateTypeCode;
+    NSInteger selectedSection;
 }
 
 @property (weak, nonatomic) IBOutlet FZAccordionTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contents;
-@property (strong, nonatomic) NSMutableArray* addOn;
-@property (nonatomic, strong) NSArray *headers;
+@property (strong, nonatomic) NSArray* addOn;
+@property (nonatomic, strong) NSMutableArray *headers;
 
 @property (strong, nonatomic)
 NSMutableDictionary* keyValue;
 @end
 
 @implementation EditCourtDiaryViewController
+@synthesize courtModel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,22 +51,94 @@ NSMutableDictionary* keyValue;
     [self registerNib];
 }
 - (void) prepareUI {
-    self.keyValue = [@{
-                       @(0): @(1), @(1):@(0)
-                       } mutableCopy];
-    _addOn = [@[@[@"Next date", @""], @[@"Next Time", @""], @[@"Enclosure No", @""], @[@"Next Nature of Hearing", @""], @[@"Next Details.", @""], @[@"Next Remarks.", @""]
-              ] mutableCopy];
+    self.keyValue = [@{ @(0): @(1), @(1):@(0)} mutableCopy];
+    _addOn = @[@[@"Next date", @""], @[@"Next Time", @""], @[@"Enclosure No", @""], @[@"Next Nature of Hearing", @""], @[@"Next Details.", @""], @[@"Next Remarks.", @""]];
     
-    NSArray* temp = @[
-                      @[@[@"File No", @""], @[@"Previous Date", @""], @[@"Present Hearing Date", @""], @[@"Enclosure No", @""], @[@"Hearing Type", @""], @[@"Details", @""], @[@"Counsel Assigned", @""], @[@"Attendant Type", @""], @[@"Counsel Attended", @""], @[@"Coram", @""], @[@"Opponent's Counsel", @""], @[@"Court Decision", @""], @[@"Select Next Date Type", @""]],
-                      
-                      ];
-//    _contents = [temp ara];
+    _contents = [@[@[@[@"File No", courtModel.fileNo1], @[@"Previous Date", courtModel.previousDate], @[@"Present Hearing Date", courtModel.hearingStartDate], @[@"Enclosure No", self.courtModel.enclosureNo], @[@"Hearing Type", self.courtModel.hearingType], @[@"Details",self.courtModel.enclosureDetails], @[@"Counsel Assigned", self.courtModel.counselAssigned], @[@"Attendant Type", self.courtModel.attendedStatus.descriptionValue], @[@"Counsel Attended", courtModel.counselAttended], @[@"Coram", courtModel.coram.name], @[@"Opponent's Counsel", @""], @[@"Court Decision", courtModel.courtDecision], @[@"Select Next Date Type", courtModel.nextDateType.descriptionValue]], @[]] mutableCopy];
     
-    _headers = @[@"Bill Details", @"Bill Analysis"
-                 ];
+    _headers = [@[@"Court Diary",  @"Next Date Details"
+                  ] mutableCopy];
+
+    if ([courtModel.nextDateType.codeValue isEqualToString:@"0"]) {
+        [self addNextDate];
+    }
     
-    isRental = @"0";
+    selectedCoramCode = courtModel.coram.coramCode;
+    attendedStatusCode = courtModel.attendedStatus.codeValue;
+    nextDateTypeCode = courtModel.nextDateType.codeValue	;
+}
+
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+//    if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+//        [self.tableView scrollRectToVisible:activeField.frame animated:YES];
+//    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void) removeNextDate {
+    NSMutableArray* newArray = [NSMutableArray new];
+    for (int i = 0; i < self.tableView.numberOfSections; i++) {
+        newArray[i] = [NSMutableArray new];
+        for (int j = 0; j < [_contents[i] count]; j++) {
+            newArray[i][j]  = [NSMutableArray new];
+            [newArray[i][j] addObject:_contents[i][j][0]];
+            [newArray[i][j] addObject:_contents[i][j][1]];
+        }
+    }
+    
+     _contents = newArray;
+}
+
+- (void) addNextDate {
+    NSMutableArray* newArray = [NSMutableArray new];
+    for (int i = 0; i < self.tableView.numberOfSections; i++) {
+        newArray[i] = [NSMutableArray new];
+        for (int j = 0; j < [_contents[i] count]; j++) {
+            newArray[i][j]  = [NSMutableArray new];
+            [newArray[i][j] addObject:_contents[i][j][0]];
+            [newArray[i][j] addObject:_contents[i][j][1]];
+        }
+    }
+    newArray[1] = [NSMutableArray new];
+    for (int j = 0; j < [_addOn count]; j++) {
+        newArray[1][j] = [NSMutableArray new];
+        [newArray[1][j] addObject:_addOn[j][0]];
+        [newArray[1][j] addObject:_addOn[j][1]];
+    }
+    
+    _contents = newArray;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,40 +150,106 @@ NSMutableDictionary* keyValue;
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)saveBill:(id)sender {
+
+- (void) showPopup: (UIViewController*) vc {
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
+    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
+    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
+    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
+    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    popupController.transitionStyle = STPopupTransitionStyleFade;;
+    popupController.containerView.layer.cornerRadius = 4;
+    popupController.containerView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
+    popupController.containerView.layer.shadowOffset = CGSizeMake(4, 4);
+    popupController.containerView.layer.shadowOpacity = 1;
+    popupController.containerView.layer.shadowRadius = 1.0;
+    
+    [popupController presentInViewController:self];
+}
+
+- (void) showTimePicker {
+    [self.view endEditing:YES];
+    
+    TimePickerViewController *timeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TimePickerView"];
+    timeViewController.updateHandler =  ^(NSString* date) {
+        if ([nameOfField isEqualToString:@"nextTime"]) {
+            [self replaceContentForSection:1 InRow:1 withValue:date];
+        }
+    };
+    
+    [self showPopup:timeViewController];
+}
+
+- (void) showCalendar {
+    [self.view endEditing:YES];
+    
+    BirthdayCalendarViewController *calendarViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"CalendarView"];
+    calendarViewController.updateHandler =  ^(NSString* date) {
+        if ([nameOfField isEqualToString:@"nextDate"]) {
+            [self replaceContentForSection:1 InRow:0 withValue:date];
+        }
+    };
+    [self showPopup:calendarViewController];
+}
+
+- (NSNumber*) getValidValue: (NSNumber*) value
+{
+    if (value == nil) {
+        return @(0);
+    }
+    else {
+        return value;
+    }
+    
+    return value;
+}
+
+
+- (IBAction)updateCourtDiary:(id)sender {
+    NSString* nextDate = @"";
+    if ([_contents[0][12][1] isEqualToString:@"0"]) {
+        nextDate = [DIHelpers convertDateToMySQLFormat:[NSString stringWithFormat:@"%@ %@", _contents[1][0][1], _contents[1][1][1]]];
+    }
     NSDictionary* data = @{
-                           @"fileNo": _contents[0][2][1],
-                           @"isRental": isRental,
-                           @"issueDate": [DIHelpers todayWithTime],
-                           @"issueTo1stCode": @{
-                                   @"code": issueToFirstCode
-                                   },
-                           @"issueToName": _contents[0][4][1],
-                           @"matter": @{
-                                   @"code": _contents[0][3][1]
-                                   },
-                           @"presetCode": @{
-                                   @"code": _contents[0][5][1]
-                                   },
-                           @"relatedDocumentNo": _contents[0][0][1],
-                           @"spaPrice": [self getValidValue:_contents[0][6][1]],
-                           @"spaLoan": [self getValidValue:_contents[0][7][1]],
-                           @"rentalMonth": [self getValidValue:_contents[0][8][1]],
-                           @"rentalPrice": [self getValidValue:_contents[0][9][1]]
+                           @"code":courtModel.courtCode,
+                           @"attendedStatus": @{
+                               @"code": attendedStatusCode,
+                               @"description": _contents[0][7][1]
+                           },
+                           @"coram":
+                               @{
+                                   @"code": selectedCoramCode},
+                           @"counselAssigned": _contents[0][6][1],
+                           @"counselAttended": _contents[0][8][1],
+                           @"court": @"",
+                           @"courtDecision": _contents[0][11][1],
+                           @"enclosureDetails": @"Hearing Type 1",
+                           @"enclosureNo": courtModel.enclosureNo,
+                           @"fileNo1": courtModel.fileNo1,
+                           @"hearingDate": courtModel.hearingStartDate,
+                           @"hearingType": _contents[0][4][1],
+                           @"nextDate": nextDate,
+                           @"nextDateType": @{
+                               @"code": nextDateTypeCode,
+                               @"description": _contents[0][12][1]
+                           },
+                           @"opponentCounsel": _contents[0][10][1],
+                           @"previousDate": courtModel.previousDate,
+                           @"remark": courtModel.remark
                            };
     if (isLoading) return;
     isLoading = YES;
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self);
-    [[QMNetworkManager sharedManager] saveBillorQuotationWithParams:data inURL:TAXINVOICE_SAVE_URL WithCompletion:^(NSDictionary * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] updateCourtDiaryWithData:data WithCompletion:^(EditCourtModel * _Nonnull model, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         @strongify(self)
         self->isLoading = NO;
         if (error == nil) {
-            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully saved" duration:1.0];
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully updated" duration:1.0];
             self->isSaved = YES;
-            [self updateWholeData:result];
+//            [self updateWholeData:model];
             
         } else {
             [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:1.0];
@@ -114,7 +262,7 @@ NSMutableDictionary* keyValue;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     
     self.tableView.allowMultipleSectionsOpen = YES;
-    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(1), nil];
+    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(0), nil];
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -132,7 +280,12 @@ NSMutableDictionary* keyValue;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.contents[section] count] + 1;
+    return [self.contents[section] count];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
 }
 
 - (void) updateWholeData: (NSDictionary*) result {
@@ -177,16 +330,32 @@ NSMutableDictionary* keyValue;
     [self replaceContentForSection:1 InRow:4 withValue:iTotal];
 }
 
-- (NSString*) getValidValue: (NSString*) value
-{
-    if (value.length == 0) {
-        return @"0";
-    }
-    else {
-        return value;
+
+- (NSInteger) calcTag: (NSIndexPath*) indexPath {
+    NSInteger tag = 0;
+    for (int i = 0; i < [_contents count]; i++) {
+        if (i < indexPath.section) {
+            tag += [_contents[i] count];
+        }
     }
     
-    return value;
+    tag += indexPath.row;
+    
+    return tag;
+}
+
+- (NSArray*) calcSectionNumber: (NSInteger) tag {
+    NSInteger section = 0;
+    NSInteger remain = tag;
+    for (int i = 0; i < self.tableView.numberOfSections; i++) {
+        section = i;
+        if (remain - (NSInteger)[_contents[i] count] < 0) {
+            break;
+        }
+        remain = (remain - (NSInteger)[_contents[i] count]);
+    }
+    
+    return @[@(section), @(remain)];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -208,24 +377,29 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.inputAccessoryView = accessoryView;
-    cell.floatingTextField.tag = indexPath.row;
+    cell.floatingTextField.tag = [self calcTag:indexPath];
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
     
     if (indexPath.section == 0) {
-        if (indexPath.row == 0 || indexPath.row == 2 || indexPath.row == 3  || indexPath.row == 5) {
+        if (indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 4 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.floatingTextField.userInteractionEnabled = NO;
-        } else if (indexPath.row == 1 || indexPath.row == 4) {
+        }
+        
+        if (indexPath.row == 0) {
+            cell.floatingTextField.userInteractionEnabled = NO;
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0 || indexPath.row == 1 ||indexPath.row == 3 || indexPath.row == 4) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.floatingTextField.userInteractionEnabled = NO;
         }
     }
-    cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
-    
+ 
     return cell;
 }
-
 
 - (void)handleTap {
     [self.view endEditing:YES];
@@ -235,9 +409,9 @@ NSMutableDictionary* keyValue;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self replaceContentForSection:0 InRow:textField.tag withValue:textField.text];
+    NSArray* info = [self calcSectionNumber:textField.tag];
+    [self replaceContentForSection:[info[0] integerValue] InRow:[info[1] integerValue] withValue:textField.text];
 }
-
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -296,15 +470,46 @@ NSMutableDictionary* keyValue;
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    selectedRow = indexPath.row;
+    selectedSection = indexPath.section;
+
     if (indexPath.section == 0) {
+        if (indexPath.row == 4) {
+            titleOfList = @"Select Hearing Type";
+            nameOfField = @"natureOfHearing";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_HEARINGTYPE_GET_URL];
+        } else if (indexPath.row == 6 || indexPath.row == 8) {
+            [self performSegueWithIdentifier:kStaffSegue sender:@"attest"];
+        } else if (indexPath.row == 7) {
+            titleOfList = @"Select Attendant Type";
+            nameOfField = @"attendantType";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_ATTENDED_STATUS_GET_URL];
+        } else if (indexPath.row == 9) {
+            [self performSegueWithIdentifier:kCoramListSegue sender:nil];
+        } else if (indexPath.row == 11) {
+            titleOfList = @"Select Court Decision";
+            nameOfField = @"CourtDecision";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_DECISION_GET_URL];
+        } else if (indexPath.row == 12) {
+            titleOfList = @"Select NEXTDATE TYPE";
+            nameOfField = @"NextDateType";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_NEXTDATE_TYPE_GET_URL];
+        }
+    } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            [self performSegueWithIdentifier:kQuotationSegue sender:QUOTATION_GET_LIST_URL];
-        } else if (indexPath.row == 2) {
-            [self performSegueWithIdentifier:kSimpleMatterSegue sender:MATTERSIMPLE_GET_URL];
+            nameOfField = @"nextDate";
+            [self showCalendar];
+        } else if (indexPath.row == 1) {
+            nameOfField = @"nextTime";
+            [self showTimePicker];
         } else if (indexPath.row == 3) {
-            [self performSegueWithIdentifier:kMatterCodeSegue sender:MATTER_LIST_GET_URL];
-        } else if (indexPath.row == 5) {
-            [self performSegueWithIdentifier:kPresetBillSegue sender:PRESET_BILL_GET_URL];
+            titleOfList = @"Select Hearing Type";
+            nameOfField = @"nextNatureOfHearing";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_HEARINGTYPE_GET_URL];
+        } else if ( indexPath.row == 4) {
+            titleOfList = @"Select Hearing Details";
+            nameOfField = @"nextDetails";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:COURT_HEARINGDETAIL_GET_URL];
         }
     }
 }
@@ -317,11 +522,7 @@ NSMutableDictionary* keyValue;
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView didOpenSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
-        
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    });
+    
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView willCloseSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
@@ -375,7 +576,25 @@ NSMutableDictionary* keyValue;
 - (void) didSelectList:(UIViewController *)listVC name:(NSString*) name withModel:(CodeDescription *)model
 {
     if ([name isEqualToString:@"natureOfHearing"]) {
-        
+        [self replaceContentForSection:0 InRow:5 withValue:model.descriptionValue];
+    } else if ([name isEqualToString:@"CourtDecision"]) {
+        [self replaceContentForSection:0 InRow:11 withValue:model.descriptionValue];
+    } else if ([name isEqualToString:@"NextDateType"]) {
+        [self replaceContentForSection:0 InRow:12 withValue:model.descriptionValue];
+        nextDateTypeCode = model.codeValue;
+        if ([nextDateTypeCode isEqualToString:@"0"]) {
+            [self addNextDate];
+            [self.tableView reloadData];
+        } else if ([nextDateTypeCode isEqualToString:@"1"]) {
+            
+        }
+    } else if ([name isEqualToString:@"attendantType"]) {
+        [self replaceContentForSection:0 InRow:7 withValue:model.descriptionValue];
+        attendedStatusCode = model.codeValue;
+    } else if ([name isEqualToString:@"nextNatureOfHearing"]) {
+        [self replaceContentForSection:1 InRow:3 withValue:model.descriptionValue];
+    } else if ([name isEqualToString:@"nextDetails"]) {
+        [self replaceContentForSection:1 InRow:4 withValue:model.descriptionValue];
     }
 }
 
@@ -398,11 +617,23 @@ NSMutableDictionary* keyValue;
         UINavigationController *navVC =segue.destinationViewController;
         StaffViewController* staffVC = navVC.viewControllers.firstObject;
         staffVC.typeOfStaff = sender;
-        staffVC.updateHandler = ^(NSString*  typeOfStaff, StaffModel* model) {
-//            self.councilAssigned.text = value;
+        staffVC.updateHandler = ^(NSString* typeOfStaff, StaffModel* model) {
+            if (selectedRow == 6) {
+                [self replaceContentForSection:0 InRow:6 withValue:model.name];
+            } else if (selectedRow == 8) {
+                [self replaceContentForSection:0 InRow:8 withValue:model.name];
+            }
+            
         };
     }
     
+    if ([segue.identifier isEqualToString:kCoramListSegue]) {
+        CoramListViewController* coramVC = segue.destinationViewController;
+        coramVC.updateHandler = ^(CoramModel *model) {
+            [self replaceContentForSection:0 InRow:9 withValue:model.name];
+            selectedCoramCode = model.coramCode;
+        };
+    }
 }
 
 

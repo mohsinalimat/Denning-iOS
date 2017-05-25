@@ -994,6 +994,44 @@
 
 }
 
+- (void) getCoramArrayWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, COURT_CORAM_GET_LIST_URL,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [CoramModel getCoramArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+    
+}
+
+- (void) updateCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
+{
+    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:COURT_SAVE_UPATE_URL];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager PUT:_url parameters:data success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([EditCourtModel getEditCourtFromResponse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+
 - (void) saveCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
 {
     NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:COURT_SAVE_UPATE_URL];
@@ -1001,7 +1039,7 @@
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            completion(responseObject, nil);
+            completion([EditCourtModel getEditCourtFromResponse:responseObject], nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if  (completion != nil)

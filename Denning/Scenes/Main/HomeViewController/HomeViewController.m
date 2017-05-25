@@ -182,7 +182,7 @@
 }
 
 - (void) showComingSoon {
-    [QMAlert showAlertWithMessage:@"Coming Soon. Thank you for your support." actionSuccess:YES inViewController:self];
+    [QMAlert showInformationWithMessage:@"Coming Soon. Thank you for your support." inViewController:self];
 }
 
 #pragma mark -

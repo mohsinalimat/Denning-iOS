@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define COURT_PERSONAL_DETAIL_GET_LIST_URL  @"denningwcf/v1/PersonalDiary/AppointmentDetails?search="
 
-#define COURT_CORAM_GET_URL @"denningwcf/v1/courtDiary/coram?search="
+#define COURT_CORAM_GET_LIST_URL @"denningwcf/v1/courtDiary/coram?search="
 
 #define COURT_DECISION_GET_URL  @"denningwcf/v1/courtDiary/decision?search="
 

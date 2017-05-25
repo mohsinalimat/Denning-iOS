@@ -149,3 +149,7 @@ static NSString* const kCourtDiarySegue = @"CourtDiarySegue";
 static NSString* const kDiarySegue = @"DiarySegue";
 
 static NSString* const kAddReceiptSegue = @"AddReceiptSegue";
+
+static NSString* const kEditCourtSegue = @"EditCourtSegue";
+
+static NSString* const kCoramListSegue = @"CoramListSegue";

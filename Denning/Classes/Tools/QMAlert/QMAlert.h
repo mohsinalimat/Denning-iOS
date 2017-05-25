@@ -12,4 +12,6 @@
 
 + (void)showAlertWithMessage:(NSString *)message actionSuccess:(BOOL)success inViewController:(UIViewController *)viewController;
 
++ (void)showInformationWithMessage:(NSString *)message inViewController:(UIViewController *)viewController;
+
 @end

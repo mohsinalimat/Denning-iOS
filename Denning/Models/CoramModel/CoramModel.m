@@ -13,11 +13,18 @@
 + (CoramModel*) getCoramFromResponse: (NSDictionary*) response
 {
     CoramModel *coram = [CoramModel new];
-    
-    coram.coramCode = [response objectForKeyNotNull:@"code"];
-    coram.courtType = [response objectForKeyNotNull:@"courtType"];
-    coram.position = [response objectForKeyNotNull:@"position"];
-    coram.name = [response objectForKeyNotNull:@"name"];
+    if (response) {
+        coram.coramCode = [response valueForKeyNotNull:@"code"];
+        coram.courtType = [response valueForKeyNotNull:@"courtType"];
+        coram.position = [response valueForKeyNotNull:@"position"];
+        coram.name = [response valueForKeyNotNull:@"name"];
+        coram.position = [response valueForKeyNotNull:@"position"];
+    } else {
+        coram.coramCode = @"";
+        coram.courtType = @"";
+        coram.name = @"";
+        coram.position = @"";
+    }
     
     return coram;
 }

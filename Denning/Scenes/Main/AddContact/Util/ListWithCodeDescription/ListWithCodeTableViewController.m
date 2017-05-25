@@ -55,7 +55,7 @@
 {
     self.title = self.titleOfList;
     self.copyedList = [NSMutableArray new];
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;

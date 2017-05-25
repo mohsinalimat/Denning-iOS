@@ -105,6 +105,9 @@
 
 + (NSString*) convertDateToMySQLFormat: (NSString*)date
 {
+    if (date.length == 0) {
+        return @"";
+    }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     

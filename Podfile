@@ -31,6 +31,7 @@ target ‘Denning’ do
 	pod 'UIFloatLabelTextField'
 	pod 'FZAccordionTableView', '~> 0.2.3'
 	pod "HNKGooglePlacesAutocomplete", "~> 1.1"
+	pod 'UILabel+Copyable', '~> 1.0.0'
 
 	pod 'AFNetworking’
 	pod 'Bolts'

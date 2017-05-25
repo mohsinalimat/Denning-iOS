@@ -10,12 +10,17 @@
 
 @implementation CodeDescription
 
-+ (CodeDescription*) getCodeDescriptionFromResponse: (NSDictionary*) resposne
++ (CodeDescription*) getCodeDescriptionFromResponse: (NSDictionary*) response
 {
     CodeDescription* codeDescription = [CodeDescription new];
     
-    codeDescription.codeValue = [resposne valueForKeyNotNull:@"code"];
-    codeDescription.descriptionValue = [resposne valueForKeyNotNull:@"description"];
+    if (response) {
+        codeDescription.codeValue = [response valueForKeyNotNull:@"code"];
+        codeDescription.descriptionValue = [response valueForKeyNotNull:@"description"];
+    } else {
+        codeDescription.codeValue = @"";
+        codeDescription.descriptionValue = @"";
+    }
     
     return codeDescription;
 }

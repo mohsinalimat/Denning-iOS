@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '581F69B9888B722656C872D4DFE0B403'
+               BlueprintIdentifier = 'E403532CD0B4FC1335DA4AFEABAE7314'
                BlueprintName = 'QMChatViewController'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libQMChatViewController.a'>

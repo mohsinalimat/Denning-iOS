@@ -85,7 +85,7 @@ NSMutableDictionary* keyValue;
                       @[@[@"Vendor's Solicitor", @""], @[@"Purchaser's Solicitor", @""], @[@"Customer Group3's Solicitor", @""], @[@"Customer Group4's Solicitor", @""]],
                       @[@[@"Property1", @""], @[@"Property2", @""], @[@"Property3", @""], @[@"Property4", @""], @[@"Property5", @""]],
                       @[@[@"Vendor's Bank", @""], @[@"Purchaser's Bank", @""], @[@"Customer Group3's Bank", @""]],
-                      @[@[@"Purchase Price (A)", @""], @[@"Earnest Deposit  (B)", @""], @[@"Balance (C)", @""], @[@"Total Deposit (D) = B + C", @""], @[@"Balance Purchase Price (A)", @""], @[@"Purchase Price (A)", @""], @[@"Purchase Price (A - D)", @""], @[@"GST Amount", @""], @[@"Redemption Sum", @""], @[@"Term Loan Amt", @""], @[@"OD Loan Amt", @""], @[@"+ MRTA", @""], @[@"+ Legal Fee", @""], @[@"+ Other", @""], @[@"Total Loan", @""]],
+                      @[@[@"Purchase Price (A)", @""], @[@"Earnest Deposit  (B)", @""], @[@"Balance (C)", @""], @[@"Total Deposit (D) = B + C", @""], @[@"Purchase Price (A - D)", @""], @[@"GST Amount", @""], @[@"Redemption Sum", @""], @[@"Term Loan Amt", @""], @[@"OD Loan Amt", @""], @[@"+ MRTA", @""], @[@"+ Legal Fee", @""], @[@"+ Other", @""], @[@"Total Loan", @""]],
                       @[@[@"SPA Date", @""], @[@"CP Fulfillment Date", @""], @[@"Completion Date", @""], @[@"Extended Completion date", @""], @[@"Redemption Date", @""], @[@"Bank Instruction Date", @""], @[@"Letter of Offer Date", @""]]
                       ];
     _contents = [temp mutableCopy];
@@ -297,7 +297,7 @@ NSMutableDictionary* keyValue;
 
 - (void) registerNib {
     self.tableView.allowMultipleSectionsOpen = YES;
-    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(1), nil];
+    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(0), nil];
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -404,8 +404,21 @@ NSMutableDictionary* keyValue;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-   
-    return YES;
+    NSInteger section = [[self calcSectionNumber:textField.tag][0] integerValue];
+    if (section == 5) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
+        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
+        textField.text = formattedNumberString;
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 
@@ -533,7 +546,7 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.inputAccessoryView = accessoryView;
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
-    cell.floatingTextField.tag = indexPath.row;
+    cell.floatingTextField.tag = [self calcTag:indexPath];
     cell.leftUtilityButtons = [self leftButtons];
     cell.delegate = self;
     
@@ -649,17 +662,33 @@ NSMutableDictionary* keyValue;
     [self.tableView reloadData];
 }
 
+- (NSString*) removeComma: (NSString*) string {
+    return [string stringByReplacingOccurrencesOfString:@"," withString:@""];
+}
+
 #pragma mark - UITextField Delegate
 
 - (void) calculateImportantRM {
-    CGFloat totalDeposit = [_contents[5][1][1] floatValue] + [_contents[5][2][1] floatValue];
+    CGFloat totalDeposit = [[self removeComma:_contents[5][1][1]] floatValue]  + [[self removeComma:_contents[5][2][1]] floatValue];
     [self replaceContentForSection:5 InRow:3 withValue:[NSString stringWithFormat:@"%lf", totalDeposit]];
     
-    CGFloat balancePurchase = [_contents[5][0][1] floatValue] + totalDeposit;
+    CGFloat balancePurchase = [[self removeComma:_contents[5][0][1]] floatValue] - totalDeposit;
     [self replaceContentForSection:5 InRow:4 withValue:[NSString stringWithFormat:@"%lf", balancePurchase]];
     CGFloat totalLoan = 0;
     
+}
+
+- (NSInteger) calcTag: (NSIndexPath*) indexPath {
+    NSInteger tag = 0;
+    for (int i = 0; i < [_contents count]; i++) {
+        if (i < indexPath.section) {
+            tag += [_contents[i] count];
+        }
+    }
     
+    tag += indexPath.row;
+    
+    return tag;
 }
 
 - (NSArray*) calcSectionNumber: (NSInteger) tag {
@@ -762,7 +791,7 @@ NSMutableDictionary* keyValue;
 - (void) loadSolicitor: (NSInteger) number {
     if (solicitorCodeList.count == 0) {
         [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:@"Couldn't get the detail" duration:1.0];
-        
+        return;
     } else {
         if (isLoading) return;
         isLoading = YES;
@@ -786,7 +815,7 @@ NSMutableDictionary* keyValue;
 - (void) loadProperty: (NSInteger) number {
     if (propertyCodeList.count == 0) {
         [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:@"Couldn't get the detail" duration:1.0];
-        
+        return;
     } else {
         if (isLoading) return;
         isLoading = YES;
@@ -814,7 +843,7 @@ NSMutableDictionary* keyValue;
 - (void) loadBank: (NSInteger) number {
     if (bankCodeList.count == 0) {
         [self.navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:@"Couldn't get the detail" duration:1.0];
-        
+        return;
     } else {
         if (isLoading) return;
         isLoading = YES;

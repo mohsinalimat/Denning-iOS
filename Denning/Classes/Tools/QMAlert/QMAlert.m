@@ -26,4 +26,18 @@
     [viewController presentViewController:alertController animated:YES completion:nil];
 }
 
++ (void)showInformationWithMessage:(NSString *)message inViewController:(UIViewController *)viewController
+{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Information"
+                                          message:message
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"QM_STR_OK", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull __unused action) {
+        
+    }]];
+    
+    [viewController presentViewController:alertController animated:YES completion:nil];
+}
+
 @end

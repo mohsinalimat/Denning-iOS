@@ -14,7 +14,7 @@
 {
     EditCourtModel* model = [EditCourtModel new];
     model.attendedStatus = [CodeDescription getCodeDescriptionFromResponse: [response objectForKeyNotNull:@"attendedStatus"]];
-    model.courtCode = [response valueForKeyNotNull:@"courtCode"];
+    model.courtCode = [response valueForKeyNotNull:@"code"];
     model.coram = [CoramModel getCoramFromResponse:[response objectForKeyNotNull:@"coram"]];
     model.counselAssigned = [response valueForKeyNotNull:@"counselAssigned"];
     model.counselAttended = [response valueForKeyNotNull:@"counselAttended"];

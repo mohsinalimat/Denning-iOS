@@ -718,6 +718,7 @@
 		962082C91ED48D2E00BB595C /* CourtDiaryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082C81ED48D2E00BB595C /* CourtDiaryModel.m */; };
 		962082CD1ED48FE100BB595C /* CourtDiaryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */; };
 		962082D11ED5209100BB595C /* HNKDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082D01ED5209100BB595C /* HNKDemoViewController.m */; };
+		962082D51ED641DE00BB595C /* CoramListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082D41ED641DE00BB595C /* CoramListViewController.m */; };
 		F4A8F1784F1A06AAD47D5D01 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */; };
 /* End PBXBuildFile section */
 
@@ -1785,6 +1786,8 @@
 		962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourtDiaryListViewController.m; sourceTree = "<group>"; };
 		962082CF1ED5209100BB595C /* HNKDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNKDemoViewController.h; sourceTree = "<group>"; };
 		962082D01ED5209100BB595C /* HNKDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNKDemoViewController.m; sourceTree = "<group>"; };
+		962082D31ED641DE00BB595C /* CoramListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoramListViewController.h; sourceTree = "<group>"; };
+		962082D41ED641DE00BB595C /* CoramListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoramListViewController.m; sourceTree = "<group>"; };
 		B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -2485,6 +2488,7 @@
 		793FF2291EC48E22001F83A5 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				962082D21ED641CD00BB595C /* CoramListView */,
 				962082CE1ED5208000BB595C /* GoogleMapAutocomplete */,
 				962082CA1ED48FCE00BB595C /* CourtDiaryViewController */,
 				962082C21ED4827600BB595C /* MatterLitigateViewController */,
@@ -5502,6 +5506,15 @@
 			path = GoogleMapAutocomplete;
 			sourceTree = "<group>";
 		};
+		962082D21ED641CD00BB595C /* CoramListView */ = {
+			isa = PBXGroup;
+			children = (
+				962082D31ED641DE00BB595C /* CoramListViewController.h */,
+				962082D41ED641DE00BB595C /* CoramListViewController.m */,
+			);
+			path = CoramListView;
+			sourceTree = "<group>";
+		};
 		EA4300F6D243812CDEACE5C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -6262,6 +6275,7 @@
 				7920E7B51EA0512C002FEFF3 /* DIFileBrowser.m in Sources */,
 				793FF1B61EBF9079001F83A5 /* CoramModel.m in Sources */,
 				79FBDFB51E30421A00448FE3 /* QMNetworkManager.m in Sources */,
+				962082D51ED641DE00BB595C /* CoramListViewController.m in Sources */,
 				7903D0811ECEC9680090206C /* PropertyTypeListViewController.m in Sources */,
 				79EC0E101E89AD8400320A28 /* ThreeFieldsCell.m in Sources */,
 				79D59A161E94762B00CD3821 /* QMContactsSearchDataProvider.m in Sources */,

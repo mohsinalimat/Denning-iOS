@@ -413,7 +413,6 @@ NSMutableDictionary* keyValue;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    string = string.uppercaseString;
     if (textField.tag == 6 || textField.tag == 7 || textField.tag == 8 || textField.tag == 9) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
