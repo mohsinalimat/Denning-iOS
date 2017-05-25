@@ -116,11 +116,12 @@
         }
         
         if (error == nil) {
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
             if (isAppending) {
                 self.listOfCodeDesc = [[self.listOfCodeDesc arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
+                
             } else {
                 self.listOfCodeDesc = [result mutableCopy];
             }

@@ -60,7 +60,7 @@
 {
     self.title = self.titleOfList;
     self.copyedList = [NSMutableArray new];
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
@@ -121,11 +121,12 @@
         }
         
         if (error == nil) {
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
             if (isAppending) {
                 self.listOfDesc = [[self.listOfDesc arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
+                
             } else {
                 self.listOfDesc = [result mutableCopy];
             }
