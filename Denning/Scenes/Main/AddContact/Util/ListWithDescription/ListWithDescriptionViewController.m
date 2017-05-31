@@ -204,6 +204,7 @@
     self.filter = @"";
     searchController.searchBar.text = @"";
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 
@@ -212,6 +213,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 

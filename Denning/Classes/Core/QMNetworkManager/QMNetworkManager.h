@@ -28,6 +28,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class DocumentModel;
 @class AddContactModel;
 @class EditCourtModel;
+@class ThreeItemModel;
+@class NewMatterModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -184,6 +186,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 // Ledger detail
 - (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerDetailModelArray, NSError* error)) completion;
 
+
 // Document
 - (void) loadDocumentWithCode: (NSString*) code completion: (void(^)(DocumentModel* doumentModel, NSError* error)) completion;
 
@@ -288,6 +291,22 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) getAccountTypeListWithPage: (NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) saveReceiptWithParams: (NSDictionary*) data WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion;
+
+
+/*
+ * Dashbard
+ */
+
+- (void) getDashboardThreeItmesInURL:(NSString*)url withCompletion: (void(^)(ThreeItemModel* result, NSError* error)) completion;
+- (void) getNewMatterInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardContactInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardTaxInvoiceInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardAccountInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardFeeTransferInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 @end
 
 NS_ASSUME_NONNULL_END

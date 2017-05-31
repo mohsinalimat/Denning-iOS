@@ -142,18 +142,18 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) updateWholeData: (NSDictionary*) result {
-    NSString* relatedDocumentNo = [result objectForKeyNotNull:@"relatedDocumentNo"];
-    isRental =  [result objectForKeyNotNull:@"isRental"];
-    issueToFirstCode =  [result objectForKeyNotNull:@"issueTo1stCode"];
-    NSString* issueToName =  [result objectForKeyNotNull:@"issueToName"];
-    NSString* documentNo = [result objectForKeyNotNull:@"documentNo"];
-    NSString* fileNo = [result objectForKeyNotNull:@"fileNo"];
-    NSString* matterCode = [result objectForKeyNotNull:@"matter"];
-    NSString* presetCode = [result objectForKeyNotNull:@"presetCode"];
-    NSString* rentalMonth = [result objectForKeyNotNull:@"rentalMonth"];
-    NSString* rentalPrice = [result objectForKeyNotNull:@"rentalPrice"];
-    NSString* spaLoan = [result objectForKeyNotNull:@"spaLoan"];
-    NSString* spaPrice = [result objectForKeyNotNull:@"spaPrice"];
+    NSString* relatedDocumentNo = [result valueForKeyNotNull:@"relatedDocumentNo"];
+    isRental =  [result valueForKeyNotNull:@"isRental"];
+    issueToFirstCode =  [result valueForKeyNotNull:@"issueTo1stCode"];
+    NSString* issueToName =  [result valueForKeyNotNull:@"issueToName"];
+    NSString* documentNo = [result valueForKeyNotNull:@"documentNo"];
+    NSString* fileNo = [result valueForKeyNotNull:@"fileNo"];
+    NSString* matterCode = [result valueForKeyNotNull:@"matter"];
+    NSString* presetCode = [result valueForKeyNotNull:@"presetCode"];
+    NSString* rentalMonth = [result valueForKeyNotNull:@"rentalMonth"];
+    NSString* rentalPrice = [result valueForKeyNotNull:@"rentalPrice"];
+    NSString* spaLoan = [result valueForKeyNotNull:@"spaLoan"];
+    NSString* spaPrice = [result valueForKeyNotNull:@"spaPrice"];
     
     [self replaceContentForSection:0 InRow:0 withValue:relatedDocumentNo];
     [self replaceContentForSection:0 InRow:1 withValue:documentNo];
@@ -185,6 +185,10 @@ NSMutableDictionary* keyValue;
 
 - (NSString*) getValidValue: (NSString*) value
 {
+    if ([value isKindOfClass:[NSNumber class]]) {
+        value = [((NSNumber*)value) stringValue];
+    }
+    
     if (value.length == 0) {
         return @"0";
     }
@@ -319,11 +323,7 @@ NSMutableDictionary* keyValue;
     if (indexPath.section == 0) {
         if (indexPath.row == 0 || indexPath.row == 2 || indexPath.row == 3  || indexPath.row == 5) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.floatingTextField.userInteractionEnabled = NO;
-        } else if (indexPath.row == 1 || indexPath.row == 4) {
-            cell.floatingTextField.userInteractionEnabled = NO;
         }
-        
         cell.hidden = NO;
         if ([isRental integerValue] == 0) {
             if (indexPath.row == 6 || indexPath.row == 7) {
@@ -336,13 +336,7 @@ NSMutableDictionary* keyValue;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
             }
         }
-        cell.floatingTextField.tag = indexPath.row;
-        cell.floatingTextField.delegate = self;
-    } else if (indexPath.section == 1) {
-        cell.floatingTextField.userInteractionEnabled = NO;
-    }
-    
-    cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
+    } 
     
     return cell;
 }
@@ -395,10 +389,8 @@ NSMutableDictionary* keyValue;
         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
         NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
         textField.text = formattedNumberString;
-        return NO;
-    } else {
-        return YES;
     }
+    return NO;
 }
 
 #pragma mark - UITableView Datasource

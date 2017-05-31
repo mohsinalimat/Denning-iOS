@@ -26,6 +26,8 @@
     }
     relatedMatter.matter = [[response objectForKeyNotNull:@"matter"] valueForKeyNotNull:@"description"];
     
+    relatedMatter.partner = [StaffModel getStaffFromResponse:[response objectForKeyNotNull:@"partner"]];
+    
     relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKeyNotNull:@"partyGroup"]];
     
     relatedMatter.court = [CourtModel getCourtFromResponse:[response objectForKeyNotNull:@"courtInfo"]];
@@ -35,6 +37,8 @@
     relatedMatter.propertyGroupArray = [PropertyModel getPropertyArrayFromResponse:[response objectForKeyNotNull:@"propertyGroup"]];
     
     relatedMatter.bankGroupArray = [BankGroupModel getBankGroupArrayFromResponse:[response objectForKeyNotNull:@"bankGroup"]];
+    
+    relatedMatter.clerk = [StaffModel getStaffFromResponse:[response objectForKeyNotNull:@"clerk"]];
     
     relatedMatter.RMGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKeyNotNull:@"RMGroup"]];
     

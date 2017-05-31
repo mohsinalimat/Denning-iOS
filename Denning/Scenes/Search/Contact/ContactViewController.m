@@ -185,7 +185,7 @@
         } else if (indexPath.row == 5) {
             [cell configureCellWithContact:@"Fax" text:contactModel.fax];
         } else if (indexPath.row == 6) {
-            [cell configureCellWithContact:@"Email" text:contactModel.email];
+            [cell configureCellWithContact:@"Email" text:contactModel.email withLower:YES];
             [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_email_red"]];
             cell.tag = 2;
         } else if (indexPath.row == 7) {

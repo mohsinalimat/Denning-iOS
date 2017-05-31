@@ -65,7 +65,7 @@
 
 - (void) prepareUI
 {
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
@@ -108,11 +108,12 @@
         }
         
         if (error == nil) {
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
             if (isAppending) {
                 self.listOfProperties = [[self.listOfProperties arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
+                
             } else {
                 self.listOfProperties = [result mutableCopy];
             }
@@ -190,6 +191,7 @@
     self.filter = @"";
     searchController.searchBar.text = @"";
     isAppending = NO;
+    self.page  =@(1);
     [self getList];
 }
 
@@ -197,6 +199,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page  =@(1);
     [self getList];
 }
 

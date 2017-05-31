@@ -57,8 +57,7 @@
 
 - (void) prepareUI
 {
-    self.copyedList = [NSMutableArray new];
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
@@ -110,12 +109,13 @@
         }
         
         if (error == nil) {
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
+
             if (isAppending) {
                 self.listOfQuotations = [[self.listOfQuotations arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
-            } else {
+                            } else {
                 self.listOfQuotations = [result mutableCopy];
             }
             
@@ -191,6 +191,7 @@
     self.filter = @"";
     searchController.searchBar.text = @"";
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 
@@ -199,6 +200,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 

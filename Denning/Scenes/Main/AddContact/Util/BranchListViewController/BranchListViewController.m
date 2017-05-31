@@ -63,7 +63,7 @@
 
 - (void) prepareUI
 {
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
@@ -108,13 +108,13 @@
         }
         
         if (error == nil) {
-            
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
+
             if (isAppending) {
                 self.listOfBankBranches = [[self.listOfBankBranches arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
-            } else {
+                            } else {
                 self.listOfBankBranches = [result mutableCopy];
             }
             
@@ -198,6 +198,7 @@
     self.filter = @"";
     searchController.searchBar.text = @"";
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 
@@ -205,6 +206,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 

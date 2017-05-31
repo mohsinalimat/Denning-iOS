@@ -180,16 +180,16 @@ NSMutableDictionary* keyValue;
 
 - (void) updateWholeData: (NSDictionary*) result {
     isRental =  [result objectForKeyNotNull:@"isRental"];
-    issueToFirstCode =  [result objectForKeyNotNull:@"issueTo1stCode"];
-    NSString* issueToName =  [result objectForKeyNotNull:@"issueToName"];
-    NSString* documentNo = [result objectForKeyNotNull:@"documentNo"];
-    NSString* fileNo = [result objectForKeyNotNull:@"fileNo"];
-    NSString* matterCode = [result objectForKeyNotNull:@"matter"];
-    NSString* presetCode = [result objectForKeyNotNull:@"presetCode"];
-    NSString* rentalMonth = [result objectForKeyNotNull:@"rentalMonth"];
-    NSString* rentalPrice = [result objectForKeyNotNull:@"rentalPrice"];
-    NSString* spaLoan = [result objectForKeyNotNull:@"spaLoan"];
-    NSString* spaPrice = [result objectForKeyNotNull:@"spaPrice"];
+    issueToFirstCode =  [result valueForKeyNotNull:@"issueTo1stCode"];
+    NSString* issueToName =  [result valueForKeyNotNull:@"issueToName"];
+    NSString* documentNo = [result valueForKeyNotNull:@"documentNo"];
+    NSString* fileNo = [result valueForKeyNotNull:@"fileNo"];
+    NSString* matterCode = [result valueForKeyNotNull:@"matter"];
+    NSString* presetCode = [result valueForKeyNotNull:@"presetCode"];
+    NSString* rentalMonth = [result valueForKeyNotNull:@"rentalMonth"];
+    NSString* rentalPrice = [result valueForKeyNotNull:@"rentalPrice"];
+    NSString* spaLoan = [result valueForKeyNotNull:@"spaLoan"];
+    NSString* spaPrice = [result valueForKeyNotNull:@"spaPrice"];
     
     [self replaceContentForSection:0 InRow:0 withValue:documentNo];
     [self replaceContentForSection:0 InRow:1 withValue:fileNo];
@@ -206,11 +206,11 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) updateBelowViewWithData: (NSDictionary*) result {
-    NSString* iFee = [result objectForKeyNotNull:@"iFee"];
-    NSString* iDisbTax = [result objectForKeyNotNull:@"iDisbTax"];
-    NSString* iDisbOnly = [result objectForKeyNotNull:@"iDisbOnly"];
-    NSString* iGST = [result objectForKeyNotNull:@"iGST"];
-    NSString* iTotal = [result objectForKeyNotNull:@"iTotal"];
+    NSString* iFee = [result valueForKeyNotNull:@"iFee"];
+    NSString* iDisbTax = [result valueForKeyNotNull:@"iDisbTax"];
+    NSString* iDisbOnly = [result valueForKeyNotNull:@"iDisbOnly"];
+    NSString* iGST = [result valueForKeyNotNull:@"iGST"];
+    NSString* iTotal = [result valueForKeyNotNull:@"iTotal"];
     
     [self replaceContentForSection:1 InRow:0 withValue:iFee];
     [self replaceContentForSection:1 InRow:1 withValue:iDisbTax];
@@ -221,6 +221,9 @@ NSMutableDictionary* keyValue;
 
 - (NSString*) getValidValue: (NSString*) value
 {
+    if ([value isKindOfClass:[NSNumber class]]) {
+        value = [((NSNumber*)value) stringValue];
+    }
     if (value.length == 0) {
         return @"0";
     }
@@ -240,6 +243,19 @@ NSMutableDictionary* keyValue;
 - (UIViewController *) documentInteractionControllerViewControllerForPreview: (UIDocumentInteractionController *) controlle
 {
     return self;
+}
+
+- (NSInteger) calcTag: (NSIndexPath*) indexPath {
+    NSInteger tag = 0;
+    for (int i = 0; i < [_contents count]; i++) {
+        if (i < indexPath.section) {
+            tag += [_contents[i] count];
+        }
+    }
+    
+    tag += indexPath.row;
+    
+    return tag;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -342,7 +358,7 @@ NSMutableDictionary* keyValue;
     cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
     cell.floatingTextField.delegate = self;
     cell.floatingTextField.inputAccessoryView = accessoryView;
-    cell.floatingTextField.tag = indexPath.row;
+    cell.floatingTextField.tag = [self calcTag:indexPath];
     cell.leftUtilityButtons = [self leftButtons];
     cell.delegate = self;
     
@@ -351,9 +367,6 @@ NSMutableDictionary* keyValue;
     if (indexPath.section == 0) {
         if (indexPath.row == 1 || indexPath.row == 2  || indexPath.row == 4) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.floatingTextField.userInteractionEnabled = NO;
-        } else if (indexPath.row == 0 || indexPath.row == 3) {
-            cell.floatingTextField.userInteractionEnabled = NO;
         }
         
         cell.hidden = NO;
@@ -361,7 +374,6 @@ NSMutableDictionary* keyValue;
             if (indexPath.row == 5 || indexPath.row == 6) {
                 cell.hidden = NO;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
-                
             }
         } else {
             if (indexPath.row == 7 || indexPath.row == 8) {
@@ -369,11 +381,8 @@ NSMutableDictionary* keyValue;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
             }
         }
-        cell.floatingTextField.tag = indexPath.row;
-        cell.floatingTextField.delegate = self;
-    } else if (indexPath.section == 1) {
-        cell.floatingTextField.userInteractionEnabled = NO;
     }
+    
     return cell;
 }
 
@@ -413,7 +422,7 @@ NSMutableDictionary* keyValue;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (textField.tag == 6 || textField.tag == 7 || textField.tag == 8 || textField.tag == 9) {
+    if (textField.tag == 5 || textField.tag == 6 || textField.tag == 7 || textField.tag == 8) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
         text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
@@ -423,10 +432,9 @@ NSMutableDictionary* keyValue;
         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
         NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
         textField.text = formattedNumberString;
-        return NO;
-    } else {
-        return YES;
     }
+    
+    return NO;
 }
 
 #pragma mark - UITableView Datasource

@@ -51,12 +51,12 @@ NSMutableDictionary* keyValue;
     [self registerNib];
 }
 - (void) prepareUI {
-    self.keyValue = [@{ @(0): @(1), @(1):@(0)} mutableCopy];
+    self.keyValue = [@{@(0): @(1), @(1): @(0)} mutableCopy];
     _addOn = @[@[@"Next date", @""], @[@"Next Time", @""], @[@"Enclosure No", @""], @[@"Next Nature of Hearing", @""], @[@"Next Details.", @""], @[@"Next Remarks.", @""]];
     
     _contents = [@[@[@[@"File No", courtModel.fileNo1], @[@"Previous Date", courtModel.previousDate], @[@"Present Hearing Date", courtModel.hearingStartDate], @[@"Enclosure No", self.courtModel.enclosureNo], @[@"Hearing Type", self.courtModel.hearingType], @[@"Details",self.courtModel.enclosureDetails], @[@"Counsel Assigned", self.courtModel.counselAssigned], @[@"Attendant Type", self.courtModel.attendedStatus.descriptionValue], @[@"Counsel Attended", courtModel.counselAttended], @[@"Coram", courtModel.coram.name], @[@"Opponent's Counsel", @""], @[@"Court Decision", courtModel.courtDecision], @[@"Select Next Date Type", courtModel.nextDateType.descriptionValue]], @[]] mutableCopy];
     
-    _headers = [@[@"Court Diary",  @"Next Date Details"
+    _headers = [@[@"Court Diary", @"Next Date"
                   ] mutableCopy];
 
     if ([courtModel.nextDateType.codeValue isEqualToString:@"0"]) {
@@ -119,6 +119,9 @@ NSMutableDictionary* keyValue;
     }
     
      _contents = newArray;
+   _headers = [@[@"Court Diary"
+       ] mutableCopy];
+    self.keyValue = [@{ @(0): @(1)} mutableCopy];
 }
 
 - (void) addNextDate {
@@ -139,6 +142,11 @@ NSMutableDictionary* keyValue;
     }
     
     _contents = newArray;
+    
+    _headers = [@[@"Court Diary", @"Next Date Details"
+       ] mutableCopy];
+    
+    self.keyValue = [@{ @(0): @(1), @(1): @(1)} mutableCopy];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -149,7 +157,6 @@ NSMutableDictionary* keyValue;
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 - (void) showPopup: (UIViewController*) vc {
     STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
@@ -204,11 +211,12 @@ NSMutableDictionary* keyValue;
     return value;
 }
 
-
 - (IBAction)updateCourtDiary:(id)sender {
-    NSString* nextDate = @"";
+    NSString* nextDate = @"", *enclosureDetails = @"", *remark = courtModel.remark;
     if ([_contents[0][12][1] isEqualToString:@"0"]) {
         nextDate = [DIHelpers convertDateToMySQLFormat:[NSString stringWithFormat:@"%@ %@", _contents[1][0][1], _contents[1][1][1]]];
+        enclosureDetails = _contents[1][3][1];
+        remark = _contents[1][5][1];
     }
     NSDictionary* data = @{
                            @"code":courtModel.courtCode,
@@ -225,6 +233,7 @@ NSMutableDictionary* keyValue;
                            @"courtDecision": _contents[0][11][1],
                            @"enclosureDetails": @"Hearing Type 1",
                            @"enclosureNo": courtModel.enclosureNo,
+                           @"enclosureDetails": enclosureDetails,
                            @"fileNo1": courtModel.fileNo1,
                            @"hearingDate": courtModel.hearingStartDate,
                            @"hearingType": _contents[0][4][1],
@@ -235,7 +244,7 @@ NSMutableDictionary* keyValue;
                            },
                            @"opponentCounsel": _contents[0][10][1],
                            @"previousDate": courtModel.previousDate,
-                           @"remark": courtModel.remark
+                           @"remark": remark
                            };
     if (isLoading) return;
     isLoading = YES;
@@ -262,8 +271,8 @@ NSMutableDictionary* keyValue;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     
     self.tableView.allowMultipleSectionsOpen = YES;
-    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(0), nil];
-    // Hide empty separators
+    self.tableView.initialOpenSections = [NSSet setWithObjects:@(1), @(0), nil];
+      // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     [FloatingTextCell registerForReuseInTableView:self.tableView];
@@ -586,7 +595,11 @@ NSMutableDictionary* keyValue;
             [self addNextDate];
             [self.tableView reloadData];
         } else if ([nextDateTypeCode isEqualToString:@"1"]) {
-            
+            [self removeNextDate];
+            [self.tableView reloadData];
+        } else {
+            [self removeNextDate];
+            [self.tableView reloadData];
         }
     } else if ([name isEqualToString:@"attendantType"]) {
         [self replaceContentForSection:0 InRow:7 withValue:model.descriptionValue];

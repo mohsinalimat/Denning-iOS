@@ -25,5 +25,7 @@
 
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text;
 
+- (void) configureCellWithContact:(NSString*) title text:(NSString*) text withLower:(BOOL) isLower;
+
 - (void) setEnableRightBtn: (BOOL) enabled image:(UIImage*)rightImage;
 @end

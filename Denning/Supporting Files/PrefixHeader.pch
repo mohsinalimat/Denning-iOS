@@ -75,6 +75,9 @@
 #import "TimePickerViewController.h"
 #import "FZAccordionTableView.h"
 #import "AccordionHeaderView.h"
+#import "UILabel+Copyable.h"
+#import "BadgeLabel.h"
+#import "DrGraphs.h"
 
 #import "UserModel.h"
 #import "SearchResultModel.h"
@@ -127,6 +130,13 @@
 #import "TypeValueModel.h"
 #import "MatterLitigationModel.h"
 #import "CourtDiaryModel.h"
+#import "VisibleModel.h"
+#import "ItemModel.h"
+#import "ThreeItemModel.h"
+#import "NewMatterModel.h"
+#import "GraphModel.h"
+#import "TaxInvoceModel.h"
+#import "FeeTranserModel.h"
 
 @protocol ContactListWithCodeSelectionDelegate <NSObject>
 

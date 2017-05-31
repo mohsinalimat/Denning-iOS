@@ -223,6 +223,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self buildSearchKeywordURL];
+        [self.selectionList reloadData];
     });
     
     // close the search after click logo on the top right
@@ -318,7 +319,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) displaySearchResult
 {
-    self.selectionList.hidden = NO;
+//    self.selectionList.hidden = NO;
     [self.selectionList reloadData];
     self.selectionList.selectedButtonIndex = selectedIndexOfFilter;
     
@@ -426,11 +427,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 #pragma mark - Search delegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    self.selectionList.hidden = YES;
-    return YES;
-}
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self buildSearchURL];
@@ -817,6 +814,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didHideAutoCompleteTableView:(UITableView *)autoCompleteTableView {
     NSLog(@"Autocomplete table view ws removed from the view hierarchy");
    // [self.searchTextField resignFirstResponder];
+    self.selectionList.hidden = NO;
 }
 
 - (void)autoCompleteTextField:(MLPAutoCompleteTextField *)textField didShowAutoCompleteTableView:(UITableView *)autoCompleteTableView {

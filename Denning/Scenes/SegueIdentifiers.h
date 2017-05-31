@@ -153,3 +153,13 @@ static NSString* const kAddReceiptSegue = @"AddReceiptSegue";
 static NSString* const kEditCourtSegue = @"EditCourtSegue";
 
 static NSString* const kCoramListSegue = @"CoramListSegue";
+
+static NSString* const kDashboardMatterSegue = @"DashboardMatterSegue";
+
+static NSString* const kBankCashSegue = @"BankCashSegue";
+
+static NSString* const kDashboardContactSegue = @"DashboardContactSegue";
+
+static NSString* const kDashboardTaxInvoiceSegue = @"DashboardTaxInvoiceSegue";
+
+static NSString* const kDashboardFeesTranserSegue = @"DashboardFeesTranserSegue";

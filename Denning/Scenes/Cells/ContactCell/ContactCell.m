@@ -33,7 +33,19 @@
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text
 {
     self.titleLabel.text = title;
-    self.contentLabel.text = text.uppercaseString ;
+    self.contentLabel.text = text;
+    
+    self.value = text;
+}
+
+- (void) configureCellWithContact:(NSString*) title text:(NSString*) text withLower:(BOOL) isLower
+{
+    self.titleLabel.text = title;
+    if (isLower) {
+        self.contentLabel.text = text;
+    } else {
+        self.contentLabel.text = text;
+    }
     
     self.value = text;
 }

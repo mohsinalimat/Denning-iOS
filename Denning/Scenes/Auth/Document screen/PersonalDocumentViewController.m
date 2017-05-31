@@ -10,7 +10,7 @@
 #import "BranchHeaderCell.h"
 #import "DocumentCell.h"
 
-@interface PersonalDocumentViewController ()<BranchHeaderDelegate>
+@interface PersonalDocumentViewController ()<BranchHeaderDelegate, UIDocumentInteractionControllerDelegate>
 
 @end
 

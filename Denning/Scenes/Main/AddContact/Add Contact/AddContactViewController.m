@@ -45,6 +45,8 @@
     NSString* selectedPhoneMobile;
     NSString* selectedPhoneOffice;
     NSString* selectedPhoneFax;
+    
+    NSInteger phoneTag;
 }
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *IDType;
@@ -162,41 +164,58 @@
 }
 
 - (IBAction)didTapHomeBtn:(id)sender {
-    NSSet* dataSet = [self showCountryCodeList:self.phoneHomeBtn];
-    homeCountryCallingCode = [dataSet allObjects].firstObject;
-    homeCountryCode =  [dataSet allObjects].lastObject;
+    phoneTag = 1;
+    [self showCountryCodeList:self.phoneHomeBtn];
 }
 
 - (IBAction)didTapMobileBtn:(id)sender {
-    NSSet* dataSet = [self showCountryCodeList:self.phoneMobileBtn];
-    mobileCountryCallingCode = [dataSet allObjects].firstObject;
-    mobileCountryCode =  [dataSet allObjects].lastObject;
+    phoneTag = 2;
+   [self showCountryCodeList:self.phoneMobileBtn];
 }
 
 - (IBAction)didTapOfficeBtn:(id)sender {
-    NSSet* dataSet = [self showCountryCodeList:self.phoneOfficeBtn];
-    officeCountryCallingCode = [dataSet allObjects].firstObject;
-    officeCountryCode =  [dataSet allObjects].lastObject;
+    phoneTag = 2;
+    [self showCountryCodeList:self.phoneOfficeBtn];
 }
 
 - (IBAction)didTapFaxbtn:(id)sender {
-    NSSet* dataSet = [self showCountryCodeList:self.faxBtn];
-    faxCountryCallingCode = [dataSet allObjects].firstObject;
-    faxCountryCode =  [dataSet allObjects].lastObject;
+    phoneTag = 3;
+    [self showCountryCodeList:self.faxBtn];
 }
 
 
-- (NSSet*) showCountryCodeList:(UIButton*) countryBtn {
-    __block NSString* selectedCountryCallingCode;
-    __block NSString* selectedCountryCode;
-
+- (void) showCountryCodeList:(UIButton*) countryBtn {
+    __block NSString* countryCode, *countryCallingCode;
+    
     [ActionSheetStringPicker showPickerWithTitle:@"Select a Contry Code"
                                             rows:countriesNameList
                                 initialSelection:0
                                        doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-                                           selectedCountryCode = [countriesList[selectedIndex] objectForKey:kCountryCode];
-                                           selectedCountryCallingCode = [countriesList[selectedIndex] objectForKey:kCountryCallingCode];
-                                           NSString *buttonTitle = [NSString stringWithFormat:@"(%@)",selectedCountryCallingCode];
+                                           countryCode = [countriesList[selectedIndex] objectForKey:kCountryCode];
+                                           countryCallingCode = [countriesList[selectedIndex] objectForKey:kCountryCallingCode];
+                                           switch (phoneTag) {
+                                               case 1:
+                                                   homeCountryCode = countryCode;
+                                                   homeCountryCallingCode = countryCallingCode;
+                                                   break;
+                                               case 2:
+                                                   mobileCountryCode = countryCode;
+                                                   mobileCountryCallingCode = countryCallingCode;
+                                                   break;
+                                               case 3:
+                                                   officeCountryCode = countryCode;
+                                                   officeCountryCallingCode = countryCallingCode;
+                                                   break;
+                                               case 4:
+                                                   faxCountryCode = countryCode;
+                                                   faxCountryCallingCode = countryCallingCode;
+                                                   break;
+                                                   
+                                               default:
+                                                   break;
+                                           }
+                                           
+                                           NSString *buttonTitle = [NSString stringWithFormat:@"(%@)",countryCallingCode];
                                            [countryBtn setTitle: buttonTitle forState:UIControlStateNormal];
                                        }
      
@@ -204,9 +223,6 @@
                                          NSLog(@"Block Picker Canceled");
                                      }
                                           origin:countryBtn];
-    
-    NSSet *dataSet = [[NSSet alloc] initWithObjects:selectedCountryCallingCode, selectedCountryCode, nil];
-    return dataSet;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -476,12 +492,22 @@
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [accessoryView sizeToFit];
     
+    self.IDType.inputAccessoryView = accessoryView;
     self.IDNo.inputAccessoryView = accessoryView;
     self.oldIC.inputAccessoryView = accessoryView;
     self.name.inputAccessoryView = accessoryView;
+    self.contactTitle.inputAccessoryView = accessoryView;
     self.address1.inputAccessoryView = accessoryView;
     self.address2.inputAccessoryView = accessoryView;
     self.address3.inputAccessoryView = accessoryView;
+    self.postcode.inputAccessoryView = accessoryView;
+    self.town.inputAccessoryView = accessoryView;
+    self.state.inputAccessoryView = accessoryView;
+    self.country.inputAccessoryView = accessoryView;
+    self.citizenship.inputAccessoryView = accessoryView;
+    self.dateOfBirth.inputAccessoryView = accessoryView;
+    self.occupation.inputAccessoryView = accessoryView;
+    self.IRDBranch.inputAccessoryView = accessoryView;
     self.email.inputAccessoryView = accessoryView;
     self.phoneHome.inputAccessoryView = accessoryView;
     self.phoneMobile.inputAccessoryView = accessoryView;
@@ -492,7 +518,9 @@
     self.website.inputAccessoryView = accessoryView;
     self.registeredOffice.inputAccessoryView = accessoryView;
     
-    self.oldIC.delegate = self.name.delegate = self.address1.delegate = self.address2.delegate = self.address3.delegate = self.registeredOffice.delegate = self.postcode.delegate = self.town.delegate = self.state.delegate = self.country.delegate = self.contactTitle.delegate = self.IDType.delegate = self.contactPerson.delegate = self.citizenship.delegate = self.IRDBranch.delegate = self;
+    self.oldIC.delegate = self.IDNo.delegate = self.name.delegate = self.address1.delegate = self.address2.delegate = self.address3.delegate = self.registeredOffice.delegate = self.postcode.delegate = self.town.delegate = self.state.delegate = self.country.delegate = self.contactTitle.delegate = self.IDType.delegate = self.contactPerson.delegate = self.citizenship.delegate = self.taxFileNo.delegate = self.IRDBranch.delegate = self.registeredOffice.delegate = self;
+    
+
     
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -502,10 +530,31 @@
     [self.view endEditing:YES];
 }
 
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length == 0) {
+        return;
+    }
+    NSString *newString = [textField.text stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[textField.text substringToIndex:1] capitalizedString]];
+    
+    if (textField.tag > 19 && textField.tag < 23) {
+        newString = [newString stringByAppendingString:@","];
+    }
+    
+    textField.text = newString;
+}
+
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-//    textField.text = string.uppercaseString;
-    return YES;
+    BOOL editable;
+    if (textField == self.IDType || textField == self.contactTitle || textField == self.postcode || textField == self.town || textField == self.state || textField == self.state || textField == self.country || textField == self.citizenship || textField == self.dateOfBirth || textField == self.occupation || textField == self.IRDBranch) {
+        editable = NO;
+    } else {
+        editable = YES;
+    }
+    
+    return editable;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

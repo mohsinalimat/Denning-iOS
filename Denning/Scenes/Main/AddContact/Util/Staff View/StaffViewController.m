@@ -7,7 +7,7 @@
 //
 
 #import "StaffViewController.h"
-#import "PropertyContactCell.h"
+#import "TwoColumnCell.h"
 @interface StaffViewController ()
 <UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
 {
@@ -55,7 +55,7 @@
 }
 
 - (void)registerNibs {
-    [PropertyContactCell registerForReuseInTableView:self.tableView];
+    [TwoColumnCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -65,7 +65,7 @@
 - (void) prepareUI
 {
     self.copyedList = [NSMutableArray new];
-    self.page = @(0);
+    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
@@ -90,21 +90,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) filterList {
-    NSMutableArray* newArray = [NSMutableArray new];
-    if (self.filter.length == 0) {
-        self.listOfStaff = self.copyedList;
-    } else {
-        for(StaffModel* model in self.listOfStaff) {
-            if ([model.name localizedCaseInsensitiveContainsString:self.filter]) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfStaff = newArray;
-    }
-    
-    [self.tableView reloadData];
-}
 
 - (void) appendList {
     isAppending = YES;
@@ -129,11 +114,12 @@
         }
         
         if (error == nil) {
+            if (result.count != 0) {
+                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
+            }
             if (isAppending) {
                 self.listOfStaff = [[self.listOfStaff arrayByAddingObjectsFromArray:result] mutableCopy];
-                if (result.count != 0) {
-                    self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-                }
+                
             } else {
                 self.listOfStaff = [result mutableCopy];
             }
@@ -168,10 +154,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-     PropertyContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[PropertyContactCell cellIdentifier] forIndexPath:indexPath];
+    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
     
     StaffModel *model = self.listOfStaff[indexPath.row];
-    [cell configureCellWithStaffModel:model];
+    [cell configureCellWithCodeLabel:@"Nick Name" codeValue:model.nickName descLabel:@"Full Name" descValue:model.name];
     
     return cell;
 }
@@ -212,6 +198,7 @@
     self.filter = @"";
     searchController.searchBar.text = @"";
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 
@@ -220,6 +207,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 

@@ -90,7 +90,7 @@
     
     switch (section) {
         case 0:
-            return 5;
+            return 6;
             break;
         case 1:
             if (relatedMatterModel.court == nil) {
@@ -307,6 +307,8 @@
             [cell configureCellWithContact:@"Ref 2" text:relatedMatterModel.ref];
         } else if (indexPath.row == 4) {
             [cell configureCellWithContact:@"Matter" text:relatedMatterModel.matter];
+        } else if (indexPath.row == 5) {
+            [cell configureCellWithContact:@"Partner / LA / Clerk" text:[DIHelpers getOnlyDateFromDateTime:@"partner/la/clerk"]];
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 1) { // Court Case information

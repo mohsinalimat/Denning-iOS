@@ -719,7 +719,48 @@
 		962082CD1ED48FE100BB595C /* CourtDiaryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082CC1ED48FE100BB595C /* CourtDiaryListViewController.m */; };
 		962082D11ED5209100BB595C /* HNKDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082D01ED5209100BB595C /* HNKDemoViewController.m */; };
 		962082D51ED641DE00BB595C /* CoramListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082D41ED641DE00BB595C /* CoramListViewController.m */; };
-		F4A8F1784F1A06AAD47D5D01 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */; };
+		962082D71ED765A900BB595C /* dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 962082D61ED765A900BB595C /* dashboard.storyboard */; };
+		962082DD1ED7733D00BB595C /* ThreeColumWithDotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082DB1ED7733D00BB595C /* ThreeColumWithDotCell.m */; };
+		962082DE1ED7733D00BB595C /* ThreeColumWithDotCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962082DC1ED7733D00BB595C /* ThreeColumWithDotCell.xib */; };
+		962082E21ED7734C00BB595C /* TwoColumnWithDotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082E01ED7734C00BB595C /* TwoColumnWithDotCell.m */; };
+		962082E31ED7734C00BB595C /* TwoColumnWithDotCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962082E11ED7734C00BB595C /* TwoColumnWithDotCell.xib */; };
+		962082E81ED77A4300BB595C /* OneRowWithDot.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082E61ED77A4300BB595C /* OneRowWithDot.m */; };
+		962082E91ED77A4300BB595C /* OneRowWithDot.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962082E71ED77A4300BB595C /* OneRowWithDot.xib */; };
+		962082ED1ED7AA8800BB595C /* BadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082EC1ED7AA8800BB595C /* BadgeLabel.m */; };
+		962082F21ED7B9E200BB595C /* LineGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082F01ED7B9E200BB595C /* LineGraphCell.m */; };
+		962082F31ED7B9E200BB595C /* LineGraphCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962082F11ED7B9E200BB595C /* LineGraphCell.xib */; };
+		962082F71ED912EE00BB595C /* ThreeItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082F61ED912EE00BB595C /* ThreeItemModel.m */; };
+		962082FB1ED9130C00BB595C /* VisibleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082FA1ED9130C00BB595C /* VisibleModel.m */; };
+		962082FF1ED9149700BB595C /* ItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962082FE1ED9149700BB595C /* ItemModel.m */; };
+		962083031ED92BC600BB595C /* NewMatterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083021ED92BC600BB595C /* NewMatterModel.m */; };
+		962083081ED9305600BB595C /* DashboardMatterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083061ED9305600BB595C /* DashboardMatterCell.m */; };
+		962083091ED9305600BB595C /* DashboardMatterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083071ED9305600BB595C /* DashboardMatterCell.xib */; };
+		9620830D1ED9316300BB595C /* MaterListingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620830C1ED9316300BB595C /* MaterListingViewController.m */; };
+		962083181EDB32DA00BB595C /* DashboardTaxInvoiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083161EDB32DA00BB595C /* DashboardTaxInvoiceCell.m */; };
+		962083191EDB32DA00BB595C /* DashboardTaxInvoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083171EDB32DA00BB595C /* DashboardTaxInvoiceCell.xib */; };
+		9620831E1EDBBD5F00BB595C /* TwoColumnSecondCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620831C1EDBBD5F00BB595C /* TwoColumnSecondCell.m */; };
+		9620831F1EDBBD5F00BB595C /* TwoColumnSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9620831D1EDBBD5F00BB595C /* TwoColumnSecondCell.xib */; };
+		962083241EDBBF3E00BB595C /* ThreeColumnSecondCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083221EDBBF3E00BB595C /* ThreeColumnSecondCell.m */; };
+		962083251EDBBF3E00BB595C /* ThreeColumnSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083231EDBBF3E00BB595C /* ThreeColumnSecondCell.xib */; };
+		962083291EDD103200BB595C /* GraphModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083281EDD103200BB595C /* GraphModel.m */; };
+		962083351EDD510100BB595C /* DashboardStyle4Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083331EDD510100BB595C /* DashboardStyle4Cell.m */; };
+		962083361EDD510100BB595C /* DashboardStyle4Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083341EDD510100BB595C /* DashboardStyle4Cell.xib */; };
+		9620833B1EDDF89100BB595C /* DashboardMatterSecondCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083391EDDF89100BB595C /* DashboardMatterSecondCell.m */; };
+		9620833C1EDDF89100BB595C /* DashboardMatterSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9620833A1EDDF89100BB595C /* DashboardMatterSecondCell.xib */; };
+		962083401EDE12F500BB595C /* BankCashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620833F1EDE12F500BB595C /* BankCashViewController.m */; };
+		962083451EDE151300BB595C /* BankCashCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083431EDE151300BB595C /* BankCashCell.m */; };
+		962083461EDE151300BB595C /* BankCashCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083441EDE151300BB595C /* BankCashCell.xib */; };
+		9620834B1EDE236D00BB595C /* BankCashSecondCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083491EDE236D00BB595C /* BankCashSecondCell.m */; };
+		9620834C1EDE236D00BB595C /* BankCashSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9620834A1EDE236D00BB595C /* BankCashSecondCell.xib */; };
+		962083501EDE488100BB595C /* DashboardContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620834F1EDE488100BB595C /* DashboardContactListViewController.m */; };
+		962083551EDE492200BB595C /* DashboardContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083531EDE492200BB595C /* DashboardContactCell.m */; };
+		962083561EDE492200BB595C /* DashboardContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083541EDE492200BB595C /* DashboardContactCell.xib */; };
+		969A60391EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60381EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m */; };
+		969A603D1EDE50EC00A5D961 /* TaxInvoceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A603C1EDE50EC00A5D961 /* TaxInvoceModel.m */; };
+		969A60421EDE62DA00A5D961 /* FeeTransferCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60401EDE62DA00A5D961 /* FeeTransferCell.m */; };
+		969A60431EDE62DA00A5D961 /* FeeTransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 969A60411EDE62DA00A5D961 /* FeeTransferCell.xib */; };
+		969A60471EDE643F00A5D961 /* DashboardFeeTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60461EDE643F00A5D961 /* DashboardFeeTransferViewController.m */; };
+		969A604B1EDE650C00A5D961 /* FeeTranserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A604A1EDE650C00A5D961 /* FeeTranserModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1788,6 +1829,75 @@
 		962082D01ED5209100BB595C /* HNKDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNKDemoViewController.m; sourceTree = "<group>"; };
 		962082D31ED641DE00BB595C /* CoramListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoramListViewController.h; sourceTree = "<group>"; };
 		962082D41ED641DE00BB595C /* CoramListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoramListViewController.m; sourceTree = "<group>"; };
+		962082D61ED765A900BB595C /* dashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = dashboard.storyboard; sourceTree = "<group>"; };
+		962082DA1ED7733D00BB595C /* ThreeColumWithDotCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreeColumWithDotCell.h; sourceTree = "<group>"; };
+		962082DB1ED7733D00BB595C /* ThreeColumWithDotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreeColumWithDotCell.m; sourceTree = "<group>"; };
+		962082DC1ED7733D00BB595C /* ThreeColumWithDotCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreeColumWithDotCell.xib; sourceTree = "<group>"; };
+		962082DF1ED7734C00BB595C /* TwoColumnWithDotCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoColumnWithDotCell.h; sourceTree = "<group>"; };
+		962082E01ED7734C00BB595C /* TwoColumnWithDotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoColumnWithDotCell.m; sourceTree = "<group>"; };
+		962082E11ED7734C00BB595C /* TwoColumnWithDotCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TwoColumnWithDotCell.xib; sourceTree = "<group>"; };
+		962082E51ED77A4300BB595C /* OneRowWithDot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneRowWithDot.h; sourceTree = "<group>"; };
+		962082E61ED77A4300BB595C /* OneRowWithDot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneRowWithDot.m; sourceTree = "<group>"; };
+		962082E71ED77A4300BB595C /* OneRowWithDot.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OneRowWithDot.xib; sourceTree = "<group>"; };
+		962082EB1ED7AA8800BB595C /* BadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadgeLabel.h; sourceTree = "<group>"; };
+		962082EC1ED7AA8800BB595C /* BadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadgeLabel.m; sourceTree = "<group>"; };
+		962082EF1ED7B9E200BB595C /* LineGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineGraphCell.h; sourceTree = "<group>"; };
+		962082F01ED7B9E200BB595C /* LineGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineGraphCell.m; sourceTree = "<group>"; };
+		962082F11ED7B9E200BB595C /* LineGraphCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LineGraphCell.xib; sourceTree = "<group>"; };
+		962082F51ED912EE00BB595C /* ThreeItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreeItemModel.h; sourceTree = "<group>"; };
+		962082F61ED912EE00BB595C /* ThreeItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreeItemModel.m; sourceTree = "<group>"; };
+		962082F91ED9130C00BB595C /* VisibleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisibleModel.h; sourceTree = "<group>"; };
+		962082FA1ED9130C00BB595C /* VisibleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisibleModel.m; sourceTree = "<group>"; };
+		962082FD1ED9149700BB595C /* ItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemModel.h; sourceTree = "<group>"; };
+		962082FE1ED9149700BB595C /* ItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemModel.m; sourceTree = "<group>"; };
+		962083011ED92BC600BB595C /* NewMatterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMatterModel.h; sourceTree = "<group>"; };
+		962083021ED92BC600BB595C /* NewMatterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMatterModel.m; sourceTree = "<group>"; };
+		962083051ED9305600BB595C /* DashboardMatterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardMatterCell.h; sourceTree = "<group>"; };
+		962083061ED9305600BB595C /* DashboardMatterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardMatterCell.m; sourceTree = "<group>"; };
+		962083071ED9305600BB595C /* DashboardMatterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardMatterCell.xib; sourceTree = "<group>"; };
+		9620830B1ED9316300BB595C /* MaterListingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterListingViewController.h; sourceTree = "<group>"; };
+		9620830C1ED9316300BB595C /* MaterListingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaterListingViewController.m; sourceTree = "<group>"; };
+		962083151EDB32DA00BB595C /* DashboardTaxInvoiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardTaxInvoiceCell.h; sourceTree = "<group>"; };
+		962083161EDB32DA00BB595C /* DashboardTaxInvoiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardTaxInvoiceCell.m; sourceTree = "<group>"; };
+		962083171EDB32DA00BB595C /* DashboardTaxInvoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardTaxInvoiceCell.xib; sourceTree = "<group>"; };
+		9620831B1EDBBD5F00BB595C /* TwoColumnSecondCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoColumnSecondCell.h; sourceTree = "<group>"; };
+		9620831C1EDBBD5F00BB595C /* TwoColumnSecondCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoColumnSecondCell.m; sourceTree = "<group>"; };
+		9620831D1EDBBD5F00BB595C /* TwoColumnSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TwoColumnSecondCell.xib; sourceTree = "<group>"; };
+		962083211EDBBF3E00BB595C /* ThreeColumnSecondCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreeColumnSecondCell.h; sourceTree = "<group>"; };
+		962083221EDBBF3E00BB595C /* ThreeColumnSecondCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreeColumnSecondCell.m; sourceTree = "<group>"; };
+		962083231EDBBF3E00BB595C /* ThreeColumnSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThreeColumnSecondCell.xib; sourceTree = "<group>"; };
+		962083271EDD103200BB595C /* GraphModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphModel.h; sourceTree = "<group>"; };
+		962083281EDD103200BB595C /* GraphModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphModel.m; sourceTree = "<group>"; };
+		962083321EDD510100BB595C /* DashboardStyle4Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardStyle4Cell.h; sourceTree = "<group>"; };
+		962083331EDD510100BB595C /* DashboardStyle4Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardStyle4Cell.m; sourceTree = "<group>"; };
+		962083341EDD510100BB595C /* DashboardStyle4Cell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardStyle4Cell.xib; sourceTree = "<group>"; };
+		962083381EDDF89100BB595C /* DashboardMatterSecondCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardMatterSecondCell.h; sourceTree = "<group>"; };
+		962083391EDDF89100BB595C /* DashboardMatterSecondCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardMatterSecondCell.m; sourceTree = "<group>"; };
+		9620833A1EDDF89100BB595C /* DashboardMatterSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardMatterSecondCell.xib; sourceTree = "<group>"; };
+		9620833E1EDE12F500BB595C /* BankCashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankCashViewController.h; sourceTree = "<group>"; };
+		9620833F1EDE12F500BB595C /* BankCashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankCashViewController.m; sourceTree = "<group>"; };
+		962083421EDE151300BB595C /* BankCashCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankCashCell.h; sourceTree = "<group>"; };
+		962083431EDE151300BB595C /* BankCashCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankCashCell.m; sourceTree = "<group>"; };
+		962083441EDE151300BB595C /* BankCashCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BankCashCell.xib; sourceTree = "<group>"; };
+		962083481EDE236D00BB595C /* BankCashSecondCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankCashSecondCell.h; sourceTree = "<group>"; };
+		962083491EDE236D00BB595C /* BankCashSecondCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankCashSecondCell.m; sourceTree = "<group>"; };
+		9620834A1EDE236D00BB595C /* BankCashSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BankCashSecondCell.xib; sourceTree = "<group>"; };
+		9620834E1EDE488100BB595C /* DashboardContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardContactListViewController.h; sourceTree = "<group>"; };
+		9620834F1EDE488100BB595C /* DashboardContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardContactListViewController.m; sourceTree = "<group>"; };
+		962083521EDE492200BB595C /* DashboardContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardContactCell.h; sourceTree = "<group>"; };
+		962083531EDE492200BB595C /* DashboardContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardContactCell.m; sourceTree = "<group>"; };
+		962083541EDE492200BB595C /* DashboardContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardContactCell.xib; sourceTree = "<group>"; };
+		969A60371EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardTaxInvoiceViewController.h; sourceTree = "<group>"; };
+		969A60381EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardTaxInvoiceViewController.m; sourceTree = "<group>"; };
+		969A603B1EDE50EC00A5D961 /* TaxInvoceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaxInvoceModel.h; sourceTree = "<group>"; };
+		969A603C1EDE50EC00A5D961 /* TaxInvoceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaxInvoceModel.m; sourceTree = "<group>"; };
+		969A603F1EDE62DA00A5D961 /* FeeTransferCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeeTransferCell.h; sourceTree = "<group>"; };
+		969A60401EDE62DA00A5D961 /* FeeTransferCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeeTransferCell.m; sourceTree = "<group>"; };
+		969A60411EDE62DA00A5D961 /* FeeTransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeeTransferCell.xib; sourceTree = "<group>"; };
+		969A60451EDE643F00A5D961 /* DashboardFeeTransferViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardFeeTransferViewController.h; sourceTree = "<group>"; };
+		969A60461EDE643F00A5D961 /* DashboardFeeTransferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardFeeTransferViewController.m; sourceTree = "<group>"; };
+		969A60491EDE650C00A5D961 /* FeeTranserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeeTranserModel.h; sourceTree = "<group>"; };
+		969A604A1EDE650C00A5D961 /* FeeTranserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeeTranserModel.m; sourceTree = "<group>"; };
 		B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1821,7 +1931,6 @@
 				79FBDFF11E304AAC00448FE3 /* libstdc++.tbd in Frameworks */,
 				79FBDFEF1E304AA000448FE3 /* libsqlite3.tbd in Frameworks */,
 				4614714DB83FC0B8A26C9915 /* libPods-Denning.a in Frameworks */,
-				F4A8F1784F1A06AAD47D5D01 /* libPods-Denning.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2305,8 +2414,10 @@
 		7931B4EB1EA901DB0090BDE0 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				9620830A1ED9314D00BB595C /* Details */,
 				7931B4EF1EA902AF0090BDE0 /* DashboardViewController.h */,
 				7931B4F01EA902AF0090BDE0 /* DashboardViewController.m */,
+				962082D61ED765A900BB595C /* dashboard.storyboard */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -3685,6 +3796,7 @@
 		79FBDEB81E30421A00448FE3 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				962082EA1ED7AA8800BB595C /* BadgeLabel */,
 				7931B4DA1EA8E8E10090BDE0 /* UITextField+LeftView */,
 				7920E7B61EA05DF6002FEFF3 /* FCFileManager */,
 				7920E7871E9F2B9D002FEFF3 /* Common */,
@@ -4319,6 +4431,13 @@
 		79FBE01C1E304E0E00448FE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				969A60481EDE650200A5D961 /* FeeTranserModel */,
+				969A603A1EDE50DF00A5D961 /* TaxInvoceModel */,
+				962083261EDD102300BB595C /* GraphModel */,
+				962083001ED92BBD00BB595C /* NewMatterModel */,
+				962082FC1ED9149000BB595C /* ItemModel */,
+				962082F81ED9130400BB595C /* VisibleModel */,
+				962082F41ED912DD00BB595C /* ThreeItemModel */,
 				962082C61ED48D2200BB595C /* CourtDiaryModel */,
 				962082B81ED40C2200BB595C /* MatterLitigationModel */,
 				7903D0931ECF9B460090206C /* TypeValueModel */,
@@ -4687,6 +4806,20 @@
 		79FBE09B1E304F5000448FE3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				969A603E1EDE62C600A5D961 /* FeeTransferCell */,
+				962083511EDE48E800BB595C /* DashboardContactCell */,
+				962083471EDE235B00BB595C /* BankCashSecondCell */,
+				962083411EDE150500BB595C /* BankCashCell */,
+				962083371EDDF88200BB595C /* DashboardMatterSecondCell */,
+				962083311EDD50EF00BB595C /* DashboardStyle4Cell */,
+				962083201EDBBF2D00BB595C /* ThreeColumnSecondCell */,
+				9620831A1EDBBD5000BB595C /* TwoColumnSecondCell */,
+				962083141EDB32CB00BB595C /* DashboardTaxInvoiceCell */,
+				962083041ED9303E00BB595C /* DashbardMatterCell */,
+				962082EE1ED7B9BC00BB595C /* LineGraphCell */,
+				962082E41ED77A3600BB595C /* OneRowWithDot */,
+				962082D91ED7732800BB595C /* ThreeColumWithDotCell */,
+				962082D81ED7730F00BB595C /* TwoColumnWithDotCell */,
 				962082BC1ED417A900BB595C /* MatterLitigationCell */,
 				7903D0891ECF1D1F0090206C /* SolicitorCell */,
 				7903D0761ECE7EEC0090206C /* AddMatterCell */,
@@ -5515,6 +5648,267 @@
 			path = CoramListView;
 			sourceTree = "<group>";
 		};
+		962082D81ED7730F00BB595C /* TwoColumnWithDotCell */ = {
+			isa = PBXGroup;
+			children = (
+				962082DF1ED7734C00BB595C /* TwoColumnWithDotCell.h */,
+				962082E01ED7734C00BB595C /* TwoColumnWithDotCell.m */,
+				962082E11ED7734C00BB595C /* TwoColumnWithDotCell.xib */,
+			);
+			path = TwoColumnWithDotCell;
+			sourceTree = "<group>";
+		};
+		962082D91ED7732800BB595C /* ThreeColumWithDotCell */ = {
+			isa = PBXGroup;
+			children = (
+				962082DA1ED7733D00BB595C /* ThreeColumWithDotCell.h */,
+				962082DB1ED7733D00BB595C /* ThreeColumWithDotCell.m */,
+				962082DC1ED7733D00BB595C /* ThreeColumWithDotCell.xib */,
+			);
+			path = ThreeColumWithDotCell;
+			sourceTree = "<group>";
+		};
+		962082E41ED77A3600BB595C /* OneRowWithDot */ = {
+			isa = PBXGroup;
+			children = (
+				962082E51ED77A4300BB595C /* OneRowWithDot.h */,
+				962082E61ED77A4300BB595C /* OneRowWithDot.m */,
+				962082E71ED77A4300BB595C /* OneRowWithDot.xib */,
+			);
+			path = OneRowWithDot;
+			sourceTree = "<group>";
+		};
+		962082EA1ED7AA8800BB595C /* BadgeLabel */ = {
+			isa = PBXGroup;
+			children = (
+				962082EB1ED7AA8800BB595C /* BadgeLabel.h */,
+				962082EC1ED7AA8800BB595C /* BadgeLabel.m */,
+			);
+			path = BadgeLabel;
+			sourceTree = "<group>";
+		};
+		962082EE1ED7B9BC00BB595C /* LineGraphCell */ = {
+			isa = PBXGroup;
+			children = (
+				962082EF1ED7B9E200BB595C /* LineGraphCell.h */,
+				962082F01ED7B9E200BB595C /* LineGraphCell.m */,
+				962082F11ED7B9E200BB595C /* LineGraphCell.xib */,
+			);
+			path = LineGraphCell;
+			sourceTree = "<group>";
+		};
+		962082F41ED912DD00BB595C /* ThreeItemModel */ = {
+			isa = PBXGroup;
+			children = (
+				962082F51ED912EE00BB595C /* ThreeItemModel.h */,
+				962082F61ED912EE00BB595C /* ThreeItemModel.m */,
+			);
+			path = ThreeItemModel;
+			sourceTree = "<group>";
+		};
+		962082F81ED9130400BB595C /* VisibleModel */ = {
+			isa = PBXGroup;
+			children = (
+				962082F91ED9130C00BB595C /* VisibleModel.h */,
+				962082FA1ED9130C00BB595C /* VisibleModel.m */,
+			);
+			path = VisibleModel;
+			sourceTree = "<group>";
+		};
+		962082FC1ED9149000BB595C /* ItemModel */ = {
+			isa = PBXGroup;
+			children = (
+				962082FD1ED9149700BB595C /* ItemModel.h */,
+				962082FE1ED9149700BB595C /* ItemModel.m */,
+			);
+			path = ItemModel;
+			sourceTree = "<group>";
+		};
+		962083001ED92BBD00BB595C /* NewMatterModel */ = {
+			isa = PBXGroup;
+			children = (
+				962083011ED92BC600BB595C /* NewMatterModel.h */,
+				962083021ED92BC600BB595C /* NewMatterModel.m */,
+			);
+			path = NewMatterModel;
+			sourceTree = "<group>";
+		};
+		962083041ED9303E00BB595C /* DashbardMatterCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083051ED9305600BB595C /* DashboardMatterCell.h */,
+				962083061ED9305600BB595C /* DashboardMatterCell.m */,
+				962083071ED9305600BB595C /* DashboardMatterCell.xib */,
+			);
+			path = DashbardMatterCell;
+			sourceTree = "<group>";
+		};
+		9620830A1ED9314D00BB595C /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				969A60441EDE643000A5D961 /* DashboardFeeTransferViewController */,
+				969A60361EDE4F7600A5D961 /* DashboardTaxInvoiceViewController */,
+				9620834D1EDE486C00BB595C /* DashboardContactListViewController */,
+				9620833D1EDE12E500BB595C /* BankCashViewController */,
+				9620830B1ED9316300BB595C /* MaterListingViewController.h */,
+				9620830C1ED9316300BB595C /* MaterListingViewController.m */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		962083141EDB32CB00BB595C /* DashboardTaxInvoiceCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083151EDB32DA00BB595C /* DashboardTaxInvoiceCell.h */,
+				962083161EDB32DA00BB595C /* DashboardTaxInvoiceCell.m */,
+				962083171EDB32DA00BB595C /* DashboardTaxInvoiceCell.xib */,
+			);
+			path = DashboardTaxInvoiceCell;
+			sourceTree = "<group>";
+		};
+		9620831A1EDBBD5000BB595C /* TwoColumnSecondCell */ = {
+			isa = PBXGroup;
+			children = (
+				9620831B1EDBBD5F00BB595C /* TwoColumnSecondCell.h */,
+				9620831C1EDBBD5F00BB595C /* TwoColumnSecondCell.m */,
+				9620831D1EDBBD5F00BB595C /* TwoColumnSecondCell.xib */,
+			);
+			path = TwoColumnSecondCell;
+			sourceTree = "<group>";
+		};
+		962083201EDBBF2D00BB595C /* ThreeColumnSecondCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083211EDBBF3E00BB595C /* ThreeColumnSecondCell.h */,
+				962083221EDBBF3E00BB595C /* ThreeColumnSecondCell.m */,
+				962083231EDBBF3E00BB595C /* ThreeColumnSecondCell.xib */,
+			);
+			path = ThreeColumnSecondCell;
+			sourceTree = "<group>";
+		};
+		962083261EDD102300BB595C /* GraphModel */ = {
+			isa = PBXGroup;
+			children = (
+				962083271EDD103200BB595C /* GraphModel.h */,
+				962083281EDD103200BB595C /* GraphModel.m */,
+			);
+			path = GraphModel;
+			sourceTree = "<group>";
+		};
+		962083311EDD50EF00BB595C /* DashboardStyle4Cell */ = {
+			isa = PBXGroup;
+			children = (
+				962083321EDD510100BB595C /* DashboardStyle4Cell.h */,
+				962083331EDD510100BB595C /* DashboardStyle4Cell.m */,
+				962083341EDD510100BB595C /* DashboardStyle4Cell.xib */,
+			);
+			path = DashboardStyle4Cell;
+			sourceTree = "<group>";
+		};
+		962083371EDDF88200BB595C /* DashboardMatterSecondCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083381EDDF89100BB595C /* DashboardMatterSecondCell.h */,
+				962083391EDDF89100BB595C /* DashboardMatterSecondCell.m */,
+				9620833A1EDDF89100BB595C /* DashboardMatterSecondCell.xib */,
+			);
+			path = DashboardMatterSecondCell;
+			sourceTree = "<group>";
+		};
+		9620833D1EDE12E500BB595C /* BankCashViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9620833E1EDE12F500BB595C /* BankCashViewController.h */,
+				9620833F1EDE12F500BB595C /* BankCashViewController.m */,
+			);
+			path = BankCashViewController;
+			sourceTree = "<group>";
+		};
+		962083411EDE150500BB595C /* BankCashCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083421EDE151300BB595C /* BankCashCell.h */,
+				962083431EDE151300BB595C /* BankCashCell.m */,
+				962083441EDE151300BB595C /* BankCashCell.xib */,
+			);
+			path = BankCashCell;
+			sourceTree = "<group>";
+		};
+		962083471EDE235B00BB595C /* BankCashSecondCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083481EDE236D00BB595C /* BankCashSecondCell.h */,
+				962083491EDE236D00BB595C /* BankCashSecondCell.m */,
+				9620834A1EDE236D00BB595C /* BankCashSecondCell.xib */,
+			);
+			path = BankCashSecondCell;
+			sourceTree = "<group>";
+		};
+		9620834D1EDE486C00BB595C /* DashboardContactListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9620834E1EDE488100BB595C /* DashboardContactListViewController.h */,
+				9620834F1EDE488100BB595C /* DashboardContactListViewController.m */,
+			);
+			path = DashboardContactListViewController;
+			sourceTree = "<group>";
+		};
+		962083511EDE48E800BB595C /* DashboardContactCell */ = {
+			isa = PBXGroup;
+			children = (
+				962083521EDE492200BB595C /* DashboardContactCell.h */,
+				962083531EDE492200BB595C /* DashboardContactCell.m */,
+				962083541EDE492200BB595C /* DashboardContactCell.xib */,
+			);
+			path = DashboardContactCell;
+			sourceTree = "<group>";
+		};
+		969A60361EDE4F7600A5D961 /* DashboardTaxInvoiceViewController */ = {
+			isa = PBXGroup;
+			children = (
+				969A60371EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.h */,
+				969A60381EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m */,
+			);
+			path = DashboardTaxInvoiceViewController;
+			sourceTree = "<group>";
+		};
+		969A603A1EDE50DF00A5D961 /* TaxInvoceModel */ = {
+			isa = PBXGroup;
+			children = (
+				969A603B1EDE50EC00A5D961 /* TaxInvoceModel.h */,
+				969A603C1EDE50EC00A5D961 /* TaxInvoceModel.m */,
+			);
+			path = TaxInvoceModel;
+			sourceTree = "<group>";
+		};
+		969A603E1EDE62C600A5D961 /* FeeTransferCell */ = {
+			isa = PBXGroup;
+			children = (
+				969A603F1EDE62DA00A5D961 /* FeeTransferCell.h */,
+				969A60401EDE62DA00A5D961 /* FeeTransferCell.m */,
+				969A60411EDE62DA00A5D961 /* FeeTransferCell.xib */,
+			);
+			path = FeeTransferCell;
+			sourceTree = "<group>";
+		};
+		969A60441EDE643000A5D961 /* DashboardFeeTransferViewController */ = {
+			isa = PBXGroup;
+			children = (
+				969A60451EDE643F00A5D961 /* DashboardFeeTransferViewController.h */,
+				969A60461EDE643F00A5D961 /* DashboardFeeTransferViewController.m */,
+			);
+			path = DashboardFeeTransferViewController;
+			sourceTree = "<group>";
+		};
+		969A60481EDE650200A5D961 /* FeeTranserModel */ = {
+			isa = PBXGroup;
+			children = (
+				969A60491EDE650C00A5D961 /* FeeTranserModel.h */,
+				969A604A1EDE650C00A5D961 /* FeeTranserModel.m */,
+			);
+			path = FeeTranserModel;
+			sourceTree = "<group>";
+		};
 		EA4300F6D243812CDEACE5C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -5590,7 +5984,7 @@
 		79FBDE671E302F6600448FE3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = DenningIT;
 				TargetAttributes = {
 					79FBDE6E1E302F6600448FE3 = {
@@ -5676,6 +6070,7 @@
 				79F9FC9B1E4217840097CB23 /* NewsCell.xib in Resources */,
 				79EC0E711E8B0E8300320A28 /* icon_web@3x.png in Resources */,
 				793FF1891EBD4BDF001F83A5 /* icon_court.png in Resources */,
+				969A60431EDE62DA00A5D961 /* FeeTransferCell.xib in Resources */,
 				79EC0EDA1E8C85F100320A28 /* icon_phone@2x.png in Resources */,
 				79FBE0FE1E304F5000448FE3 /* QMNoResultsCell.xib in Resources */,
 				7903CF781ECD34610090206C /* PostCodeCell.xib in Resources */,
@@ -5690,6 +6085,7 @@
 				79EC0E6B1E8B0E8300320A28 /* icon_pdf@3x.png in Resources */,
 				793FF12F1EBB78C9001F83A5 /* icon_chat_blue@3x.png in Resources */,
 				793FF18A1EBD4BDF001F83A5 /* icon_court@2x.png in Resources */,
+				962083251EDBBF3E00BB595C /* ThreeColumnSecondCell.xib in Resources */,
 				793FF1511EBB7D67001F83A5 /* icon_home_selected.png in Resources */,
 				793FF16A1EBBFEA3001F83A5 /* denning_logo.png in Resources */,
 				797ED50F1EAEDA86009C20C4 /* icon_email_red@2x.png in Resources */,
@@ -5705,6 +6101,7 @@
 				795DF2451E6E4C3F006D617D /* Lato-HairlineItalic.ttf in Resources */,
 				79EC0D1A1E77013A00320A28 /* SF-UI-Display-Semibold.otf in Resources */,
 				79EC0EB81E8BE8AD00320A28 /* Home.storyboard in Resources */,
+				962082DE1ED7733D00BB595C /* ThreeColumWithDotCell.xib in Resources */,
 				79734FB51EBAACB800647215 /* icon_upload@3x.png in Resources */,
 				79F9FC991E42177E0097CB23 /* EventCell.xib in Resources */,
 				797ED5101EAEDA86009C20C4 /* icon_email_red@3x.png in Resources */,
@@ -5723,6 +6120,7 @@
 				7931B4C01EA851B00090BDE0 /* menu_contact_us@2x.png in Resources */,
 				79EC0D8D1E87420200320A28 /* icon_news.png in Resources */,
 				793FF1651EBB7FDE001F83A5 /* icon_updates@2x.png in Resources */,
+				962082F31ED7B9E200BB595C /* LineGraphCell.xib in Resources */,
 				79EC0D251E77013A00320A28 /* SF-UI-Text-Regular.otf in Resources */,
 				79A6AF9E1E9D611D007AA24D /* icon_client@2x.png in Resources */,
 				7931B4D21EA851B00090BDE0 /* menu_settings@2x.png in Resources */,
@@ -5738,6 +6136,7 @@
 				79EC0D601E85520700320A28 /* splash_logo@2x.png in Resources */,
 				79EC0D161E77013A00320A28 /* SF-UI-Display-Heavy.otf in Resources */,
 				795DF2541E6E6FD0006D617D /* close@2x.png in Resources */,
+				962083561EDE492200BB595C /* DashboardContactCell.xib in Resources */,
 				79EC0D281E77013A00320A28 /* SF-UI-Text-SemiboldItalic.otf in Resources */,
 				7920E7A61E9FA747002FEFF3 /* icon_search_black.png in Resources */,
 				793FF12D1EBB78C9001F83A5 /* icon_chat_blue.png in Resources */,
@@ -5810,6 +6209,7 @@
 				79EC0E6E1E8B0E8300320A28 /* icon_png@3x.png in Resources */,
 				7931B4C31EA851B00090BDE0 /* menu_help@2x.png in Resources */,
 				79D59A3D1E958AC300CD3821 /* phone-icon.png in Resources */,
+				962082D71ED765A900BB595C /* dashboard.storyboard in Resources */,
 				79EC0DC81E874ED700320A28 /* shutterstock@3x.jpg in Resources */,
 				79FBDFE01E30421A00448FE3 /* busy.wav in Resources */,
 				79FBE2171E3197AD00448FE3 /* SearchResultCell.xib in Resources */,
@@ -5825,6 +6225,7 @@
 				79D929DC1E8DA285000A53D2 /* icon_signout@2x.png in Resources */,
 				7920E7A21E9FA747002FEFF3 /* icon_favorite_selected@3x.png in Resources */,
 				793FF1331EBB78C9001F83A5 /* icon_home_white.png in Resources */,
+				9620831F1EDBBD5F00BB595C /* TwoColumnSecondCell.xib in Resources */,
 				7931B4C91EA851B00090BDE0 /* menu_logout@2x.png in Resources */,
 				79734FAD1EBAABA900647215 /* icon_calculator.png in Resources */,
 				795DF2481E6E4C3F006D617D /* Lato-LightItalic.ttf in Resources */,
@@ -5870,6 +6271,7 @@
 				795DF2291E6E3A81006D617D /* Contact@2x.png in Resources */,
 				7931B5031EA9B1C50090BDE0 /* icon_forum@3x.png in Resources */,
 				79EC0E771E8B160600320A28 /* LedgerDetailCell.xib in Resources */,
+				9620834C1EDE236D00BB595C /* BankCashSecondCell.xib in Resources */,
 				79FBE0861E304EAB00448FE3 /* QMCallInfoView.xib in Resources */,
 				793FF1881EBD4BDF001F83A5 /* icon_contact_blue@3x.png in Resources */,
 				79734FB41EBAACB800647215 /* icon_upload@2x.png in Resources */,
@@ -5879,6 +6281,7 @@
 				793FF14D1EBB7D67001F83A5 /* icon_chat_selected@3x.png in Resources */,
 				793FF1351EBB78C9001F83A5 /* icon_home_white@3x.png in Resources */,
 				793FF1931EBD4BDF001F83A5 /* icon_property@2x.png in Resources */,
+				962082E91ED77A4300BB595C /* OneRowWithDot.xib in Resources */,
 				79EC0E671E8B0E8300320A28 /* icon_event@2x.png in Resources */,
 				79FBE0871E304EAB00448FE3 /* QMVideoCallInfoView.xib in Resources */,
 				793FF2131EC3A626001F83A5 /* expandableImage@2x.png in Resources */,
@@ -5915,6 +6318,7 @@
 				7931B4BE1EA851B00090BDE0 /* menu_add@3x.png in Resources */,
 				793FF18B1EBD4BDF001F83A5 /* icon_court@3x.png in Resources */,
 				793FF12A1EBB78C9001F83A5 /* icon_calendar.png in Resources */,
+				9620833C1EDDF89100BB595C /* DashboardMatterSecondCell.xib in Resources */,
 				79A6AF9D1E9D611D007AA24D /* icon_client.png in Resources */,
 				7931B4D61EA851B00090BDE0 /* menu_terms_of_uses@3x.png in Resources */,
 				795DF24D1E6E563B006D617D /* Back.png in Resources */,
@@ -5953,7 +6357,9 @@
 				79EC0D141E77013A00320A28 /* SF-UI-Display-Black.otf in Resources */,
 				79EC0E6C1E8B0E8300320A28 /* icon_png.png in Resources */,
 				795DF2471E6E4C3F006D617D /* Lato-Light.ttf in Resources */,
+				962083091ED9305600BB595C /* DashboardMatterCell.xib in Resources */,
 				7931B5071EA9B1C50090BDE0 /* icon_search_gray.png in Resources */,
+				962083361EDD510100BB595C /* DashboardStyle4Cell.xib in Resources */,
 				79EC0D691E855FB000320A28 /* button_background_other@2x.png in Resources */,
 				79EC0D1E1E77013A00320A28 /* SF-UI-Text-BoldItalic.otf in Resources */,
 				79FF35051E97D95B001BECFB /* icon_user@3x.png in Resources */,
@@ -5971,6 +6377,7 @@
 				793FF14B1EBB7D67001F83A5 /* icon_chat_selected.png in Resources */,
 				79734F9E1EBAA11500647215 /* icon_shared.png in Resources */,
 				793FF1951EBD4BDF001F83A5 /* icon_quotation.png in Resources */,
+				962083191EDB32DA00BB595C /* DashboardTaxInvoiceCell.xib in Resources */,
 				79EC0ED71E8C85F100320A28 /* icon_our_product@2x.png in Resources */,
 				797ED5041EAED9F2009C20C4 /* NewContactHeaderCell.xib in Resources */,
 				7931B4CF1EA851B00090BDE0 /* menu_overview@2x.png in Resources */,
@@ -5984,6 +6391,7 @@
 				7903CF7E1ECD37510090206C /* PropertyCodeCell.xib in Resources */,
 				796BBFA01EA7B3CE001DA47F /* NewLedgerDetailCell.xib in Resources */,
 				79FBE0F91E304F5000448FE3 /* QMDialogCell.xib in Resources */,
+				962083461EDE151300BB595C /* BankCashCell.xib in Resources */,
 				7931B4BF1EA851B00090BDE0 /* menu_contact_us.png in Resources */,
 				79D929DE1E8DA285000A53D2 /* icon_termsOfUses.png in Resources */,
 				793FF14E1EBB7D67001F83A5 /* icon_chat.png in Resources */,
@@ -6016,6 +6424,7 @@
 				79734FAF1EBAABA900647215 /* icon_calculator@3x.png in Resources */,
 				7931B4D81EA851B00090BDE0 /* menu_user@2x.png in Resources */,
 				79734F9C1EBAA11500647215 /* icon_delivery@2x.png in Resources */,
+				962082E31ED7734C00BB595C /* TwoColumnWithDotCell.xib in Resources */,
 				797ED51D1EAF259B009C20C4 /* icon_edit.png in Resources */,
 				79EC0D221E77013A00320A28 /* SF-UI-Text-LightItalic.otf in Resources */,
 			);
@@ -6110,15 +6519,18 @@
 				79EC0EB61E8BE7F700320A28 /* UpdateViewController.m in Sources */,
 				962082B11ED3CEB900BB595C /* PersonalDiaryViewController.m in Sources */,
 				79F732291E96A929004F88DF /* DEMOCustomAutoCompleteCell.m in Sources */,
+				962083031ED92BC600BB595C /* NewMatterModel.m in Sources */,
 				79FBE10B1E304F5000448FE3 /* QMGroupOccupantsDataSource.m in Sources */,
 				79EC0DE51E88098400320A28 /* ContactHeaderCell.m in Sources */,
 				79EC0E161E89C98E00320A28 /* LedgerModel.m in Sources */,
 				79EC0CF11E76431900320A28 /* LegalFirmViewController.m in Sources */,
 				79FBDF9E1E30421A00448FE3 /* KeychainWrapper.m in Sources */,
 				79FBE08C1E304EAB00448FE3 /* QMGroupHeaderView.m in Sources */,
+				962082DD1ED7733D00BB595C /* ThreeColumWithDotCell.m in Sources */,
 				79FBE0FA1E304F5000448FE3 /* QMLeaveChatCell.m in Sources */,
 				79F9FC8A1E41881D0097CB23 /* NewsModel.m in Sources */,
 				79EC0DFA1E895F6000320A28 /* BankGroupModel.m in Sources */,
+				9620834B1EDE236D00BB595C /* BankCashSecondCell.m in Sources */,
 				795DF2021E6DEDE5006D617D /* ChangePasswordViewController.m in Sources */,
 				7931B4E91EA900ED0090BDE0 /* DICustomViewController.m in Sources */,
 				79CE7C851EA79B95001A8101 /* NewLedgerViewController.m in Sources */,
@@ -6156,12 +6568,14 @@
 				79EC0E251E89E23800320A28 /* DocumentViewController.m in Sources */,
 				79FBE0841E304EAA00448FE3 /* QMTableViewDataSource.m in Sources */,
 				79734F631EB97CAC00647215 /* AddContactViewController.m in Sources */,
+				9620830D1ED9316300BB595C /* MaterListingViewController.m in Sources */,
 				79FBDFD41E30421A00448FE3 /* QMProfile.m in Sources */,
 				79FBDF991E30421A00448FE3 /* BaseNavigationController.m in Sources */,
 				79FBDFCE1E30421A00448FE3 /* QMFacebook.m in Sources */,
 				79FBDFA51E30421A00448FE3 /* UIButton+Badge.m in Sources */,
 				7903CF931ECD57D50090206C /* BankBranchCell.m in Sources */,
 				790DD49B1ECBC05E009D5634 /* PropertyContactListViewController.m in Sources */,
+				962083351EDD510100BB595C /* DashboardStyle4Cell.m in Sources */,
 				79FBDFDF1E30421A00448FE3 /* QMSoundManager.m in Sources */,
 				79FBE1041E304F5000448FE3 /* QMUserInfoCell.m in Sources */,
 				79FBE1181E304F5000448FE3 /* QMUpdateUserViewController.m in Sources */,
@@ -6170,6 +6584,7 @@
 				793FF23C1EC4D117001F83A5 /* AddLastOneButtonCell.m in Sources */,
 				79EC0E761E8B160600320A28 /* LedgerDetailCell.m in Sources */,
 				7903D06A1ECE40BB0090206C /* AccountTypeModel.m in Sources */,
+				962083401EDE12F500BB595C /* BankCashViewController.m in Sources */,
 				79EC0EB51E8BE7F700320A28 /* NewsViewController.m in Sources */,
 				79EC0EB01E8BE7F700320A28 /* LoanViewController.m in Sources */,
 				793FF1C41EC04EBF001F83A5 /* AddMatterViewController.m in Sources */,
@@ -6178,7 +6593,9 @@
 				7920E78C1E9F2B9D002FEFF3 /* NSString+QMSiriUtils.m in Sources */,
 				79FBE1081E304F5000448FE3 /* QMGroupAddUsersSearchDataProvider.m in Sources */,
 				79FBE1101E304F5000448FE3 /* QMChangePasswordViewController.m in Sources */,
+				962082E21ED7734C00BB595C /* TwoColumnWithDotCell.m in Sources */,
 				79EC0DEF1E88C7C500320A28 /* PartyModel.m in Sources */,
+				962083241EDBBF3E00BB595C /* ThreeColumnSecondCell.m in Sources */,
 				79FBE1011E304F5000448FE3 /* QMSelectableContactCell.m in Sources */,
 				79EC0EBC1E8BF82200320A28 /* CalendarViewController.m in Sources */,
 				790B23A91E373A140037A187 /* FirmModel.m in Sources */,
@@ -6190,24 +6607,30 @@
 				79EC0DF51E88C7FA00320A28 /* SolicitorGroup.m in Sources */,
 				79FBE1591E30FBEA00448FE3 /* QMCallViewController.m in Sources */,
 				7903D06E1ECE41CE0090206C /* AccountTypeViewController.m in Sources */,
+				962082F71ED912EE00BB595C /* ThreeItemModel.m in Sources */,
 				79EC0D741E85A03100320A28 /* WelcomeViewController.m in Sources */,
 				797ED5321EAFDC31009C20C4 /* CalendarRangeView.m in Sources */,
 				79FBDFCF1E30421A00448FE3 /* QMStatusStringBuilder.m in Sources */,
 				79734F781EB99ED300647215 /* CityModel.m in Sources */,
 				79FD2D021E428526005978E3 /* MainTabBarController.m in Sources */,
+				962083451EDE151300BB595C /* BankCashCell.m in Sources */,
 				79FBE09A1E304EAB00448FE3 /* QMTextField.m in Sources */,
 				7931B4F11EA902AF0090BDE0 /* DashboardViewController.m in Sources */,
+				969A60471EDE643F00A5D961 /* DashboardFeeTransferViewController.m in Sources */,
 				79FBE0201E304E2300448FE3 /* UserModel.m in Sources */,
 				79556DC21E932F7700A16CB8 /* MessageViewController.m in Sources */,
 				7903CF4B1ECC00BB0090206C /* ListWithCodeTableViewController.m in Sources */,
+				962082ED1ED7AA8800BB595C /* BadgeLabel.m in Sources */,
 				79FBDFB91E30421A00448FE3 /* QMDigitsConfigurationFactory.m in Sources */,
 				79D59A181E94762B00CD3821 /* QMContactsDataSource.m in Sources */,
 				79FF5B5A1E6FBB4000A27907 /* RelatedMatterViewController.m in Sources */,
 				7903CF541ECC00CE0090206C /* StaffViewController.m in Sources */,
 				79EC0E531E8AEF7D00320A28 /* CourtModel.m in Sources */,
 				793FF2351EC49A0A001F83A5 /* FloatingTextTwoColumnCell.m in Sources */,
+				962083291EDD103200BB595C /* GraphModel.m in Sources */,
 				79FBDFB41E30421A00448FE3 /* QMCore.m in Sources */,
 				79FBDFDA1E30421A00448FE3 /* QMImagePicker.m in Sources */,
+				969A604B1EDE650C00A5D961 /* FeeTranserModel.m in Sources */,
 				79EC0E851E8B822100320A28 /* BranchViewController.m in Sources */,
 				7903CF6B1ECD2B2D0090206C /* BillCell.m in Sources */,
 				7903CF7D1ECD37510090206C /* PropertyCodeCell.m in Sources */,
@@ -6217,11 +6640,14 @@
 				79F7322A1E96A929004F88DF /* DEMOCustomAutoCompleteObject.m in Sources */,
 				79FBDFD51E30421A00448FE3 /* QMTasks.m in Sources */,
 				962082C01ED417C200BB595C /* MatterLitigationCell.m in Sources */,
+				962083501EDE488100BB595C /* DashboardContactListViewController.m in Sources */,
 				79FBDFDE1E30421A00448FE3 /* QMPermissions.m in Sources */,
 				79FBDF9D1E30421A00448FE3 /* BaseTextInputView.m in Sources */,
+				969A60391EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m in Sources */,
 				79EC0EB21E8BE7F700320A28 /* StamDutyViewController.m in Sources */,
 				79EC0DFD1E895F7E00320A28 /* BankModel.m in Sources */,
 				79FBE0821E304EAA00448FE3 /* QMSplitViewController.m in Sources */,
+				962083081ED9305600BB595C /* DashboardMatterCell.m in Sources */,
 				79734FA61EBAA40900647215 /* MenuCell.m in Sources */,
 				7903CF591ECC00E20090206C /* SimpleMatterViewController.m in Sources */,
 				79D59A271E95245E00CD3821 /* QMNewMessageViewController.m in Sources */,
@@ -6261,10 +6687,12 @@
 				79FBE10F1E304F5000448FE3 /* QMUserInfoViewController.m in Sources */,
 				79FBDFCB1E30421A00448FE3 /* QMCameraCapture.m in Sources */,
 				79FBDF9A1E30421A00448FE3 /* BaseViewController.m in Sources */,
+				962082FB1ED9130C00BB595C /* VisibleModel.m in Sources */,
 				79FBDFBC1E30421A00448FE3 /* OnboardingContentViewController.m in Sources */,
 				79EC0DEC1E88C79400320A28 /* GeneralGroup.m in Sources */,
 				79EC0EC11E8C511A00320A28 /* BranchHeaderCell.m in Sources */,
 				79F732281E96A929004F88DF /* AsynchronousOperation.m in Sources */,
+				962083551EDE492200BB595C /* DashboardContactCell.m in Sources */,
 				7903CF621ECD26500090206C /* TwoColumnCell.m in Sources */,
 				7903D0661ECE3E3F0090206C /* TaxModel.m in Sources */,
 				79FBDFB71E30421A00448FE3 /* QMRootViewControllerSegue.m in Sources */,
@@ -6272,6 +6700,7 @@
 				79FBE1031E304F5000448FE3 /* QMSeparatorCell.m in Sources */,
 				79FBE0801E304EAA00448FE3 /* QMSearchDataSource.m in Sources */,
 				79EC0EAD1E8BE7F700320A28 /* IncomeTaxViewController.m in Sources */,
+				962083181EDB32DA00BB595C /* DashboardTaxInvoiceCell.m in Sources */,
 				7920E7B51EA0512C002FEFF3 /* DIFileBrowser.m in Sources */,
 				793FF1B61EBF9079001F83A5 /* CoramModel.m in Sources */,
 				79FBDFB51E30421A00448FE3 /* QMNetworkManager.m in Sources */,
@@ -6282,6 +6711,7 @@
 				79EC0EAB1E8BE7F700320A28 /* CalculatorSelectionViewController.m in Sources */,
 				79FBDFAD1E30421A00448FE3 /* DataManager.m in Sources */,
 				79D59A001E9473D500CD3821 /* QMDialogsViewController.m in Sources */,
+				962082E81ED77A4300BB595C /* OneRowWithDot.m in Sources */,
 				79734FCB1EBABD3E00647215 /* ChangeBranchViewController.m in Sources */,
 				79FBE2161E3197AD00448FE3 /* SearchResultCell.m in Sources */,
 				79FBDFD31E30421A00448FE3 /* QMPlaceholder.m in Sources */,
@@ -6309,6 +6739,7 @@
 				79F732271E96A929004F88DF /* AFURLSessionOperation.m in Sources */,
 				962082AB1ED3C76E00BB595C /* CourtDiaryViewController.m in Sources */,
 				79EC0E011E89617A00320A28 /* BankViewController.m in Sources */,
+				9620833B1EDDF89100BB595C /* DashboardMatterSecondCell.m in Sources */,
 				79FBDEB41E30410000448FE3 /* main.m in Sources */,
 				79EC0DDC1E8802E400320A28 /* ContactModel.m in Sources */,
 				795DF1FF1E6DE540006D617D /* NSDictionary+NotNull.m in Sources */,
@@ -6327,6 +6758,7 @@
 				79D59A261E95245E00CD3821 /* QMMessageContactListViewController.m in Sources */,
 				79D59A2E1E955B4900CD3821 /* ClientContactViewController.m in Sources */,
 				7920E7B11EA0129F002FEFF3 /* ChatUserModel.m in Sources */,
+				962082F21ED7B9E200BB595C /* LineGraphCell.m in Sources */,
 				793C1A041EC4FFE600271B7F /* ListOfMatterViewController.m in Sources */,
 				79FBDFB81E30421A00448FE3 /* QMCallButtonsFactory.m in Sources */,
 				79FBE0961E304EAB00448FE3 /* QMShadowView.m in Sources */,
@@ -6359,6 +6791,7 @@
 				79F9FC8E1E41BDB50097CB23 /* EventModel.m in Sources */,
 				790DD47E1ECA7087009D5634 /* QuotationModel.m in Sources */,
 				7903CF711ECD303D0090206C /* PropertyContactCell.m in Sources */,
+				969A603D1EDE50EC00A5D961 /* TaxInvoceModel.m in Sources */,
 				79A6AFAA1E9DBE12007AA24D /* ChatContactCell.m in Sources */,
 				79FBDFD21E30421A00448FE3 /* QMPhoto.m in Sources */,
 				79D59A311E955B6D00CD3821 /* FavoriteViewController.m in Sources */,
@@ -6399,6 +6832,8 @@
 				7903D0961ECF9B520090206C /* TypeValueModel.m in Sources */,
 				795DF25A1E6F04E0006D617D /* CategorySelectViewController.m in Sources */,
 				79FBDFA61E30421A00448FE3 /* UIColor+CustomColors.m in Sources */,
+				962082FF1ED9149700BB595C /* ItemModel.m in Sources */,
+				9620831E1EDBBD5F00BB595C /* TwoColumnSecondCell.m in Sources */,
 				79FBDFCA1E30421A00448FE3 /* QMCallNotificationItem.m in Sources */,
 				7903CF5D1ECC06340090206C /* EditCourtModel.m in Sources */,
 				79FBE0F81E304F5000448FE3 /* QMDialogCell.m in Sources */,
@@ -6416,6 +6851,7 @@
 				79FBE10A1E304F5000448FE3 /* QMGroupInfoViewController.m in Sources */,
 				79FBDFB61E30421A00448FE3 /* QMPushNotificationManager.m in Sources */,
 				79FBDE771E302F6600448FE3 /* AppDelegate.m in Sources */,
+				969A60421EDE62DA00A5D961 /* FeeTransferCell.m in Sources */,
 				79FBE1071E304F5000448FE3 /* QMLocationViewController.m in Sources */,
 				79D59A381E95690800CD3821 /* QMContactsSearchDataSource.m in Sources */,
 			);
@@ -6562,14 +6998,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1996F974161488BB17036EF8 /* Pods-Denning.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Denning/Denning.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thong Mee Ho (FR83CC98GQ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6886,10 +7319,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E17F995330526CFB53C3FA3 /* Pods-Denning.release.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Denning/Denning.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Thong Mee Ho (6ATV26A86Y)";

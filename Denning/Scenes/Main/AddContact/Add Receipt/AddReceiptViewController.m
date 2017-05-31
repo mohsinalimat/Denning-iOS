@@ -98,6 +98,13 @@
                              [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [_accessoryView sizeToFit];
     
+    self.fileNo.inputAccessoryView = _accessoryView;
+    self.billNo.inputAccessoryView = _accessoryView;
+    self.accountType.inputAccessoryView = _accessoryView;
+    self.receivedFrom.inputAccessoryView = _accessoryView;
+    self.transaction.inputAccessoryView = _accessoryView;
+    self.mode.inputAccessoryView = _accessoryView;
+    self.issuerBank.inputAccessoryView = _accessoryView;
     self.amount.inputAccessoryView = _accessoryView;
     self.transaction.inputAccessoryView = _accessoryView;
     self.bankBranch.inputAccessoryView = _accessoryView;
@@ -271,12 +278,21 @@
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    string = string.uppercaseString;
-    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
-    double number = [text intValue] * 0.01;
-    textField.text = [NSString stringWithFormat:@"%.2lf", number];
-    return NO;
+    BOOL editable = YES;
+    if (textField.tag == 4 || textField.tag == 14) {
+        string = string.uppercaseString;
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+        double number = [text intValue] * 0.01;
+        textField.text = [NSString stringWithFormat:@"%.2lf", number];
+        editable = NO;
+    } else if (textField.tag == 12 || textField.tag == 13 || textField.tag == 15) {
+        editable = YES;
+    } else {
+        editable = NO;
+    }
+    
+    return editable;
 }
 
 

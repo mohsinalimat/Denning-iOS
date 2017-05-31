@@ -18,7 +18,6 @@
     return YES;
 }
 
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -27,7 +26,6 @@
     self.landscapeContentSizeInPopup = CGSizeMake(350, 300);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStylePlain target:self action:@selector(nextBtnDidTap)];
 }
-
 
 - (IBAction)nextBtnDidTap
 {

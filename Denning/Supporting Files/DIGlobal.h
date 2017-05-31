@@ -34,6 +34,26 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define kCountryCode        @"code"
 
 
+#define HEIGHT(v)                                       v.frame.size.height
+#define WIDTH(v)                                        v.frame.size.width
+#define BOTTOM(v)                                       (v.frame.origin.y + v.frame.size.height)
+#define AFTER(v)                                        (v.frame.origin.x + v.frame.size.width)
+#define PH                                              [[UIScreen mainScreen].bounds.size.height]
+#define PW                                              [[UIScreen mainScreen].bounds.size.width]
+
+#define INNER_PADDING 10
+#define SIDE_PADDING 15
+#define LEGEND_VIEW 15
+#define OFFSET_X 30
+#define OFFSET_Y 30
+#define OFFSET_PADDING 5
+
+#define DEG2RAD(angle) angle*M_PI/180.0
+
+#define ANIMATION_DURATION 1.5f
+
+#define header_height 0
+
 #define FORGOT_PASSWORD_SEND_SMS_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/SMS/lostPassword"
 
 #define FORGOT_PASSWORD_REQUEST_URL     @"http://denningsoft.dlinkddns.com/denningwcf/v1/password/forget"
@@ -221,6 +241,13 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define ACCOUNT_CHEQUE_ISSUEER_GET_URL  @"denningwcf/v1/account/ChequeIssuerBank?search="
 
 #define RECEIPT_SAVE_URL @"denningwcf/v1/ClientReceipt"
+
+#define DASHBOARD_S1_MATTER_GET_URL @"denningwcf/v1/app/dashboard/S1"
+
+#define DASHBOARD_S2_CONTACT_GET_URL @"denningwcf/v1/app/dashboard/S2"
+
+#define DASHBOARD_S10_GET_URL   @"denningwcf/v1/app/dashboard/S10"
+
 /*
  *  Notification Names
  */

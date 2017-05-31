@@ -32,6 +32,7 @@ target ‘Denning’ do
 	pod 'FZAccordionTableView', '~> 0.2.3'
 	pod "HNKGooglePlacesAutocomplete", "~> 1.1"
 	pod 'UILabel+Copyable', '~> 1.0.0'
+	pod 'drCharts', :git => 'https://github.com/Zomato/DR-charts.git'
 
 	pod 'AFNetworking’
 	pod 'Bolts'
