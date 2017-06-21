@@ -36,7 +36,6 @@
     
     self.containverViewTopConstraint.constant -= 64;
     [self addView:self.viewControllers[0]];
-    
     [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(gotoHome)];
 }
 

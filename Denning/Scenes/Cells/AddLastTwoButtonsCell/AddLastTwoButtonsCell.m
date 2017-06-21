@@ -10,7 +10,11 @@
 
 @implementation AddLastTwoButtonsCell
 
-- (IBAction)didTapCalculate:(id)sender {
+- (IBAction)didTapSave:(id)sender {
+    self.saveHandler();
+}
+
+- (IBAction)didTapView:(id)sender {
     self.viewHandler();
 }
 

@@ -58,51 +58,6 @@ static NSString* attachmentPath(QBChatAttachment *attachment) {
 - (void)uploadAndSendAttachmentMessage:(QBChatMessage *)message
                               toDialog:(QBChatDialog *)dialog
                        withChatService:(QMChatService *)chatService
-                     withAttachedDocument:(NSData *)data
-                          withMIMEType: (NSString*) mimeType
-                              withType: (NSString*) type
-                            completion:(QBChatCompletionBlock)completion {
-    
-   [self changeMessageAttachmentStatus:QMMessageAttachmentStatusLoading forMessage:message];
-    __weak __typeof(self)weakSelf = self;
-    [QBRequest TUploadFile:data fileName:@"attachment" contentType:mimeType isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-        __typeof(weakSelf)strongSelf = weakSelf;
-        
-        QBChatAttachment *attachment = [QBChatAttachment new];
-        attachment.type = type;
-        attachment.ID = blob.UID;
-        attachment.url = [blob privateUrl];
-        
-        message.attachments = @[attachment];
-        message.text = @"Attachment document";
-        
-//        strongSelf.attachmentsStorage[attachment.ID] = image;
-        
-        [strongSelf changeMessageAttachmentStatus:QMMessageAttachmentStatusLoaded forMessage:message];
-        
-        [chatService sendMessage:message type:QMMessageTypeText toDialog:dialog saveToHistory:YES saveToStorage:YES completion:completion];
-        
-    } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
-        
-        __typeof(weakSelf)strongSelf = weakSelf;
-        if ([strongSelf.delegate respondsToSelector:@selector(chatAttachmentService:didChangeUploadingProgress:forMessage:)]) {
-            [strongSelf.delegate chatAttachmentService:strongSelf didChangeUploadingProgress:status.percentOfCompletion forMessage:message];
-        }
-        
-    } errorBlock:^(QBResponse *response) {
-        
-        __typeof(weakSelf)strongSelf = weakSelf;
-        [strongSelf changeMessageAttachmentStatus:QMMessageAttachmentStatusNotLoaded forMessage:message];
-        
-        if (completion) {
-            completion(response.error.error);
-        }
-    }];
-}
-
-- (void)uploadAndSendAttachmentMessage:(QBChatMessage *)message
-                              toDialog:(QBChatDialog *)dialog
-                       withChatService:(QMChatService *)chatService
                      withAttachedImage:(UIImage *)image
                             completion:(QBChatCompletionBlock)completion {
     

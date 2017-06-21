@@ -84,9 +84,15 @@
     return YES;
 }
 
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    customString = [DIHelpers capitalizedString:textField.text];
+    return YES;
+}
+
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
-    customString = textField.text;
+    customString = [DIHelpers capitalizedString:textField.text];
 }
 
 - (void)awakeFromNib

@@ -27,8 +27,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fileNumberLable;
 @property (weak, nonatomic) IBOutlet UIButton *chatBtn;
+@property (weak, nonatomic) IBOutlet UILabel *chatLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editBtn;
-
+@property (weak, nonatomic) IBOutlet UILabel *editLabel;
 
 - (void) configureCellWithInfo:(NSString*) name number:(NSString*) number image:(UIImage*) image;
 

@@ -23,6 +23,10 @@
     self.paymentRecordBtn.titleLabel.minimumScaleFactor = 0.5f;
     self.paymentRecordBtn.titleLabel.numberOfLines = 0;   
     self.paymentRecordBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
+    
+    self.titleLabel.copyingEnabled = YES;
+    self.headerLabel.copyingEnabled = YES;
+    self.descriptionLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

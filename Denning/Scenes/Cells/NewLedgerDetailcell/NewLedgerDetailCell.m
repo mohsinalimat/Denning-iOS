@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *documentNoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *receivedPaid;
 
 @end
 
@@ -22,6 +23,10 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.amountLabel.copyingEnabled = YES;
+    self.documentNoLabel.copyingEnabled = YES;
+    self.descriptionLabel.copyingEnabled = YES;
+    self.dateLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -35,7 +40,13 @@
     self.dateLabel.text = ledgerDetail.date;
     self.documentNoLabel.text = ledgerDetail.documentNo;
     self.descriptionLabel.text = ledgerDetail.ledgerDescription;
-    self.amountLabel.text = ledgerDetail.amount;
+    if (ledgerDetail.amountDR.length == 0) {
+        self.amountLabel.text = [@"-" stringByAppendingString: [DIHelpers addThousandsSeparator:ledgerDetail.amountCR]];
+    } else {
+        self.amountLabel.text = [DIHelpers addThousandsSeparator:ledgerDetail.amountDR];
+    }
+    
+    self.receivedPaid.text = ledgerDetail.recdPaid;
 }
 
 @end

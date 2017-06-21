@@ -10,10 +10,8 @@
 #import "DIGeneralCell.h"
 
 @interface PropertyContactCell : DIGeneralCell
-
-@property (weak, nonatomic) IBOutlet UILabel *fullName;
-@property (weak, nonatomic) IBOutlet UILabel *NRIC;
-@property (weak, nonatomic) IBOutlet UILabel *mobileAndPhone;
+@property (weak, nonatomic) IBOutlet UILabel *ID;
+@property (weak, nonatomic) IBOutlet UILabel *name;
 
 - (void) configureCellWithStaffModel:(StaffModel*) model;
 @end

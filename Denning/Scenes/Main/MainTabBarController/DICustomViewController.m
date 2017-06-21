@@ -33,14 +33,14 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self hideTabBar];
+//    [self hideTabBar];
 }
 
 - (void) hideTabBar {
     self.tabBarController.tabBar.hidden = YES;
     
     [self configureBackBtnWithImageName:@"Back" withSelector:@selector(popupScreen:)];
-    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(popupScreen:)];
+//    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(popupScreen:)];
 }
 
 - (void) configureBackBtnWithImageName:(NSString*) imageName withSelector:(SEL) action {

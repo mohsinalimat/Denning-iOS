@@ -101,6 +101,8 @@ static NSString *const kActionTarget = @"buttonActionTarget";
 // For subclasses.  This returns a configured picker view.  Subclasses should autorelease.
 - (UIView *)configuredPickerView;
 
+- (UISearchBar*) configureSearchView;
+
 // Adds custom buttons to the left of the UIToolbar that select specified values
 - (void)addCustomButtonWithTitle:(NSString *)title value:(id)value;
 

@@ -26,24 +26,24 @@
 {
     EventModel* eventModel = [EventModel new];
     
-    eventModel.subject = [response objectForKey:@"counsel"];
-    eventModel.FileNo = [response objectForKey:@"FileNo"];
-    eventModel.caseNo = [response objectForKey:@"caseNo"];
-    eventModel.URL = [response objectForKey:@"URL"];
-    eventModel.eventCode = [response objectForKey:@"code"];
-    eventModel.description = [response objectForKey:@"description"];
-    eventModel.eventStart = [response objectForKey:@"eventStart"];
-    eventModel.eventEnd = [response objectForKey:@"eventEnd"];
+    eventModel.caseName = [response valueForKeyNotNull:@"description"];
+    eventModel.FileNo = [response valueForKeyNotNull:@"FileNo"];
+    eventModel.caseNo = [response valueForKeyNotNull:@"caseNo"];
+    eventModel.URL = [response valueForKeyNotNull:@"URL"];
+    eventModel.eventCode = [response valueForKeyNotNull:@"code"];
+    eventModel.descriptionValue = [response valueForKeyNotNull:@"description"];
+    eventModel.eventStart = [response valueForKeyNotNull:@"eventStart"];
+    eventModel.eventEnd = [response valueForKeyNotNull:@"eventEnd"];
     if (![[response objectForKey:@"img"] isEqual:[NSNull null]]){
-        eventModel.imageURL = [[response objectForKey:@"img"] objectForKey:@"FileName"];
-        eventModel.imageData = [[response objectForKey:@"img"] objectForKey:@"base64"];
+        eventModel.imageURL = [[response objectForKey:@"img"] valueForKeyNotNull:@"FileName"];
+        eventModel.imageData = [[response objectForKey:@"img"] valueForKeyNotNull:@"base64"];
     }
     
-    eventModel.location = [response objectForKey:@"location"];
-    eventModel.reminder1 = [response objectForKey:@"reminder1"];
-    eventModel.reminder2 = [response objectForKey:@"reminder2"];
+    eventModel.location = [response valueForKeyNotNull:@"location"];
+    eventModel.reminder1 = [response valueForKeyNotNull:@"reminder1"];
+    eventModel.reminder2 = [response valueForKeyNotNull:@"reminder2"];
     
-    eventModel.counsel = [response objectForKey:@"counsel"];
+    eventModel.counsel = [response valueForKeyNotNull:@"counsel"];
     
     return eventModel;
 }

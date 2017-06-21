@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4614714DB83FC0B8A26C9915 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 064FEAC551343F357D0017CC /* libPods-Denning.a */; };
+		6EE6BC012F8FA5241EA721D0 /* libPods-Denning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */; };
 		7903CF481ECC00BB0090206C /* BirthdayCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF381ECC00BB0090206C /* BirthdayCalendarViewController.m */; };
 		7903CF491ECC00BB0090206C /* DetailWithAutocomplete.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF3B1ECC00BB0090206C /* DetailWithAutocomplete.m */; };
 		7903CF4B1ECC00BB0090206C /* ListWithCodeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7903CF411ECC00BB0090206C /* ListWithCodeTableViewController.m */; };
@@ -755,12 +756,29 @@
 		962083501EDE488100BB595C /* DashboardContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620834F1EDE488100BB595C /* DashboardContactListViewController.m */; };
 		962083551EDE492200BB595C /* DashboardContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962083531EDE492200BB595C /* DashboardContactCell.m */; };
 		962083561EDE492200BB595C /* DashboardContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 962083541EDE492200BB595C /* DashboardContactCell.xib */; };
+		966A62F81EF4A85E008A25FE /* TransactionDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 966A62F71EF4A85E008A25FE /* TransactionDetail.m */; };
+		968E85E21EF19573001B442D /* IncreasingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 968E85E01EF19573001B442D /* IncreasingCell.m */; };
+		968E85E31EF19573001B442D /* IncreasingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 968E85E11EF19573001B442D /* IncreasingCell.xib */; };
+		968E85E71EF1A861001B442D /* YHCPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 968E85E61EF1A861001B442D /* YHCPickerView.m */; };
+		968E85EB1EF2DB00001B442D /* CountryAutoCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 968E85EA1EF2DB00001B442D /* CountryAutoCompleteViewController.m */; };
+		968E85EF1EF2E74C001B442D /* PhoneNumberAutoComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = 968E85EE1EF2E74C001B442D /* PhoneNumberAutoComplete.m */; };
+		968E85F31EF431DC001B442D /* SearchMatterCodeDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 968E85F21EF431DC001B442D /* SearchMatterCodeDetail.m */; };
 		969A60391EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60381EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m */; };
 		969A603D1EDE50EC00A5D961 /* TaxInvoceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A603C1EDE50EC00A5D961 /* TaxInvoceModel.m */; };
 		969A60421EDE62DA00A5D961 /* FeeTransferCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60401EDE62DA00A5D961 /* FeeTransferCell.m */; };
 		969A60431EDE62DA00A5D961 /* FeeTransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 969A60411EDE62DA00A5D961 /* FeeTransferCell.xib */; };
 		969A60471EDE643F00A5D961 /* DashboardFeeTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A60461EDE643F00A5D961 /* DashboardFeeTransferViewController.m */; };
 		969A604B1EDE650C00A5D961 /* FeeTranserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 969A604A1EDE650C00A5D961 /* FeeTranserModel.m */; };
+		96C7AF461EE590F100EF0A37 /* PostCodeAutoComplete.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C7AF451EE590F100EF0A37 /* PostCodeAutoComplete.m */; };
+		96C7AF4A1EE6957D00EF0A37 /* MukimModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C7AF491EE6957D00EF0A37 /* MukimModel.m */; };
+		96C7AFBC1EE82E6D00EF0A37 /* MukimValueList.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C7AFBB1EE82E6D00EF0A37 /* MukimValueList.m */; };
+		96C7AFC71EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C7AFC51EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.m */; };
+		96C7AFC81EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96C7AFC61EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.xib */; };
+		96CACE051EE243500087E76B /* TaskCheckCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CACE031EE243500087E76B /* TaskCheckCell.m */; };
+		96CACE061EE243500087E76B /* TaskCheckCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96CACE041EE243500087E76B /* TaskCheckCell.xib */; };
+		96CACE0B1EE24D260087E76B /* TaskCheckListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CACE091EE24D260087E76B /* TaskCheckListViewController.m */; };
+		96CACE101EE24E500087E76B /* TaskCheckModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CACE0F1EE24E500087E76B /* TaskCheckModel.m */; };
+		96CACE141EE252E00087E76B /* DashboardLedgerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CACE131EE252E00087E76B /* DashboardLedgerModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1887,6 +1905,19 @@
 		962083521EDE492200BB595C /* DashboardContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardContactCell.h; sourceTree = "<group>"; };
 		962083531EDE492200BB595C /* DashboardContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardContactCell.m; sourceTree = "<group>"; };
 		962083541EDE492200BB595C /* DashboardContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DashboardContactCell.xib; sourceTree = "<group>"; };
+		966A62F61EF4A85E008A25FE /* TransactionDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionDetail.h; sourceTree = "<group>"; };
+		966A62F71EF4A85E008A25FE /* TransactionDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetail.m; sourceTree = "<group>"; };
+		968E85DF1EF19573001B442D /* IncreasingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IncreasingCell.h; sourceTree = "<group>"; };
+		968E85E01EF19573001B442D /* IncreasingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IncreasingCell.m; sourceTree = "<group>"; };
+		968E85E11EF19573001B442D /* IncreasingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IncreasingCell.xib; sourceTree = "<group>"; };
+		968E85E51EF1A861001B442D /* YHCPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHCPickerView.h; sourceTree = "<group>"; };
+		968E85E61EF1A861001B442D /* YHCPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHCPickerView.m; sourceTree = "<group>"; };
+		968E85E91EF2DB00001B442D /* CountryAutoCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryAutoCompleteViewController.h; sourceTree = "<group>"; };
+		968E85EA1EF2DB00001B442D /* CountryAutoCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryAutoCompleteViewController.m; sourceTree = "<group>"; };
+		968E85ED1EF2E74C001B442D /* PhoneNumberAutoComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberAutoComplete.h; sourceTree = "<group>"; };
+		968E85EE1EF2E74C001B442D /* PhoneNumberAutoComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberAutoComplete.m; sourceTree = "<group>"; };
+		968E85F11EF431DC001B442D /* SearchMatterCodeDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchMatterCodeDetail.h; sourceTree = "<group>"; };
+		968E85F21EF431DC001B442D /* SearchMatterCodeDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchMatterCodeDetail.m; sourceTree = "<group>"; };
 		969A60371EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardTaxInvoiceViewController.h; sourceTree = "<group>"; };
 		969A60381EDE4F8700A5D961 /* DashboardTaxInvoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardTaxInvoiceViewController.m; sourceTree = "<group>"; };
 		969A603B1EDE50EC00A5D961 /* TaxInvoceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaxInvoceModel.h; sourceTree = "<group>"; };
@@ -1898,6 +1929,24 @@
 		969A60461EDE643F00A5D961 /* DashboardFeeTransferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardFeeTransferViewController.m; sourceTree = "<group>"; };
 		969A60491EDE650C00A5D961 /* FeeTranserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeeTranserModel.h; sourceTree = "<group>"; };
 		969A604A1EDE650C00A5D961 /* FeeTranserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeeTranserModel.m; sourceTree = "<group>"; };
+		96C7AF441EE590F100EF0A37 /* PostCodeAutoComplete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCodeAutoComplete.h; sourceTree = "<group>"; };
+		96C7AF451EE590F100EF0A37 /* PostCodeAutoComplete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCodeAutoComplete.m; sourceTree = "<group>"; };
+		96C7AF481EE6957D00EF0A37 /* MukimModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MukimModel.h; sourceTree = "<group>"; };
+		96C7AF491EE6957D00EF0A37 /* MukimModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MukimModel.m; sourceTree = "<group>"; };
+		96C7AFBA1EE82E6D00EF0A37 /* MukimValueList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MukimValueList.h; sourceTree = "<group>"; };
+		96C7AFBB1EE82E6D00EF0A37 /* MukimValueList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MukimValueList.m; sourceTree = "<group>"; };
+		96C7AFC41EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingTextTwoColumnReversedCell.h; sourceTree = "<group>"; };
+		96C7AFC51EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloatingTextTwoColumnReversedCell.m; sourceTree = "<group>"; };
+		96C7AFC61EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FloatingTextTwoColumnReversedCell.xib; sourceTree = "<group>"; };
+		96CACE021EE243500087E76B /* TaskCheckCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCheckCell.h; sourceTree = "<group>"; };
+		96CACE031EE243500087E76B /* TaskCheckCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCheckCell.m; sourceTree = "<group>"; };
+		96CACE041EE243500087E76B /* TaskCheckCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TaskCheckCell.xib; sourceTree = "<group>"; };
+		96CACE081EE24D260087E76B /* TaskCheckListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCheckListViewController.h; sourceTree = "<group>"; };
+		96CACE091EE24D260087E76B /* TaskCheckListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCheckListViewController.m; sourceTree = "<group>"; };
+		96CACE0E1EE24E500087E76B /* TaskCheckModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCheckModel.h; sourceTree = "<group>"; };
+		96CACE0F1EE24E500087E76B /* TaskCheckModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCheckModel.m; sourceTree = "<group>"; };
+		96CACE121EE252E00087E76B /* DashboardLedgerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardLedgerModel.h; sourceTree = "<group>"; };
+		96CACE131EE252E00087E76B /* DashboardLedgerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardLedgerModel.m; sourceTree = "<group>"; };
 		B5B204D56B08DD5FA20D4C0F /* libPods-Denning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Denning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1931,6 +1980,7 @@
 				79FBDFF11E304AAC00448FE3 /* libstdc++.tbd in Frameworks */,
 				79FBDFEF1E304AA000448FE3 /* libsqlite3.tbd in Frameworks */,
 				4614714DB83FC0B8A26C9915 /* libPods-Denning.a in Frameworks */,
+				6EE6BC012F8FA5241EA721D0 /* libPods-Denning.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2599,6 +2649,10 @@
 		793FF2291EC48E22001F83A5 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				968E85EC1EF2E72A001B442D /* PhonNumberAutoComplete */,
+				968E85E81EF2DAF1001B442D /* CountryAutoComplete */,
+				96C7AFB91EE82E5D00EF0A37 /* MukimValueList */,
+				96C7AF431EE590E000EF0A37 /* PostCodeAutoComplete */,
 				962082D21ED641CD00BB595C /* CoramListView */,
 				962082CE1ED5208000BB595C /* GoogleMapAutocomplete */,
 				962082CA1ED48FCE00BB595C /* CourtDiaryViewController */,
@@ -2835,6 +2889,7 @@
 		799109A01E6FA3130028C24B /* RelatedMatter */ = {
 			isa = PBXGroup;
 			children = (
+				968E85F01EF431CA001B442D /* SearchMatterCodeDetail */,
 				79FF5B581E6FBB4000A27907 /* RelatedMatterViewController.h */,
 				79FF5B591E6FBB4000A27907 /* RelatedMatterViewController.m */,
 			);
@@ -3277,6 +3332,8 @@
 				79EC0E1C1E89CFEE00320A28 /* LedgerViewController.m */,
 				79CE7C831EA79B95001A8101 /* NewLedgerViewController.h */,
 				79CE7C841EA79B95001A8101 /* NewLedgerViewController.m */,
+				966A62F61EF4A85E008A25FE /* TransactionDetail.h */,
+				966A62F71EF4A85E008A25FE /* TransactionDetail.m */,
 			);
 			path = Ledger;
 			sourceTree = "<group>";
@@ -3796,6 +3853,7 @@
 		79FBDEB81E30421A00448FE3 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				968E85E41EF1A861001B442D /* YHCPickerView */,
 				962082EA1ED7AA8800BB595C /* BadgeLabel */,
 				7931B4DA1EA8E8E10090BDE0 /* UITextField+LeftView */,
 				7920E7B61EA05DF6002FEFF3 /* FCFileManager */,
@@ -4431,6 +4489,9 @@
 		79FBE01C1E304E0E00448FE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				96C7AF471EE6957100EF0A37 /* MukimModel */,
+				96CACE111EE252D60087E76B /* DashboardLedgerModel */,
+				96CACE0D1EE24E430087E76B /* TaskCheckModel */,
 				969A60481EDE650200A5D961 /* FeeTranserModel */,
 				969A603A1EDE50DF00A5D961 /* TaxInvoceModel */,
 				962083261EDD102300BB595C /* GraphModel */,
@@ -4806,6 +4867,7 @@
 		79FBE09B1E304F5000448FE3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				96CACE011EE243390087E76B /* TaskCheckCell */,
 				969A603E1EDE62C600A5D961 /* FeeTransferCell */,
 				962083511EDE48E800BB595C /* DashboardContactCell */,
 				962083471EDE235B00BB595C /* BankCashSecondCell */,
@@ -4831,9 +4893,11 @@
 				7903CF5E1ECD26370090206C /* TwoColumnCell */,
 				793FF2381EC4D105001F83A5 /* AddLastTwoButtonsCell */,
 				793FF2371EC4D0F4001F83A5 /* AddLastOneButtonCell */,
+				96C7AFC31EE99CC100EF0A37 /* FloatingTextTwoColumnReversedCell */,
 				793FF22E1EC499DF001F83A5 /* FloatingTextTwoColumnCell */,
 				793FF2191EC3C2A2001F83A5 /* AccordionHeaderView */,
 				793FF20C1EC3A596001F83A5 /* FloatingTextCell */,
+				968E85DE1EF194CA001B442D /* IncreasingCell */,
 				79734F851EBA96A100647215 /* MenuCell */,
 				797ED4FF1EAED9D8009C20C4 /* NewContactHeaderCell */,
 				7931B5131EAADF7E0090BDE0 /* MatterPropertyCell */,
@@ -5746,6 +5810,7 @@
 		9620830A1ED9314D00BB595C /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				96CACE071EE24D0F0087E76B /* TaskCheckListViewController */,
 				969A60441EDE643000A5D961 /* DashboardFeeTransferViewController */,
 				969A60361EDE4F7600A5D961 /* DashboardTaxInvoiceViewController */,
 				9620834D1EDE486C00BB595C /* DashboardContactListViewController */,
@@ -5863,6 +5928,52 @@
 			path = DashboardContactCell;
 			sourceTree = "<group>";
 		};
+		968E85DE1EF194CA001B442D /* IncreasingCell */ = {
+			isa = PBXGroup;
+			children = (
+				968E85DF1EF19573001B442D /* IncreasingCell.h */,
+				968E85E01EF19573001B442D /* IncreasingCell.m */,
+				968E85E11EF19573001B442D /* IncreasingCell.xib */,
+			);
+			path = IncreasingCell;
+			sourceTree = "<group>";
+		};
+		968E85E41EF1A861001B442D /* YHCPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				968E85E51EF1A861001B442D /* YHCPickerView.h */,
+				968E85E61EF1A861001B442D /* YHCPickerView.m */,
+			);
+			path = YHCPickerView;
+			sourceTree = "<group>";
+		};
+		968E85E81EF2DAF1001B442D /* CountryAutoComplete */ = {
+			isa = PBXGroup;
+			children = (
+				968E85E91EF2DB00001B442D /* CountryAutoCompleteViewController.h */,
+				968E85EA1EF2DB00001B442D /* CountryAutoCompleteViewController.m */,
+			);
+			path = CountryAutoComplete;
+			sourceTree = "<group>";
+		};
+		968E85EC1EF2E72A001B442D /* PhonNumberAutoComplete */ = {
+			isa = PBXGroup;
+			children = (
+				968E85ED1EF2E74C001B442D /* PhoneNumberAutoComplete.h */,
+				968E85EE1EF2E74C001B442D /* PhoneNumberAutoComplete.m */,
+			);
+			path = PhonNumberAutoComplete;
+			sourceTree = "<group>";
+		};
+		968E85F01EF431CA001B442D /* SearchMatterCodeDetail */ = {
+			isa = PBXGroup;
+			children = (
+				968E85F11EF431DC001B442D /* SearchMatterCodeDetail.h */,
+				968E85F21EF431DC001B442D /* SearchMatterCodeDetail.m */,
+			);
+			path = SearchMatterCodeDetail;
+			sourceTree = "<group>";
+		};
 		969A60361EDE4F7600A5D961 /* DashboardTaxInvoiceViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -5907,6 +6018,80 @@
 				969A604A1EDE650C00A5D961 /* FeeTranserModel.m */,
 			);
 			path = FeeTranserModel;
+			sourceTree = "<group>";
+		};
+		96C7AF431EE590E000EF0A37 /* PostCodeAutoComplete */ = {
+			isa = PBXGroup;
+			children = (
+				96C7AF441EE590F100EF0A37 /* PostCodeAutoComplete.h */,
+				96C7AF451EE590F100EF0A37 /* PostCodeAutoComplete.m */,
+			);
+			path = PostCodeAutoComplete;
+			sourceTree = "<group>";
+		};
+		96C7AF471EE6957100EF0A37 /* MukimModel */ = {
+			isa = PBXGroup;
+			children = (
+				96C7AF481EE6957D00EF0A37 /* MukimModel.h */,
+				96C7AF491EE6957D00EF0A37 /* MukimModel.m */,
+			);
+			path = MukimModel;
+			sourceTree = "<group>";
+		};
+		96C7AFB91EE82E5D00EF0A37 /* MukimValueList */ = {
+			isa = PBXGroup;
+			children = (
+				96C7AFBA1EE82E6D00EF0A37 /* MukimValueList.h */,
+				96C7AFBB1EE82E6D00EF0A37 /* MukimValueList.m */,
+			);
+			path = MukimValueList;
+			sourceTree = "<group>";
+		};
+		96C7AFC31EE99CC100EF0A37 /* FloatingTextTwoColumnReversedCell */ = {
+			isa = PBXGroup;
+			children = (
+				96C7AFC41EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.h */,
+				96C7AFC51EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.m */,
+				96C7AFC61EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.xib */,
+			);
+			path = FloatingTextTwoColumnReversedCell;
+			sourceTree = "<group>";
+		};
+		96CACE011EE243390087E76B /* TaskCheckCell */ = {
+			isa = PBXGroup;
+			children = (
+				96CACE021EE243500087E76B /* TaskCheckCell.h */,
+				96CACE031EE243500087E76B /* TaskCheckCell.m */,
+				96CACE041EE243500087E76B /* TaskCheckCell.xib */,
+			);
+			path = TaskCheckCell;
+			sourceTree = "<group>";
+		};
+		96CACE071EE24D0F0087E76B /* TaskCheckListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				96CACE081EE24D260087E76B /* TaskCheckListViewController.h */,
+				96CACE091EE24D260087E76B /* TaskCheckListViewController.m */,
+			);
+			path = TaskCheckListViewController;
+			sourceTree = "<group>";
+		};
+		96CACE0D1EE24E430087E76B /* TaskCheckModel */ = {
+			isa = PBXGroup;
+			children = (
+				96CACE0E1EE24E500087E76B /* TaskCheckModel.h */,
+				96CACE0F1EE24E500087E76B /* TaskCheckModel.m */,
+			);
+			path = TaskCheckModel;
+			sourceTree = "<group>";
+		};
+		96CACE111EE252D60087E76B /* DashboardLedgerModel */ = {
+			isa = PBXGroup;
+			children = (
+				96CACE121EE252E00087E76B /* DashboardLedgerModel.h */,
+				96CACE131EE252E00087E76B /* DashboardLedgerModel.m */,
+			);
+			path = DashboardLedgerModel;
 			sourceTree = "<group>";
 		};
 		EA4300F6D243812CDEACE5C5 /* Pods */ = {
@@ -6072,11 +6257,13 @@
 				793FF1891EBD4BDF001F83A5 /* icon_court.png in Resources */,
 				969A60431EDE62DA00A5D961 /* FeeTransferCell.xib in Resources */,
 				79EC0EDA1E8C85F100320A28 /* icon_phone@2x.png in Resources */,
+				968E85E31EF19573001B442D /* IncreasingCell.xib in Resources */,
 				79FBE0FE1E304F5000448FE3 /* QMNoResultsCell.xib in Resources */,
 				7903CF781ECD34610090206C /* PostCodeCell.xib in Resources */,
 				797ED5261EAF277F009C20C4 /* icon_legalfirm.png in Resources */,
 				793FF23D1EC4D117001F83A5 /* AddLastOneButtonCell.xib in Resources */,
 				7920E7A41E9FA747002FEFF3 /* icon_message_selected@2x.png in Resources */,
+				96CACE061EE243500087E76B /* TaskCheckCell.xib in Resources */,
 				7931B5021EA9B1C50090BDE0 /* icon_forum@2x.png in Resources */,
 				79EC0D151E77013A00320A28 /* SF-UI-Display-Bold.otf in Resources */,
 				79EC0EDB1E8C85F100320A28 /* icon_phone@3x.png in Resources */,
@@ -6357,6 +6544,7 @@
 				79EC0D141E77013A00320A28 /* SF-UI-Display-Black.otf in Resources */,
 				79EC0E6C1E8B0E8300320A28 /* icon_png.png in Resources */,
 				795DF2471E6E4C3F006D617D /* Lato-Light.ttf in Resources */,
+				96C7AFC81EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.xib in Resources */,
 				962083091ED9305600BB595C /* DashboardMatterCell.xib in Resources */,
 				7931B5071EA9B1C50090BDE0 /* icon_search_gray.png in Resources */,
 				962083361EDD510100BB595C /* DashboardStyle4Cell.xib in Resources */,
@@ -6516,6 +6704,7 @@
 				79F9FC7A1E4183B30097CB23 /* HomeViewController.m in Sources */,
 				79FBDFA91E30421A00448FE3 /* UINavigationController+QMNotification.m in Sources */,
 				962082C91ED48D2E00BB595C /* CourtDiaryModel.m in Sources */,
+				96CACE0B1EE24D260087E76B /* TaskCheckListViewController.m in Sources */,
 				79EC0EB61E8BE7F700320A28 /* UpdateViewController.m in Sources */,
 				962082B11ED3CEB900BB595C /* PersonalDiaryViewController.m in Sources */,
 				79F732291E96A929004F88DF /* DEMOCustomAutoCompleteCell.m in Sources */,
@@ -6526,6 +6715,7 @@
 				79EC0CF11E76431900320A28 /* LegalFirmViewController.m in Sources */,
 				79FBDF9E1E30421A00448FE3 /* KeychainWrapper.m in Sources */,
 				79FBE08C1E304EAB00448FE3 /* QMGroupHeaderView.m in Sources */,
+				966A62F81EF4A85E008A25FE /* TransactionDetail.m in Sources */,
 				962082DD1ED7733D00BB595C /* ThreeColumWithDotCell.m in Sources */,
 				79FBE0FA1E304F5000448FE3 /* QMLeaveChatCell.m in Sources */,
 				79F9FC8A1E41881D0097CB23 /* NewsModel.m in Sources */,
@@ -6546,6 +6736,7 @@
 				7903D0751ECE5F340090206C /* SimpleAutocomplete.m in Sources */,
 				79FBE07E1E304EAA00448FE3 /* QMLinkViewController.m in Sources */,
 				79FBDFD01E30421A00448FE3 /* QMMessageNotification.m in Sources */,
+				96C7AFBC1EE82E6D00EF0A37 /* MukimValueList.m in Sources */,
 				79FBDFB01E30421A00448FE3 /* PushManager.m in Sources */,
 				79EC0E081E89661800320A28 /* GovOfficeModel.m in Sources */,
 				79FBDFA41E30421A00448FE3 /* QBUpdateUserParameters+CustomData.m in Sources */,
@@ -6561,6 +6752,7 @@
 				7903CF821ECD3B1C0090206C /* FullPropertyModel.m in Sources */,
 				79FBE1491E30EF0B00448FE3 /* SearchKeywordModel.m in Sources */,
 				790DD4931ECBBCEF009D5634 /* ProjectHousingViewController.m in Sources */,
+				96C7AF461EE590F100EF0A37 /* PostCodeAutoComplete.m in Sources */,
 				79EC0E4E1E8A90E600320A28 /* SearchDocumentCell.m in Sources */,
 				790B23B81E384C040037A187 /* DIHelpers.m in Sources */,
 				79D59A431E959E4100CD3821 /* FavContactsDataSource.m in Sources */,
@@ -6601,6 +6793,7 @@
 				790B23A91E373A140037A187 /* FirmModel.m in Sources */,
 				79F7322B1E96A929004F88DF /* DEMODataSource.m in Sources */,
 				79CE7C821EA78E20001A8101 /* NewLedgerModel.m in Sources */,
+				96C7AF4A1EE6957D00EF0A37 /* MukimModel.m in Sources */,
 				79FBDFDC1E30421A00448FE3 /* QMImages.m in Sources */,
 				79734F841EBA570D00647215 /* AddContactModel.m in Sources */,
 				790B23A61E373A090037A187 /* AddressModel.m in Sources */,
@@ -6647,11 +6840,14 @@
 				79EC0EB21E8BE7F700320A28 /* StamDutyViewController.m in Sources */,
 				79EC0DFD1E895F7E00320A28 /* BankModel.m in Sources */,
 				79FBE0821E304EAA00448FE3 /* QMSplitViewController.m in Sources */,
+				96CACE051EE243500087E76B /* TaskCheckCell.m in Sources */,
+				968E85EB1EF2DB00001B442D /* CountryAutoCompleteViewController.m in Sources */,
 				962083081ED9305600BB595C /* DashboardMatterCell.m in Sources */,
 				79734FA61EBAA40900647215 /* MenuCell.m in Sources */,
 				7903CF591ECC00E20090206C /* SimpleMatterViewController.m in Sources */,
 				79D59A271E95245E00CD3821 /* QMNewMessageViewController.m in Sources */,
 				79FBE08E1E304EAB00448FE3 /* QMLocationPinView.m in Sources */,
+				96C7AFC71EE99CF500EF0A37 /* FloatingTextTwoColumnReversedCell.m in Sources */,
 				793FF1AE1EBF893C001F83A5 /* ClientModel.m in Sources */,
 				79FBDF9F1E30421A00448FE3 /* NSArray+Intersection.m in Sources */,
 				962082B71ED3D03800BB595C /* AddDiaryViewController.m in Sources */,
@@ -6663,6 +6859,7 @@
 				79F732261E96A929004F88DF /* AFHTTPSessionOperation.m in Sources */,
 				79FBDFA71E30421A00448FE3 /* UIImage+fixOrientation.m in Sources */,
 				79FBDFA81E30421A00448FE3 /* UIImage+Base64.m in Sources */,
+				96CACE101EE24E500087E76B /* TaskCheckModel.m in Sources */,
 				79EC0E811E8B5B2700320A28 /* FirmURLModel.m in Sources */,
 				962082C51ED4828E00BB595C /* MatterLitigationViewController.m in Sources */,
 				7903CF481ECC00BB0090206C /* BirthdayCalendarViewController.m in Sources */,
@@ -6679,6 +6876,7 @@
 				7931B5111EAA32780090BDE0 /* MatterLastCell.m in Sources */,
 				793FF2241EC3E8FF001F83A5 /* AddPropertyViewController.m in Sources */,
 				7903CF981ECD58A60090206C /* BranchListViewController.m in Sources */,
+				968E85EF1EF2E74C001B442D /* PhoneNumberAutoComplete.m in Sources */,
 				79FBDFAA1E30421A00448FE3 /* UIPlaceholderTextView.m in Sources */,
 				79FBDFDB1E30421A00448FE3 /* QMImagePreview.m in Sources */,
 				79EC0CF61E7645D400320A28 /* LegalFirmModel.m in Sources */,
@@ -6752,6 +6950,7 @@
 				79F9A8211E6D4CD500E17629 /* NewDeviceLoginViewController.m in Sources */,
 				7903CF491ECC00BB0090206C /* DetailWithAutocomplete.m in Sources */,
 				79FBE0901E304EAB00448FE3 /* QMNavigationBar.m in Sources */,
+				968E85E21EF19573001B442D /* IncreasingCell.m in Sources */,
 				79EC0DF21E88C7D100320A28 /* PartyGroupModel.m in Sources */,
 				79FBE07F1E304EAA00448FE3 /* QMSearchDataProvider.m in Sources */,
 				79D929EC1E8DDD8D000A53D2 /* UpdateModel.m in Sources */,
@@ -6785,6 +6984,7 @@
 				79FBE1111E304F5000448FE3 /* QMFeedbackViewController.m in Sources */,
 				797ED5031EAED9F2009C20C4 /* NewContactHeaderCell.m in Sources */,
 				79FBE10D1E304F5000448FE3 /* QMGroupNameViewController.m in Sources */,
+				968E85F31EF431DC001B442D /* SearchMatterCodeDetail.m in Sources */,
 				790DD4821ECA73A1009D5634 /* QuotationGetListViewController.m in Sources */,
 				962082A01ED2C6DA00BB595C /* PropertyAutoComplete.m in Sources */,
 				79EC0E3A1E8A0A2600320A28 /* FolderModel.m in Sources */,
@@ -6804,6 +7004,7 @@
 				7931B4F71EA98F1B0090BDE0 /* DICustomTableViewController.m in Sources */,
 				79FBE1FB1E31600F00448FE3 /* QMLogInViewController.m in Sources */,
 				7903CF551ECC00CE0090206C /* TimePickerViewController.m in Sources */,
+				96CACE141EE252E00087E76B /* DashboardLedgerModel.m in Sources */,
 				790DD4971ECBBD38009D5634 /* ProjectHousingModel.m in Sources */,
 				79FBDFB21E30421A00448FE3 /* QMChatManager.m in Sources */,
 				796BBF9F1EA7B3CE001DA47F /* NewLedgerDetailCell.m in Sources */,
@@ -6830,6 +7031,7 @@
 				793FF1DB1EC382F8001F83A5 /* AddBillViewController.m in Sources */,
 				7903D0841ECECBA10090206C /* PropertyListViewController.m in Sources */,
 				7903D0961ECF9B520090206C /* TypeValueModel.m in Sources */,
+				968E85E71EF1A861001B442D /* YHCPickerView.m in Sources */,
 				795DF25A1E6F04E0006D617D /* CategorySelectViewController.m in Sources */,
 				79FBDFA61E30421A00448FE3 /* UIColor+CustomColors.m in Sources */,
 				962082FF1ED9149700BB595C /* ItemModel.m in Sources */,

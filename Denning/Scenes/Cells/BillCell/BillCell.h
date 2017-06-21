@@ -16,6 +16,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *primaryClient;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *issueBy;
+@property (weak, nonatomic) IBOutlet UILabel *fees;
+@property (weak, nonatomic) IBOutlet UILabel *disbGST;
+@property (weak, nonatomic) IBOutlet UILabel *disb;
+@property (weak, nonatomic) IBOutlet UILabel *GST;
+@property (weak, nonatomic) IBOutlet UILabel *total;
 
 - (void) configureCellWithMatterSimple:(QuotationModel*) model;
 

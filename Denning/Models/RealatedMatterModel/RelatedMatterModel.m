@@ -18,13 +18,18 @@
     relatedMatter.systemNo = [response objectForKey:@"systemNo"];
     
     relatedMatter.clientName = [NSString stringWithFormat:@"%@", [[response objectForKeyNotNull:@"primaryClient"] valueForKeyNotNull:@"name"]];
-    relatedMatter.contactCode = [[[response objectForKeyNotNull:@"primaryClient"] valueForKeyNotNull:@"code"] stringValue];
-    relatedMatter.openDate = [response objectForKey:@"dateOpen"];
-    relatedMatter.ref = [response objectForKey:@"referenceNo"];
-    if ([relatedMatter.ref isKindOfClass:[NSNull class]]) {
-        relatedMatter.ref = @"";
-    }
-    relatedMatter.matter = [[response objectForKeyNotNull:@"matter"] valueForKeyNotNull:@"description"];
+    relatedMatter.contactCode = [[response objectForKeyNotNull:@"primaryClient"] valueForKeyNotNull:@"code"];
+    relatedMatter.openDate = [response valueForKeyNotNull:@"dateOpen"];
+    relatedMatter.ref = [response valueForKeyNotNull:@"referenceNo"];
+    relatedMatter.fileStatus = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"fileStatus"]];
+    relatedMatter.locationBox = [response valueForKeyNotNull:@"locationBox"];
+    relatedMatter.locationPocket = [response valueForKeyNotNull:@"locationPocket"];
+    relatedMatter.locationPhysical = [response valueForKeyNotNull:@"locationPhysical"];
+    relatedMatter.dateClose = [response valueForKeyNotNull:@"dateClose"];
+    
+    relatedMatter.legalAssistant = [StaffModel getStaffFromResponse:[response objectForKeyNotNull:@"legalAssistant"]];
+    
+    relatedMatter.matter = [MatterCodeModel getMatterCodeFromResponse:[response objectForKeyNotNull:@"matter"]];
     
     relatedMatter.partner = [StaffModel getStaffFromResponse:[response objectForKeyNotNull:@"partner"]];
     
@@ -55,7 +60,7 @@
     
     for (id group in response) {
          PartyGroupModel* partyGroupModel = [PartyGroupModel new];
-        partyGroupModel.partyGroupName = [group objectForKey:@"PartyName"];
+        partyGroupModel.partyGroupName = [group objectForKeyNotNull:@"PartyName"];
         partyGroupModel.partyArray = [PartyModel getPartyArrayFromResponse:[group objectForKeyNotNull:@"party"]];
         [partyGroupArray addObject:partyGroupModel];
     }

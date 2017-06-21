@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class MLPAutoCompleteTextField;
-typedef void (^UpdatePropertyAutocompletHandler)(NSString* model);
+typedef void (^UpdatePropertyAutocompletHandler)(ProjectHousingModel* model);
 
 @interface PropertyAutoComplete : UIViewController
 

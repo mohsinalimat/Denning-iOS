@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^UpdateAutocompletHandler)(NSString* model);
+typedef void (^UpdateSimpleAutocompletHandler)(NSString* model);
 
 @interface SimpleAutocomplete : UIViewController
 
 
 @property (strong, nonatomic) NSString* url;
 
-@property (strong, nonatomic) UpdateAutocompletHandler updateHandler;
+@property (strong, nonatomic) UpdateSimpleAutocompletHandler updateHandler;
 @end

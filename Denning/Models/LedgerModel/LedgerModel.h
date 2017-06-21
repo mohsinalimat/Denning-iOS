@@ -11,7 +11,7 @@
 @interface LedgerModel : NSObject
 
 @property (strong, nonatomic) NSString* accountName;
-@property (strong, nonatomic) NSString* accountType;
+@property (strong, nonatomic) NSString* urlDetail;
 @property (strong, nonatomic) NSString* availableBalance;
 @property (strong, nonatomic) NSString* currentBalance;
 @property (strong, nonatomic) NSString* lastStatementDate;

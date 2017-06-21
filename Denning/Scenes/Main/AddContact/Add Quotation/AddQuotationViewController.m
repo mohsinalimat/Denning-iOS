@@ -20,6 +20,7 @@
     NSString* nameOfField;
     __block NSString *isRental;
     __block NSNumber* issueToFirstCode;
+    NSString* selectedMaterCode, *selectedPresetCode;
     __block BOOL isLoading;
     __block BOOL isSaved;
 }
@@ -48,7 +49,7 @@ NSMutableDictionary* keyValue;
                        @(0): @(1), @(1):@(0)
                        } mutableCopy];
     NSArray* temp = @[
-                      @[@[@"Quotation No.", @""], @[@"File No.", @""], @[@"Matter", @""], @[@"Quotation to", @""], @[@"Preset Code", @""], @[@"Price", @""], @[@"Loan", @""], @[@"Month", @""], @[@"Rental", @""]],
+                      @[@[@"Quotation No (Auto assinged)", @""], @[@"File No.", @""], @[@"Matter", @""], @[@"Quotation to", @""], @[@"Preset Code", @""], @[@"Price", @""], @[@"Loan", @""], @[@"Month", @""], @[@"Rental", @""]],
                       @[@[@"Professional Fees", @""], @[@"Disb. with GST", @""], @[@"Disbursements", @""], @[@"GST", @""], @[@"Total.", @""]
                         ],
                       ];
@@ -119,10 +120,10 @@ NSMutableDictionary* keyValue;
                            },
                            @"issueToName": _contents[0][3][1],
                            @"matter": @{
-                               @"code": _contents[0][2][1]
+                               @"code": selectedMaterCode
                            },
                            @"presetCode": @{
-                               @"code": _contents[0][4][1]
+                               @"code": selectedPresetCode
                            },
                            @"relatedDocumentNo": @"",
                            @"spaPrice": [self getValidValue:_contents[0][5][1]],
@@ -179,28 +180,9 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) updateWholeData: (NSDictionary*) result {
-    isRental =  [result objectForKeyNotNull:@"isRental"];
-    issueToFirstCode =  [result valueForKeyNotNull:@"issueTo1stCode"];
-    NSString* issueToName =  [result valueForKeyNotNull:@"issueToName"];
     NSString* documentNo = [result valueForKeyNotNull:@"documentNo"];
-    NSString* fileNo = [result valueForKeyNotNull:@"fileNo"];
-    NSString* matterCode = [result valueForKeyNotNull:@"matter"];
-    NSString* presetCode = [result valueForKeyNotNull:@"presetCode"];
-    NSString* rentalMonth = [result valueForKeyNotNull:@"rentalMonth"];
-    NSString* rentalPrice = [result valueForKeyNotNull:@"rentalPrice"];
-    NSString* spaLoan = [result valueForKeyNotNull:@"spaLoan"];
-    NSString* spaPrice = [result valueForKeyNotNull:@"spaPrice"];
     
     [self replaceContentForSection:0 InRow:0 withValue:documentNo];
-    [self replaceContentForSection:0 InRow:1 withValue:fileNo];
-    [self replaceContentForSection:0 InRow:2 withValue:matterCode];
-    [self replaceContentForSection:0 InRow:3 withValue:issueToName];
-    [self replaceContentForSection:0 InRow:4 withValue:presetCode];
-
-    [self replaceContentForSection:0 InRow:5 withValue:spaPrice];
-    [self replaceContentForSection:0 InRow:6 withValue:spaLoan];
-    [self replaceContentForSection:0 InRow:7 withValue:rentalMonth];
-    [self replaceContentForSection:0 InRow:8 withValue:rentalPrice];
     
     [self updateBelowViewWithData:[result objectForKeyNotNull:@"analysis"]];
 }
@@ -221,6 +203,8 @@ NSMutableDictionary* keyValue;
 
 - (NSString*) getValidValue: (NSString*) value
 {
+    value = [value stringByReplacingOccurrencesOfString:@"," withString:@""];
+    
     if ([value isKindOfClass:[NSNumber class]]) {
         value = [((NSNumber*)value) stringValue];
     }
@@ -270,7 +254,7 @@ NSMutableDictionary* keyValue;
                                    @"rentalMonth": [self getValidValue:_contents[0][7][1]],
                                    @"rentalPrice": [self getValidValue:_contents[0][8][1]],
                                    @"presetCode": @{
-                                       @"code": _contents[0][4][1]
+                                       @"code": selectedPresetCode
                                    }
                                    };
             
@@ -333,10 +317,11 @@ NSMutableDictionary* keyValue;
             }];
             [downloadTask resume];
         };
-        
+        cell.saveHandler = ^{
+            [self saveQuotaion:nil];
+        };
         cell.convertHandler = ^{
-            
-
+            [self performSegueWithIdentifier:kAddReceiptSegue sender:nil];
         };
         return cell;
     }
@@ -365,8 +350,9 @@ NSMutableDictionary* keyValue;
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
     if (indexPath.section == 0) {
-        if (indexPath.row == 1 || indexPath.row == 2  || indexPath.row == 4) {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (indexPath.row >= 1 && indexPath.row <= 4) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.floatingTextField.userInteractionEnabled = NO;
         }
         
         cell.hidden = NO;
@@ -380,6 +366,15 @@ NSMutableDictionary* keyValue;
                 cell.hidden = YES;
                 cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
             }
+        }
+    }
+    
+    if (indexPath.section == 1) {
+        cell.floatingTextField.userInteractionEnabled = NO;
+        if (indexPath.row == 4) {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
     
@@ -424,14 +419,8 @@ NSMutableDictionary* keyValue;
 {
     if (textField.tag == 5 || textField.tag == 6 || textField.tag == 7 || textField.tag == 8) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
-        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
-        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
-        textField.text = formattedNumberString;
+        
+        textField.text = [DIHelpers formatDecimal:text];
     }
     
     return NO;
@@ -622,8 +611,9 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kMatterCodeSegue]) {
         ListOfMatterViewController* matterVC = segue.destinationViewController;
         matterVC.updateHandler = ^(MatterCodeModel *model) {
-            [self replaceContentForSection:0 InRow:2 withValue:model.matterCode];
+            [self replaceContentForSection:0 InRow:2 withValue:model.matterDescription];
             isRental = model.isRental;
+            selectedMaterCode = model.matterCode;
         };
         
     }
@@ -631,8 +621,8 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kPresetBillSegue]) {
         PresetBillViewController* billVC = segue.destinationViewController;
         billVC.updateHandler = ^(PresetBillModel *model) {
-            [self replaceContentForSection:0 InRow:4 withValue:model.billCode];
-            
+            [self replaceContentForSection:0 InRow:4 withValue:model.billDescription];
+            selectedPresetCode = model.billCode;
         };
     }
 }

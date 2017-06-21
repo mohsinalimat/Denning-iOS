@@ -15,4 +15,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 
 - (void) configureCellWithValue: (NSString*) value;
+- (void) configureCellWithString: (NSString*) string;
 @end

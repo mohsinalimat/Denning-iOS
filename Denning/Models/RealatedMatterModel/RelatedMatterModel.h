@@ -14,6 +14,7 @@
 @class PartyModel;
 @class CourtModel;
 @class StaffModel;
+@class MatterCodeModel;
 
 @interface RelatedMatterModel : NSObject
 
@@ -28,7 +29,21 @@
 
 @property (strong, nonatomic) NSString * ref;
 
-@property (strong, nonatomic) NSString * matter;
+@property (strong, nonatomic) StaffModel * legalAssistant;
+
+@property (strong, nonatomic) NSString *fileLocation;
+
+@property (strong, nonatomic) NSString* locationBox;
+
+@property (strong, nonatomic) NSString* locationPhysical;
+
+@property (strong, nonatomic) NSString* locationPocket;
+
+@property (strong, nonatomic) NSString* dateClose;
+
+@property (strong, nonatomic) MatterCodeModel * matter;
+
+@property (strong, nonatomic) CodeDescription* fileStatus;
 
 // Court Information
 @property (strong, nonatomic) CourtModel* court;    

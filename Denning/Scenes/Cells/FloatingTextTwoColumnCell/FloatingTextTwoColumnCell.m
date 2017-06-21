@@ -10,9 +10,19 @@
 
 @implementation FloatingTextTwoColumnCell
 
-
-- (IBAction)didTapTypeField:(id)sender {
-    self.updateHandler();
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    self.rightDetailDisclosure.hidden = YES;
 }
+
+- (IBAction)didTapTypeField:(UITextField*)sender {
+    self.updateTypeHandler();
+}
+- (IBAction)didTapValueField:(UITextField*)sender {
+    self.updateValueHandler();
+}
+
+
 
 @end

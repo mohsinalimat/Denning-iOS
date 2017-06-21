@@ -16,6 +16,8 @@
 >
 {
     NSString* customString;
+    NSArray* curArray;
+    CodeDescription* curModel;
     NSString* serverAPI;
 }
 
@@ -93,10 +95,39 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStylePlain target:self action:@selector(nextBtnDidTap)];
 }
 
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    customString = [DIHelpers capitalizedString:textField.text];
+    return YES;
+}
+
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    customString = [DIHelpers capitalizedString:textField.text];
+}
+
+- (void) selectModel {
+    BOOL isSame = NO;
+    for (CodeDescription* model in curArray) {
+        if ([model.descriptionValue isEqualToString:customString]) {
+            curModel = model;
+            isSame = YES;
+            break;
+        }
+    }
+    
+    if (!isSame) {
+        curModel = [CodeDescription new];
+        curModel.codeValue = @"";
+        curModel.descriptionValue = customString;
+    }
+}
+
 - (void) nextBtnDidTap
 {
+    [self selectModel];
     [self.popupController dismissWithCompletion:^{
-        self.updateHandler(customString);
+        self.updateHandler(curModel);
     }];
 }
 

@@ -138,18 +138,24 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return 1;
+    return self.listOfQuotations.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.listOfQuotations.count;
+    return 1;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    
+    return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BillCell *cell = [tableView dequeueReusableCellWithIdentifier:[BillCell cellIdentifier] forIndexPath:indexPath];
     
-    QuotationModel *model = self.listOfQuotations[indexPath.row];
+    QuotationModel *model = self.listOfQuotations[indexPath.section];
     [cell configureCellWithMatterSimple:model];
     
     return cell;
@@ -157,7 +163,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TaxModel *model = self.listOfQuotations[indexPath.row];
+    TaxModel *model = self.listOfQuotations[indexPath.section];
     self.updateHandler(model);
     [self.navigationController popViewControllerAnimated:YES];
 }

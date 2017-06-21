@@ -14,27 +14,27 @@
 {
     ContactModel *contactModel = [ContactModel new];
     
-    contactModel.contactCode = [[response objectForKeyNotNull:@"code"] stringValue];
+    contactModel.contactCode = [response valueForKeyNotNull:@"code"];
     contactModel.idType = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"idType"]];
-    contactModel.IDNo = [response objectForKeyNotNull:@"IDNo"];
-    contactModel.name = [response objectForKeyNotNull:@"name"];
-    contactModel.homePhone = [response objectForKeyNotNull:@"phoneHome"];
-    contactModel.mobilePhone = [response objectForKeyNotNull:@"phoneMobile"];
-    contactModel.officePhone = [response objectForKeyNotNull:@"phoneOffice"];
-    contactModel.email = [response objectForKeyNotNull:@"emailAddress"];
+    contactModel.IDNo = [response valueForKeyNotNull:@"IDNo"];
+    contactModel.name = [response valueForKeyNotNull:@"name"];
+    contactModel.homePhone = [response valueForKeyNotNull:@"phoneHome"];
+    contactModel.mobilePhone = [response valueForKeyNotNull:@"phoneMobile"];
+    contactModel.officePhone = [response valueForKeyNotNull:@"phoneOffice"];
+    contactModel.email = [response valueForKeyNotNull:@"emailAddress"];
     contactModel.address = [AddressModel getAddressFromResponse:[response objectForKeyNotNull:@"address"]];
     
-    contactModel.dateOfBirth = [response objectForKeyNotNull:@"dateBirth"];
-    contactModel.citizenShip = [response objectForKeyNotNull:@"citizenship"];
-    contactModel.fax = [response objectForKeyNotNull:@"phoneFax"];
+    contactModel.dateOfBirth = [response valueForKeyNotNull:@"dateBirth"];
+    contactModel.citizenShip = [response valueForKeyNotNull:@"citizenship"];
+    contactModel.fax = [response valueForKeyNotNull:@"phoneFax"];
     contactModel.tax = [response valueForKeyNotNull:@"taxFileNo"];
     contactModel.IRDBranch = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"irdBranch"]];
-    contactModel.idType = [response objectForKeyNotNull:@"idType"];
-    contactModel.contactTitle = [response objectForKeyNotNull:@"title"];
-    contactModel.contactPerson = [response objectForKeyNotNull:@"contactPerson"];
-    contactModel.website = [response objectForKeyNotNull:@"website"];
-    contactModel.InviteDennig = [response objectForKeyNotNull:@"InviteDennig"];
-    contactModel.registeredOffice = [response objectForKeyNotNull:@"registeredOffice"];
+    contactModel.idType = [response valueForKeyNotNull:@"idType"];
+    contactModel.contactTitle = [response valueForKeyNotNull:@"title"];
+    contactModel.contactPerson = [response valueForKeyNotNull:@"contactPerson"];
+    contactModel.website = [response valueForKeyNotNull:@"website"];
+    contactModel.InviteDennig = [response valueForKeyNotNull:@"InviteDennig"];
+    contactModel.registeredOffice = [response valueForKeyNotNull:@"registeredOffice"];
     contactModel.occupation = [CodeDescription getCodeDescriptionFromResponse:[response objectForKeyNotNull:@"occupation"]];
     
     contactModel.relatedMatter = [SearchResultModel getSearchResultArrayFromResponse:[response objectForKeyNotNull:@"relatedMatter"]];

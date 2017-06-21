@@ -19,6 +19,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.amount.copyingEnabled = YES;
+    self.documentNo.copyingEnabled = YES;
+    self.descriptionLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

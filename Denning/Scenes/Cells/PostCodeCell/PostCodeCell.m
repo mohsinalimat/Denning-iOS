@@ -13,6 +13,10 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.postCode.copyingEnabled = YES;
+    self.city.copyingEnabled = YES;
+    self.country.copyingEnabled = YES;
+    self.state.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

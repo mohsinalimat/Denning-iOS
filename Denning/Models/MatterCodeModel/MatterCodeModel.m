@@ -13,18 +13,18 @@
 + (MatterCodeModel*) getMatterCodeFromResponse:(NSDictionary*) response
 {
     MatterCodeModel* model = [MatterCodeModel new];
-    model.category = [response objectForKeyNotNull:@"category"];
-    model.matterCode = [response objectForKeyNotNull:@"code"];
-    model.matterDescription = [response objectForKeyNotNull:@"description"];
-    model.department = [response objectForKeyNotNull:@"department"];
-    model.formName = [response objectForKeyNotNull:@"formName"];
-    model.groupName1 = [response objectForKeyNotNull:@"groupName1"];
-    model.groupName2 = [response objectForKeyNotNull:@"groupName2"];
-    model.groupName3 = [response objectForKeyNotNull:@"groupName3"];
-    model.groupName4 = [response objectForKeyNotNull:@"groupName4"];
-    model.groupName5 = [response objectForKeyNotNull:@"groupName5"];
-    model.isRental = [response objectForKeyNotNull:@"isRental"];
-    model.turnAround = [response objectForKeyNotNull:@"turnAround"];
+    model.category = [response valueForKeyNotNull:@"category"];
+    model.matterCode = [response valueForKeyNotNull:@"code"];
+    model.matterDescription = [response valueForKeyNotNull:@"description"];
+    model.department = [response valueForKeyNotNull:@"department"];
+    model.formName = [response valueForKeyNotNull:@"formName"];
+    model.groupName1 = [response valueForKeyNotNull:@"groupName1"];
+    model.groupName2 = [response valueForKeyNotNull:@"groupName2"];
+    model.groupName3 = [response valueForKeyNotNull:@"groupName3"];
+    model.groupName4 = [response valueForKeyNotNull:@"groupName4"];
+    model.groupName5 = [response valueForKeyNotNull:@"groupName5"];
+    model.isRental = [response valueForKeyNotNull:@"isRental"];
+    model.turnAround = [response valueForKeyNotNull:@"turnAround"];
     
     return model;
 }

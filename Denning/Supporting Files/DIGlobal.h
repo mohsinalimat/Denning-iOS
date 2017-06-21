@@ -194,6 +194,8 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define PROPERTY_MUKIM_TYPE_GET_URL     @"denningwcf/v1/Property/MukimType?search="
 
+#define PROPERTY_MUKIM_GET_LIST_URL @"denningwcf/v1/Mukim?search="
+
 #define PROPERTY_AREA_TYPE_GET_URL  @"denningwcf/v1/Property/AreaType?search="
 
 #define PROPERTY_TENURE_TYPE_GET_URL    @"denningwcf/v1/Property/TenureType?search="
@@ -201,6 +203,8 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define PROPERTY_RESTRICTION_GET_URL    @"denningwcf/v1/generalSelection/frmProperty/restrictionInInterest?search="
 
 #define PROPERTY_RESTRICTION_AGAINST_GET_URL    @"denningwcf/v1/Property/RestrictionAgainst?search="
+
+#define PROPERTY_APPROVING_AUTHORITY_GET_URL    @"denningwcf/v1/generalSelection/frmProperty/ApprovingAuthority?search="
 
 #define PROPERTY_LANDUSE_GET_URL    @"denningwcf/v1/Property/LandUse?search="
 

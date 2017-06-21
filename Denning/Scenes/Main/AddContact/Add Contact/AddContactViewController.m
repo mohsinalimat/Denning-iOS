@@ -14,11 +14,17 @@
 #import "ContactViewController.h"
 #import "BranchListViewController.h"
 #import "SimpleAutocomplete.h"
+#import "PostCodeAutoComplete.h"
+#import "DetailWithAutocomplete.h"
+#import "CountryAutoCompleteViewController.h"
+#import "PhoneNumberAutoComplete.h"
 #import <NBPhoneNumberUtil.h>
 #import <NBPhoneNumber.h>
 
 @interface AddContactViewController() <SWTableViewCellDelegate>
 {
+    NSInteger selectedRow;
+    
     NSString* titleOfList;
     NSString* nameOfField;
     NSString* selectedIDTypeCode;
@@ -47,6 +53,8 @@
     NSString* selectedPhoneFax;
     
     NSInteger phoneTag;
+    
+    NSArray* headers;
 }
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *IDType;
@@ -120,24 +128,7 @@
     [super viewDidLoad];
     
     [self prepareUI];
-    [self parseJSON];
     [self setDefaultCountryCode];
-}
-
-- (void)parseJSON {
-    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"countries" ofType:@"json"]];
-    NSError *localError = nil;
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
-    
-    if (localError != nil) {
-        NSLog(@"%@", [localError userInfo]);
-    }
-    countriesList = (NSArray *)parsedObject;
-    countriesNameList = [NSMutableArray new];
-    for (id obj in countriesList) {
-        NSString* countryNameAndCode = [NSString stringWithFormat:@"%@ (%@)",[obj objectForKey:kCountryName],  [obj objectForKey:kCountryCallingCode]];
-        [countriesNameList addObject:countryNameAndCode];
-    }
 }
 
 - (void) setDefaultCountryCode
@@ -146,6 +137,15 @@
     NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
     NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
     NSString *buttonTitle;
+    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"countries" ofType:@"json"]];
+    NSError *localError = nil;
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
+    
+    if (localError != nil) {
+        NSLog(@"%@", [localError userInfo]);
+    }
+    
+    countriesList = (NSArray *)parsedObject;
     for (id obj in countriesList) {
         if ([[obj objectForKey:kCountryCode] isEqualToString:countryCode]) {
             buttonTitle = [NSString stringWithFormat:@"(%@)", [obj objectForKey:kCountryCallingCode]];
@@ -165,64 +165,54 @@
 
 - (IBAction)didTapHomeBtn:(id)sender {
     phoneTag = 1;
-    [self showCountryCodeList:self.phoneHomeBtn];
+    [self showCountryCodeList:_phoneHomeBtn];
 }
 
 - (IBAction)didTapMobileBtn:(id)sender {
     phoneTag = 2;
-   [self showCountryCodeList:self.phoneMobileBtn];
+   [self showCountryCodeList:_phoneMobileBtn];
 }
 
 - (IBAction)didTapOfficeBtn:(id)sender {
     phoneTag = 2;
-    [self showCountryCodeList:self.phoneOfficeBtn];
+    [self showCountryCodeList:_phoneOfficeBtn];
 }
 
 - (IBAction)didTapFaxbtn:(id)sender {
     phoneTag = 3;
-    [self showCountryCodeList:self.faxBtn];
+    [self showCountryCodeList:_faxBtn];
 }
 
-
 - (void) showCountryCodeList:(UIButton*) countryBtn {
-    __block NSString* countryCode, *countryCallingCode;
+    PhoneNumberAutoComplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"PhoneNumberAutoComplete"];
     
-    [ActionSheetStringPicker showPickerWithTitle:@"Select a Contry Code"
-                                            rows:countriesNameList
-                                initialSelection:0
-                                       doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-                                           countryCode = [countriesList[selectedIndex] objectForKey:kCountryCode];
-                                           countryCallingCode = [countriesList[selectedIndex] objectForKey:kCountryCallingCode];
-                                           switch (phoneTag) {
-                                               case 1:
-                                                   homeCountryCode = countryCode;
-                                                   homeCountryCallingCode = countryCallingCode;
-                                                   break;
-                                               case 2:
-                                                   mobileCountryCode = countryCode;
-                                                   mobileCountryCallingCode = countryCallingCode;
-                                                   break;
-                                               case 3:
-                                                   officeCountryCode = countryCode;
-                                                   officeCountryCallingCode = countryCallingCode;
-                                                   break;
-                                               case 4:
-                                                   faxCountryCode = countryCode;
-                                                   faxCountryCallingCode = countryCallingCode;
-                                                   break;
-                                                   
-                                               default:
-                                                   break;
-                                           }
-                                           
-                                           NSString *buttonTitle = [NSString stringWithFormat:@"(%@)",countryCallingCode];
-                                           [countryBtn setTitle: buttonTitle forState:UIControlStateNormal];
-                                       }
-     
-                                     cancelBlock:^(ActionSheetStringPicker *picker) {
-                                         NSLog(@"Block Picker Canceled");
-                                     }
-                                          origin:countryBtn];
+    vc.updateHandler =  ^(NSString* countryCode, NSString* countryCallingCode) {
+        switch (phoneTag) {
+            case 1:
+                homeCountryCode = countryCode;
+                homeCountryCallingCode = countryCallingCode;
+                break;
+            case 2:
+                mobileCountryCode = countryCode;
+                mobileCountryCallingCode = countryCallingCode;
+                break;
+            case 3:
+                officeCountryCode = countryCode;
+                officeCountryCallingCode = countryCallingCode;
+                break;
+            case 4:
+                faxCountryCode = countryCode;
+                faxCountryCallingCode = countryCallingCode;
+                break;
+                
+            default:
+                break;
+        }
+        
+        NSString *buttonTitle = [NSString stringWithFormat:@"(%@)",countryCallingCode];
+        [countryBtn setTitle: buttonTitle forState:UIControlStateNormal];
+    };
+    [self showPopup:vc];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -233,6 +223,107 @@
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+- (void) showPopup: (UIViewController*) vc {
+    STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
+    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
+    [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
+    [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
+    [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    popupController.transitionStyle = STPopupTransitionStyleFade;;
+    popupController.containerView.layer.cornerRadius = 4;
+    popupController.containerView.layer.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor;
+    popupController.containerView.layer.shadowOffset = CGSizeMake(4, 4);
+    popupController.containerView.layer.shadowOpacity = 1;
+    popupController.containerView.layer.shadowRadius = 1.0;
+    
+    [popupController presentInViewController:self];
+}
+
+- (void) showCountryAutocomplete:(NSString*) url {
+    [self.view endEditing:YES];
+    
+    CountryAutoCompleteViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CountryAutoCompleteViewController"];
+
+    vc.updateHandler =  ^(NSString* model) {
+        self.country.text = model;
+    };
+    [self showPopup:vc];
+}
+
+- (void) showDetailAutocomplete:(NSString*) url {
+    [self.view endEditing:YES];
+    
+    DetailWithAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailWithAutocomplete"];
+    vc.url = url;
+    vc.updateHandler =  ^(CodeDescription* model) {
+        if ([nameOfField isEqualToString:@"Occupation"]) {
+            self.occupation.text = model.descriptionValue;
+            selectedOccupationCode = model.codeValue;
+        } else {
+            self.citizenship.text = model.descriptionValue;
+            selectedCitizenCode = model.codeValue;
+        }
+        
+    };
+    [self showPopup:vc];
+}
+
+
+
+- (void) showCountryCallingCode{
+//    NSMutableArray* countriesArray = [[NSMutableArray alloc] init];
+//    
+//    NSLocale *locale = [NSLocale currentLocale];
+//    
+//    NSArray *countryArray = [NSLocale ISOCountryCodes];
+//    for (NSString *countryCode in countryArray)
+//    {
+//
+//        NSString *displayNameString = [locale displayNameForKey:NSLocaleCountryCode value:countryCode];
+//        [countriesArray addObject:displayNameString];
+//    }
+    
+    
+    
+//    YHCPickerView *objYHCPickerView = [[YHCPickerView alloc] initWithFrame:CGRectMake(0, 0, 320, 480) withNSArray:countriesNameList];
+//    
+//    objYHCPickerView.delegate = self;
+//    [self.tableView addSubview:objYHCPickerView];
+//    [objYHCPickerView showPicker];
+}
+
+- (void) showSimpleAutocomplete:(NSString*) url {
+    [self.view endEditing:YES];
+    
+    SimpleAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"SimpleAutocomplete"];
+    vc.url = url;
+    vc.title = titleOfList;
+    vc.updateHandler =  ^(NSString* selectedString) {
+        [self didSelectListWithDescription:nil name:nameOfField withString:selectedString];
+    };
+    
+    [self showPopup:vc];
+}
+
+
+- (void) showPostcodeAutocomplete: (NSString*) url {
+    [self.view endEditing:YES];
+    
+    PostCodeAutoComplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"PostCodeAutoComplete"];
+    vc.url = url;
+    vc.title = @"Postcode";
+    vc.updateHandler =  ^(CityModel* city) {
+        self.postcode.text = city.postcode;
+        self.town.text = city.city;
+        self.state.text = city.state;
+        self.country.text = city.country;
+    };
+    
+    [self showPopup:vc];
+}
+
 
 - (BOOL) checkPhoneValidation:(NSString*) selectedCountryCallingCode selectedCountryCode:(NSString*)selectedCountryCode textfield:(UITextField*)phoneField
 {
@@ -258,13 +349,13 @@
         return NO;
     }
     
-    if (self.IDNo.text.length == 0) {
-        [QMAlert showAlertWithMessage:@"ID No is must" actionSuccess:NO inViewController:self];
+    if ([selectedIDTypeCode integerValue] == 1 && self.oldIC.text.length == 0) {
+        [QMAlert showAlertWithMessage:@"Please input the Old IC" actionSuccess:NO inViewController:self];
         return NO;
     }
-    
+
     if (self.name.text.length == 0) {
-        [QMAlert showAlertWithMessage:@"ID No is must" actionSuccess:NO inViewController:self];
+        [QMAlert showAlertWithMessage:@"Name is must" actionSuccess:NO inViewController:self];
         return NO;
     }
     
@@ -298,16 +389,16 @@
     return value;
 }
 
-- (NSString*) getValidValue: (NSString*) value
+- (id) getValidValue: (NSString*) value
 {
-    if (value.length == 0) {
+    if (value == nil || value.length == 0) {
         return @"0";
     }
     else {
-       return value;
+        return value;
     }
-    
-    return value;
+
+    return @"0";
 }
 
 - (IBAction)saveContact:(id)sender {
@@ -316,7 +407,7 @@
     }
     
     NSDictionary* address = @{@"city": [self getValidValue:self.town.text],
-                              @"state": [self getValidValue:self.state.text],
+                              @"state": [self getNotNull:self.state.text],
                               @"country": [self getNotNull:self.country.text],
                               @"postcode": [self getValidValue:self.postcode.text],
                               @"fullAddress":@"",
@@ -329,11 +420,11 @@
         selectedPhoneHome = [homeCountryCallingCode stringByAppendingString: self.phoneHome.text];
     }
     selectedPhoneMobile = @"";
-    if (self.phoneHome.text.length > 0) {
+    if (self.phoneMobile.text.length > 0) {
         selectedPhoneMobile = [mobileCountryCallingCode stringByAppendingString: self.phoneMobile.text];
     }
     selectedPhoneOffice = @"";
-    if (self.phoneHome.text.length > 0) {
+    if (self.phoneOffice.text.length > 0) {
         selectedPhoneOffice = [officeCountryCallingCode stringByAppendingString: self.phoneOffice.text];
     }
     
@@ -375,22 +466,37 @@
                            @"InviteToDenning":inviteToDenning
                            } mutableCopy];
     
-    if (self.viewType.length == 0) {
+    
+    if (self.viewType == nil || self.viewType.length == 0) {
         [self _save:data];
     } else {
         [self _update:data];
     }
 }
 
+- (void) clearInput {
+  self.IDType.text =  self.contactTitle.text = self.oldIC.text = self.IDNo.text = self.name.text = self.address1.text = self.address2.text = self.address3.text = self.registeredOffice.text = self.postcode.text = self.town.text = self.state.text = self.country.text = self.phoneMobile.text = self.phoneOffice.text = self.phoneHome.text = self.fax.text = self.contactTitle.text = self.IDType.text = self.email.text = self.website.text = self.contactPerson.text = self.dateOfBirth.text = self.occupation.text =  self.citizenship.text = self.taxFileNo.text = self.IRDBranch.text = self.registeredOffice.text = @"";
+    
+    self.inviteDenning.on = NO;
+    selectedIDTypeCode = @"-1";
+    selectedTitleCode = @"-1";
+    selectedOccupationCode = @"-1";
+    selectedIRDBranchCode = @"-1";
+}
+
 - (void) _save: (NSDictionary*)data {
     
-    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"Saving", nil) duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
     
+    @weakify(self)
     [[QMNetworkManager sharedManager] saveContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
+        @strongify(self)
         if (error == nil) {
+            [self clearInput];
+            
             [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully Saved" duration:1.0];
             [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
             return;
@@ -419,14 +525,17 @@
 }
 
 - (void) prepareUI {
+    headers = @[@"Personal Info.", @"Contact Info", @"Other Info.", @"Company Info", @"Invitation"];
+    
     if (self.viewType.length == 0) {
         self.contactModel = [ContactModel new];
         [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
     } else {
         self.IDType.text = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"description"];
         selectedIDTypeCode = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"code"];
+        [self applyValidateRuleOfID];
         self.IDNo.text = self.contactModel.IDNo;
-//        self.oldIC.text = self.contactModel
+//        self.oldIC.text = self.contactModel.
         self.name.text = self.contactModel.name;
         self.contactTitle.text = self.contactModel.contactTitle;
         self.address1.text = self.contactModel.address.line1;
@@ -518,9 +627,7 @@
     self.website.inputAccessoryView = accessoryView;
     self.registeredOffice.inputAccessoryView = accessoryView;
     
-    self.oldIC.delegate = self.IDNo.delegate = self.name.delegate = self.address1.delegate = self.address2.delegate = self.address3.delegate = self.registeredOffice.delegate = self.postcode.delegate = self.town.delegate = self.state.delegate = self.country.delegate = self.contactTitle.delegate = self.IDType.delegate = self.contactPerson.delegate = self.citizenship.delegate = self.taxFileNo.delegate = self.IRDBranch.delegate = self.registeredOffice.delegate = self;
-    
-
+    self.oldIC.delegate = self.IDNo.delegate = self.name.delegate = self.address1.delegate = self.address2.delegate = self.address3.delegate = self.registeredOffice.delegate = self.postcode.delegate = self.town.delegate = self.state.delegate = self.country.delegate = self.phoneMobile.delegate = self.phoneOffice.delegate = self.phoneHome.delegate = self.fax.delegate = self.contactTitle.delegate = self.IDType.delegate = self.contactPerson.delegate = self.citizenship.delegate = self.taxFileNo.delegate = self.IRDBranch.delegate = self.registeredOffice.delegate = self;
     
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -536,13 +643,66 @@
     if (textField.text.length == 0) {
         return;
     }
-    NSString *newString = [textField.text stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[textField.text substringToIndex:1] capitalizedString]];
     
+    NSMutableString* string = [[DIHelpers capitalizedString:textField.text] mutableCopy];
     if (textField.tag > 19 && textField.tag < 23) {
-        newString = [newString stringByAppendingString:@","];
+        string = [[[string stringByTrimmingCharactersInSet:
+                     [NSCharacterSet whitespaceCharacterSet]] stringByAppendingString:@","] mutableCopy];
     }
     
-    textField.text = newString;
+    if (textField.tag == 2 && ([selectedIDTypeCode integerValue] == 1 || [selectedIDTypeCode integerValue] == 2)) {
+        string = [[[string stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]mutableCopy];
+        if (string.length > 12) {
+            [QMAlert showAlertWithMessage:@"ID is wrong" actionSuccess:NO inViewController:self];
+            return;
+        }
+        if (string.length > 6) {
+            NSString* birth = [string substringToIndex:6];
+            NSString* _year = [birth substringToIndex:2];
+            NSString* _month = [birth substringWithRange:NSMakeRange(2, 2)];
+            NSString* _day = [birth substringWithRange:NSMakeRange(4, 2)];
+            if ([_month integerValue] > 12 || [_day integerValue] > 31) {
+                [QMAlert showAlertWithMessage:@"Please input valid ID No." actionSuccess:NO inViewController:self];
+            } else {
+                birth = [NSString stringWithFormat:@"19%@-%@-%@", _year, _day, _month ];
+                self.dateOfBirth.text = [DIHelpers getDateInShortFormWithoutTime:birth];
+            }
+            
+            [string insertString:@"-" atIndex:6];
+        }
+        if (string.length > 9) {
+            [string insertString:@"-" atIndex:9];
+        }
+        
+    }
+    
+    if (textField.tag == 25 || textField.tag == 26 || textField.tag == 27) {
+        string = [[[string stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]mutableCopy];
+        if (string.length > 1) {
+            [string insertString:@"-" atIndex:1];
+        }
+        
+        if (string.length > 6) {
+            [string insertString:@"-" atIndex:6];
+        }
+    }
+    
+    if (textField.tag == 24) {
+        string = [[[string stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]mutableCopy];
+        if (string.length > 2) {
+            [string insertString:@"-" atIndex:2];
+        }
+        
+        if (string.length > 6) {
+            [string insertString:@"-" atIndex:7];
+        }
+    }
+    
+    if (textField.tag == 34) {
+        string = [string.uppercaseString mutableCopy];
+    }
+    
+    textField.text = [string copy];
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -555,6 +715,35 @@
     }
     
     return editable;
+}
+
+#pragma mark - UITableView
+
+- (UIView*) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    if (section == 3) {
+        UIButton* headerBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-120, 5, 100, 33)];
+        headerBtn.backgroundColor = [UIColor clearColor];
+        headerBtn.titleLabel.font = [UIFont fontWithName:@"SFUIText-Regular" size:13];
+        [headerBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [headerBtn setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+        [headerBtn setTitleColor:[UIColor blueColor] forState:UIControlStateFocused];
+        headerBtn.tag = section;
+        [headerBtn setTitle:@"Same as Above" forState:UIControlStateNormal];
+        [headerBtn addTarget:self action:@selector(sameAsAbove:) forControlEvents:UIControlEventTouchUpInside];
+        [customView addSubview:headerBtn];
+    }
+    
+    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 200, 30)];
+    label.font = [UIFont fontWithName:@"SFUIText-Medium" size:15];
+    label.text = headers[section];
+    [customView addSubview:label];
+    return customView;
+}
+
+- (void) sameAsAbove: (id) sender {
+    self.registeredOffice.text = [NSString stringWithFormat:@"%@ %@ %@ %@ %@, %@, %@", self.address1.text, self.address2.text, self.address3.text,  self.postcode.text, self.town.text, self.state.text, self.country.text];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -600,10 +789,12 @@
             self.countryCell.delegate = self;
             return self.countryCell;
         } else if (indexPath.row == 7) {
-            return self.phoneHomeCell;
-        } else if (indexPath.row == 8) {
             return self.phoneMobileCell;
+        } else if (indexPath.row == 8) {
+            self.phoneHome.delegate = self;
+            return self.phoneHomeCell;
         } else if (indexPath.row == 9) {
+            self.phoneOffice.delegate = self;
             return self.phoneOfficeCell;;
         } else if (indexPath.row == 10) {
             return self.faxCell;
@@ -692,7 +883,6 @@
     }
 }
 
-
 - (void) showCalendar {
     [self.view endEditing:YES];
     
@@ -768,20 +958,21 @@
     
     if (indexPath.section == 1) {
         if (indexPath.row == 3) { // Postcode
-            [self performSegueWithIdentifier:kListWithPostcodeSegue sender:CONTACT_POSTCODE_URL];
+            [self showPostcodeAutocomplete:CONTACT_POSTCODE_URL];
         } else if (indexPath.row == 4) { // City
             titleOfList = @"Select City";
             nameOfField = @"Town";
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_CITY_URL];
-            
+            [self showSimpleAutocomplete:CONTACT_CITY_URL];
+    
         } else if (indexPath.row == 5) { // State
             titleOfList = @"Select State";
             nameOfField = @"State";
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_STATE_URL];
+            [self showSimpleAutocomplete:CONTACT_STATE_URL];
         } else if (indexPath.row == 6) { // Postcode
             titleOfList = @"Select Country";
             nameOfField = @"Country";
-            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_COUNTRY_URL];
+//            [self performSegueWithIdentifier:kListWithDescriptionSegue sender:CONTACT_COUNTRY_URL];
+            [self showCountryAutocomplete: nil];
         }
     }
     
@@ -789,16 +980,18 @@
         if (indexPath.row == 0) { // Citizenship
             titleOfList = @"Select Citizen";
             nameOfField = @"Citizen";
-            [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_CITIZENSHIP_URL];
+            [self showDetailAutocomplete:CONTACT_CITIZENSHIP_URL];
+//            [self showCountryPicker];
         } else if (indexPath.row == 1) {
             [self showCalendar];
         } else if (indexPath.row == 2) { // Occupation
             titleOfList = @"Select Occupation";
             nameOfField = @"Occupation";
-            [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_OCCUPATION_URL];
+            [self showDetailAutocomplete:CONTACT_OCCUPATION_URL];
         } else if (indexPath.row == 4) { // branch
-          
-            [self performSegueWithIdentifier:kBankBranchSegue sender:CONTACT_IRDBRANCH_URL];
+            titleOfList = @"Select IRDBranch";
+            nameOfField = @"IRDBranch";
+            [self performSegueWithIdentifier:kListWithCodeSegue sender:CONTACT_IRDBRANCH_URL];
         }
     }
     
@@ -827,13 +1020,6 @@
         listDescVC.url = sender;
     }
     
-    if ([segue.identifier isEqualToString:kListWithPostcodeSegue]) {
-        UINavigationController *navVC =segue.destinationViewController;
-        
-        ListWithPostCodeViewController *listPostcodeVC = navVC.viewControllers.firstObject;
-        listPostcodeVC.delegate = self;
-    }
-    
     if ([segue.identifier isEqualToString:kBankBranchSegue]) {
         UINavigationController *navVC =segue.destinationViewController;
         
@@ -853,21 +1039,43 @@
     }
 }
 
+- (void) applyValidateRuleOfID {
+    if ( [@[@"5", @"8", @"11"] containsObject:selectedIDTypeCode]) {
+        self.citizenship.placeholder = @"Country of Incorporation";
+    }
+    
+    if ( [@[@"1", @"3"] containsObject:selectedIDTypeCode]) {
+        self.oldIC.userInteractionEnabled = YES;
+    } else {
+        self.oldIC.userInteractionEnabled = NO;
+    }
+}
+
 #pragma mark - ContactListWithCodeSelectionDelegate
 - (void) didSelectList:(UIViewController *)listVC name:(NSString*) name withModel:(CodeDescription *)model
 {
     if ([name isEqualToString:@"IDType"]) {
         self.IDType.text = model.descriptionValue;
         selectedIDTypeCode = model.codeValue;
+        if ([selectedIDTypeCode integerValue] == 1 || [selectedIDTypeCode integerValue] == 2) {
+            self.IDNo.keyboardType = UIKeyboardTypeNumberPad;
+        } else {
+            self.IDNo.keyboardType = UIKeyboardTypeDefault;
+        }
+        
+        [self applyValidateRuleOfID];
     } else if ([name isEqualToString:@"Title"]) {
-        self.contactTitle.text = model.descriptionValue;
+        self.contactTitle.text = [DIHelpers capitalizedString:model.descriptionValue];
         selectedTitleCode = model.codeValue;
     } else if ([name isEqualToString:@"Citizen"]) {
-        self.citizenship.text = model.descriptionValue;
+        self.citizenship.text = [DIHelpers capitalizedString:model.descriptionValue];
         selectedCitizenCode = model.codeValue;
     } else if ([name isEqualToString:@"Occupation"]) {
-        self.occupation.text = model.descriptionValue;
+        self.occupation.text = [DIHelpers capitalizedString:model.descriptionValue];
         selectedOccupationCode = model.codeValue;
+    } else if ([name isEqualToString:@"IRDBranch"]) {
+        self.IRDBranch.text = [DIHelpers capitalizedString:model.descriptionValue];
+        selectedIRDBranchCode = model.codeValue;
     }
 }
 
@@ -881,15 +1089,6 @@
     } else if ([name isEqualToString:@"Country"]) {
         self.country.text = description;
     }
-}
-
-#pragma mark - ContactPostCodeDelegate
-- (void) didSelectListWithPostcode:(UIViewController *)listVC withCityModel:(CityModel *)city
-{
-    self.postcode.text = city.postcode;
-    self.town.text = city.city;
-    self.state.text = city.state;
-    self.country.text = city.country;
 }
 
 @end

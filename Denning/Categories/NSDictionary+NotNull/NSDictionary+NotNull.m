@@ -18,7 +18,7 @@
         object = @"";
     }
     
-    if (object == nil) {
+    if (object == nil || (object != nil && [object isKindOfClass:[NSString class]] && [object isEqualToString:@"NIL"])) {
         object = @"";
     }
     

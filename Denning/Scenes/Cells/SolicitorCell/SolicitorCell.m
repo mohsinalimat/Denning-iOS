@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.firmName.copyingEnabled = YES;
+    self.branch.copyingEnabled = YES;
+    self.phoneAndFax.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

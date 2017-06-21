@@ -11,7 +11,7 @@
 @class ListWithCodeTableViewController;
 
 
-@interface AddContactViewController : UITableViewController<UITextFieldDelegate, ContactListWithCodeSelectionDelegate, ContactListWithDescSelectionDelegate,ContactPostCodeDelegate>
+@interface AddContactViewController : UITableViewController<UITextFieldDelegate, ContactListWithCodeSelectionDelegate, ContactListWithDescSelectionDelegate>
 
 
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *postcodeTextField;

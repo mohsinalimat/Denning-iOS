@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,49 +20,58 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NewLedgerDetailCell" rowHeight="67" id="KGk-i7-Jjw" customClass="NewLedgerDetailCell">
-            <rect key="frame" x="0.0" y="0.0" width="544" height="67"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NewLedgerDetailCell" rowHeight="77" id="KGk-i7-Jjw" customClass="NewLedgerDetailCell">
+            <rect key="frame" x="0.0" y="0.0" width="358" height="77"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="511" height="66.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="325" height="76.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C57-Jq-Ckb">
-                        <rect key="frame" x="28" y="9" width="31" height="17"/>
+                        <rect key="frame" x="20" y="9" width="31" height="17"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QYY-Z8-DXr">
-                        <rect key="frame" x="28" y="47.5" width="70" height="10"/>
+                        <rect key="frame" x="20" y="52.5" width="70" height="16"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHI-lg-YjZ">
-                        <rect key="frame" x="448" y="24.5" width="55" height="18"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="15"/>
+                        <rect key="frame" x="265.5" y="30" width="51.5" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Document No" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9T-5z-PCO">
-                        <rect key="frame" x="71" y="9" width="83.5" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="13"/>
+                        <rect key="frame" x="56" y="9" width="84.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Recd / Paid" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-jm-pYC">
+                        <rect key="frame" x="21" y="31" width="63" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="g9T-5z-PCO" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="trailing" constant="12" id="4i6-WW-b9j"/>
+                    <constraint firstItem="g9T-5z-PCO" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="trailing" constant="5" id="4i6-WW-b9j"/>
                     <constraint firstItem="SHI-lg-YjZ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="4n6-Aa-pKt"/>
-                    <constraint firstItem="QYY-Z8-DXr" firstAttribute="top" secondItem="SHI-lg-YjZ" secondAttribute="bottom" constant="5" id="5LJ-JF-efl"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="QYY-Z8-DXr" secondAttribute="bottom" constant="1" id="6Zm-ol-iGs"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="QYY-Z8-DXr" secondAttribute="bottom" id="6Zm-ol-iGs"/>
+                    <constraint firstItem="PdS-jm-pYC" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="leading" id="787-uy-mab"/>
+                    <constraint firstItem="SHI-lg-YjZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PdS-jm-pYC" secondAttribute="trailing" constant="10" id="FgR-Uo-i9O"/>
                     <constraint firstItem="g9T-5z-PCO" firstAttribute="top" secondItem="C57-Jq-Ckb" secondAttribute="top" id="Kxj-TO-C0x"/>
+                    <constraint firstItem="PdS-jm-pYC" firstAttribute="top" secondItem="C57-Jq-Ckb" secondAttribute="bottom" constant="5" id="QBg-u4-yQ0"/>
                     <constraint firstItem="QYY-Z8-DXr" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="leading" id="QBz-Ph-Uhj"/>
                     <constraint firstAttribute="trailingMargin" secondItem="SHI-lg-YjZ" secondAttribute="trailing" id="o7C-Yy-M0M"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="QYY-Z8-DXr" secondAttribute="trailing" constant="20" id="q5n-7Q-YNl"/>
                     <constraint firstItem="C57-Jq-Ckb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="r8f-0d-epY"/>
-                    <constraint firstItem="C57-Jq-Ckb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="20" id="v1g-1n-rr5"/>
+                    <constraint firstItem="C57-Jq-Ckb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="v1g-1n-rr5"/>
+                    <constraint firstItem="QYY-Z8-DXr" firstAttribute="top" secondItem="PdS-jm-pYC" secondAttribute="bottom" constant="4.5" id="vw6-2s-qu2"/>
                     <constraint firstItem="SHI-lg-YjZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="g9T-5z-PCO" secondAttribute="trailing" constant="14" id="xSa-CP-KcH"/>
                 </constraints>
             </tableViewCellContentView>
@@ -71,8 +80,9 @@
                 <outlet property="dateLabel" destination="C57-Jq-Ckb" id="rzq-FO-Za9"/>
                 <outlet property="descriptionLabel" destination="QYY-Z8-DXr" id="lmX-wv-cAM"/>
                 <outlet property="documentNoLabel" destination="g9T-5z-PCO" id="9fY-wb-qWE"/>
+                <outlet property="receivedPaid" destination="PdS-jm-pYC" id="GFj-8C-zlb"/>
             </connections>
-            <point key="canvasLocation" x="29" y="-78.5"/>
+            <point key="canvasLocation" x="-75" y="-74.5"/>
         </tableViewCell>
     </objects>
 </document>

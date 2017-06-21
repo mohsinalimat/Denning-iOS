@@ -34,11 +34,12 @@
 @property (strong, nonatomic) IBOutlet UIButton* courtBtn;
 @property (strong, nonatomic) IBOutlet UIButton* officeBtn;
 @property (strong, nonatomic) IBOutlet UIButton* personalBtn;
-
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tabbarIndicatorLeading;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomLeading;
 @property (strong, nonatomic) EventModel* latestEvent;
 
 @property (strong, nonatomic) UISearchController *searchController;
-@property (copy, nonatomic) NSString *filter;
+@property (copy, nonatomic) NSString *search;
 
 @property (strong, nonatomic) NSArray* topFilters;
 @property (strong, nonatomic) NSArray* bottomFilters;
@@ -68,7 +69,7 @@
 
 - (void) setupTopBottomFilters {
     self.topFilters = @[@"Today", @"This Week", @"Future", @"Previous"];
-    self.bottomFilters = @[@"0All", @"1court", @"2Ofice", @"3personal"];
+    self.bottomFilters = @[@"1court", @"2office", @"3personal", @"0All"];
     currentTopFilter = self.topFilters[0];
     currentBottomFilter = self.bottomFilters[0];
 }
@@ -119,6 +120,7 @@
 
 - (void) prepareUI
 {
+    _search = @"";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -130,6 +132,8 @@
     UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
+    
+    [self.todayBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (void) loadEventFromFilters {
@@ -139,7 +143,7 @@
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self);
-    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:startDate endDate:endDate filter:currentBottomFilter withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:startDate endDate:endDate filter:currentBottomFilter search:_search withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
         
         @strongify(self);
         self->isLoading = NO;
@@ -156,7 +160,8 @@
 }
 
 - (void) resetState: (UIButton*) button {
-    [button setTitleColor:[UIColor colorWithHexString:@"555555"] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void) resetButtonState {
@@ -166,34 +171,38 @@
     [self resetState:self.personalBtn];
 }
 
-- (IBAction) allFilter: (id) sender {
-    currentBottomFilter = self.bottomFilters[0];
-
-    [self resetButtonState];
-    [self.allBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self loadEventFromFilters];
-}
-
 - (IBAction) courtFilter: (id) sender  {
-    currentBottomFilter = self.bottomFilters[1];
+    currentBottomFilter = self.bottomFilters[0];
     [self resetButtonState];
     [self.courtBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
+    [self updateBottomTabStateWithAnimate:0];
 }
 
 - (IBAction) officeFilter: (id) sender  {
-    currentBottomFilter = self.bottomFilters[2];
+    currentBottomFilter = self.bottomFilters[1];
     
     [self resetButtonState];
     [self.officeBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
+    [self updateBottomTabStateWithAnimate:1];
 }
 
 - (IBAction) personalFilter: (id) sender  {
-    currentBottomFilter = self.bottomFilters[3];
+    currentBottomFilter = self.bottomFilters[2];
     [self resetButtonState];
     [self.personalBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
+    [self updateBottomTabStateWithAnimate:2];
+}
+
+- (IBAction) allFilter: (id) sender {
+    currentBottomFilter = self.bottomFilters[3];
+    
+    [self resetButtonState];
+    [self.allBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [self loadEventFromFilters];
+    [self updateBottomTabStateWithAnimate:3];
 }
 
 - (IBAction) onBackAction: (id) sender
@@ -216,28 +225,68 @@
     [self resetState:self.previousBtn];
 }
 
+- (void) updateBottomTabStateWithAnimate:(NSInteger)index {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateBottomTabState:index];
+        } completion:^(BOOL __unused finished) {
+            
+        }];
+    });
+}
+
+- (void) updateTabStateWithAnimate:(NSInteger)index {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [UIView animateWithDuration:0.3f animations:^{
+            [self updateTabState:index];
+        } completion:^(BOOL __unused finished) {
+            
+        }];
+    });
+}
+
+- (void) updateBottomTabState:(NSInteger)tab {
+    CGFloat width = CGRectGetWidth(self.view.frame)/4;
+    self.bottomLeading.constant = tab * width;
+}
+
+- (void) updateTabState:(NSInteger)tab {
+    CGFloat width = CGRectGetWidth(self.view.frame)/4;
+    self.tabbarIndicatorLeading.constant = tab * width;
+}
+
 - (IBAction)didTapToday:(id)sender {
     [self resetTopFilterButtons];
     [self.todayBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     startDate = [DIHelpers today];
     endDate = [DIHelpers today];
     [self loadEventFromFilters];
+    [self updateTabStateWithAnimate:0];
+    [self.todayBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapThisWeek:(id)sender {
     [self resetTopFilterButtons];
     [self.thisWeekBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    startDate = [DIHelpers currentSunday];
-    startDate = [DIHelpers sevenDaysLaterFromDate:startDate];
+    startDate = [DIHelpers today];
+    endDate = [DIHelpers sevenDaysLater];
     [self loadEventFromFilters];
+    [self updateTabStateWithAnimate:1];
+    [self.thisWeekBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapFuture:(id)sender {
     [self resetTopFilterButtons];
     [self.futureBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     startDate = [DIHelpers today];
-    endDate = [DIHelpers sevenDaysLater];
+    endDate = @"2999-12-31";
     [self loadEventFromFilters];
+    [self updateTabStateWithAnimate:2];
+    [self.futureBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapPrevious:(id)sender {
@@ -246,26 +295,16 @@
     startDate = [DIHelpers sevenDaysBefore];
     endDate = [DIHelpers today];
     [self loadEventFromFilters];
+    [self updateTabStateWithAnimate:3];
+    [self.previousBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapCalendar:(id)sender {
     [self performSegueWithIdentifier:kCalendarRangeSegue sender:self.currentRange];
 }
 
-- (void) filterEventArray
-{
-    NSMutableArray* newArray = [NSMutableArray new];
-    for(EventModel* event in self.originalArray) {
-        if ([event.subject localizedCaseInsensitiveContainsString:self.filter] || [event.counsel localizedCaseInsensitiveContainsString:self.filter] || [event.location localizedCaseInsensitiveContainsString:self.filter]) {
-            [newArray addObject:event];
-        }
-    }
-    self.eventsArray = newArray;
-    [self.tableView reloadData];
-}
-
 - (void) updateEvents {
-    self.filter = @"";
+    self.search = @"";
     self.eventsArray = self.originalArray;
     [self.tableView reloadData];
 }
@@ -288,17 +327,12 @@
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
-    self.filter = searchText;
-    if (self.filter.length == 0) {
-        self.eventsArray = self.originalArray;
-        [self.tableView reloadData];
-    } else {
-       [self filterEventArray];
-    }
+    
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    
+    self.search = searchBar.text;
+    [self loadEventFromFilters];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

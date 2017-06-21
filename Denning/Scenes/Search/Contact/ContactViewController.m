@@ -167,7 +167,7 @@
     } else if (indexPath.section == 1 && ![self.gotoRelatedMatter isEqualToString:@"Matter"]) {
         [cell setEnableRightBtn:NO image:nil];
         if (indexPath.row == 0) {
-            [cell configureCellWithContact:@"Date Of Birth" text:contactModel.dateOfBirth];
+            [cell configureCellWithContact:@"Date Of Birth" text:[DIHelpers getDateInShortForm:contactModel.dateOfBirth]];
         } else if (indexPath.row == 1) {
             [cell configureCellWithContact:@"Citizenship" text:contactModel.citizenShip];
         } else if (indexPath.row == 2) {
@@ -185,7 +185,7 @@
         } else if (indexPath.row == 5) {
             [cell configureCellWithContact:@"Fax" text:contactModel.fax];
         } else if (indexPath.row == 6) {
-            [cell configureCellWithContact:@"Email" text:contactModel.email withLower:YES];
+            [cell configureCellWithContact:@"Email" text:contactModel.email];
             [cell setEnableRightBtn:YES image:[UIImage imageNamed:@"icon_email_red"]];
             cell.tag = 2;
         } else if (indexPath.row == 7) {

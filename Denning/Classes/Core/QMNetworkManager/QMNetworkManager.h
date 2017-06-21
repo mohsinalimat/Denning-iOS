@@ -159,7 +159,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Event
 
-- (void) getLatestEventWithStartDate: (NSString*) startDate endDate:(NSString*) endDate filter:(NSString*) filter withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
+- (void) getLatestEventWithStartDate: (NSString*) startDate endDate:(NSString*) endDate filter:(NSString*) filter search:(NSString*)search withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
 
 // Property
 
@@ -184,7 +184,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NewLedgerModel* newLedgerModel, NSError* error)) completion;
 
 // Ledger detail
-- (void) loadLedgerDetailWithCode: (NSString*) code accountType:(NSString*)accountType completion: (void(^)(NSArray* ledgerDetailModelArray, NSError* error)) completion;
+- (void) loadLedgerDetailURL:(NSString*) url completion: (void(^)(NSArray* ledgerDetailModelArray, NSError* error)) completion;
 
 
 // Document
@@ -256,6 +256,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getPropertyList: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
+- (void) getMukimValue: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 /*
  * Matter
  */
@@ -307,6 +308,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) getDashboardAccountInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) getDashboardFeeTransferInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+-  (void) getDashboardTaskCheckListInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 @end
 
 NS_ASSUME_NONNULL_END

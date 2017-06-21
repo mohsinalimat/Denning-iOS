@@ -14,14 +14,23 @@
 {
     LedgerDetailModel* ledgerDetailModel = [LedgerDetailModel new];
     
-    ledgerDetailModel.ChequeNo = [response objectForKey:@"ChequeNo"];
-    ledgerDetailModel.amount = [response objectForKey:@"amount"];
-    ledgerDetailModel.ledgerCode = [response objectForKey:@"code"];
-    ledgerDetailModel.date = [response objectForKey:@"date"];
-    ledgerDetailModel.ledgerDescription = [response objectForKey:@"description"];
-    ledgerDetailModel.documentNo = [response objectForKey:@"documentNo"];
-    ledgerDetailModel.drORcr = [response objectForKey:@"drORcr"];
-    ledgerDetailModel.isDebit = [response objectForKey:@"isDebit"];
+    ledgerDetailModel.ChequeNo = [response valueForKeyNotNull:@"ChequeNo"];
+    ledgerDetailModel.bankAcc = [response valueForKeyNotNull:@"bankAcc"];
+    ledgerDetailModel.amountCR = [response valueForKeyNotNull:@"amountCR"];
+    ledgerDetailModel.amount = [[[response valueForKeyNotNull:@"amount"] stringByReplacingOccurrencesOfString:@"(" withString:@""] stringByReplacingOccurrencesOfString:@")" withString:@""];
+    ledgerDetailModel.amountDR = [response valueForKeyNotNull:@"amountDR"];
+    ledgerDetailModel.ledgerCode = [response valueForKeyNotNull:@"code"];
+    ledgerDetailModel.date = [response valueForKeyNotNull:@"date"];
+    ledgerDetailModel.ledgerDescription = [response valueForKeyNotNull:@"description"];
+    ledgerDetailModel.documentNo = [response valueForKeyNotNull:@"documentNo"];
+    ledgerDetailModel.drORcr = [response valueForKeyNotNull:@"drORcr"];
+    ledgerDetailModel.fileNo = [response valueForKeyNotNull:@"fileNo"];
+    ledgerDetailModel.fileName = [response valueForKeyNotNull:@"fileName"];
+    ledgerDetailModel.issuedBy = [response valueForKeyNotNull:@"issuedBy"];
+    ledgerDetailModel.recdPaid = [response valueForKeyNotNull:@"recdPaid"];
+    ledgerDetailModel.taxInvoice = [response valueForKeyNotNull:@"taxInvoice"];
+    ledgerDetailModel.updatedBy = [response valueForKeyNotNull:@"updatedBy"];
+    ledgerDetailModel.isDebit = [response valueForKeyNotNull:@"isDebit"];
 
     return ledgerDetailModel;
 }

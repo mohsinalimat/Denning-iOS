@@ -199,10 +199,10 @@ NSMutableDictionary* keyValue;
     [self showPopup:calendarViewController];
 }
 
-- (NSNumber*) getValidValue: (NSNumber*) value
+- (NSString*) getValidValue: (NSString*) value
 {
     if (value == nil) {
-        return @(0);
+        return @"";
     }
     else {
         return value;

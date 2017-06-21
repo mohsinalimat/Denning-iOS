@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fileNoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *fileName;
+@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 
 @end
 
@@ -39,12 +41,15 @@
 
 - (void) configureCellWithEvent:(EventModel*) event
 {
-    self.subjectLabel.text = event.subject;
-    self.fileNoLabel.text = event.FileNo;
+    self.subjectLabel.text = event.caseName.uppercaseString;
+    NSArray *noName = [DIHelpers separateNameIntoTwo:event.FileNo];
+    self.fileNoLabel.text = noName[0];
+    self.fileName.text = noName[1];
     self.caseNoLabel.text = event.caseNo;
     self.locationLabel.text = event.location;
-    self.eventStartDatelabel.text = [DIHelpers getDateInLongForm:event.eventStart];
-    self.eventEndDateLabel.text = [DIHelpers getDateInLongForm:event.eventEnd];
+    self.eventStartDatelabel.text = [DIHelpers getOnlyDateFromDateTime:event.eventStart];
+    self.eventEndDateLabel.text = [DIHelpers getOnlyDateFromDateTime:event.eventEnd];
+    self.dayLabel.text = [DIHelpers getDayFromDate:event.eventStart];
     self.eventStartTimeLabel.text = [DIHelpers getTimeFromDate:event.eventStart];
     self.counsel.text = event.counsel;
 }

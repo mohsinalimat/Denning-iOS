@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,11 +17,11 @@
         <array key="SF-UI-Text-Light.otf">
             <string>SFUIText-Light</string>
         </array>
-        <array key="SF-UI-Text-Medium.otf">
-            <string>SFUIText-Medium</string>
-        </array>
         <array key="SF-UI-Text-Regular.otf">
             <string>SFUIText-Regular</string>
+        </array>
+        <array key="SF-UI-Text-Semibold.otf">
+            <string>SFUIText-Semibold</string>
         </array>
     </customFonts>
     <objects>
@@ -44,7 +44,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="File No" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGJ-OS-AfG">
-                        <rect key="frame" x="14" y="89" width="37" height="14"/>
+                        <rect key="frame" x="14" y="90.5" width="37" height="14"/>
                         <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -71,8 +71,8 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Case No" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VcH-Ja-fDA">
-                        <rect key="frame" x="14" y="53" width="50" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="13"/>
+                        <rect key="frame" x="14" y="56" width="46" height="14.5"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -98,7 +98,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="2000-0077" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vna-L4-OT0">
-                        <rect key="frame" x="14" y="104" width="214.5" height="14"/>
+                        <rect key="frame" x="14" y="105.5" width="214.5" height="14"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="12"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -122,19 +122,19 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XAe-J7-eGd">
-                        <rect key="frame" x="14" y="70" width="214.5" height="14"/>
+                        <rect key="frame" x="14" y="71.5" width="214.5" height="14"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="12"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Case Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C6g-zs-obd">
-                        <rect key="frame" x="14" y="13" width="66" height="14"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="12"/>
+                        <rect key="frame" x="14" y="13" width="67" height="14"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="12"/>
                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebH-zf-gtg">
-                        <rect key="frame" x="14" y="28" width="30.5" height="20"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebH-zf-gtg">
+                        <rect key="frame" x="14" y="28" width="214.5" height="23"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="12"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -159,25 +159,45 @@
                             <constraint firstAttribute="width" constant="1" id="5sl-a7-JRK"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="755" ambiguous="YES" text="File Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSq-hc-M9W">
-                        <rect key="frame" x="14" y="120.5" width="51" height="13"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="755" text="File Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSq-hc-M9W">
+                        <rect key="frame" x="14" y="120.5" width="214.5" height="13"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="09:30 am" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKk-Js-pEY">
+                        <rect key="frame" x="330" y="62" width="60" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="Q11-pf-fTn"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Day" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XIa-VO-vsA">
+                        <rect key="frame" x="330" y="46" width="21.5" height="15"/>
+                        <fontDescription key="fontDescription" name="SFUIDisplay-Semibold" family="SF UI Display" pointSize="12"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="xKk-Js-pEY" firstAttribute="top" secondItem="XIa-VO-vsA" secondAttribute="bottom" constant="1" id="0z5-Ga-kP2"/>
                     <constraint firstItem="Yzb-lK-CIM" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="1Aj-WU-4mE"/>
                     <constraint firstItem="YlK-h4-P2P" firstAttribute="leading" secondItem="Yzb-lK-CIM" secondAttribute="trailing" constant="5" id="2iF-ju-4se"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="leading" secondItem="CUl-u9-xbv" secondAttribute="leading" id="3bk-eF-tp8"/>
+                    <constraint firstItem="QSq-hc-M9W" firstAttribute="width" secondItem="Vna-L4-OT0" secondAttribute="width" id="5LJ-c6-KlJ"/>
                     <constraint firstItem="VsH-y7-tk8" firstAttribute="top" secondItem="YlK-h4-P2P" secondAttribute="bottom" constant="1" id="8Au-aD-Hrr"/>
+                    <constraint firstItem="ebH-zf-gtg" firstAttribute="width" secondItem="XAe-J7-eGd" secondAttribute="width" id="9GG-wa-07v"/>
                     <constraint firstItem="XAe-J7-eGd" firstAttribute="width" secondItem="Vna-L4-OT0" secondAttribute="width" id="AWM-aV-UVp"/>
                     <constraint firstItem="VsH-y7-tk8" firstAttribute="leading" secondItem="YlK-h4-P2P" secondAttribute="leading" id="Bev-un-w1f"/>
                     <constraint firstItem="kWc-Fh-Ucb" firstAttribute="leading" secondItem="VsH-y7-tk8" secondAttribute="trailing" constant="1" id="Bxf-nK-bzp"/>
+                    <constraint firstItem="xKk-Js-pEY" firstAttribute="leading" secondItem="XIa-VO-vsA" secondAttribute="leading" id="CIf-os-iGp"/>
                     <constraint firstItem="CUl-u9-xbv" firstAttribute="leading" secondItem="YlK-h4-P2P" secondAttribute="leading" id="CRZ-Hm-C8H"/>
-                    <constraint firstItem="QSq-hc-M9W" firstAttribute="top" secondItem="Vna-L4-OT0" secondAttribute="bottom" constant="2.5" id="Dbx-8z-dLH"/>
+                    <constraint firstItem="QSq-hc-M9W" firstAttribute="top" secondItem="Vna-L4-OT0" secondAttribute="bottom" constant="1" id="Dbx-8z-dLH"/>
                     <constraint firstItem="DkW-EY-2GL" firstAttribute="top" secondItem="CUl-u9-xbv" secondAttribute="bottom" constant="1" id="Do9-Vb-fdc"/>
                     <constraint firstItem="Vna-L4-OT0" firstAttribute="leading" secondItem="OGJ-OS-AfG" secondAttribute="leading" id="EJG-09-09A"/>
+                    <constraint firstItem="XIa-VO-vsA" firstAttribute="top" secondItem="7Vk-ZX-OCi" secondAttribute="top" id="F6x-Os-Qxk"/>
                     <constraint firstItem="zvZ-5R-aoD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Gz4-RL-UA4"/>
                     <constraint firstItem="hHC-u8-AED" firstAttribute="top" secondItem="Tv4-xt-Ruv" secondAttribute="bottom" constant="1" id="H2r-x1-mdd"/>
                     <constraint firstItem="1es-6B-7ZM" firstAttribute="leading" secondItem="7Vk-ZX-OCi" secondAttribute="leading" id="I13-Jh-0eI"/>
@@ -198,6 +218,7 @@
                     <constraint firstItem="hHC-u8-AED" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="fWA-Zh-1nl"/>
                     <constraint firstItem="C6g-zs-obd" firstAttribute="leading" secondItem="zvZ-5R-aoD" secondAttribute="trailing" constant="9" id="iWf-Vb-n6w"/>
                     <constraint firstItem="h2j-5S-mIB" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="iZv-Hy-jFi"/>
+                    <constraint firstItem="XIa-VO-vsA" firstAttribute="leading" secondItem="Tv4-xt-Ruv" secondAttribute="leading" id="ib3-4i-uG5"/>
                     <constraint firstItem="7Vk-ZX-OCi" firstAttribute="leading" secondItem="VsH-y7-tk8" secondAttribute="leading" id="ioE-vR-Omr"/>
                     <constraint firstItem="OGJ-OS-AfG" firstAttribute="leading" secondItem="5i7-bq-U7K" secondAttribute="leading" id="lOq-rL-YfH"/>
                     <constraint firstItem="5i7-bq-U7K" firstAttribute="top" secondItem="h2j-5S-mIB" secondAttribute="bottom" constant="1" id="ngj-5a-7Ag"/>
@@ -211,14 +232,18 @@
                     <constraint firstAttribute="bottom" secondItem="zvZ-5R-aoD" secondAttribute="bottom" id="xm2-NA-45y"/>
                     <constraint firstItem="C6g-zs-obd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="ymF-73-y5g"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Yzb-lK-CIM" secondAttribute="bottom" constant="5" id="yy3-4y-uXc"/>
+                    <constraint firstItem="QSq-hc-M9W" firstAttribute="leading" secondItem="Vna-L4-OT0" secondAttribute="leading" id="z1L-k2-cU9"/>
                     <constraint firstItem="YlK-h4-P2P" firstAttribute="top" secondItem="C6g-zs-obd" secondAttribute="top" id="zLm-Nn-oWj"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="caseNoLabel" destination="XAe-J7-eGd" id="hUR-yb-qwv"/>
                 <outlet property="counsel" destination="5i7-bq-U7K" id="7ju-Qy-m8t"/>
+                <outlet property="dayLabel" destination="xKk-Js-pEY" id="1y9-5y-0Dg"/>
                 <outlet property="eventEndDateLabel" destination="hHC-u8-AED" id="Zz7-D5-NYH"/>
                 <outlet property="eventStartDatelabel" destination="VsH-y7-tk8" id="3ck-Hv-mrt"/>
+                <outlet property="eventStartTimeLabel" destination="1es-6B-7ZM" id="QDW-hb-hne"/>
+                <outlet property="fileName" destination="QSq-hc-M9W" id="1wZ-gc-f0a"/>
                 <outlet property="fileNoLabel" destination="Vna-L4-OT0" id="aLj-CE-Qa4"/>
                 <outlet property="locationLabel" destination="DkW-EY-2GL" id="gik-Ov-qZi"/>
                 <outlet property="subjectLabel" destination="ebH-zf-gtg" id="E8t-cx-G2O"/>

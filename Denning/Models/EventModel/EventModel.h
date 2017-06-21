@@ -10,7 +10,7 @@
 
 @interface EventModel : NSObject
 
-@property (strong, nonatomic) NSString * subject;
+@property (strong, nonatomic) NSString * caseName;
 
 @property (strong, nonatomic) NSString * FileNo;
 
@@ -20,7 +20,7 @@
 
 @property (strong, nonatomic) NSString * eventCode;
 
-@property (strong, nonatomic) NSString * description;
+@property (strong, nonatomic) NSString * descriptionValue;
 
 @property (strong, nonatomic) NSString * eventStart;
 

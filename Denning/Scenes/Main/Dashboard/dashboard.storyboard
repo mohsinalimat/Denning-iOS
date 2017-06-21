@@ -85,6 +85,7 @@
                         <segue destination="ysL-WN-MFp" kind="show" identifier="DashboardContactSegue" id="H8e-K8-h9K"/>
                         <segue destination="vMO-NW-A4L" kind="show" identifier="DashboardTaxInvoiceSegue" id="vmV-Pf-Mo0"/>
                         <segue destination="01r-rY-dYe" kind="show" identifier="DashboardFeesTranserSegue" id="nVo-Ys-7R8"/>
+                        <segue destination="iVG-wB-Mev" kind="show" identifier="DashboardTaskCheckSegue" id="0ed-XW-163"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yBx-sr-pA3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -451,6 +452,73 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ahW-O4-8Tt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6612" y="9833"/>
+        </scene>
+        <!--Fees Transfer-->
+        <scene sceneID="6Ne-Ni-7Nx">
+            <objects>
+                <tableViewController id="KUp-Oe-8Bn" customClass="TaskCheckListViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="fCc-yd-GHy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0s3-q6-aS3">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0s3-q6-aS3" id="8cM-Ga-Rbc">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="KUp-Oe-8Bn" id="dEo-Mj-Gq6"/>
+                            <outlet property="delegate" destination="KUp-Oe-8Bn" id="ezh-Dw-thB"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Fees Transfer" id="h9z-pc-GaF">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="8Km-Q8-KJG">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ulO-ds-FTY">
+                                <rect key="frame" x="16" y="11" width="11" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="Back.png"/>
+                                <connections>
+                                    <action selector="dismissScreen:" destination="KUp-Oe-8Bn" eventType="touchUpInside" id="y0o-0B-STJ"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qPa-Wa-ewy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7406" y="10507"/>
+        </scene>
+        <!--Dashboard-->
+        <scene sceneID="2WY-d7-Xyw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iVG-wB-Mev" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Dashboard" image="icon_overview" id="YEl-C4-bBf"/>
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qAY-q7-2Yh" customClass="QMNavigationBar">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.200823158" green="0.24376520509999999" blue="0.31830331680000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="KUp-Oe-8Bn" kind="relationship" relationship="rootViewController" id="UYu-TT-aep"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r1g-Ig-q5s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6612" y="10519"/>
         </scene>
     </scenes>
     <resources>

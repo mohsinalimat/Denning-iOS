@@ -13,6 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.systemNo.copyingEnabled = YES;
+    self.courtCaseNo.copyingEnabled = YES;
+    self.courtCaseName.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

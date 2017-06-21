@@ -150,15 +150,23 @@
         
         cell.acName.text = model.documentNo;
         cell.acNo.text = model.documentNo;
-        cell.amount.text = model.amount;
+        if (model.amountDR.length == 0) {
+            cell.amount.text = [@"-" stringByAppendingString: [DIHelpers addThousandsSeparator:model.amountCR]];
+        } else {
+            cell.amount.text = [DIHelpers addThousandsSeparator:model.amountDR];
+        }
+
         return cell;
-        
     }
     BankCashSecondCell *cell = [tableView dequeueReusableCellWithIdentifier:[BankCashSecondCell cellIdentifier] forIndexPath:indexPath];
     
     cell.firstLabel.text = model.documentNo;
     cell.middleLabel.text = model.documentNo;
-    cell.rightLabel.text = model.amount;
+    if (model.amountDR.length == 0) {
+        cell.rightLabel.text = [@"-" stringByAppendingString: [DIHelpers addThousandsSeparator:model.amountCR]];
+    } else {
+        cell.rightLabel.text = [DIHelpers addThousandsSeparator:model.amountDR];
+    }
     
     return cell;
     

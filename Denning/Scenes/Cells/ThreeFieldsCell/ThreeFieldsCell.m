@@ -19,6 +19,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.firstValueLabel.copyingEnabled = YES;
+    self.secondValueLabel.copyingEnabled = YES;
+    self.thirdValuelabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -30,8 +33,8 @@
 - (void) configureCellWithValue1: (NSString*) value1 value2:(NSString*) value2 value3: (NSString*) value3
 {
     self.firstValueLabel.text = value1;
-    self.secondValueLabel.text = value2.uppercaseString;
-    self.thirdValuelabel.text = value3.uppercaseString;
+    self.secondValueLabel.text = [DIHelpers capitalizedString:value2];
+    self.thirdValuelabel.text = [DIHelpers capitalizedString:value3];
 }
 
 @end

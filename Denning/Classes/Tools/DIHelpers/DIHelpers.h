@@ -26,6 +26,8 @@
 
 + (NSString*) getDateInLongForm: (NSString*) date;
 
++ (NSString*) getDateInShortFormWithoutTime: (NSString*) date;
+
 + (NSString*) getDateInShortForm: (NSString*) date;
 
 + (NSString*) getTimeFromDate: (NSString*) date;
@@ -56,6 +58,8 @@
 
 + (NSString*) convertDateToCustomFormat: (NSString*) date;
 
++ (NSString*) getDayFromDate: (NSString*) date;
+
 + (NSString*) today;
 
 + (NSString*) todayWithTime;
@@ -67,4 +71,10 @@
 + (NSString*) sevenDaysBefore;
 
 + (NSString*) currentSunday;
+
++ (NSString*) addThousandsSeparator: (id) value;
+
++ (NSString*) capitalizedString: (id) value;
+
++ (NSString*) formatDecimal:(NSString*) text;
 @end

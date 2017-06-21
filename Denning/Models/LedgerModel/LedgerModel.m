@@ -14,11 +14,11 @@
 {
     LedgerModel* ledgerModel = [LedgerModel new];
     
-    ledgerModel.accountName = [response objectForKey:@"accountName"];
-    ledgerModel.accountType = [response objectForKey:@"accountType"];
-    ledgerModel.availableBalance = [response objectForKey:@"availableBalance"];
-    ledgerModel.currentBalance = [response objectForKey:@"currentBalance"];
-    ledgerModel.lastStatementDate = [response objectForKey:@"lastStatementDate"];
+    ledgerModel.accountName = [response valueForKeyNotNull:@"accountName"];
+    ledgerModel.urlDetail = [response valueForKeyNotNull:@"urlDetail"];
+    ledgerModel.availableBalance = [response valueForKeyNotNull:@"availableBalance"];
+    ledgerModel.currentBalance = [response valueForKeyNotNull:@"currentBalance"];
+    ledgerModel.lastStatementDate = [response valueForKeyNotNull:@"lastStatementDate"];
     
     return ledgerModel;
 }

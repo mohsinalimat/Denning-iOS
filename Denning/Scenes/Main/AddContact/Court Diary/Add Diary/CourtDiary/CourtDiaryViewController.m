@@ -356,8 +356,8 @@
     
     DetailWithAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailWithAutocomplete"];
     vc.url = COURT_HEARINGDETAIL_GET_URL;
-    vc.updateHandler =  ^(NSString* selectedString) {
-        self.details.text = selectedString;
+    vc.updateHandler =  ^(CodeDescription* model) {
+        self.details.text = model.descriptionValue;
     };
     [self showPopup:vc];
 }

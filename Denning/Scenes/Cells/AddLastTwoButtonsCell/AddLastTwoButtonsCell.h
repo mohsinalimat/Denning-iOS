@@ -10,9 +10,11 @@
 #import "DIGeneralCell.h"
 
 typedef void (^ViewHandler)(void);
+typedef void (^SaveHandler)(void);
 typedef void (^ConvertHandler)(void);
 @interface AddLastTwoButtonsCell : DIGeneralCell
 
 @property (strong, nonatomic) ViewHandler viewHandler;
+@property (strong, nonatomic) SaveHandler saveHandler;
 @property (strong, nonatomic) ConvertHandler convertHandler;
 @end

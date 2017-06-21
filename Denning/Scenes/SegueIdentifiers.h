@@ -163,3 +163,11 @@ static NSString* const kDashboardContactSegue = @"DashboardContactSegue";
 static NSString* const kDashboardTaxInvoiceSegue = @"DashboardTaxInvoiceSegue";
 
 static NSString* const kDashboardFeesTranserSegue = @"DashboardFeesTranserSegue";
+
+static NSString* const kDashboardTaskCheckSegue = @"DashboardTaskCheckSegue";
+
+static NSString* const kMukimValueSegue = @"MukimValueSegue";
+static NSString* const kSearchMatterCodeSegue = @"SearchMatterCodeSegue";
+
+static NSString* const kAccountDetailSegue = @"AccountDetailSegue";
+

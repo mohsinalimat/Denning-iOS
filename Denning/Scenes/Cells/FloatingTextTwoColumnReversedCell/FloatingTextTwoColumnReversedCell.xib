@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="86" id="KGk-i7-Jjw" customClass="FloatingTextTwoColumnReversedCell">
+            <rect key="frame" x="0.0" y="0.0" width="412" height="86"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="412" height="85.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nmj-1N-oF1">
+                        <rect key="frame" x="205.5" y="13" width="1" height="59.5"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="ofu-iB-kv8"/>
+                        </constraints>
+                    </view>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="textfield" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mEL-Nm-Poh" customClass="UIFloatLabelTextField">
+                        <rect key="frame" x="214.5" y="8" width="174.5" height="70"/>
+                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="textfield" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7RL-c1-a7e" customClass="UIFloatLabelTextField">
+                        <rect key="frame" x="8" y="8" width="189.5" height="69.5"/>
+                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                    </textField>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="qm-ic-disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="szd-v2-29P">
+                        <rect key="frame" x="391" y="36" width="8" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="8" id="3Og-xd-Sb9"/>
+                            <constraint firstAttribute="height" constant="13" id="Gem-Sn-PJQ"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="nmj-1N-oF1" secondAttribute="bottom" constant="5" id="0qI-G0-MM5"/>
+                    <constraint firstItem="szd-v2-29P" firstAttribute="centerY" secondItem="mEL-Nm-Poh" secondAttribute="centerY" id="5Ts-u8-qAg"/>
+                    <constraint firstItem="mEL-Nm-Poh" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="AWD-EP-DWW"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="mEL-Nm-Poh" secondAttribute="bottom" id="Cit-fF-eu3"/>
+                    <constraint firstItem="nmj-1N-oF1" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IDd-Hx-3ra"/>
+                    <constraint firstItem="nmj-1N-oF1" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="W3M-62-Una"/>
+                    <constraint firstItem="7RL-c1-a7e" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="bUC-We-h1b"/>
+                    <constraint firstItem="nmj-1N-oF1" firstAttribute="leading" secondItem="7RL-c1-a7e" secondAttribute="trailing" constant="8" id="buP-ML-p6P"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="7RL-c1-a7e" secondAttribute="bottom" id="eUs-od-cOy"/>
+                    <constraint firstItem="szd-v2-29P" firstAttribute="leading" secondItem="mEL-Nm-Poh" secondAttribute="trailing" constant="2" id="gy9-ov-S6P"/>
+                    <constraint firstItem="nmj-1N-oF1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="iUI-eg-WeQ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="szd-v2-29P" secondAttribute="trailing" constant="5" id="ikB-LZ-dzh"/>
+                    <constraint firstItem="mEL-Nm-Poh" firstAttribute="leading" secondItem="nmj-1N-oF1" secondAttribute="trailing" constant="8" id="kwR-yP-Ld6"/>
+                    <constraint firstItem="7RL-c1-a7e" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="pvN-s2-39C"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="leftValue" destination="7RL-c1-a7e" id="09q-yK-Om7"/>
+                <outlet property="rightType" destination="mEL-Nm-Poh" id="1aS-VX-pbJ"/>
+            </connections>
+            <point key="canvasLocation" x="102" y="-106"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="qm-ic-disclosure" width="8" height="13"/>
+    </resources>
+</document>

@@ -22,22 +22,30 @@
 #import "AddLastOneButtonCell.h"
 #import "AddMatterCell.h"
 #import "BirthdayCalendarViewController.h"
+#import "LegalFirmViewController.h"
 #import "CommonTextCell.h"
+#import "IncreasingCell.h"
 
-@interface AddMatterViewController ()<UITableViewDelegate, UITableViewDataSource,
-ContactListWithCodeSelectionDelegate,UITextFieldDelegate, SWTableViewCellDelegate>
+@interface AddMatterViewController ()
+<UITableViewDelegate,
+UITableViewDataSource,
+ContactListWithCodeSelectionDelegate,
+UITextFieldDelegate,
+SWTableViewCellDelegate,
+UITextViewDelegate>
 {
     NSString *titleOfList;
     NSString* nameOfField;
     __block BOOL isLoading;
     __block BOOL isSaved;
+    __block BOOL isHeaderOpening;
     
-    NSNumber* selectedFileStatusCode;
-    NSNumber* selectedPartnerCode;
-    NSNumber* selectedLACode;
-    NSNumber* selectedClerkCode;
-    NSNumber* selectedPrimaryClientCode;
-    NSNumber* selectedMatterCode;
+    NSString* selectedFileStatusCode;
+    NSString* selectedPartnerCode;
+    NSString* selectedLACode;
+    NSString* selectedClerkCode;
+    NSString* selectedPrimaryClientCode;
+    NSString* selectedMatterCode;
     
     NSMutableArray* partyVendorCodeList, *partyVendorNameList;
     NSMutableArray* partyPurchaserCodeList, *partyPurchaserNameList;
@@ -55,9 +63,11 @@ ContactListWithCodeSelectionDelegate,UITextFieldDelegate, SWTableViewCellDelegat
 }
 @property (weak, nonatomic) IBOutlet FZAccordionTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contents;
-@property (nonatomic, strong) NSArray *headers;
+@property (nonatomic, strong) NSMutableArray *headers;
 @property (strong, nonatomic)
 NSMutableDictionary* keyValue;
+
+@property (nonatomic, strong) RelatedMatterModel* matterModel;
 
 @end
 
@@ -65,34 +75,24 @@ NSMutableDictionary* keyValue;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self prepareUI];
     [self registerNib];
 }
 
 - (void) prepareUI {
     self.keyValue = [@{
-                       @(0): @(1), @(1):@(0),
-                       @(2):@(0),
-                       @(3):@(0),
-                       @(4):@(0), @(5):@(0), @(6):@(0)
+                       @(0): @(1)
                        } mutableCopy];
     NSArray* temp = @[
-                      @[@[@"File No", @""], @[@"Primary Client", @""], @[@"File Status", @""], @[@"Partner-in-Charge", @""], @[@"LA-in-Charge", @""], @[@"Clert-in-Charge", @""], @[@"Matter", @""], @[@"Physical File", @""], @[@"Box", @""], @[@"Remarks", @""],
+                      @[@[@"File No (Auto Assigned)", @""], @[@"Ref 2", @""], @[@"Primary Client", @""], @[@"File Status", @""], @[@"Partner-in-Charge", @""], @[@"LA-in-Charge", @""], @[@"Clert-in-Charge", @""], @[@"Matter", @""], @[@"Location Box", @""], @[@"Location Physical", @""], @[@"Location Pocket No", @""],  @[@"Remarks", @""],
                           @[@"Save", @""]
-                        ],
-                      @[@[@"Vendor", @""],@[@"Purchaser", @""], @[@"Customer Group3", @""], @[@"Customer Group4", @""]],
-                      @[@[@"Vendor's Solicitor", @""], @[@"Purchaser's Solicitor", @""], @[@"Customer Group3's Solicitor", @""], @[@"Customer Group4's Solicitor", @""]],
-                      @[@[@"Property1", @""], @[@"Property2", @""], @[@"Property3", @""], @[@"Property4", @""], @[@"Property5", @""]],
-                      @[@[@"Vendor's Bank", @""], @[@"Purchaser's Bank", @""], @[@"Customer Group3's Bank", @""]],
-                      @[@[@"Purchase Price (A)", @""], @[@"Earnest Deposit  (B)", @""], @[@"Balance (C)", @""], @[@"Total Deposit (D) = B + C", @""], @[@"Purchase Price (A - D)", @""], @[@"GST Amount", @""], @[@"Redemption Sum", @""], @[@"Term Loan Amt", @""], @[@"OD Loan Amt", @""], @[@"+ MRTA", @""], @[@"+ Legal Fee", @""], @[@"+ Other", @""], @[@"Total Loan", @""]],
-                      @[@[@"SPA Date", @""], @[@"CP Fulfillment Date", @""], @[@"Completion Date", @""], @[@"Extended Completion date", @""], @[@"Redemption Date", @""], @[@"Bank Instruction Date", @""], @[@"Letter of Offer Date", @""]]
+                        ]
                       ];
     _contents = [temp mutableCopy];
     
-    _headers = @[
-                 @"Matter Information", @"Parties Group", @"Solicitors", @"Properties", @"Banks", @"Important RM", @"Important Date"
-                 ];
+    _headers = [@[
+                 @"Matter Information"
+                 ] mutableCopy];
     
     partyVendorCodeList = [NSMutableArray new];
     partyVendorNameList = [NSMutableArray new];
@@ -141,6 +141,10 @@ NSMutableDictionary* keyValue;
 
 - (void) addPartyToContents: (NSString*)name code:(NSNumber*) code
 {
+    if ((partyVendorCodeList.count + partyPurchaserCodeList.count + partyCustomerGroup3CodeList.count + partyCustomerGroup4CodeList.count) > 25) {
+        [QMAlert showAlertWithMessage:@"You cannot add more parties" actionSuccess:NO inViewController:self];
+        return;
+    }
     NSInteger index = 0;
     NSInteger vendorCount = partyVendorCodeList.count;
     NSInteger purchaserCount = partyPurchaserCodeList.count;
@@ -297,11 +301,12 @@ NSMutableDictionary* keyValue;
 
 - (void) registerNib {
     self.tableView.allowMultipleSectionsOpen = YES;
-    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), @(0), nil];
+    self.tableView.initialOpenSections = [NSSet setWithObjects:@(0), nil];
     // Hide empty separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     [CommonTextCell registerForReuseInTableView:self.tableView];
+    [IncreasingCell registerForReuseInTableView:self.tableView];
     [FloatingTextCell registerForReuseInTableView:self.tableView];
     [AddLastOneButtonCell registerForReuseInTableView:self.tableView];
     [AddMatterCell registerForReuseInTableView:self.tableView];
@@ -349,10 +354,10 @@ NSMutableDictionary* keyValue;
     return [self.contents[section] count];
 }
 
-- (NSNumber*) getValidValue: (NSNumber*) value
+- (NSString*) getValidValue: (NSString*) value
 {
     if (value == nil) {
-        return @(0);
+        return @"";
     }
     else {
         return value;
@@ -361,8 +366,48 @@ NSMutableDictionary* keyValue;
     return value;
 }
 
+- (void) updateSystemNumber {
+    [self replaceContentForSection:0 InRow:0 withValue:_matterModel.systemNo];
+}
+
+- (void) updatePartyGroup {
+    if (_matterModel.partyGroupArray.count == 0) {
+        return;
+    }
+    
+    NSMutableArray *newArray = [NSMutableArray new];
+    for (int i = 0; i < _headers.count; i++) {
+        newArray[i] = [NSMutableArray new];
+        
+        for (int j = 0; j < [_contents[i] count]; j++) {
+            newArray[i][j] = [NSMutableArray new];
+            [newArray[i][j] addObject:_contents[i][j][0]];
+            [newArray[i][j] addObject:_contents[i][j][1]];
+        }
+        for (int k = 0; k < _matterModel.partyGroupArray.count; k++) {
+            PartyGroupModel* model = _matterModel.partyGroupArray[k];
+            newArray[i][k] = [NSMutableArray new];
+            [newArray[i][k] addObject:model.partyGroupName];
+            [newArray[i][k] addObject:@""];
+        }
+    }
+    
+    [_headers addObject:@"PartyGroup"];
+    NSDictionary* temp = @{@(1):@(1)};
+    [_keyValue addEntriesFromDictionary:temp];
+    
+    self.contents = [newArray copy];
+    [self.tableView reloadData];
+}
+
+- (void) updateMatterTable {
+    [self updateSystemNumber];
+    [self updatePartyGroup];
+}
+
 - (IBAction)saveMatter:(id)sender {
     NSDictionary* data = @{
+                           @"dateOpen": [DIHelpers todayWithTime],
                            @"primaryClient": @{
                                    @"code": [self getValidValue:selectedPrimaryClientCode]
                                    },
@@ -380,9 +425,10 @@ NSMutableDictionary* keyValue;
                            @"fileStatus": @{
                                    @"code": [self getValidValue:selectedFileStatusCode]
                                    },
-                           @"locationBox": _contents[0][8][1],
-                           @"locationPhysical": _contents[0][7][1],
-                           @"remarks": _contents[0][9][1]
+                           @"locationBox": _contents[0][9][1],
+                           @"locationPhysical": _contents[0][8][1],
+                           @"locationPocket":_contents[0][10][1],
+                           @"remarks": _contents[0][11][1]
                            };
     if (isLoading) return;
     isLoading = YES;
@@ -394,6 +440,8 @@ NSMutableDictionary* keyValue;
         @strongify(self)
         self->isLoading = NO;
         if (error == nil) {
+            _matterModel = result;
+            [self updateMatterTable];
             [navigationController showNotificationWithType:QMNotificationPanelTypeSuccess message:@"Success" duration:1.0];
             
         } else {
@@ -407,14 +455,8 @@ NSMutableDictionary* keyValue;
     NSInteger section = [[self calcSectionNumber:textField.tag][0] integerValue];
     if (section == 5) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
-        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
-        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
-        textField.text = formattedNumberString;
+        
+        textField.text = [DIHelpers formatDecimal:text];
         return NO;
     } else {
         return YES;
@@ -444,7 +486,7 @@ NSMutableDictionary* keyValue;
                 cell.subLabel.hidden = YES;
                 cell.lastLabel.hidden = YES;
                 cell.addNew = ^{
-                    
+                    [self addParty:indexPath];
                 };
                 
                 return cell;
@@ -535,10 +577,24 @@ NSMutableDictionary* keyValue;
                             [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(handleTap)]];
     [accessoryView sizeToFit];
     
-    FloatingTextCell *cell = [tableView dequeueReusableCellWithIdentifier:[FloatingTextCell cellIdentifier] forIndexPath:indexPath];
-  
     int rows = (int)indexPath.row;
-  
+    
+    if (indexPath.section == 0 && indexPath.row == 11) {
+        IncreasingCell* cell = [tableView dequeueReusableCellWithIdentifier:[IncreasingCell cellIdentifier] forIndexPath:indexPath];
+        cell.increaseTextView.placeholder = self.contents[indexPath.section][rows][0];
+        cell.increaseTextView.text = self.contents[indexPath.section][rows][1];
+        cell.increaseTextView.inputAccessoryView = accessoryView;
+        cell.increaseTextView.tag = [self calcTag:indexPath];
+        cell.increaseTextView.delegate = self;
+        cell.leftUtilityButtons = [self leftButtons];
+        cell.delegate = self;
+        
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        return cell;
+    }
+    
+    FloatingTextCell *cell = [tableView dequeueReusableCellWithIdentifier:[FloatingTextCell cellIdentifier] forIndexPath:indexPath];
+
     cell.floatingTextField.placeholder = self.contents[indexPath.section][rows][0];
     cell.floatingTextField.text = self.contents[indexPath.section][rows][1];
     cell.floatingTextField.floatLabelActiveColor = cell.floatingTextField.floatLabelPassiveColor = [UIColor redColor];
@@ -553,7 +609,7 @@ NSMutableDictionary* keyValue;
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
     if (indexPath.section == 0) {
-        if (indexPath.row > 0 && indexPath.row < 7) {
+        if (indexPath.row > 1 && indexPath.row <= 7) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.floatingTextField.userInteractionEnabled = NO;
         }
@@ -670,10 +726,10 @@ NSMutableDictionary* keyValue;
 
 - (void) calculateImportantRM {
     CGFloat totalDeposit = [[self removeComma:_contents[5][1][1]] floatValue]  + [[self removeComma:_contents[5][2][1]] floatValue];
-    [self replaceContentForSection:5 InRow:3 withValue:[NSString stringWithFormat:@"%lf", totalDeposit]];
+    [self replaceContentForSection:5 InRow:3 withValue:[DIHelpers formatDecimal:[NSString stringWithFormat:@"%.2lf", totalDeposit]]];
     
     CGFloat balancePurchase = [[self removeComma:_contents[5][0][1]] floatValue] - totalDeposit;
-    [self replaceContentForSection:5 InRow:4 withValue:[NSString stringWithFormat:@"%lf", balancePurchase]];
+    [self replaceContentForSection:5 InRow:4 withValue:[DIHelpers formatDecimal:[NSString stringWithFormat:@"%.2lf", balancePurchase]]];
     CGFloat totalLoan = 0;
     
 }
@@ -705,11 +761,24 @@ NSMutableDictionary* keyValue;
     return @[@(section), @(remain)];
 }
 
+- (void) updateTableAfterDidEndEditing:(NSString*) string tag:(NSInteger) tag {
+    string = [[DIHelpers capitalizedString:string] mutableCopy];
+    NSArray* info = [self calcSectionNumber:tag];
+    if ([info[0] integerValue] == 0 && ([info[1] integerValue] >= 8 || [info[1] integerValue] <= 10)) {
+        string = [[string localizedUppercaseString] mutableCopy];
+    }
+    [self replaceContentForSection:[info[0] integerValue] InRow:[info[1] integerValue] withValue:string];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    [self updateTableAfterDidEndEditing:textView.text tag:textView.tag];
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    NSArray* info = [self calcSectionNumber:textField.tag];
-    [self replaceContentForSection:[info[0] integerValue] InRow:[info[1] integerValue] withValue:textField.text];
-    [self calculateImportantRM];   
+    [self updateTableAfterDidEndEditing:textField.text tag:textField.tag];
+//    [self calculateImportantRM];   
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -865,38 +934,42 @@ NSMutableDictionary* keyValue;
     }
 }
 
+- (void) addParty: (NSIndexPath*) indexPath
+{
+    if (indexPath.row == 0 || indexPath.row == partyVendorCodeList.count+1 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+2 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+partyCustomerGroup3CodeList.count + 3 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+partyCustomerGroup3CodeList.count + partyCustomerGroup4CodeList.count + 4 ) {
+        isAddNew = YES;
+        selectedContactRow = indexPath.row;
+        selectedSection = indexPath.section;
+        [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
+    } else {
+        [self loadContact:indexPath.row];
+    }
+}
+
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedContactRow = -1;
     selectedSection = indexPath.section;
     if (indexPath.section == 0) {
         isAddNew = NO;
-        if (indexPath.row == 1) {
+        if (indexPath.row == 2) {
             selectedContactRow = indexPath.row;
             [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
-        } else if (indexPath.row == 2) {
+        } else if (indexPath.row == 3) {
             titleOfList = @"Select File Status";
             nameOfField = self.contents[indexPath.section][indexPath.row][0];
             [self performSegueWithIdentifier:kListWithCodeSegue sender:MATTER_FILE_STATUS_GET_LIST_URL];
-        } else if (indexPath.row == 3) {
-            [self performSegueWithIdentifier:kStaffSegue sender:@"partner"];
         } else if (indexPath.row == 4) {
-            [self performSegueWithIdentifier:kStaffSegue sender:@"la"];
+            [self performSegueWithIdentifier:kStaffSegue sender:@"partner"];
         } else if (indexPath.row == 5) {
+            [self performSegueWithIdentifier:kStaffSegue sender:@"la"];
+        } else if (indexPath.row == 6) {
             [self performSegueWithIdentifier:kStaffSegue sender:@"clerk"];
-        } else if (indexPath.row == 6)  {
+        } else if (indexPath.row == 7)  {
             [self performSegueWithIdentifier:kMatterCodeSegue sender:MATTER_LIST_GET_URL];
         }
     } else if (indexPath.section == 1) {
-        if (indexPath.row == 0 || indexPath.row == partyVendorCodeList.count+1 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+2 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+partyCustomerGroup3CodeList.count + 3 || indexPath.row == partyVendorCodeList.count+partyPurchaserCodeList.count+partyCustomerGroup3CodeList.count + partyCustomerGroup4CodeList.count + 4 ) {
-            isAddNew = YES;
-            selectedContactRow = indexPath.row;
-            selectedSection = indexPath.section;
-            [self performSegueWithIdentifier:kContactGetListSegue sender:CONTACT_GETLIST_URL];
-        } else {
-            [self loadContact:indexPath.row];
-        }
-        
+        [self addParty:indexPath];
     } else if (indexPath.section == 2) {
         isAddNew = NO;
         selectedContactRow = indexPath.row;
@@ -929,9 +1002,16 @@ NSMutableDictionary* keyValue;
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView didOpenSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
-//    NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
-//    
-//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if (isHeaderOpening) {
+        return;
+    }
+    isHeaderOpening = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:section]-1) inSection:section];
+        
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        isHeaderOpening = NO;
+    });
 }
 
 - (void)tableView:(FZAccordionTableView *)tableView willCloseSection:(NSInteger)section withHeader:(UITableViewHeaderFooterView *)header {
@@ -949,8 +1029,8 @@ NSMutableDictionary* keyValue;
 - (void) didSelectList:(UIViewController *)listVC name:(NSString*) name withModel:(CodeDescription *)model
 {
     if ([name isEqualToString:@"File Status"]) {
-        [self replaceContentForSection:0 InRow:2 withValue:model.descriptionValue];
-        selectedFileStatusCode = [NSNumber numberWithLong:[model.codeValue longLongValue]];
+        [self replaceContentForSection:0 InRow:3 withValue:model.descriptionValue];
+        selectedFileStatusCode = model.codeValue;
     } 
 }
 
@@ -965,7 +1045,7 @@ NSMutableDictionary* keyValue;
             newLabel = @"Name";
             
             if (selectedSection == 0) {
-                selectedPrimaryClientCode =[NSNumber numberWithInteger: [model.staffCode integerValue]];
+                selectedPrimaryClientCode = model.staffCode;
                 [self replaceContentForSection:selectedSection InRow:selectedContactRow withValue:model.name];
             } else {
                 [self addPartyToContents:model.name code:[NSNumber numberWithInteger: [model.staffCode integerValue]]];
@@ -987,8 +1067,8 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kMatterCodeSegue]) {
         ListOfMatterViewController* matterVC = segue.destinationViewController;
         matterVC.updateHandler = ^(MatterCodeModel *model) {
-            selectedMatterCode = [NSNumber numberWithInteger: [model.matterCode integerValue]];
-            [self replaceContentForSection:0 InRow:6 withValue:model.matterCode];
+            selectedMatterCode = model.matterCode;
+            [self replaceContentForSection:0 InRow:7 withValue:[NSString stringWithFormat:@"%@ %@", model.matterCode, model.matterDescription]];
         };
     }
     
@@ -998,14 +1078,14 @@ NSMutableDictionary* keyValue;
         staffVC.typeOfStaff = sender;
         staffVC.updateHandler = ^(NSString* typeOfStaff, StaffModel* model) {
             if ([typeOfStaff isEqualToString:@"partner"]) {
-                [self replaceContentForSection:0 InRow:3 withValue:model.name];
-                selectedPartnerCode = [NSNumber numberWithInteger: [model.staffCode integerValue]];
-            } else if ([typeOfStaff isEqualToString:@"la"]) {
                 [self replaceContentForSection:0 InRow:4 withValue:model.name];
-                selectedLACode = [NSNumber numberWithInteger: [model.staffCode integerValue]];
-            } else if ([typeOfStaff isEqualToString:@"clerk"]) {
+                selectedPartnerCode = model.staffCode;
+            } else if ([typeOfStaff isEqualToString:@"la"]) {
                 [self replaceContentForSection:0 InRow:5 withValue:model.name];
-                selectedClerkCode = [NSNumber numberWithInteger: [model.staffCode integerValue]];
+                selectedLACode = model.staffCode;
+            } else if ([typeOfStaff isEqualToString:@"clerk"]) {
+                [self replaceContentForSection:0 InRow:6 withValue:model.name];
+                selectedClerkCode = model.staffCode;
             }
         };
     }
@@ -1052,13 +1132,6 @@ NSMutableDictionary* keyValue;
             solicitorCodeList[selectedContactRow] = [NSNumber numberWithInteger: [model.solicitorCode integerValue]];
             solicitorNameList[selectedContactRow] = model.name;
             solicitorRefList[selectedContactRow] = model.reference;
-//            if (solicitorCodeList.count > selectedContactRow) {
-//                
-//            } else {
-//                [solicitorCodeList addObject:[NSNumber numberWithInteger: [model.solicitorCode integerValue]]];
-//                [solicitorNameList addObject:model.name];
-//                [solicitorRefList addObject:model.reference];
-//            }
             [self replaceContentForSection:selectedSection InRow:selectedContactRow withValue:model.name];
         };
     }
@@ -1079,6 +1152,12 @@ NSMutableDictionary* keyValue;
         ContactViewController* contactVC = segue.destinationViewController;
         contactVC.contactModel = sender;
         contactVC.previousScreen = @"Back";
+    }
+    
+    if ([segue.identifier isEqualToString:kLegalFirmSearchSegue]){
+        LegalFirmViewController* legalFirmVC = segue.destinationViewController;
+        legalFirmVC.legalFirmModel = sender;
+        legalFirmVC.previousScreen = @"Back";
     }
 }
 @end

@@ -22,6 +22,8 @@
     [super awakeFromNib];
     // Initialization code
     self.rightBtn.hidden = YES;
+    self.titleLabel.copyingEnabled = YES;
+    self.contentLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -33,7 +35,12 @@
 - (void) configureCellWithContact:(NSString*) title text:(NSString*) text
 {
     self.titleLabel.text = title;
-    self.contentLabel.text = text;
+    
+    if ([title isEqualToString:@"Client"]) {
+        self.contentLabel.text = text.uppercaseString;
+    } else {
+        self.contentLabel.text = text;
+    }
     
     self.value = text;
 }

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -14,6 +15,9 @@
         </array>
         <array key="SF-UI-Display-Semibold.otf">
             <string>SFUIDisplay-Semibold</string>
+        </array>
+        <array key="SF-UI-Text-Bold.otf">
+            <string>SFUIText-Bold</string>
         </array>
         <array key="SF-UI-Text-Light.otf">
             <string>SFUIText-Light</string>
@@ -77,7 +81,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 Feb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D5c-fT-4jT">
-                                            <rect key="frame" x="329.5" y="64" width="37.5" height="27"/>
+                                            <rect key="frame" x="328.5" y="64" width="38.5" height="27"/>
                                             <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="12"/>
                                             <color key="textColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -154,7 +158,7 @@
                     <tabBarItem key="tabBarItem" title="Home" image="icon_home.png" id="cas-ce-5h9"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8d8-px-nXR" customClass="QMNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="8d8-px-nXR" customClass="QMNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.039215686270000001" green="0.074509803920000006" blue="0.10980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -201,7 +205,7 @@
                                                     <rect key="frame" x="51" y="43.5" width="28" height="20"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delivery" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bZM-b5-G8X">
-                                                    <rect key="frame" x="42.5" y="68.5" width="46.5" height="16"/>
+                                                    <rect key="frame" x="41" y="68.5" width="49" height="16"/>
                                                     <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="13"/>
                                                     <color key="textColor" red="0.65490196079999996" green="0.66274509800000003" blue="0.67450980390000004" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -230,7 +234,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ho Mogan &amp; Noraini" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClF-ad-UKj">
-                                        <rect key="frame" x="49" y="9" width="117.5" height="16"/>
+                                        <rect key="frame" x="49" y="9" width="121.5" height="16"/>
                                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -265,7 +269,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5eE-R2-UtC">
-                                        <rect key="frame" x="51" y="28" width="27" height="13"/>
+                                        <rect key="frame" x="51" y="28" width="28" height="13"/>
                                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
                                         <color key="textColor" red="0.73725490196078436" green="0.74509803921568629" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -525,25 +529,95 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fyY-kJ-Czc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="637"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="648"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="t63-MS-Uc1">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="122"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="134"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T0r-o6-p76" userLabel="TabBar">
+                                            <rect key="frame" x="0.0" y="90" width="375" height="44"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="QQj-iJ-CZG">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZI-On-CQO">
+                                                            <rect key="frame" x="0.0" y="0.0" width="94" height="44"/>
+                                                            <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
+                                                            <state key="normal" title="Today">
+                                                                <color key="titleColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="didTapToday:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Jpf-9Z-4FT"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q6F-nd-7iW">
+                                                            <rect key="frame" x="94" y="0.0" width="93.5" height="44"/>
+                                                            <fontDescription key="fontDescription" name="SFUIText-Bold" family="SF UI Text" pointSize="13"/>
+                                                            <state key="normal" title="Next 7 days">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="didTapThisWeek:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Obs-aF-yvg"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uuv-8N-FYq">
+                                                            <rect key="frame" x="187.5" y="0.0" width="94" height="44"/>
+                                                            <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
+                                                            <state key="normal" title="Future">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="didTapFuture:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Mrh-sc-7Fn"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvm-mB-JHB">
+                                                            <rect key="frame" x="281.5" y="0.0" width="93.5" height="44"/>
+                                                            <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
+                                                            <state key="normal" title="Past">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="didTapPrevious:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="sA8-W1-MiW"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="tintColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                                                </stackView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBc-zq-kwv" userLabel="TabInd">
+                                                    <rect key="frame" x="0.0" y="41" width="94" height="3"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="3" id="bVx-sR-yz1"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="wBc-zq-kwv" firstAttribute="width" secondItem="T0r-o6-p76" secondAttribute="width" multiplier="1:4" id="8WY-jf-4Ge"/>
+                                                <constraint firstAttribute="trailing" secondItem="QQj-iJ-CZG" secondAttribute="trailing" id="Jtz-Fv-gJE"/>
+                                                <constraint firstItem="wBc-zq-kwv" firstAttribute="leading" secondItem="T0r-o6-p76" secondAttribute="leading" id="KCS-yj-P0b"/>
+                                                <constraint firstAttribute="bottom" secondItem="wBc-zq-kwv" secondAttribute="bottom" id="LLh-dr-pac"/>
+                                                <constraint firstItem="QQj-iJ-CZG" firstAttribute="leading" secondItem="T0r-o6-p76" secondAttribute="leading" id="OsR-6p-ZK7"/>
+                                                <constraint firstAttribute="bottom" secondItem="QQj-iJ-CZG" secondAttribute="bottom" id="Wph-iu-avt"/>
+                                                <constraint firstAttribute="height" constant="44" id="dBv-MR-cR1"/>
+                                                <constraint firstItem="QQj-iJ-CZG" firstAttribute="top" secondItem="T0r-o6-p76" secondAttribute="top" id="odM-2d-Zcs"/>
+                                            </constraints>
+                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mar 27, 2017" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8zx-so-ulL">
-                                            <rect key="frame" x="284" y="60" width="83" height="16.5"/>
+                                            <rect key="frame" x="281" y="60" width="86" height="17"/>
                                             <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
                                             <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c45-fx-XvU">
-                                            <rect key="frame" x="18" y="60" width="102" height="18"/>
+                                            <rect key="frame" x="18" y="59" width="102" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="102" id="uSo-zu-mkM"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="15"/>
+                                            <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                             <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" title="Calendar" image="icon_calendar_red.png">
                                                 <color key="titleColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
@@ -552,66 +626,21 @@
                                                 <action selector="didTapCalendar:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="0s1-pH-ZL8"/>
                                             </connections>
                                         </button>
-                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="QQj-iJ-CZG">
-                                            <rect key="frame" x="5" y="84" width="365" height="30"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZI-On-CQO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="91.5" height="30"/>
-                                                    <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
-                                                    <state key="normal" title="Today">
-                                                        <color key="titleColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapToday:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Jpf-9Z-4FT"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q6F-nd-7iW">
-                                                    <rect key="frame" x="91.5" y="0.0" width="91" height="30"/>
-                                                    <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
-                                                    <state key="normal" title="This Week">
-                                                        <color key="titleColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapThisWeek:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Obs-aF-yvg"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uuv-8N-FYq">
-                                                    <rect key="frame" x="182.5" y="0.0" width="91.5" height="30"/>
-                                                    <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
-                                                    <state key="normal" title="Future">
-                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapFuture:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="Mrh-sc-7Fn"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvm-mB-JHB">
-                                                    <rect key="frame" x="274" y="0.0" width="91" height="30"/>
-                                                    <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
-                                                    <state key="normal" title="Previous">
-                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapPrevious:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="sA8-W1-MiW"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </stackView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
+                                        <constraint firstItem="T0r-o6-p76" firstAttribute="leading" secondItem="t63-MS-Uc1" secondAttribute="leading" id="1Et-Za-9an"/>
                                         <constraint firstAttribute="trailing" secondItem="8zx-so-ulL" secondAttribute="trailing" constant="8" id="9qN-6d-k8a"/>
-                                        <constraint firstItem="c45-fx-XvU" firstAttribute="top" secondItem="8zx-so-ulL" secondAttribute="top" id="FgM-nT-CBm"/>
-                                        <constraint firstItem="QQj-iJ-CZG" firstAttribute="leading" secondItem="t63-MS-Uc1" secondAttribute="leading" constant="5" id="JF1-MS-Rmp"/>
-                                        <constraint firstAttribute="bottom" secondItem="QQj-iJ-CZG" secondAttribute="bottom" constant="8" id="M5T-2c-diC"/>
-                                        <constraint firstAttribute="trailing" secondItem="QQj-iJ-CZG" secondAttribute="trailing" constant="5" id="Wtp-Cd-QTn"/>
+                                        <constraint firstItem="T0r-o6-p76" firstAttribute="top" secondItem="c45-fx-XvU" secondAttribute="bottom" constant="3" id="GRR-2T-A2O"/>
                                         <constraint firstItem="c45-fx-XvU" firstAttribute="leading" secondItem="t63-MS-Uc1" secondAttribute="leading" constant="18" id="X9l-tt-gxC"/>
+                                        <constraint firstAttribute="bottom" secondItem="T0r-o6-p76" secondAttribute="bottom" id="knm-Zg-nuq"/>
                                         <constraint firstItem="8zx-so-ulL" firstAttribute="top" secondItem="t63-MS-Uc1" secondAttribute="top" constant="60" id="xjH-zu-6rP"/>
+                                        <constraint firstAttribute="trailing" secondItem="T0r-o6-p76" secondAttribute="trailing" id="zIb-5g-vTk"/>
                                     </constraints>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="h0C-3c-cKn">
-                                        <rect key="frame" x="0.0" y="150" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="162" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h0C-3c-cKn" id="xMF-9U-MfN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -624,76 +653,84 @@
                                     <outlet property="delegate" destination="PG9-Eb-HbX" id="1dv-bm-PpK"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IxU-kk-W6b">
-                                <rect key="frame" x="0.0" y="637" width="375" height="30"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cc4-Ef-M93" userLabel="TabBar">
+                                <rect key="frame" x="0.0" y="634" width="375" height="33"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="uFn-hY-CnM">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="33"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rBN-f3-2Fe">
-                                                <rect key="frame" x="0.0" y="0.0" width="94" height="30"/>
-                                                <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
-                                                <state key="normal" title="All">
-                                                    <color key="titleColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="allFilter:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="aSC-VS-Hx9"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OmH-hi-b9E">
-                                                <rect key="frame" x="94" y="0.0" width="93.5" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="94" height="33"/>
                                                 <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
                                                 <state key="normal" title="Court">
-                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="courtFilter:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="BeZ-W9-dLX"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xon-6K-m4O">
-                                                <rect key="frame" x="187.5" y="0.0" width="94" height="30"/>
+                                                <rect key="frame" x="94" y="0.0" width="93.5" height="33"/>
                                                 <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
                                                 <state key="normal" title="Office">
-                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="officeFilter:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="ITY-oM-5WH"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AVz-Cs-Klb">
-                                                <rect key="frame" x="281.5" y="0.0" width="93.5" height="30"/>
+                                                <rect key="frame" x="187.5" y="0.0" width="94" height="33"/>
                                                 <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
                                                 <state key="normal" title="Personal">
-                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="personalFilter:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="4tw-kj-YP8"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rBN-f3-2Fe">
+                                                <rect key="frame" x="281.5" y="0.0" width="93.5" height="33"/>
+                                                <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
+                                                <state key="normal" title="All">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="allFilter:" destination="PG9-Eb-HbX" eventType="touchUpInside" id="aSC-VS-Hx9"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="bYT-pR-MKw"/>
-                                        </constraints>
                                     </stackView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rIW-Jp-m7g" userLabel="TabInd">
+                                        <rect key="frame" x="0.0" y="30" width="94" height="3"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="3" id="u9a-9O-vMG"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="uFn-hY-CnM" firstAttribute="top" secondItem="IxU-kk-W6b" secondAttribute="top" id="16j-uf-UmP"/>
-                                    <constraint firstAttribute="bottom" secondItem="uFn-hY-CnM" secondAttribute="bottom" id="BbC-ky-mjF"/>
-                                    <constraint firstAttribute="trailing" secondItem="uFn-hY-CnM" secondAttribute="trailing" id="XEY-8X-OM8"/>
-                                    <constraint firstItem="uFn-hY-CnM" firstAttribute="leading" secondItem="IxU-kk-W6b" secondAttribute="leading" id="aHb-Zs-sj9"/>
+                                    <constraint firstAttribute="bottom" secondItem="rIW-Jp-m7g" secondAttribute="bottom" id="0yH-Dw-eff"/>
+                                    <constraint firstAttribute="height" constant="33" id="5Vy-St-j5a"/>
+                                    <constraint firstItem="uFn-hY-CnM" firstAttribute="leading" secondItem="Cc4-Ef-M93" secondAttribute="leading" id="VIf-Qu-rtf"/>
+                                    <constraint firstItem="rIW-Jp-m7g" firstAttribute="width" secondItem="Cc4-Ef-M93" secondAttribute="width" multiplier="1:4" id="Xvz-py-euA"/>
+                                    <constraint firstItem="uFn-hY-CnM" firstAttribute="top" secondItem="Cc4-Ef-M93" secondAttribute="top" id="aut-Pu-EVr"/>
+                                    <constraint firstAttribute="trailing" secondItem="uFn-hY-CnM" secondAttribute="trailing" id="dey-AC-ezX"/>
+                                    <constraint firstItem="rIW-Jp-m7g" firstAttribute="leading" secondItem="Cc4-Ef-M93" secondAttribute="leading" id="kud-WN-7gv"/>
+                                    <constraint firstAttribute="bottom" secondItem="uFn-hY-CnM" secondAttribute="bottom" id="pV2-by-edA"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fyY-kJ-Czc" secondAttribute="trailing" id="4gt-3b-HZI"/>
-                            <constraint firstItem="IxU-kk-W6b" firstAttribute="top" secondItem="fyY-kJ-Czc" secondAttribute="bottom" id="GG5-jb-9yy"/>
-                            <constraint firstItem="6rz-Tg-bPY" firstAttribute="top" secondItem="IxU-kk-W6b" secondAttribute="bottom" id="aeZ-WW-6gH"/>
-                            <constraint firstAttribute="trailing" secondItem="IxU-kk-W6b" secondAttribute="trailing" id="hPx-YL-keN"/>
+                            <constraint firstAttribute="bottom" secondItem="Cc4-Ef-M93" secondAttribute="bottom" id="I0B-fO-XUi"/>
+                            <constraint firstItem="Cc4-Ef-M93" firstAttribute="leading" secondItem="7aN-bO-UlP" secondAttribute="leading" id="KDH-JE-kfw"/>
+                            <constraint firstItem="Cc4-Ef-M93" firstAttribute="top" secondItem="fyY-kJ-Czc" secondAttribute="bottom" constant="-14" id="WmO-XE-itQ"/>
+                            <constraint firstAttribute="trailing" secondItem="Cc4-Ef-M93" secondAttribute="trailing" id="anu-GM-dqR"/>
                             <constraint firstItem="fyY-kJ-Czc" firstAttribute="leading" secondItem="7aN-bO-UlP" secondAttribute="leading" id="iHf-qZ-ByG"/>
-                            <constraint firstItem="IxU-kk-W6b" firstAttribute="leading" secondItem="7aN-bO-UlP" secondAttribute="leading" id="jS3-hU-bhl"/>
                             <constraint firstItem="fyY-kJ-Czc" firstAttribute="top" secondItem="7aN-bO-UlP" secondAttribute="top" id="zt2-NP-lpF"/>
                         </constraints>
                     </view>
@@ -711,12 +748,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="allBtn" destination="rBN-f3-2Fe" id="CcT-rP-pnl"/>
+                        <outlet property="bottomLeading" destination="kud-WN-7gv" id="sf3-cp-MdU"/>
                         <outlet property="courtBtn" destination="OmH-hi-b9E" id="pJY-es-0Ik"/>
                         <outlet property="dateLabel" destination="8zx-so-ulL" id="PVC-kS-LrK"/>
                         <outlet property="futureBtn" destination="uuv-8N-FYq" id="OvD-ZT-VFZ"/>
                         <outlet property="officeBtn" destination="xon-6K-m4O" id="gWI-SQ-pod"/>
                         <outlet property="personalBtn" destination="AVz-Cs-Klb" id="0k0-HV-Emc"/>
                         <outlet property="previousBtn" destination="bvm-mB-JHB" id="SRc-vT-NZY"/>
+                        <outlet property="tabbarIndicatorLeading" destination="KCS-yj-P0b" id="e89-xH-mY3"/>
                         <outlet property="tableView" destination="fyY-kJ-Czc" id="lu1-n5-nUO"/>
                         <outlet property="thisWeekBtn" destination="Q6F-nd-7iW" id="pUi-5s-CWe"/>
                         <outlet property="todayBtn" destination="oZI-On-CQO" id="Vs4-xw-acL"/>
@@ -726,7 +765,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xtJ-VE-kwh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5614" y="734"/>
+            <point key="canvasLocation" x="5613.6000000000004" y="733.5832083958021"/>
         </scene>
         <!--EditCourtnavigation-->
         <scene sceneID="7Q8-Rn-rkV">
@@ -815,7 +854,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dg3-dV-Y9A" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="oJq-4P-nyc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="oJq-4P-nyc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -839,7 +878,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="98K-PN-Fhb" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="r8K-Lc-SgC">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="r8K-Lc-SgC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -863,7 +902,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="VqM-Ye-o3a" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2ZM-6U-yum" customClass="QMNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="2ZM-6U-yum" customClass="QMNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>

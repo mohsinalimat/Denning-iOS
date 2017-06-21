@@ -294,8 +294,8 @@
     
     DetailWithAutocomplete *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailWithAutocomplete"];
     vc.url = COURT_PERSONAL_DETAIL_GET_LIST_URL;
-    vc.updateHandler =  ^(NSString* selectedString) {
-        self.details.text = selectedString;
+    vc.updateHandler =  ^(CodeDescription* model) {
+        self.details.text = model.descriptionValue;
     };
     [self showPopup:vc];
 }

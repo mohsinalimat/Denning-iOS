@@ -17,7 +17,7 @@
 #import "DashboardTaxInvoiceViewController.h"
 #import "BankCashViewController.h"
 #import "DashboardFeeTransferViewController.h"
-
+#import "TaskCheckListViewController.h"
 
 @interface DashboardViewController ()
 <UIDocumentInteractionControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, SWTableViewCellDelegate>
@@ -137,9 +137,9 @@ NSMutableDictionary* keyValue;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self hideTabBar];
+//    [self hideTabBar];
+    [self configureBackBtnWithImageName:@"Back" withSelector:@selector(popupScreen:)];
     [self changeTitle];
-
     
     [self getDashbardWithAPI:@"v1/app/dashboard/S1" inSessionID:@(1) withCompletion:^{
         [self.tableView reloadData];
@@ -281,13 +281,13 @@ NSMutableDictionary* keyValue;
         NSArray* items = [self itemsFromIndexpath:indexPath];
         OneRowWithDot *cell = [tableView dequeueReusableCellWithIdentifier:[OneRowWithDot cellIdentifier] forIndexPath:indexPath];
         cell.leftLabel.text = ((ItemModel*)items[indexPath.row]).label;
-        cell.dotValue.text = ((ItemModel*)items[indexPath.row]).value;
+        cell.dotValue.text = [DIHelpers addThousandsSeparator:((ItemModel*)items[indexPath.row]).value];
         return cell;
     } else if ([visibleModel.iStyle integerValue] == 4) {
         NSArray* items = [self itemsFromIndexpath:indexPath];
         DashboardStyle4Cell *cell = [tableView dequeueReusableCellWithIdentifier:[DashboardStyle4Cell cellIdentifier] forIndexPath:indexPath];
         cell.leftLabel.text = ((ItemModel*)items[indexPath.row]).label;
-        cell.value.text = ((ItemModel*)items[indexPath.row]).value;
+        cell.value.text = [DIHelpers addThousandsSeparator:((ItemModel*)items[indexPath.row]).value];
         return cell;
     } else if ([visibleModel.iStyle integerValue] == 5) {
         LineGraphCell *cell = [tableView dequeueReusableCellWithIdentifier:[LineGraphCell cellIdentifier] forIndexPath:indexPath];
@@ -408,6 +408,8 @@ NSMutableDictionary* keyValue;
         [self performSegueWithIdentifier:kDashboardTaxInvoiceSegue sender:item];
     } else if ([((VisibleModel*)_headers[indexPath.section]).sessionName  isEqualToString:@"FEES TRANSFER"]) {
         [self performSegueWithIdentifier:kDashboardFeesTranserSegue sender:item];
+    } else if ([((VisibleModel*)_headers[indexPath.section]).sessionName  isEqualToString:@"TASK CHECKLIST ALERT"]) {
+        [self performSegueWithIdentifier:kDashboardTaskCheckSegue sender:item];
     }
 }
 
@@ -450,6 +452,13 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kDashboardFeesTranserSegue]) {
         UINavigationController* navVC = segue.destinationViewController;
         DashboardFeeTransferViewController* vc = navVC.viewControllers.firstObject;
+        
+        vc.url = ((ItemModel*)sender).api;
+    }
+    
+    if ([segue.identifier isEqualToString:kDashboardTaskCheckSegue]) {
+        UINavigationController* navVC = segue.destinationViewController;
+        TaskCheckListViewController* vc = navVC.viewControllers.firstObject;
         
         vc.url = ((ItemModel*)sender).api;
     }

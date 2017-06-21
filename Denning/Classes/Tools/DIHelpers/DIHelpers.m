@@ -67,40 +67,41 @@
     return [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
 }
 
-+ (NSString*) getDateInShortForm: (NSString*) date
++ (NSString*) getDateInShortFormWithoutTime: (NSString*) date
 {
-    NSString* formattedDate;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
-    
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
-    [formatter setTimeZone:timeZone];
-    [newFormatter setTimeZone:timeZone];
-    [newFormatter setDateFormat:@"MM/dd/yyyy"];
-    
-    NSDate *creationDate = [formatter dateFromString:date];
-    
-    formattedDate = [newFormatter stringFromDate:creationDate];
-    return formattedDate;
-}
-
-+ (NSString*) getDateInLongForm: (NSString*) date
-{
-    NSString* formattedDate;
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     
     [formatter setDateFormat:@"yyyy-MM-dd"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
-    [newFormatter setTimeZone:timeZone];
-    [newFormatter setDateFormat:@"MM/dd/yyyy"];
     
     NSDate *creationDate = [formatter dateFromString:date];
     
-    formattedDate = [newFormatter stringFromDate:creationDate];
-    return formattedDate;
+    return [NSDateFormatter localizedStringFromDate:creationDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+}
+
++ (NSString*) getDateInShortForm: (NSString*) date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    
+    NSDate *creationDate = [formatter dateFromString:date];
+    
+    return [NSDateFormatter localizedStringFromDate:creationDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+}
+
++ (NSString*) getDateInLongForm: (NSString*) date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSDate *creationDate = [formatter dateFromString:date];
+    
+    return [NSDateFormatter localizedStringFromDate:creationDate dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterNoStyle];
 }
 
 + (NSString*) convertDateToMySQLFormat: (NSString*)date
@@ -111,7 +112,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     
-    [formatter setDateFormat:@"MM/dd/yyyy"];
+    [formatter setDateFormat:@"d MMM yyyy"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     [newFormatter setTimeZone:timeZone];
@@ -131,7 +132,7 @@
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     [newFormatter setTimeZone:timeZone];
-    [newFormatter setDateFormat:@"MM/dd/yyyy"];
+    [newFormatter setDateFormat:@"d MMM yyyy"];
     
     NSDate *creationDate = [formatter dateFromString:date];
     
@@ -161,20 +162,7 @@
 
 + (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime
 {
-    NSString* date;
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
-    
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
-    [formatter setTimeZone:timeZone];
-    [newFormatter setTimeZone:timeZone];
-    [newFormatter setDateFormat:@"dd-MM-yyyy"];
-    
-    NSDate *creationDate = [formatter dateFromString:dateTime];
-    
-    date = [newFormatter stringFromDate:creationDate];
-    return date;
+   return [self getDateInShortForm:dateTime];
 }
 
 + (BOOL) isWordFile:(NSString*) fileExt
@@ -268,9 +256,29 @@
 + (NSArray*) separateNameIntoTwo:(NSString*) title
 {
     NSMutableArray *items = [[title componentsSeparatedByString:@"("] mutableCopy];
-    items[1] = [items[1] substringToIndex:((NSString*)items[1]).length-2];
+    if ([items count] > 1) {
+        items[1] = [items[1] substringToIndex:((NSString*)items[1]).length-1];
+    } else {
+        [items addObject:@""];
+    }
+    
     
     return items;
+}
+
++ (NSString*) getDayFromDate: (NSString*) date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
+    [newFormatter setTimeZone:timeZone];
+    [newFormatter setDateFormat:@"EEEE"];
+
+    return [newFormatter stringFromDate:[formatter dateFromString:date]];
 }
 
 + (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title
@@ -295,6 +303,8 @@
     NSString* date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     
     date = [formatter stringFromDate:[NSDate date]];
@@ -305,7 +315,9 @@
     NSString* date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ii"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     date = [formatter stringFromDate:[NSDate date]];
     return date;
@@ -318,6 +330,8 @@
 + (NSString*) sevenDaysLaterFromDate: (NSString*) date {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     
     return [formatter stringFromDate:[GLDateUtils dateByAddingDays:6 toDate:[formatter dateFromString:date]]];
@@ -327,6 +341,8 @@
     NSString* date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     
     date = [formatter stringFromDate:[GLDateUtils dateByAddingDays:-6 toDate:[NSDate date]]];
@@ -358,9 +374,50 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
+    NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
+    [formatter setTimeZone:timeZone];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     
     return [formatter stringFromDate:Sunday];
 }
 
++ (NSString*) addThousandsSeparator: (id) value
+{
+    NSScanner *scanner = [NSScanner scannerWithString:[value stringByReplacingOccurrencesOfString:@"," withString:@""]];
+    BOOL isNumeric = [scanner scanInteger:NULL] && [scanner isAtEnd];
+    if (((NSString*)value).length == 0 && !isNumeric) {
+        return value;
+    }
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:value];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    return [numberFormatter stringFromNumber:number];
+}
+
++ (NSString*) capitalizedString: (id) value
+{
+    NSArray* myWords = [(NSString*)value componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    NSString* string = @"";
+    for (NSString* word in myWords) {
+        string = [NSString stringWithFormat:@"%@ %@", string,[ word capitalizedString]];
+    }
+    
+    return string;
+}
+
++ (NSString*) formatDecimal:(NSString*) text {
+    text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
+    text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
+    NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
+    NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
+    NSArray* obj = [formattedNumberString componentsSeparatedByString:@"."];
+    if ([obj count] > 1 && ((NSString*)obj[1]).length == 1) {
+        formattedNumberString = [formattedNumberString stringByAppendingString:@"0"];
+    }
+    return formattedNumberString;
+}
 @end

@@ -23,6 +23,9 @@
     [super awakeFromNib];
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.titleLabel.copyingEnabled = YES;
+    self.indexData.copyingEnabled = YES;
+    self.descriptionLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

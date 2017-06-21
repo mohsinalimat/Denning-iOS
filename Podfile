@@ -33,21 +33,24 @@ target ‘Denning’ do
 	pod "HNKGooglePlacesAutocomplete", "~> 1.1"
 	pod 'UILabel+Copyable', '~> 1.0.0'
 	pod 'drCharts', :git => 'https://github.com/Zomato/DR-charts.git'
+	pod 'UIFloatLabelTextView'
+	pod 'JVFloatLabeledTextField'
+	pod 'MaterialComponents/ShadowElevations'
 
 	pod 'AFNetworking’
 	pod 'Bolts'
 
 	pod 'Realm'
 
-	pod 'Quickblox-WebRTC', '~> 2.4'
+	pod 'Quickblox-WebRTC', ‘2.5’
 	pod 'QuickBlox'
-    	pod 'QMChatViewController'
+    	pod 'QMChatViewController’, ‘0.4.0’
    	pod 'QMServices'
 
 	pod 'ActionSheetPicker-3.0'
 
 	pod 'Fabric'
-	pod 'Digits'
+	pod 'Digits’, ‘1.15.3’
 	pod 'Crashlytics'
     	pod 'TwitterCore', '~> 1.15'
 

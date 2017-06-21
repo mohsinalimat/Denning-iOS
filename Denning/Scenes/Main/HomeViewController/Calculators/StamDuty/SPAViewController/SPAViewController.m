@@ -28,7 +28,7 @@
 }
 
 - (void) prepareUI {
-    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parenet-Child (50%)", @"Grandparent-Grandchild(50%)", @"Trustee-Beneficiary (+RM10)", @"Administrator-Beneficiary (+RM10)", @"Trustee-Trustee (RM10)flat", @"No consideration(Gift)100%", @"Others (+RM10)", nil];
+    self.relationsArray = [NSArray arrayWithObjects:@"Seller-Purchaser (100%)", @"Husband-wife (0%)", @"Parents-Child (50%)", @"Grandparent-Grandchild (50%)", @"Trustee-Beneficiary (RM10)", @"Administrator-Beneficiary (+RM10)", @"Trustee-Trustee (RM10)flat", @"No consideration(Gift)100%", @"Others (RM10)", nil];
     
     UIToolbar *accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
@@ -140,25 +140,21 @@
     if ([self.relationshipLabel.text isEqualToString:@"Seller-Purchaser (100%)"] || [self.relationshipLabel.text isEqualToString:@"No consideration(Gift)100%"])
     {
         stamDuty  *= 1; // 100%
-        legalCost *= 1;
+        
     } else if ([self.relationshipLabel.text isEqualToString:@"Husband-wife (0%)"]){
         // No more stamp duty
         stamDuty  = 0;
-        legalCost = 0;
-    } else if ([self.relationshipLabel.text isEqualToString:@"Parenet-Child (50%)"]){
+    } else if ([self.relationshipLabel.text isEqualToString:@"Parents-Child (50%)"]){
         stamDuty  *= .5; // 50%
-        legalCost *= .5;
     } else if ([self.relationshipLabel.text isEqualToString:@"Grandparent-Grandchild (50%)"]){
         stamDuty  *= .5; // 50%
-        legalCost *= .5;
-    } else if ([self.relationshipLabel.text isEqualToString:@"Trustee-Beneficiary (+RM10)"] || [self.relationshipLabel.text isEqualToString:@"Administrator-Beneficiary (+RM10)"] ||[self.relationshipLabel.text isEqualToString:@"Trustee-Trustee (RM10)flat"]){
-        stamDuty  += 10; // Add RM10
-        legalCost += 10;
+    } else if ([self.relationshipLabel.text isEqualToString:@"Administrator-Beneficiary (+RM10)"] || [self.relationshipLabel.text isEqualToString:@"Trustee-Beneficiary (RM10)"] || [self.relationshipLabel.text isEqualToString:@"Trustee-Trustee (RM10)flat"] || [self.relationshipLabel.text isEqualToString:@"Others (RM10)"]) {
+        stamDuty = 10;
     } else {
         stamDuty  += 10; // Add RM10
-        legalCost += 10;
     }
     
+    legalCost *= 1;
     self.resultTextField.text = [NSString stringWithFormat:@"%.2f", stamDuty ];
     self.legalCostTextField.text = [NSString stringWithFormat:@"%.2f", legalCost];
     

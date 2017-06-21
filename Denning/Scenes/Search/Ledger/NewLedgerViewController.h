@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface NewLedgerViewController : UIViewController
-@property (strong, nonatomic) NSString* matterCode;
-@property (strong, nonatomic) NSString* selectedAccountType;
+@property (strong, nonatomic) NSString* selectedAccountName;
 @property (strong, nonatomic) NewLedgerModel* ledgerModelNew;
+
 @end

@@ -86,23 +86,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-- (void) filterList {
-    NSMutableArray* newArray = [NSMutableArray new];
-    if (self.filter.length == 0) {
-        self.listOfPresetBills = self.copyedList;
-    } else {
-        for(PresetBillModel* model in self.listOfPresetBills) {
-            if ([model.billCode localizedCaseInsensitiveContainsString:self.filter] || model.billDescription) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfPresetBills = newArray;
-    }
-    
-    [self.tableView reloadData];
-}
-
 - (void) appendList {
     isAppending = YES;
     [self getList];

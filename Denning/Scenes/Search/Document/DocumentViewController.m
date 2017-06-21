@@ -210,6 +210,8 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
         [cell configureCellWithInfo:info[0] number:info[1] image:nil];
         cell.editBtn.hidden = YES;
         cell.chatBtn.hidden = YES;
+        cell.editLabel.hidden = YES;
+        cell.chatLabel.hidden = YES;
         cell.accessoryType = UITableViewCellAccessoryNone;
         return cell;
     } else if (indexPath.section == 1) {
@@ -250,7 +252,10 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
     }
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
+    [request setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
                                                                            inDomain:NSUserDomainMask

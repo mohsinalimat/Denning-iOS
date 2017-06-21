@@ -14,6 +14,11 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.propertyTitle.copyingEnabled = YES;
+    self.projectName.copyingEnabled = YES;
+    self.address.copyingEnabled = YES;
+    self.parcelNo.copyingEnabled = YES;
+    self.condoName.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

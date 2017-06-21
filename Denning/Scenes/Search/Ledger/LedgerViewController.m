@@ -88,8 +88,7 @@
     
     if (indexPath.section == 1) {
         LedgerModel* model = self.ledgerModel.ledgerModelArray[indexPath.row];
-        selectedAccountType = model.accountType;
-        [self performSegueWithIdentifier:kLedgerDetailSearchSegue sender:selectedAccountType];
+        [self performSegueWithIdentifier:kLedgerDetailSearchSegue sender:model.accountName];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -139,8 +138,7 @@
     if ([segue.identifier isEqualToString:kLedgerDetailSearchSegue]){
         NewLedgerViewController* ledgerDetailVC = segue.destinationViewController;
         ledgerDetailVC.ledgerModelNew = self.ledgerModel;
-        ledgerDetailVC.matterCode = self.ledgerModel.fileNo;
-        ledgerDetailVC.selectedAccountType = selectedAccountType;
+        ledgerDetailVC.selectedAccountName = sender;
     }
 }
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class MLPAutoCompleteTextField;
-typedef void (^UpdateAutocompletHandler)(NSString* model);
+typedef void (^UpdateAutocompletHandler)(CodeDescription* model);
 
 @interface DetailWithAutocomplete : UIViewController
 

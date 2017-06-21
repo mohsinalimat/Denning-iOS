@@ -30,7 +30,12 @@
 - (void) configureCellWithLedger: (LedgerModel*) ledgerModel
 {
     self.accountName.text = ledgerModel.accountName;
-    self.availableBalance.text = ledgerModel.availableBalance;
+    if (ledgerModel.availableBalance.length == 0) {
+        self.availableBalance.text = @"0.00";
+    } else {
+        self.availableBalance.text = ledgerModel.availableBalance;
+    }
+    
 }
 
 @end

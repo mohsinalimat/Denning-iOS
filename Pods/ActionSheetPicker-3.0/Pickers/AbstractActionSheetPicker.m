@@ -51,6 +51,7 @@ CG_INLINE BOOL isIPhone4() {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 
 @interface MyPopoverController : UIPopoverController <UIAdaptivePresentationControllerDelegate>
+
 @end
 
 @implementation MyPopoverController
@@ -84,8 +85,10 @@ CG_INLINE BOOL isIPhone4() {
 
 #endif
 
-@interface AbstractActionSheetPicker () <UIGestureRecognizerDelegate>
+@interface AbstractActionSheetPicker () <UIGestureRecognizerDelegate, UISearchBarDelegate, UISearchControllerDelegate>
+@property (nonatomic,assign) NSInteger selectedIndex;
 
+@property (strong, nonatomic) UISearchController *searchController;
 @property(nonatomic, strong) UIBarButtonItem *barButtonItem;
 @property(nonatomic, strong) UIBarButtonItem *doneBarButtonItem;
 @property(nonatomic, strong) UIBarButtonItem *cancelBarButtonItem;
@@ -220,6 +223,11 @@ CG_INLINE BOOL isIPhone4() {
     return nil;
 }
 
+- (UISearchBar*) configureSearchView {
+    
+    return nil;
+}
+
 - (void)notifyTarget:(id)target didSucceedWithAction:(SEL)successAction origin:(id)origin {
     NSAssert(NO, @"This is an abstract class, you must use a subclass of AbstractActionSheetPicker (like ActionSheetStringPicker)");
 }
@@ -233,6 +241,16 @@ CG_INLINE BOOL isIPhone4() {
     }
 }
 
+
+- (void)addKeyboardObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)removeKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Actions
 
 - (void)showActionSheetPicker {
@@ -244,6 +262,9 @@ CG_INLINE BOOL isIPhone4() {
     }
     self.toolbar = [self createPickerToolbarWithTitle:self.title];
     [masterView addSubview:self.toolbar];
+    
+//    UISearchBar* searchBar = [self configureSearchView];
+//    [masterView addSubview:searchBar];
 
     //ios7 picker draws a darkened alpha-only region on the first and last 8 pixels horizontally, but blurs the rest of its background.  To make the whole popup appear to be edge-to-edge, we have to add blurring to the remaining left and right edges.
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {

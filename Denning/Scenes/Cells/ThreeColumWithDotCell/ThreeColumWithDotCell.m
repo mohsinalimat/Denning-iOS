@@ -58,10 +58,10 @@
 - (void) configureCellWithFirstItem:(ItemModel*) firstItem secondItem:(ItemModel*)secondItem thirdItem:(ItemModel*)thirdItem
 {
     self.firstCaption.text = firstItem.label.capitalizedString;
-    self.firstValue.text = firstItem.value;
+    self.firstValue.text = [DIHelpers addThousandsSeparator:firstItem.value];
     self.secondCaption.text = secondItem.label.capitalizedString;
-    self.secondValue.text = secondItem.value;
+    self.secondValue.text = [DIHelpers addThousandsSeparator:secondItem.value];
     self.thirdCaption.text = thirdItem.label.capitalizedString;
-    self.thirdValue.text = thirdItem.value;
+    self.thirdValue.text = [DIHelpers addThousandsSeparator:thirdItem.value];
 }
 @end

@@ -50,11 +50,36 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+//Getter to know the current state
+- (BOOL)tabBarIsVisible {
+    return self.tabBarController.tabBar.frame.origin.y < CGRectGetMaxY(self.view.frame);
+}
+
+- (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated completion:(void (^)(BOOL))completion {
+    
+    // bail if the current state matches the desired state
+    if ([self tabBarIsVisible] == visible) return (completion)? completion(YES) : nil;
+    
+    // get a frame calculation ready
+    CGRect frame = self.tabBarController.tabBar.frame;
+    CGFloat height = frame.size.height;
+    CGFloat offsetY = (visible)? -height : height;
+    
+    // zero duration means no animation
+    CGFloat duration = (animated)? 0.3 : 0.0;
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.tabBarController.tabBar.frame = CGRectOffset(frame, 0, offsetY);
+    } completion:completion];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self changeTitle];
     [self displayBranchInfo];
+    [self setTabBarVisible:YES animated:YES completion:nil];
 }
 
 - (void) changeTitle {
@@ -391,7 +416,7 @@
     isLoading = YES;
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self)
-    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:[DIHelpers today] endDate:[DIHelpers today] filter:@"0All" withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:[DIHelpers today] endDate:[DIHelpers today] filter:@"1court" search:@"" withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
         [SVProgressHUD dismiss];
         @strongify(self)
         self->isLoading = NO;

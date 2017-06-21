@@ -13,6 +13,8 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.ID.copyingEnabled = YES;
+    self.name.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -23,9 +25,8 @@
 
 - (void) configureCellWithStaffModel:(StaffModel*) model
 {
-    self.fullName.text = model.name;
-    self.NRIC.text = model.IDNo;
-    self.mobileAndPhone.text = [NSString stringWithFormat:@"%@ / %@", model.phoneMobile, model.phoneHome];
+    self.name.text = model.name;
+    self.ID.text = model.IDNo;
 }
 
 @end

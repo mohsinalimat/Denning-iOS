@@ -18,7 +18,5 @@
 
 @property (weak, nonatomic) id <QMChatActionsHandler> actionsHandler;
 
-- (void) autoAccept;
-
 @end
 

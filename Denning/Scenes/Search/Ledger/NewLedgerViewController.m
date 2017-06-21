@@ -9,6 +9,7 @@
 #import "NewLedgerViewController.h"
 #import <HTHorizontalSelectionList/HTHorizontalSelectionList.h>
 #import "NewLedgerDetailCell.h"
+#import "TransactionDetail.h"
 
 @interface NewLedgerViewController ()<HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UITableViewDelegate, UITableViewDataSource>
 {
@@ -22,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *filterForDebitOrCredit;
 @property (nonatomic, strong) HTHorizontalSelectionList *selectionList;
 @property (nonatomic, strong) NSMutableArray* filterTitleArray;
+@property (weak, nonatomic) IBOutlet UIView *topContrainer;
 
 @property (strong, nonatomic) NSArray* selectedLedgerDetailArray;
 @property (strong, nonatomic) NSArray* originalLedgerDetailArray;
@@ -30,13 +32,20 @@
 
 @implementation NewLedgerViewController
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self prepareUI];
+    
+    [self getSelectedIndex];
+    
     [self displayTitleAndFooterInfo];
     
     [self loadDetailLedger:selectedIndex withCompletion:^{
+        [self prepareUI];
         [self registerNibs];
     }];
     [self setNeedsStatusBarAppearanceUpdate];
@@ -45,6 +54,18 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,7 +79,7 @@
     LedgerModel* model = self.ledgerModelNew.ledgerModelArray[index];
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
-    [[QMNetworkManager sharedManager] loadLedgerDetailWithCode:self.matterCode accountType:model.accountName completion:^(NSArray * _Nonnull ledgerDetailModelArray, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] loadLedgerDetailURL:model.urlDetail completion:^(NSArray * _Nonnull ledgerDetailModelArray, NSError * _Nonnull error) {
         
         @strongify(self);
         self->isLoading = false;
@@ -66,6 +87,7 @@
         if (error == nil) {
             self.selectedLedgerDetailArray = ledgerDetailModelArray;
             self.originalLedgerDetailArray = ledgerDetailModelArray;
+            [self updateFooterInfo];
             if (completion != nil) {
                 completion();
             }
@@ -77,26 +99,43 @@
 }
 
 - (void) displayTitleAndFooterInfo {
-    self.ledgerFileNo.text = self.ledgerModelNew.fileNo;
-    self.ledgerFileName.text = self.ledgerModelNew.fileName;
+    self.ledgerFileNo.text = [NSString stringWithFormat:@"(%@)", self.ledgerModelNew.fileNo ];
+    self.ledgerFileName.text = [NSString stringWithFormat:@"(%@)", self.ledgerModelNew.fileName];
     
-    LedgerModel* model = (LedgerModel*)self.ledgerModelNew.ledgerModelArray[selectedIndex];
-    self.ledgerBalanceLabel.text = model.currentBalance;
+    self.ledgerBalanceLabel.text = ((LedgerModel*)self.ledgerModelNew.ledgerModelArray[selectedIndex]).currentBalance;
 }
 
-- (void) prepareUI {
+- (void) updateFooterInfo {
+    CGFloat currentBalance = 0;
+    for (LedgerDetailModel* model in self.originalLedgerDetailArray) {
+        if (model.amountDR.length > 0) {
+            currentBalance += [[model.amountDR  stringByReplacingOccurrencesOfString:@"," withString:@""] floatValue];
+        } else {
+            currentBalance -= [[model.amountCR  stringByReplacingOccurrencesOfString:@"," withString:@""] floatValue];
+        }
+    }
+    self.ledgerBalanceLabel.text = [NSString stringWithFormat:@"%lf", currentBalance];
+}
 
-    self.navigationController.navigationBarHidden = YES;
+- (void) getSelectedIndex {
+    self.filterTitleArray = [NSMutableArray new];
     
     for (NSInteger i = 0; i < self.ledgerModelNew.ledgerModelArray.count; i++) {
         LedgerModel* model = self.ledgerModelNew.ledgerModelArray[i];
         [self.filterTitleArray addObject:model.accountName];
-        if ([model.accountName isEqualToString:self.selectedAccountType]) {
+        if ([model.accountName isEqualToString:self.selectedAccountName]) {
             selectedIndex = i;
         }
     }
+}
+
+- (void) prepareUI {
+
+  //  self.navigationController.navigationBarHidden = YES;
     
-    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
+    [self getSelectedIndex];
+    
+    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 74, self.view.frame.size.width, 44)];
     self.selectionList.delegate = self;
     self.selectionList.dataSource = self;
     
@@ -113,6 +152,7 @@
     [self.view addSubview:self.selectionList];
     self.selectionList.backgroundColor = [UIColor clearColor];
     self.selectionList.selectedButtonIndex = selectedIndex;
+    self.selectionList.hidden = NO;
 }
 
 - (void)registerNibs {
@@ -123,7 +163,7 @@
 }
 
 - (IBAction)dismissScreen:(id)sender {
-    self.navigationController.navigationBarHidden = NO;
+ //   self.navigationController.navigationBarHidden = NO;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -133,14 +173,14 @@
         self.selectedLedgerDetailArray = self.originalLedgerDetailArray;
     } else if (self.filterForDebitOrCredit.selectedSegmentIndex == 1) {
         for (LedgerDetailModel* model in self.originalLedgerDetailArray) {
-            if ([model.isDebit integerValue] == 1) {
+            if (model.amountDR.length > 0) {
                 [newArray addObject:model];
             }
         }
         self.selectedLedgerDetailArray = [newArray copy];
     } else {
         for (LedgerDetailModel* model in self.originalLedgerDetailArray) {
-            if ([model.isDebit integerValue] == 0) {
+            if (model.amountDR.length == 0) {
                 [newArray addObject:model];
             }
         }
@@ -187,6 +227,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    [self performSegueWithIdentifier:kAccountDetailSegue sender:self.selectedLedgerDetailArray[indexPath.row]];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -203,10 +245,10 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:kLedgerDetailSearchSegue]){
-//        NewLedgerDetailTableViewController* ledgerDetailVC = segue.destinationViewController;
-//        ledgerDetailVC.ledgerDetailArray = sender;
-//    }
+    if ([segue.identifier isEqualToString:kAccountDetailSegue]){
+        TransactionDetail* vc = segue.destinationViewController;
+        vc.model = sender;
+    }
 }
 
 @end

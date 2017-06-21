@@ -13,6 +13,12 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.quotationNo.copyingEnabled = YES;
+    self.issueBy.copyingEnabled = YES;
+    self.issueTo.copyingEnabled = YES;
+    self.primaryClient.copyingEnabled = YES;
+    self.titleLabel.copyingEnabled = YES;
+    self.fileNo.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -29,6 +35,11 @@
     self.issueBy.text = model.issueBy;
     self.primaryClient.text = model.primaryClient;
     self.titleLabel.text = model.propertyTitle;
+    self.fees.text = @"";
+    self.disb.text = @"";
+    self.disbGST.text = @"";
+    self.GST.text = @"";
+    self.total.text = @"";
 }
 
 - (void) configureCellWithModel:(TaxModel*) model

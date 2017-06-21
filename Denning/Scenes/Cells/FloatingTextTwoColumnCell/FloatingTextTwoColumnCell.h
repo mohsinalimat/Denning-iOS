@@ -11,9 +11,13 @@
 
 typedef void (^UpdateTypeHandler)(void);
 
+typedef void (^UpdateValueHandler)(void);
+
 @interface FloatingTextTwoColumnCell : DIGeneralCell
+@property (weak, nonatomic) IBOutlet UIImageView *rightDetailDisclosure;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *leftFloatingText;
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *rightFloatingText;
 
-@property (strong, nonatomic) UpdateTypeHandler updateHandler;
+@property (strong, nonatomic) UpdateTypeHandler updateTypeHandler;
+@property (strong, nonatomic) UpdateTypeHandler updateValueHandler;
 @end

@@ -22,8 +22,11 @@
     NSString* nameOfField;
     __block NSString *isRental;
     __block NSNumber* issueToFirstCode;
+    NSString* selectedMatterCode, *selectedPresetCode;
     __block BOOL isLoading;
     __block BOOL isSaved;
+    
+    NSInteger selectedRow;
 }
 
 @property (weak, nonatomic) IBOutlet FZAccordionTableView *tableView;
@@ -51,7 +54,7 @@ NSMutableDictionary* keyValue;
                        @(0): @(1), @(1):@(0)
                        } mutableCopy];
     NSArray* temp = @[
-                      @[@[@"Convert Quotation", @""], @[@"Bill No.", @""], @[@"File No.", @""], @[@"Matter", @""], @[@"Bill to", @""], @[@"Preset Code", @""], @[@"Price", @""], @[@"Loan", @""], @[@"Month", @""], @[@"Rental", @""]],
+                      @[@[@"Convert Quotation", @""], @[@"Bill No (System Auto-assinged)", @""], @[@"File No.", @""], @[@"Matter", @""], @[@"Bill to", @""], @[@"Preset Code", @""], @[@"Price", @""], @[@"Loan", @""], @[@"Month", @""], @[@"Rental", @""]],
                       @[@[@"Professional Fees", @""], @[@"Disb. with GST", @""], @[@"Disbursements", @""], @[@"GST", @""], @[@"Total.", @""]
                         ],
                       ];
@@ -82,10 +85,10 @@ NSMutableDictionary* keyValue;
                                    },
                            @"issueToName": _contents[0][4][1],
                            @"matter": @{
-                                   @"code": _contents[0][3][1]
+                                   @"code": selectedMatterCode
                                    },
                            @"presetCode": @{
-                                   @"code": _contents[0][5][1]
+                                   @"code": selectedPresetCode
                                    },
                            @"relatedDocumentNo": _contents[0][0][1],
                            @"spaPrice": [self getActualNumber: [self getValidValue:_contents[0][6][1]]],
@@ -142,35 +145,15 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) updateWholeData: (NSDictionary*) result {
-    NSString* relatedDocumentNo = [result valueForKeyNotNull:@"relatedDocumentNo"];
-    isRental =  [result valueForKeyNotNull:@"isRental"];
-    issueToFirstCode =  [result valueForKeyNotNull:@"issueTo1stCode"];
-    NSString* issueToName =  [result valueForKeyNotNull:@"issueToName"];
     NSString* documentNo = [result valueForKeyNotNull:@"documentNo"];
-    NSString* fileNo = [result valueForKeyNotNull:@"fileNo"];
-    NSString* matterCode = [result valueForKeyNotNull:@"matter"];
-    NSString* presetCode = [result valueForKeyNotNull:@"presetCode"];
-    NSString* rentalMonth = [result valueForKeyNotNull:@"rentalMonth"];
-    NSString* rentalPrice = [result valueForKeyNotNull:@"rentalPrice"];
-    NSString* spaLoan = [result valueForKeyNotNull:@"spaLoan"];
-    NSString* spaPrice = [result valueForKeyNotNull:@"spaPrice"];
     
-    [self replaceContentForSection:0 InRow:0 withValue:relatedDocumentNo];
     [self replaceContentForSection:0 InRow:1 withValue:documentNo];
-    [self replaceContentForSection:0 InRow:2 withValue:fileNo];
-    [self replaceContentForSection:0 InRow:3 withValue:matterCode];
-    [self replaceContentForSection:0 InRow:4 withValue:issueToName];
-    [self replaceContentForSection:0 InRow:5 withValue:presetCode];
-    [self replaceContentForSection:0 InRow:6 withValue:spaPrice];
-    [self replaceContentForSection:0 InRow:7 withValue:spaLoan];
-    [self replaceContentForSection:0 InRow:8 withValue:rentalMonth];
-    [self replaceContentForSection:0 InRow:9 withValue:rentalPrice];
     
     [self updateBelowViewWithData:[result objectForKeyNotNull:@"analysis"]];
 }
 
 - (void) updateBelowViewWithData: (NSDictionary*) result {
-    NSString* iFee = [result objectForKeyNotNull:@"iFee"];
+    NSString* iFee =  [result objectForKeyNotNull:@"iFee"];
     NSString* iDisbTax = [result objectForKeyNotNull:@"iDisbTax"];
     NSString* iDisbOnly = [result objectForKeyNotNull:@"iDisbOnly"];
     NSString* iGST = [result objectForKeyNotNull:@"iGST"];
@@ -185,6 +168,7 @@ NSMutableDictionary* keyValue;
 
 - (NSString*) getValidValue: (NSString*) value
 {
+    value = [value stringByReplacingOccurrencesOfString:@"," withString:@""];
     if ([value isKindOfClass:[NSNumber class]]) {
         value = [((NSNumber*)value) stringValue];
     }
@@ -261,6 +245,9 @@ NSMutableDictionary* keyValue;
                 return;
             }
         };
+        cell.saveHandler = ^{
+            [self saveBill:nil];
+        };
         cell.convertHandler = ^{
             NSString *urlString = [NSString stringWithFormat:@"%@%@%@", @"http://43.252.215.163/", REPORT_VIEWER_PDF_QUATION_URL, _contents[0][0][1]];
             NSURL *url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
@@ -291,7 +278,7 @@ NSMutableDictionary* keyValue;
             [downloadTask resume];
         };
         
-        cell.viewHandler = ^{
+        cell.convertHandler = ^{
             [self performSegueWithIdentifier:kAddReceiptSegue sender:nil];
         };
         return cell;
@@ -321,7 +308,7 @@ NSMutableDictionary* keyValue;
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.floatingTextField.userInteractionEnabled = YES;
     if (indexPath.section == 0) {
-        if (indexPath.row == 0 || indexPath.row == 2 || indexPath.row == 3  || indexPath.row == 5) {
+        if (indexPath.row == 0 || indexPath.row == 2 || indexPath.row == 3  || indexPath.row == 4  || indexPath.row == 5) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.hidden = NO;
@@ -381,14 +368,7 @@ NSMutableDictionary* keyValue;
     string = string.uppercaseString;
     if (textField.tag == 6 || textField.tag == 7 || textField.tag == 8 || textField.tag == 9) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        text = [text stringByReplacingOccurrencesOfString:@"." withString:@""];
-        text = [text stringByReplacingOccurrencesOfString:@"," withString:@""];
-        NSString* formattedString = [NSString stringWithFormat:@"%.2lf", [text longLongValue] * 0.01];
-        NSNumber *number = [NSDecimalNumber decimalNumberWithString:formattedString];
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        NSString *formattedNumberString = [numberFormatter stringFromNumber:number];
-        textField.text = formattedNumberString;
+        textField.text = [DIHelpers formatDecimal:text];
     }
     return NO;
 }
@@ -472,7 +452,8 @@ NSMutableDictionary* keyValue;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 || indexPath.row == 4) {
+            selectedRow = indexPath.row;
             [self performSegueWithIdentifier:kQuotationSegue sender:QUOTATION_GET_LIST_URL];
         } else if (indexPath.row == 2) {
             [self performSegueWithIdentifier:kSimpleMatterSegue sender:MATTERSIMPLE_GET_URL];
@@ -548,8 +529,13 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kQuotationSegue]) {
         QuotationGetListViewController* quotationVC = segue.destinationViewController;
         quotationVC.updateHandler = ^(QuotationModel* model){
-            [self replaceContentForSection:0 InRow:0 withValue:model.relatedDocumentNo];
-            [self replaceContentForSection:0 InRow:1 withValue:model.documentNo];
+            if (selectedRow == 0) {
+               [self replaceContentForSection:0 InRow:0 withValue:model.documentNo];
+            } else {
+                [self replaceContentForSection:0 InRow:4 withValue:model.issueToName];
+            }
+            
+         //   [self replaceContentForSection:0 InRow:1 withValue:model.documentNo];
         };
     }
     
@@ -579,8 +565,9 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kMatterCodeSegue]) {
         ListOfMatterViewController* matterVC = segue.destinationViewController;
         matterVC.updateHandler = ^(MatterCodeModel *model) {
-            [self replaceContentForSection:0 InRow:3 withValue:model.matterCode];
+            [self replaceContentForSection:0 InRow:3 withValue:model.matterDescription];
             isRental = model.isRental;
+            selectedMatterCode = model.matterCode;
         };
         
     }
@@ -588,7 +575,8 @@ NSMutableDictionary* keyValue;
     if ([segue.identifier isEqualToString:kPresetBillSegue]) {
         PresetBillViewController* billVC = segue.destinationViewController;
         billVC.updateHandler = ^(PresetBillModel *model) {
-            [self replaceContentForSection:0 InRow:5 withValue:model.billCode];
+            [self replaceContentForSection:0 InRow:5 withValue:model.billDescription];
+            selectedPresetCode = model.billCode;
             
         };
     }

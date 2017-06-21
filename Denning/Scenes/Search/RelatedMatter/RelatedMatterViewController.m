@@ -19,6 +19,8 @@
 #import "LegalFirmViewController.h"
 #import "DocumentViewController.h"
 #import "MatterPropertyCell.h"
+#import "SearchMatterCodeDetail.h"
+#import "CommonTextCell.h"
 
 @interface RelatedMatterViewController ()<MatterLastCellDelegate>
 {
@@ -72,6 +74,7 @@
 - (void)registerNibs {
     [ThreeFieldsCell registerForReuseInTableView:self.tableView];
     [ContactHeaderCell registerForReuseInTableView:self.tableView];
+    [CommonTextCell registerForReuseInTableView:self.tableView];
     [ContactCell registerForReuseInTableView:self.tableView];
     [MatterLastCell registerForReuseInTableView:self.tableView];
     [MatterPropertyCell registerForReuseInTableView:self.tableView];
@@ -86,8 +89,28 @@
     return 10;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSDictionary*) getPartySectionInfo:(int) row {
+    int count = 0;
+    NSDictionary* info = [NSDictionary new];
+    for (int i = 0; i < relatedMatterModel.partyGroupArray.count; i++) {
+        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[i];
+        if (partyGroup.partyArray.count == 0) {
+            continue;
+        }
+        info = @{@"group":[NSNumber numberWithInt:i],
+                 @"party":[NSNumber numberWithInt:row-count]
+                 };
+        count += partyGroup.partyArray.count;
+        if (row < count) {
+            break;
+        }
+    }
     
+    return info;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    int count = 0;
     switch (section) {
         case 0:
             return 6;
@@ -99,7 +122,11 @@
             return 5;
             break;
         case 2:
-            return relatedMatterModel.partyGroupArray.count;
+            for (int i = 0; i < relatedMatterModel.partyGroupArray.count; i++) {
+                PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[i];
+                count += partyGroup.partyArray.count;
+            }
+            return count;
             break;
         case 3:
             return relatedMatterModel.solicitorGroupArray.count;
@@ -132,30 +159,35 @@
 
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 1) { // Contact client
-        if (isLoading) return;
-        isLoading = YES;
-        [SVProgressHUD showWithStatus:@"Loading"];
-        @weakify(self);
-        [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:relatedMatterModel.contactCode completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
-            
-            @strongify(self);
-            self->isLoading = false;
-            [SVProgressHUD dismiss];
-            if (error == nil) {
-                [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
-            } else {
-                [SVProgressHUD showErrorWithStatus:error.localizedDescription];
-            }
-        }];
+    if (indexPath.section == 0) {
+        if (indexPath.row == 1) { // Contact client
+            if (isLoading) return;
+            isLoading = YES;
+            [SVProgressHUD showWithStatus:@"Loading"];
+            @weakify(self);
+            [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:relatedMatterModel.contactCode completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+                
+                @strongify(self);
+                self->isLoading = false;
+                [SVProgressHUD dismiss];
+                if (error == nil) {
+                    [self performSegueWithIdentifier:kContactSearchSegue sender:contactModel];
+                } else {
+                    [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+                }
+            }];
+        } else if (indexPath.row == 4) {
+            [self performSegueWithIdentifier:kMatterCodeSegue sender:relatedMatterModel.matter];
+        }
     }
     
     if (indexPath.section == 2) {
-        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[indexPath.row];
+        NSDictionary* partySectionInfo = [self getPartySectionInfo:(int)indexPath.row];
+        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[[[partySectionInfo objectForKey:@"group"] integerValue]];
+        PartyModel* party = partyGroup.partyArray[[[partySectionInfo objectForKey:@"party"] integerValue]];
         if (isLoading) return;
         isLoading = YES;
         [SVProgressHUD showWithStatus:@"Loading"];
-        PartyModel* party = partyGroup.partyArray[0];
         @weakify(self);
         [[QMNetworkManager sharedManager] loadContactFromSearchWithCode:party.partyCode completion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
             
@@ -295,22 +327,35 @@
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
     
     if (indexPath.section == 0) {
+        cell.accessoryType = UITableViewCellAccessoryNone;
         if (indexPath.row == 0) {
-            [cell configureCellWithContact:@"File No" text:relatedMatterModel.systemNo];
+            NSString* string = @"";
+            NSString* label = @"";
+            if (relatedMatterModel.ref.length == 0) {
+                string = relatedMatterModel.systemNo;
+                label = @"File No";
+            } else {
+                string = [NSString stringWithFormat:@"%@(%@)", relatedMatterModel.systemNo, relatedMatterModel.ref];
+                label = @"File No(Ref 2)";
+            }
+            [cell configureCellWithContact:label text:string];
             cell.accessoryType = UITableViewCellAccessoryNone;
         } else if (indexPath.row == 1) {
             [cell configureCellWithContact:@"Client" text:relatedMatterModel.clientName];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else if (indexPath.row == 2) {
-            [cell configureCellWithContact:@"Open Date" text:[DIHelpers getOnlyDateFromDateTime:relatedMatterModel.openDate]];
+            NSString* value = [NSString stringWithFormat:@"%@ / %@ / %@", [DIHelpers getOnlyDateFromDateTime:relatedMatterModel.openDate], relatedMatterModel.fileStatus.descriptionValue, relatedMatterModel.dateClose];
+            [cell configureCellWithContact:@"Open Date / Status / Closed Date" text:value];
         } else if (indexPath.row == 3) {
-            [cell configureCellWithContact:@"Ref 2" text:relatedMatterModel.ref];
+            NSString* value = [NSString stringWithFormat:@"%@ / %@ / %@", relatedMatterModel.locationPhysical, relatedMatterModel.locationBox, relatedMatterModel.locationPocket];
+            [cell configureCellWithContact:@"File Location / Box / Pocket" text:value];
         } else if (indexPath.row == 4) {
-            [cell configureCellWithContact:@"Matter" text:relatedMatterModel.matter];
+            [cell configureCellWithContact:@"Matter" text:relatedMatterModel.matter.matterDescription];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else if (indexPath.row == 5) {
-            [cell configureCellWithContact:@"Partner / LA / Clerk" text:[DIHelpers getOnlyDateFromDateTime:@"partner/la/clerk"]];
+            NSString *string = [NSString stringWithFormat:@"%@ / %@ / %@", relatedMatterModel.partner.nickName, relatedMatterModel.legalAssistant.nickName, relatedMatterModel.clerk.nickName];
+            [cell configureCellWithContact:@"Partner / LA / Clerk" text:string];
         }
-        cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 1) { // Court Case information
         if (indexPath.row == 0) {
             [cell configureCellWithContact:@"Court" text:relatedMatterModel.court.court];
@@ -325,14 +370,21 @@
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 2) { // Party Group
-        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[indexPath.row];
-        
-        PartyModel* party = [PartyModel new];
-        if (partyGroup.partyArray.count > 0) {
-           party = partyGroup.partyArray[0];
+        NSDictionary* partySectionInfo = [self getPartySectionInfo:(int)indexPath.row];
+        PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[[[partySectionInfo objectForKey:@"group"] integerValue]];
+        PartyModel* party = partyGroup.partyArray[[[partySectionInfo objectForKey:@"party"] integerValue]];
+        if ([[partySectionInfo objectForKey:@"party"] integerValue] == 0) {
+            ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
+           [cell configureCellWithContact:partyGroup.partyGroupName text:party.partyName];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
+        } else {
+            CommonTextCell *cell = [tableView dequeueReusableCellWithIdentifier:[CommonTextCell cellIdentifier] forIndexPath:indexPath];
+            [cell configureCellWithString:party.partyName];
+            cell.valueLabel.font = [UIFont fontWithName:@"SFUIText-Light" size:13];
+             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+             return cell;
         }
-        [cell configureCellWithContact:partyGroup.partyGroupName text:party.partyName];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (indexPath.section == 3) { // Solicitor
         ThreeFieldsCell *cell = [tableView dequeueReusableCellWithIdentifier:[ThreeFieldsCell cellIdentifier] forIndexPath:indexPath];
         SolicitorGroup* solicitorGroup = relatedMatterModel.solicitorGroupArray[indexPath.row];
@@ -351,14 +403,13 @@
         if (bankGroupModel.bankName.length != 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        
     } else if (indexPath.section == 6) { // Important RM
         GeneralGroup* RMGroup = relatedMatterModel.RMGroupArray[indexPath.row];
         [cell configureCellWithContact:RMGroup.label text:RMGroup.value];
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 7) { // Important Date
         GeneralGroup* dateGroup = relatedMatterModel.dateGroupArray[indexPath.row];
-        [cell configureCellWithContact:dateGroup.label text:dateGroup.value];
+        [cell configureCellWithContact:dateGroup.label text:[DIHelpers convertDateToCustomFormat:dateGroup.value]];
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else if (indexPath.section == 8) { // TextGroup Information
         GeneralGroup* otherInfo = relatedMatterModel.textGroupArray[indexPath.row];
@@ -454,6 +505,11 @@
         DocumentViewController* documentVC = segue.destinationViewController;
         documentVC.documentModel = sender;
         documentVC.previousScreen = @"Back";
+    }
+    
+    if ([segue.identifier isEqualToString:kMatterCodeSegue]){
+        SearchMatterCodeDetail* vc = segue.destinationViewController;
+        vc.model = sender;
     }
 }
 

@@ -17,6 +17,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.fixedLabel.copyingEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -28,6 +29,11 @@
 - (void) configureCellWithValue: (NSString*) value
 {
     self.valueLabel.text = value.uppercaseString;
+}
+
+- (void) configureCellWithString: (NSString*) string
+{
+    self.valueLabel.text = string;
 }
 
 @end

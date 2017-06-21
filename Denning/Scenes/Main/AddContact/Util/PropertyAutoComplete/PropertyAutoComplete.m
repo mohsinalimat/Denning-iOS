@@ -18,6 +18,8 @@
 {
     NSString* customString;
     NSString* serverAPI;
+    NSArray* projectList;
+    ProjectHousingModel* curProject;
 }
 
 @end
@@ -94,10 +96,33 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStylePlain target:self action:@selector(nextBtnDidTap)];
 }
 
+
+- (void) selectProjectHousing {
+    BOOL isSame = NO;
+    for (ProjectHousingModel* model in projectList) {
+        if ([model.name isEqualToString:customString]) {
+            curProject = model;
+            isSame = YES;
+            break;
+        }
+    }
+    
+    if (!isSame) {
+        curProject = [ProjectHousingModel new];
+        curProject.name = customString;
+        curProject.proprietor = @"";
+        curProject.developer = @"";
+        curProject.licenseNo = @"";
+        curProject.housingCode = @"";
+        curProject.masterTitle = @"";
+    }
+}
+
 - (void) nextBtnDidTap
 {
+    [self selectProjectHousing];
     [self.popupController dismissWithCompletion:^{
-        self.updateHandler(customString);
+        self.updateHandler(curProject);
     }];
 }
 
@@ -109,6 +134,8 @@
     for (id obj in response) {
         [keywords addObject:[obj objectForKey:@"name"]];
     }
+    
+    projectList = [ProjectHousingModel getProjectHousingArrayFromResponse:response];
     
     return keywords;
 }

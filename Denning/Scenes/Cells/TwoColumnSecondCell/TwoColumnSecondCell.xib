@@ -28,13 +28,13 @@
                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hay-JN-Gpo">
                         <rect key="frame" x="20" y="11" width="103" height="17"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cRc-IM-vAN">
                         <rect key="frame" x="202" y="11" width="36" height="17"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -42,9 +42,13 @@
                     <constraint firstItem="cRc-IM-vAN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hay-JN-Gpo" secondAttribute="trailing" constant="8" id="4qn-hB-t9L"/>
                     <constraint firstItem="hay-JN-Gpo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="A5f-DY-Rdd"/>
                     <constraint firstItem="hay-JN-Gpo" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="M7c-O7-mc7"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="hay-JN-Gpo" secondAttribute="bottom" constant="2.5" id="Tj4-6Z-a2Q"/>
+                    <constraint firstItem="cRc-IM-vAN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="Wvj-Ll-hKp"/>
+                    <constraint firstItem="hay-JN-Gpo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="cUw-Zo-N05"/>
                     <constraint firstItem="hay-JN-Gpo" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2.5" id="ce9-Bx-76I"/>
                     <constraint firstAttribute="trailingMargin" secondItem="cRc-IM-vAN" secondAttribute="trailing" constant="12" id="oAZ-yb-ldT"/>
                     <constraint firstItem="cRc-IM-vAN" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="oZp-xi-QZ3"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="cRc-IM-vAN" secondAttribute="bottom" constant="2.5" id="vEG-X8-sQw"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

@@ -1016,7 +1016,7 @@ NYTPhotosViewControllerDelegate
         currentCell.containerView.bgColor = [UIColor whiteColor];
         currentCell.layer.cornerRadius = 8;
         currentCell.clipsToBounds = YES;
-        [(QMChatContactRequestCell*)currentCell autoAccept];
+//        [(QMChatContactRequestCell*)currentCell actionsHandler];
     }
     
     if ([cell conformsToProtocol:@protocol(QMChatAttachmentCell)]) {
@@ -1222,34 +1222,34 @@ NYTPhotosViewControllerDelegate
 }
 
 - (void)sendAttachmentMessageWithDocument:(NSData *)document withMIMEType:(NSString*) mimeType withType:(NSString*) type {
-    QBChatMessage* message = [QMMessagesHelper chatMessageWithText:nil
-                                                          senderID:self.senderID
-                                                      chatDialogID:self.chatDialog.ID
-                                                          dateSent:[NSDate date]];
-    @weakify(self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @strongify(self);
-        
-        // Sending attachment to dialog.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.chatDataSource addMessage:message];
-    
-        [[[QMCore instance].chatService sendAttachmentMessage:message toDialog:self.chatDialog withAttachedDocument:document withMIMEType:mimeType withType:type]
-            continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
-                
-                [self.attachmentCells removeObjectForKey:message.ID];
-                if (task.isFaulted) {
-                    
-                    [self.navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:task.error.localizedRecoverySuggestion duration:kQMDefaultNotificationDismissTime];
-                    
-                    // perform local attachment deleting
-                    [[QMCore instance].chatService deleteMessageLocally:message];
-                    [self.chatDataSource deleteMessage:message];
-                }
-                return nil;
-            }];
-        });
-    });
+//    QBChatMessage* message = [QMMessagesHelper chatMessageWithText:nil
+//                                                          senderID:self.senderID
+//                                                      chatDialogID:self.chatDialog.ID
+//                                                          dateSent:[NSDate date]];
+//    @weakify(self);
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        @strongify(self);
+//        
+//        // Sending attachment to dialog.
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.chatDataSource addMessage:message];
+//    
+//        [[[QMCore instance].chatService sendAttachmentMessage:message toDialog:self.chatDialog withAttachedDocument:document withMIMEType:mimeType withType:type]
+//            continueWithBlock:^id _Nullable(BFTask * _Nonnull task) {
+//                
+//                [self.attachmentCells removeObjectForKey:message.ID];
+//                if (task.isFaulted) {
+//                    
+//                    [self.navigationController showNotificationWithType:QMNotificationPanelTypeFailed message:task.error.localizedRecoverySuggestion duration:kQMDefaultNotificationDismissTime];
+//                    
+//                    // perform local attachment deleting
+//                    [[QMCore instance].chatService deleteMessageLocally:message];
+//                    [self.chatDataSource deleteMessage:message];
+//                }
+//                return nil;
+//            }];
+//        });
+//    });
 }
 
 - (void)sendAttachmentMessageWithImage:(UIImage *)image {
