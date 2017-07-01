@@ -40,16 +40,9 @@
 - (instancetype)init {
     if (self = [super init]) {
         [self initManager];
-        [self initVariables];
     }
     
     return self;
-}
-
-- (void) initVariables
-{
-    self.invalidTry = @0;
-    self.selectedBaseURLForGeneral = @"http://43.252.215.163/";
 }
 
 - (void)initManager
@@ -62,9 +55,8 @@
     self.manager.requestSerializer.timeoutInterval= 100;
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [self.manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:@"SkySea@denning.com.my" forHTTPHeaderField:@"webuser-id"];
-    
+    [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
     
     self.session = [NSURLSession sharedSession];
     
@@ -77,23 +69,32 @@
     self.MAC = [DIHelpers getMAC];
 }
 
-- (void) setLoginHTTPHeader
+- (AFHTTPSessionManager*) setLoginHTTPHeader
 {
     [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
     [self.manager.requestSerializer setValue:@"SkySea@denning.com.my" forHTTPHeaderField:@"webuser-id"];
+    
+    return self.manager;
 }
 
-- (void) setOtherForLoginHTTPHeader
+- (AFHTTPSessionManager*) setOtherForLoginHTTPHeader
 {
-    [self.manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID  forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
+    
+    return self.manager;
 }
 
 - (void) setAddContactLoginHTTPHeader
 {
-    [self.manager.requestSerializer setValue:@"testtestdenning" forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:@"max@denning.com.my" forHTTPHeaderField:@"webuser-id"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID  forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
+}
 
+- (void) setDashboardLoginHTTPHeader
+{
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
 }
 
 - (NSDictionary*) buildRquestParamsFromDictionary: (NSDictionary*) dict
@@ -202,7 +203,6 @@
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"hpNumber": phoneNumber, @"activationCode": activationCode}];
     
     [self setLoginHTTPHeader];
-    
     [self.manager.requestSerializer setValue:email forHTTPHeaderField:@"webuser-id"];
     
     [self.manager POST:FORGOT_PASSWORD_REQUEST_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -279,7 +279,7 @@
     }];
 }
 
-- (void) clientSignIn: (NSString*) url password:(NSString*) password withCompletion: (void(^)(BOOL success, NSString* error,  DocumentModel* doumentModel)) completion
+- (void) clientSignIn: (NSString*) url password:(NSString*) password withCompletion: (void(^)(BOOL success, NSDictionary * responseObject, NSString* error,  DocumentModel* doumentModel)) completion
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": [DataManager sharedManager].user.email, @"password": password, @"sessionID": [DataManager sharedManager].user.sessionID}];
 
@@ -288,13 +288,13 @@
         
         DocumentModel* result = [DocumentModel getDocumentFromResponse:responseObject];
         if (completion != nil) {
-            completion(YES, nil, result);
+            completion(YES, responseObject, nil, result);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         if (completion != nil) {
-            completion(NO, error.localizedDescription, nil);
+            completion(NO, nil, error.localizedDescription, nil);
         }
     }];
 }
@@ -330,10 +330,10 @@
     NSString* urlString;
     if ([[DataManager sharedManager].searchType isEqualToString:@"Public"]){
         [self setLoginHTTPHeader];
-        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
+        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], (long)category];
     } else {
         [self setOtherForLoginHTTPHeader];
-        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], category];
+        urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], (long)category];
     }
     
     if ([searchType isEqualToString:@"Normal"]) { // Direct Tap on the search button
@@ -417,25 +417,66 @@
         if (completion != nil) {
             completion(nil, error);
         }
+    }];
+}
+
+- (void) getCalenarMonthlySummaryWithYear:(NSString*) year month:(NSString*) month filter:(NSString*)filter withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion
+{
+    [self setOtherForLoginHTTPHeader];
+    
+    NSString *url = [NSString stringWithFormat:@"%@%@?year=%@&month=%@&filterBy=%@", [DataManager sharedManager].user.serverAPI, CALENDAR_MONTHLY_SUMMARY_URL, year, month, filter];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (completion != nil) {
+            completion(responseObject, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+    }];
+}
+
+// Ads
+- (void) getAdsWithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}"  forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
+
+    [self.manager GET:HOME_ADS_GET_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [AdsModel getAdsArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
         
         // Error Message
     }];
 }
 
+/*
+ *  Search
+ */
+
 // property
 
-- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion
+- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(AddPropertyModel* propertyModel, NSError* error)) completion
 {
     NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/Property/%@", [DataManager sharedManager].user.serverAPI, code];
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSHTTPURLResponse *test = (NSHTTPURLResponse *)task.response;
-        
-        NSLog(@"%@, %@", test.allHeaderFields, [NSHTTPURLResponse localizedStringForStatusCode:test.statusCode]);
-        
-        PropertyModel* result = [PropertyModel getPropertyFromResponse:responseObject];
+        AddPropertyModel* result = [AddPropertyModel getAddPropertyFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }
@@ -599,17 +640,15 @@
 // Ledger detail
 - (void) loadLedgerDetailURL:(NSString*) url completion: (void(^)(NSArray* ledgerModelDetailArray, NSError* error)) completion
 {
-    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, url];
+    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
 
     [self setOtherForLoginHTTPHeader];
     
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
         NSArray* result = [LedgerDetailModel getLedgerDetailArrayFromResponse:responseObject];
         if (completion != nil) {
             completion(result, nil);
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         if (completion != nil) {
@@ -878,9 +917,27 @@
     }];
 }
 
+- (void) checkIDorNameDuplication:(NSString*) string url:(NSString*)url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@", [DataManager sharedManager].user.serverAPI,url, [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
 - (void) saveContactWithData:(NSDictionary*) data withCompletion:(void(^)(ContactModel* addContact, NSError* error)) completion
 {
-    NSString* url = [@"http://43.252.215.163" stringByAppendingString:CONTACT_SAVE_URL];
+    NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:CONTACT_SAVE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -898,7 +955,7 @@
 
 - (void) updateContactWithData:(NSDictionary*) data withCompletion:(void(^)(ContactModel* addContact, NSError* error)) completion
 {
-    NSString* url = [@"http://43.252.215.163" stringByAppendingString:CONTACT_SAVE_URL];
+    NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:CONTACT_SAVE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager PUT:url parameters:data success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1016,7 +1073,7 @@
 
 - (void) updateCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:COURT_SAVE_UPATE_URL];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:COURT_SAVE_UPATE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager PUT:_url parameters:data success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1034,7 +1091,7 @@
 
 - (void) saveCourtDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:COURT_SAVE_UPATE_URL];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:COURT_SAVE_UPATE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1051,7 +1108,7 @@
 
 - (void) savePersonalDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:PERSONAL_DIARY_SAVE_URL];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:PERSONAL_DIARY_SAVE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1068,7 +1125,7 @@
 
 - (void) saveOfficeDiaryWithData: (NSDictionary*) data WithCompletion:(void(^)(EditCourtModel* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:OFFICE_DIARY_SAVE_URL];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:OFFICE_DIARY_SAVE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1144,6 +1201,59 @@
     }];
 }
 
+- (void) getMasterTitle:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, PROPERTY_MASTER_TITLE_GETLIST_URL, [search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    
+    [self setAddContactLoginHTTPHeader];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray *result = [MasterTitleModel getMasterTitleArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) savePropertyWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(AddPropertyModel* result, NSError* error)) completion
+{
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([AddPropertyModel getAddPropertyFromResponse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) updatePropertyWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(AddPropertyModel* result, NSError* error)) completion
+{
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager PUT:_url parameters:data success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([AddPropertyModel getAddPropertyFromResponse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
 /*
  * Matter
  */
@@ -1188,9 +1298,28 @@
 
 - (void) saveMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
+//    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([RelatedMatterModel getRelatedMatterFromResponse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) updateMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion
+{
+//    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager PUT:_url parameters:data success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
             completion([RelatedMatterModel getRelatedMatterFromResponse:responseObject], nil);
@@ -1286,7 +1415,7 @@
 
 - (void) saveBillorQuotationWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:url];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1351,7 +1480,7 @@
 
 - (void) saveReceiptWithParams: (NSDictionary*) data WithCompletion: (void(^)(NSDictionary* result, NSError* error)) completion
 {
-    NSString* _url = [@"http://43.252.215.163/" stringByAppendingString:RECEIPT_SAVE_URL];
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:RECEIPT_SAVE_URL];
     [self setAddContactLoginHTTPHeader];
     [self.manager POST:_url parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
@@ -1370,11 +1499,30 @@
  * Dashbard
  */
 
+- (void) getDashboardMainWithCompletion: (void(^)(DashboardMainModel* result, NSError* error)) completion
+{
+    [self setDashboardLoginHTTPHeader];
+    NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:DASHBOARD_MAIN_GET_URL];
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            DashboardMainModel *result = [DashboardMainModel getDashboardMainFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+
+}
+
 - (void) getDashboardThreeItmesInURL:(NSString*)url withCompletion: (void(^)(ThreeItemModel* result, NSError* error)) completion
 {
-
     [self setAddContactLoginHTTPHeader];
-    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
             ThreeItemModel *result = [ThreeItemModel getThreeItemFromResponse:responseObject];
@@ -1388,15 +1536,51 @@
     }];
 }
 
+- (void) getDashboardItemModelWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    [self setAddContactLoginHTTPHeader];
+    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@?search=%@&page=%@", [DataManager sharedManager].user.serverAPI, url, filter, page];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray* result = [ItemModel getItemArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) getDashboardMyDueTaskWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    [self setAddContactLoginHTTPHeader];
+    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@?search=%@&page=%@", [DataManager sharedManager].user.serverAPI, url, filter, page];
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            NSArray* result = [TaskCheckModel getTaskCheckArrayFromResponse:responseObject];
+            completion(result, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
 - (void) getNewMatterInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter  withCompletion: (void(^)(NSArray* result, NSError* error)) completion
 {
-    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, url];
+    NSString* _url = [NSString stringWithFormat:@"%@denningwcf/%@?search=%@&page=%@", [DataManager sharedManager].user.serverAPI, url, filter, page];
     
     [self setAddContactLoginHTTPHeader];
     [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)
         {
-            NSArray *result = [NewMatterModel getNewMatterArray:responseObject];
+            NSArray *result = [SearchResultModel getSearchResultArrayFromResponse:responseObject];
             completion(result, nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

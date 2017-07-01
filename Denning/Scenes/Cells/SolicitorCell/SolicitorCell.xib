@@ -7,12 +7,10 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-UI-Text-Medium.otf">
-            <string>SFUIText-Medium</string>
-        </array>
         <array key="SF-UI-Text-Regular.otf">
             <string>SFUIText-Regular</string>
         </array>
@@ -20,57 +18,42 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="47" id="KGk-i7-Jjw" customClass="SolicitorCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="47"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="42" id="KGk-i7-Jjw" customClass="SolicitorCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="46.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="41.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firm Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbS-aN-EcB">
-                        <rect key="frame" x="16" y="8" width="68" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
-                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Branch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kho-Dt-yKZ">
-                        <rect key="frame" x="96" y="8" width="44.5" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
-                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8y-ze-ozv">
-                        <rect key="frame" x="16" y="25" width="36" height="17"/>
+                        <rect key="frame" x="16" y="8" width="193.5" height="17"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXI-Nr-hGU">
-                        <rect key="frame" x="96" y="25" width="36" height="17"/>
+                        <rect key="frame" x="217.5" y="8" width="36" height="17"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="qbS-aN-EcB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="37d-3g-IuX"/>
-                    <constraint firstItem="hXI-Nr-hGU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Q8y-ze-ozv" secondAttribute="trailing" constant="12" id="IHg-Sl-Vg0"/>
-                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="hXI-Nr-hGU" secondAttribute="trailing" id="PJW-7b-ZOK"/>
-                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="leading" secondItem="qbS-aN-EcB" secondAttribute="leading" id="SH7-XW-ydD"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="4fI-4m-et7"/>
+                    <constraint firstItem="hXI-Nr-hGU" firstAttribute="leading" secondItem="Q8y-ze-ozv" secondAttribute="trailing" constant="8" id="IHg-Sl-Vg0"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="LM4-fV-LoJ"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="hXI-Nr-hGU" secondAttribute="trailing" constant="8" id="PJW-7b-ZOK"/>
                     <constraint firstItem="hXI-Nr-hGU" firstAttribute="bottom" secondItem="Q8y-ze-ozv" secondAttribute="bottom" id="VUB-jJ-5oS"/>
-                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="top" secondItem="qbS-aN-EcB" secondAttribute="top" id="W2i-qo-3Di"/>
-                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="leading" secondItem="qbS-aN-EcB" secondAttribute="trailing" constant="12" id="k9C-t2-SWO"/>
-                    <constraint firstItem="qbS-aN-EcB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="m4I-7S-72J"/>
-                    <constraint firstItem="Kho-Dt-yKZ" firstAttribute="leading" secondItem="hXI-Nr-hGU" secondAttribute="leading" id="sJ4-Lb-9WO"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Q8y-ze-ozv" secondAttribute="bottom" constant="8" id="hss-to-mWh"/>
                     <constraint firstItem="Q8y-ze-ozv" firstAttribute="top" secondItem="hXI-Nr-hGU" secondAttribute="top" id="uo2-rR-Ojk"/>
-                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="top" secondItem="qbS-aN-EcB" secondAttribute="bottom" constant="1" id="v4h-dg-fIf"/>
+                    <constraint firstItem="Q8y-ze-ozv" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="2:3" constant="-20" id="wy6-7h-Uwr"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="branch" destination="hXI-Nr-hGU" id="T71-VL-cgJ"/>
                 <outlet property="firmName" destination="Q8y-ze-ozv" id="fFv-9h-qAY"/>
             </connections>
-            <point key="canvasLocation" x="25" y="53.5"/>
+            <point key="canvasLocation" x="-147" y="-133"/>
         </tableViewCell>
     </objects>
 </document>

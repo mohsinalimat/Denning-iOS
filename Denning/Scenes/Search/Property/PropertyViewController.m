@@ -11,6 +11,7 @@
 #import "SearchResultCell.h"
 #import "CommonTextCell.h"
 #import "RelatedMatterViewController.h"
+#import "SearchLastCell.h"
 
 @interface PropertyViewController()
 {
@@ -74,6 +75,7 @@
     
     [ContactCell registerForReuseInTableView:self.tableView];
     [CommonTextCell registerForReuseInTableView:self.tableView];
+    [SearchLastCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -170,8 +172,11 @@
     else {
         SearchResultModel *matterModel = self.propertyModel.relatedMatter[indexPath.row];
         NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
-        [contactCell configureCellWithContact:matter[0] text:matter[1]];
-        [contactCell setEnableRightBtn:NO image:nil];
+        SearchLastCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchLastCell cellIdentifier] forIndexPath:indexPath];
+        
+        cell.topLabel.text = matter[0];
+        cell.bottomLabel.text = matter[1];
+        cell.rightLabel.text = [DIHelpers getDateInShortForm:matterModel.sortDate];
         
         return contactCell;
     }

@@ -8,6 +8,6 @@
 
 #import "DICustomViewController.h"
 
-@interface DashboardViewController : DICustomViewController
+@interface DashboardViewController : UICollectionViewController
 
 @end

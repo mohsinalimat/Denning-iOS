@@ -38,6 +38,8 @@
 
 @property (strong, nonatomic) NSString * counsel;
 
+@property (strong, nonatomic) NSString* eventType;
+
 + (EventModel*) getEventFromResponse: (NSDictionary*) response;
 
 + (NSArray*) getEventsArrayFromResponse: (NSDictionary*) response;

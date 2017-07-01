@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="DashboardForthCell">
+            <rect key="frame" x="0.0" y="0.0" width="153" height="119"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="153" height="119"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BAZ-AS-opX">
+                        <rect key="frame" x="8" y="8" width="34" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="icon_db_bank_recon.png" translatesAutoresizingMaskIntoConstraints="NO" id="GOD-xU-aqe">
+                        <rect key="frame" x="140" y="103" width="5" height="8"/>
+                    </imageView>
+                </subviews>
+            </view>
+            <color key="backgroundColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="GOD-xU-aqe" secondAttribute="trailing" constant="8" id="MoR-9M-PRM"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BAZ-AS-opX" secondAttribute="trailing" constant="12" id="iG6-Fr-lsV"/>
+                <constraint firstItem="BAZ-AS-opX" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="ke7-qo-Zx9"/>
+                <constraint firstItem="BAZ-AS-opX" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="mAe-zO-UwX"/>
+                <constraint firstAttribute="bottom" secondItem="GOD-xU-aqe" secondAttribute="bottom" constant="8" id="p84-oN-Gft"/>
+            </constraints>
+            <size key="customSize" width="153" height="119"/>
+            <connections>
+                <outlet property="bottomImage" destination="GOD-xU-aqe" id="UxJ-gA-7EI"/>
+                <outlet property="topLabel" destination="BAZ-AS-opX" id="GeU-GE-LeU"/>
+            </connections>
+            <point key="canvasLocation" x="-35.5" y="-43.5"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="icon_db_bank_recon.png" width="5" height="8"/>
+    </resources>
+</document>

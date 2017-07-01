@@ -15,6 +15,10 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
 
 @property (strong, nonatomic) UIImageView *postView;
 @property (strong, nonatomic) DocumentModel* originalDocumentModel;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *shareBtn;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelBtn;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *backBtn;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *selectBtn;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (copy, nonatomic) NSString *filter;
@@ -31,6 +35,7 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
     if (self.previousScreen.length != 0) {
         [self prepareUI];
     }
+    [self updateButtonsToMatchTableState];
     [self setNeedsStatusBarAppearanceUpdate];
     
     self.originalDocumentModel = self.documentModel;
@@ -70,6 +75,116 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
     self.tableView.tableHeaderView = self.searchController.searchBar;
+}
+
+- (IBAction)didTapSelect:(id)sender {
+    [self.tableView setEditing:YES animated:YES];
+    [self updateButtonsToMatchTableState];
+}
+
+- (IBAction)didTapCancel:(id)sender {
+    [self.tableView setEditing:NO animated:YES];
+    [self updateButtonsToMatchTableState];
+}
+
+- (NSURL*) getFileURL: (FileModel*) file
+{
+    NSURL *url = [NSURL URLWithString: file.URL];
+    if (![file.ext isEqualToString:@".url"]) {
+        NSString *urlString = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, file.URL];
+        url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    }
+    
+    return url;
+}
+
+- (IBAction)didTapShare:(id)sender {
+    NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+    NSMutableIndexSet *indicesOfItemsToDelete = [NSMutableIndexSet new];
+    NSMutableArray* urlArray = [NSMutableArray new];
+    for (NSIndexPath *selectionIndex in selectedRows)
+    {
+        if (selectionIndex.section == 0) {
+            continue;
+        }
+        if (selectionIndex.section == 1) {
+            FileModel* file = self.documentModel.documents[selectionIndex.row];
+            [urlArray addObject:[self getFileURL:file]];
+        } else {
+            FolderModel* model = self.documentModel.folders[selectionIndex.section-2];
+            FileModel* file = model.documents[selectionIndex.row];
+            [urlArray addObject:[self getFileURL:file]];
+        }
+    }
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 4;
+    
+    NSBlockOperation *completionOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            // share
+        }];
+    }];
+    
+    for (NSURL* url in urlArray)
+    {
+        NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+            NSData *data = [NSData dataWithContentsOfURL:url];
+           
+        }];
+        [completionOperation addDependency:operation];
+    }
+    
+    [queue addOperations:completionOperation.dependencies waitUntilFinished:NO];
+    [queue addOperation:completionOperation];
+//    UIImage *image = [UIImage imageWithData:[chart getImage]];
+//    NSArray *activityItems = @[image];
+//    UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+//    activityViewControntroller.excludedActivityTypes = @[];
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//        activityViewControntroller.popoverPresentationController.sourceView = self.view;
+//        activityViewControntroller.popoverPresentationController.sourceRect = CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4, 0, 0);
+//    }
+//    [self presentViewController:activityViewControntroller animated:true completion:nil];
+}
+
+
+#pragma mark - Updating button state
+
+- (void)updateButtonsToMatchTableState
+{
+    if (self.tableView.editing)
+    {
+        // Show the option to cancel the edit.
+        self.navigationItem.rightBarButtonItem = self.cancelBtn;
+        
+//        [self updateDeleteButtonTitle];
+        
+        // Show the delete button.
+        self.navigationItem.leftBarButtonItem = self.shareBtn;
+    }
+    else
+    {
+        // Not in editing mode.
+        self.navigationItem.leftBarButtonItem = self.backBtn;
+        
+        // Show the edit button, but disable the edit button if there's nothing to edit.
+        int count = 0;
+        count += self.documentModel.documents.count;
+        for (int i = 0; i < _documentModel.folders.count; i++) {
+            
+            count += self.documentModel.folders[i].documents.count;
+        }
+        if (count > 0)
+        {
+            self.selectBtn.enabled = YES;
+        }
+        else
+        {
+            self.selectBtn.enabled = NO;
+        }
+        self.navigationItem.rightBarButtonItem = self.selectBtn;
+    }
 }
 
 - (void) popupScreen:(id)sender {
@@ -155,6 +270,16 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
 
 #pragma mark - Table view data source
 
+- (BOOL)tableView:(UITableView *)tableView
+canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return  self.documentModel.folders.count + 2;
 }
@@ -236,6 +361,10 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (tableView.isEditing) {
+        return;
+    }
+    
     FileModel* file;
     if (indexPath.section == 0) {
         return;
@@ -245,17 +374,14 @@ UIDocumentInteractionControllerDelegate, UISearchBarDelegate, UISearchController
         FolderModel* model = self.documentModel.folders[indexPath.section-2];
         file = model.documents[indexPath.row];
     }
-    NSURL *url = [NSURL URLWithString: file.URL];
-    if (![file.ext isEqualToString:@".url"]) {
-        NSString *urlString = [NSString stringWithFormat:@"%@denningwcf/%@", [DataManager sharedManager].user.serverAPI, file.URL];
-        url = [NSURL URLWithString:[urlString  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
-    }
+    NSURL *url = [self getFileURL:file];
+    
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
-    [request setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
+    [request setValue:[DataManager sharedManager].user.email  forHTTPHeaderField:@"webuser-id"];
+    [request setValue:[DataManager sharedManager].user.sessionID  forHTTPHeaderField:@"webuser-sessionid"];
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
                                                                            inDomain:NSUserDomainMask

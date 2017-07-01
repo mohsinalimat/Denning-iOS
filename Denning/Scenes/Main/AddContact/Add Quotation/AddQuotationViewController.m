@@ -296,8 +296,8 @@ NSMutableDictionary* keyValue;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
             
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-            [request setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
-            [request setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
+            [request setValue:[DataManager sharedManager].user.email  forHTTPHeaderField:@"webuser-id"];
+            [request setValue:[DataManager sharedManager].user.sessionID  forHTTPHeaderField:@"webuser-sessionid"];
             
             NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                 NSURL *documentsDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory

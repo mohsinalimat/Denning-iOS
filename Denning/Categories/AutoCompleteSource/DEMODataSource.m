@@ -47,8 +47,10 @@
     self.manager = [QMNetworkManager sharedManager].manager;
     
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+        self.manager = [[QMNetworkManager sharedManager] setLoginHTTPHeader];
         _requestURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
     } else {
+        self.manager = [[QMNetworkManager sharedManager] setOtherForLoginHTTPHeader];
         _requestURL = PUBLIC_KEYWORD_SEARCH_URL;
     }
 

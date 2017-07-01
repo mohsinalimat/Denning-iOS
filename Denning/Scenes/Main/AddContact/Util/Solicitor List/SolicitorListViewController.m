@@ -7,16 +7,19 @@
 //
 
 #import "SolicitorListViewController.h"
+#import "SolicitorHeaderCell.h"
 #import "SolicitorCell.h"
 
 @interface SolicitorListViewController ()
-<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
     __block BOOL isAppending;
     BOOL initCall;
 }
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSMutableArray* listOfProperties;
 
@@ -38,10 +41,11 @@
 }
 
 - (IBAction)dismissScreen:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)registerNibs {
+    [SolicitorHeaderCell registerForReuseInTableView:self.tableView];
     [SolicitorCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -69,13 +73,7 @@
     initCall = YES;
     
     self.tableView.delegate = self;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
+
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -100,10 +98,6 @@
     __weak UINavigationController *navigationController = self.navigationController;
     [[QMNetworkManager sharedManager] getSolicitorList:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
         
         if (error == nil) {
             if (result.count != 0) {
@@ -143,6 +137,16 @@
 }
 
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    SolicitorHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[SolicitorHeaderCell cellIdentifier]];
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SolicitorCell *cell = [tableView dequeueReusableCellWithIdentifier:[SolicitorCell cellIdentifier] forIndexPath:indexPath];
     
@@ -157,7 +161,7 @@
 {
     SoliciorModel *model = self.listOfProperties[indexPath.row];
     self.updateHandler(model);
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - ScrollView Delegate

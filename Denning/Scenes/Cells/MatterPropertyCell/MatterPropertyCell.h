@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DIGeneralCell.h"
+#import "GeneralContactCell.h"
 
-@interface MatterPropertyCell : DIGeneralCell
+@interface MatterPropertyCell : GeneralContactCell
 @property (weak, nonatomic) IBOutlet UILabel *propertyNumber;
 @property (weak, nonatomic) IBOutlet UILabel *fullTitle;
 @property (weak, nonatomic) IBOutlet UILabel *address;

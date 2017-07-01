@@ -10,6 +10,8 @@
 #import "ClientModel.h"
 #import "TwoColumnCell.h"
 #import "ContactCell.h"
+#import "MatterTwoColumn.h"
+#import "SecondMatterCell.h"
 
 @interface SimpleMatterViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
 {
@@ -19,6 +21,8 @@
     BOOL initCall;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray* listOfMatters;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (copy, nonatomic) NSString *filter;
@@ -42,8 +46,8 @@
 }
 
 - (void)registerNibs {
-    [ContactCell registerForReuseInTableView:self.tableView];
-    [TwoColumnCell registerForReuseInTableView:self.tableView];
+    [MatterTwoColumn registerForReuseInTableView:self.tableView];
+    [SecondMatterCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -59,24 +63,17 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
 {
+    self.title = @"Select Matter Type";
     self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
-    
-    self.tableView.delegate = self;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
+
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -103,11 +100,7 @@
     [[QMNetworkManager sharedManager] getSimpleMatter:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
-        
+            
         if (error == nil) {
             if (result.count != 0) {
                 self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
@@ -136,44 +129,34 @@
 }
 #pragma mark - Table view data source
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 15;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 5;
-}
-
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    return self.listOfMatters.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return ((MatterSimple *)self.listOfMatters[section]).partyGroupArray.count + 1;
+    return self.listOfMatters.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    MatterTwoColumn *cell = [tableView dequeueReusableCellWithIdentifier:[MatterTwoColumn cellIdentifier]];
+    
+    return cell;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
-        TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
-        MatterSimple *model = self.listOfMatters[indexPath.section];
-        [cell configureCellWithCodeLabel:@"File No." codeValue:model.systemNo  descLabel:@"Primary Client" descValue:model.primaryClient.name];
-        return cell;
-    }
-    ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
-    
-    MatterSimple *model = self.listOfMatters[indexPath.section];
-    PartyGroupModel* partyGroup = (PartyGroupModel*)model.partyGroupArray[indexPath.row-1];
-    if (partyGroup.partyArray.count > 0){
-        ClientModel* party = partyGroup.partyArray[0];
-        [cell configureCellWithContact:partyGroup.partyGroupName text:party.name];
-    }
+    MatterSimple *model = self.listOfMatters[indexPath.row];
+
+    SecondMatterCell *cell = [tableView dequeueReusableCellWithIdentifier:[SecondMatterCell cellIdentifier] forIndexPath:indexPath];
+
+    cell.firstValue.text = model.systemNo;
+    cell.secondValue.text = model.primaryClient.name;
     
     return cell;
 }

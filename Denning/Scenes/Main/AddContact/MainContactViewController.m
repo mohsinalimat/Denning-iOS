@@ -34,6 +34,12 @@
     self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_add"];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [self setTabBarVisible:YES animated:NO completion:nil];
+    [super viewWillDisappear:animated];
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self performSelector:@selector(hideTabBar) withObject:nil afterDelay:1.0];
@@ -48,7 +54,7 @@
 }
 
 - (void) handleTap {
-    [self performSelector:@selector(showTabBar) withObject:nil afterDelay:1.0];
+    [self showTabBar];
 }
 
 - (void) hideTabBar {
@@ -60,7 +66,7 @@
     @weakify(self);
     [self setTabBarVisible:YES animated:YES completion:^(BOOL finished) {
         @strongify(self)
-        [self performSelector:@selector(hideTabBar) withObject:nil afterDelay:1.0];
+        [self performSelector:@selector(hideTabBar) withObject:nil afterDelay:2.0];
     }];
 }
 
@@ -80,7 +86,7 @@
     CGFloat offsetY = (visible)? -height : height;
     
     // zero duration means no animation
-    CGFloat duration = (animated)? 0.3 : 0.0;
+    CGFloat duration = (animated)? 0.0 : 0.0;
     
     [UIView animateWithDuration:duration animations:^{
         self.tabBarController.tabBar.frame = CGRectOffset(frame, 0, offsetY);

@@ -114,7 +114,7 @@
             currentBalance -= [[model.amountCR  stringByReplacingOccurrencesOfString:@"," withString:@""] floatValue];
         }
     }
-    self.ledgerBalanceLabel.text = [NSString stringWithFormat:@"%lf", currentBalance];
+    self.ledgerBalanceLabel.text = [DIHelpers addThousandsSeparatorWithDecimal:[NSString stringWithFormat:@"%.2lf", currentBalance]];
 }
 
 - (void) getSelectedIndex {

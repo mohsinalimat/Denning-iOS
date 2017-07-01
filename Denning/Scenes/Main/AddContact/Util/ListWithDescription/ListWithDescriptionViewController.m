@@ -9,7 +9,7 @@
 #import "ListWithDescriptionViewController.h"
 #import "AddContactViewController.h"
 
-@interface ListWithDescriptionViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+@interface ListWithDescriptionViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
@@ -18,6 +18,8 @@
 }
 
 @property (strong, nonatomic) NSArray* listOfDesc;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
 
 @property (strong, nonatomic) NSMutableArray* copyedList;
 @property (strong, nonatomic) UISearchController *searchController;
@@ -53,7 +55,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
@@ -66,13 +68,6 @@
     initCall = YES;
     
     self.tableView.delegate = self;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -115,10 +110,7 @@
     [[QMNetworkManager sharedManager] getDescriptionWithUrl:self.url withPage:self.page withSearch:(NSString*)self.filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
+       
         
         if (error == nil) {
             if (result.count != 0) {
@@ -160,6 +152,10 @@
     return self.listOfDesc.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CodeDescCell" forIndexPath:indexPath];

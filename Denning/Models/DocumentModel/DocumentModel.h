@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class FolderModel;
 @interface DocumentModel : NSObject
 
 @property (strong, nonatomic) NSString* date;
 @property (strong, nonatomic) NSString* name;
-@property (strong, nonatomic) NSArray* folders;
+@property (strong, nonatomic) NSArray<FolderModel*>* folders;
 @property (strong, nonatomic) NSArray* documents;
 
 + (DocumentModel*) getDocumentFromResponse: (NSDictionary*) response;

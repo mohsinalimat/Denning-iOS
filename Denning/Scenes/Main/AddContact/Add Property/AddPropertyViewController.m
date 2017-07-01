@@ -19,6 +19,7 @@
 #import "SimpleAutocomplete.h"
 #import "PropertyAutoComplete.h"
 #import "MukimValueList.h"
+#import "MasterTitleView.h"
 
 @interface AddPropertyViewController ()<UITableViewDelegate, UITableViewDataSource, ContactListWithDescSelectionDelegate,ContactListWithCodeSelectionDelegate, UITextFieldDelegate, SWTableViewCellDelegate>
 {
@@ -33,11 +34,14 @@
     __block BOOL isLoading;
     __block BOOL isHeaderOpening;
     NSInteger selectedContactRow;
+    
+    NSString* propertyID;
 }
 
 @property (weak, nonatomic) IBOutlet FZAccordionTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contents;
 @property (nonatomic, strong) NSArray *headers;
+@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 
 @property (strong, nonatomic)
 NSMutableDictionary* keyValue;
@@ -52,30 +56,58 @@ NSMutableDictionary* keyValue;
 }
 
 - (void) prepareUI {
-    selectedRestrictionCode = @"";
-    selectedPropertyType = @"";
-    selectedAreaTypeCode = @"";
-    selectedTitleIssuedCode = @"";
     self.keyValue = [@{
                        @(0): @(1), @(1):@(1),
                        @(2):@(0),
                        @(3):@(0),
                        @(4):@(0)
-                      } mutableCopy];
-    NSArray* temp = @[
-                  @[@[@"Property Type", @""], @[@"Individual / Strata Title", @""], @[@"ID (System assinged)", @""]],
-                  @[@[@"Title Type", @""], @[@"Title No.", @""], @[@"Lot Type", @""], @[@"Lot / PT No.", @""], @[@"Mukim Type", @""], @[@"Mukim", @""], @[@"Daerah", @""], @[@"Negeri", @""],  @[@"Area Value", @""], @[@"Area Type", @""], @[@"Tenure", @""], @[@"Address / Place", @""], @[@"Lease Expiry Date", @""], @[@"Restriction in Interest", @""], @[@"Restriction Against", @""], @[@"Approving Authority", @""], @[@"Category of Land Use", @""]
-                    ],
-                  @[@[@"Parcel No.", @""], @[@"Storey No.", @""], @[@"Building No", @""], @[@"Accessory Prcel No.", @""], @[@"Accessory Storey No.", @""], @[@"Accessory Building No.", @""], @[@"Units of Shares", @""], @[@"Total Shares", @""]],
-                  @[@[@"Parcel Type", @""], @[@"Unit/Parcel No.", @""], @[@"Storey No.", @""], @[@"Building/Block No.", @""], @[@"Apt/Condo name", @""], @[@"Accessory Parcel No", @""], @[@"SPA Area", @""], @[@"Measurement Unit", @""]],
-                  @[@[@"Project Name", @""], @[@"Developer", @""], @[@"Proprietor", @""], @[@"Block/Master Title", @""]],
-                  ];
-    _contents = [temp mutableCopy];
-    
-    _headers = @[
-                @"", @"Title Details (if issued)", @"More Strata Title Details (if issued)", @"Unit / Parcel Details (Per Principal SPA)", @"Project"
-                ];
+                       } mutableCopy];
 
+    _headers = @[
+                 @"", @"Title Details (if issued)", @"More Strata Title Details (if issued)", @"Unit / Parcel Details (Per Principal SPA)", @"Project"
+                 ];
+    
+    if ([self.viewType isEqualToString:@"view"] || [self.viewType isEqualToString:@"update"]) {
+        selectedRestrictionCode = _propertyModel.restrictionInInterest.codeValue;
+        selectedPropertyType = _propertyModel.propertyType.codeValue;
+        selectedAreaTypeCode = _propertyModel.area.type;
+        selectedTitleIssuedCode = _propertyModel.titleIssued.codeValue;
+        NSArray* temp = @[
+                          @[@[@"Property Type", _propertyModel.propertyType.descriptionValue], @[@"Individual / Strata Title", _propertyModel.titleIssued.descriptionValue], @[@"ID (System assinged)", _propertyModel.propertyID]],
+                          @[@[@"Title Type", _propertyModel.title.type], @[@"Title No.", _propertyModel.title.value], @[@"Lot Type", _propertyModel.lotPT.type], @[@"Lot / PT No.", _propertyModel.lotPT.value], @[@"Mukim Type", _propertyModel.mukim.type], @[@"Mukim", _propertyModel.mukim.value], @[@"Daerah", _propertyModel.daerah], @[@"Negeri", _propertyModel.negeri],  @[@"Area Value", _propertyModel.area.value], @[@"Area Type", _propertyModel.area.type], @[@"Tenure", _propertyModel.tenure], @[@"Address / Place", _propertyModel.address], @[@"Lease Expiry Date", [DIHelpers convertDateToCustomFormat:_propertyModel.leaseExpiryDate]], @[@"Restriction in Interest", _propertyModel.restrictionInInterest.descriptionValue], @[@"Restriction Against", _propertyModel.restrictionAgainst], @[@"Approving Authority", _propertyModel.approvingAuthority], @[@"Category of Land Use", _propertyModel.landUse]
+                            ],
+                          @[@[@"Parcel No.", _propertyModel.parcelNo], @[@"Storey No.", _propertyModel.storeyNo], @[@"Building No", _propertyModel.buildingNo], @[@"Accessory Parcel No.", _propertyModel.accParcelNo], @[@"Accessory Storey No.", _propertyModel.accStoreyNo], @[@"Accessory Building No.", _propertyModel.accBuildingNo], @[@"Units of Shares", _propertyModel.unitShare], @[@"Total Shares", _propertyModel.totalShare]],
+                          @[@[@"Parcel Type", _propertyModel.spaParcel.type], @[@"Unit/Parcel No.", _propertyModel.spaParcel.value], @[@"Storey No.", _propertyModel.storeyNo], @[@"Building/Block No.", _propertyModel.buildingNo], @[@"Apt/Condo name", _propertyModel.spaCondoName], @[@"Accessory Parcel No", _propertyModel.spaAccParcelNo], @[@"SPA Area", _propertyModel.spaArea.value], @[@"Measurement Unit", _propertyModel.spaArea.type]],
+                          @[@[@"Project Name", _propertyModel.project], @[@"Developer", _propertyModel.developer], @[@"Proprietor", _propertyModel.proprietor], @[@"Block/Master Title", _propertyModel.masterTitle]],
+                          ];
+        _contents = [temp mutableCopy];
+        if ([_viewType isEqualToString:@"view"]) {
+            self.title = @"View Property";
+        } else {
+            self.title = @"Update Property";
+        }
+        [self.saveBtn setTitle:@"Update" forState:UIControlStateNormal];
+    } else {
+        [self clearInput];
+        self.title = @"Add Property";
+    }
+}
+
+- (void) clearInput {
+    selectedRestrictionCode = @"";
+    selectedPropertyType = @"";
+    selectedAreaTypeCode = @"";
+    selectedTitleIssuedCode = @"";
+    
+    NSArray* temp = @[
+                      @[@[@"Property Type", @""], @[@"Individual / Strata Title", @""], @[@"ID (System assinged)", @""]],
+                      @[@[@"Title Type", @""], @[@"Title No.", @""], @[@"Lot Type", @""], @[@"Lot / PT No.", @""], @[@"Mukim Type", @""], @[@"Mukim", @""], @[@"Daerah", @""], @[@"Negeri", @""],  @[@"Area Value", @""], @[@"Area Type", @""], @[@"Tenure", @""], @[@"Address / Place", @""], @[@"Lease Expiry Date", @""], @[@"Restriction in Interest", @""], @[@"Restriction Against", @""], @[@"Approving Authority", @""], @[@"Category of Land Use", @""]
+                        ],
+                      @[@[@"Parcel No.", @""], @[@"Storey No.", @""], @[@"Building No", @""], @[@"Accessory Prcel No.", @""], @[@"Accessory Storey No.", @""], @[@"Accessory Building No.", @""], @[@"Units of Shares", @""], @[@"Total Shares", @""]],
+                      @[@[@"Parcel Type", @""], @[@"Unit/Parcel No.", @""], @[@"Storey No.", @""], @[@"Building/Block No.", @""], @[@"Apt/Condo name", @""], @[@"Accessory Parcel No", @""], @[@"SPA Area", @""], @[@"Measurement Unit", @""]],
+                      @[@[@"Project Name", @""], @[@"Developer", @""], @[@"Proprietor", @""], @[@"Block/Master Title", @""]],
+                      ];
+    _contents = [temp mutableCopy];
 }
 
 - (void) replaceContentForSection:(NSInteger) section InRow:(NSInteger) row withValue:(NSString*) value{
@@ -139,6 +171,8 @@ NSMutableDictionary* keyValue;
         [self didSelectListWithDescription:nil name:nameOfField withString:model.developer];
         nameOfField = @"Proprietor";
         [self didSelectListWithDescription:nil name:nameOfField withString:model.proprietor];
+        nameOfField = @"Block/Master Title";
+        [self didSelectListWithDescription:nil name:nameOfField withString:model.masterTitle];
     };
     
     [self showPopup:vc];
@@ -157,77 +191,209 @@ NSMutableDictionary* keyValue;
     [self showPopup:vc];
 }
 
-- (IBAction)saveProperty:(id)sender {
-    NSDictionary* data = @{
-                           @"accBuildingNo": _contents[2][5][1],
-                           @"accParcelNo": _contents[2][3][1],
-                           @"accStoreyNo": _contents[2][4][1],
-                           @"address": _contents[1][11][1],
-                           @"approvingAuthority": _contents[1][13][1],
-                           @"area": @{
-                               @"type": _contents[1][9][1],
-                               @"value": _contents[1][8][1]
-                           },
-                           @"daerah": _contents[1][6][1],
-                           @"fullTitle": @"",
-                           @"landUse": _contents[1][16][1],
-                           @"leaseExpiryDate": [DIHelpers convertDateToMySQLFormat:_contents[1][12][1]],
-                           @"lotPT": @{
-                               @"type": _contents[1][2][1],
-                               @"value": _contents[1][3][1]
-                           },
-                           @"mukim": @{
-                               @"type": _contents[1][4][1],
-                               @"value": _contents[1][5][1]
-                           },
-                           @"negeri": _contents[1][7][1],
-                           @"propertyType": @{
-                               @"code": selectedPropertyType
-                           },
-                           @"restrictionAgainst": _contents[1][13][1],
-                           @"restrictionInInterest": @{
-                               @"code": selectedRestrictionCode
-                           },
-                           @"spaAccParcelNo": _contents[2][0][1],
-                           @"spaArea": @{
-                               @"type": _contents[3][6][1],
-                               @"value": _contents[3][7][1]
-                           },
-                           @"spaBuildingNo": _contents[3][3][1],
-                           @"spaCondoName": _contents[3][4][1],
-                           @"spaParcel": @{
-                               @"type": _contents[3][0][1],
-                               @"value": _contents[3][1][1]
-                           },
-                           @"spaStoreyNo": _contents[3][2][1],
-                           @"storeyNo": _contents[2][1][1],
-                           @"tenure": _contents[1][10][1],
-                           @"title": @{
-                               @"type": _contents[1][0][1],
-                               @"value": _contents[1][1][1]
-                           },
-                           @"titleIssued": @{
-                               @"code": selectedTitleIssuedCode
-                           },
-                           @"totalShare": _contents[2][7][1],
-                           @"unitShare": _contents[2][6][1]
-                           };
+- (NSMutableDictionary*) buildParams {
+    NSMutableDictionary* data = [NSMutableDictionary new];
+    
+    if (((NSString*)_contents[2][5][1]).length > 0 && ![_contents[2][5][1] isEqualToString:_propertyModel.accBuildingNo]) {
+        [data addEntriesFromDictionary:@{@"accBuildingNo":_contents[2][5][1]}];
+    }
+    
+    if (((NSString*)_contents[2][3][1]).length > 0 && ![_contents[2][3][1] isEqualToString:_propertyModel.accParcelNo]) {
+        [data addEntriesFromDictionary:@{@"accParcelNo":_contents[2][3][1]}];
+    }
+    
+    if (((NSString*)_contents[2][4][1]).length > 0 && ![_contents[2][4][1] isEqualToString:_propertyModel.accStoreyNo]) {
+        [data addEntriesFromDictionary:@{@"accStoreyNo":_contents[2][4][1]}];
+    }
+    
+    if (((NSString*)_contents[1][11][1]).length > 0 && ![_contents[1][11][1] isEqualToString:_propertyModel.accStoreyNo]) {
+        [data addEntriesFromDictionary:@{@"address":_contents[1][11][1]}];
+    }
+    
+    if (((NSString*)_contents[1][13][1]).length > 0 && ![_contents[1][13][1] isEqualToString:_propertyModel.approvingAuthority]) {
+        [data addEntriesFromDictionary:@{@"approvingAuthority":_contents[1][13][1]}];
+    }
+    
+    NSMutableDictionary* area = [NSMutableDictionary new];
+    if (((NSString*)_contents[1][9][1]).length > 0 && ![_contents[1][9][1] isEqualToString:_propertyModel.area.type]) {
+        [area addEntriesFromDictionary:@{@"type":_contents[1][9][1]}];
+    }
+    
+    if (((NSString*)_contents[1][8][1]).length > 0 && ![_contents[1][8][1] isEqualToString:_propertyModel.area.value]) {
+        [area addEntriesFromDictionary:@{@"value":_contents[1][8][1]}];
+    }
+    
+    [data addEntriesFromDictionary:@{@"area":area}];
+    
+    if (((NSString*)_contents[1][6][1]).length > 0 && ![_contents[1][6][1] isEqualToString:_propertyModel.daerah]) {
+        [data addEntriesFromDictionary:@{@"daerah":_contents[1][6][1]}];
+    }
+    
+    if (((NSString*)_contents[1][16][1]).length > 0 && ![_contents[1][16][1] isEqualToString:_propertyModel.landUse]) {
+        [data addEntriesFromDictionary:@{@"landUse":_contents[1][16][1]}];
+    }
+    
+    if (((NSString*)_contents[1][12][1]).length > 0 && ![[DIHelpers convertDateToMySQLFormat:_contents[1][12][1]] isEqualToString:_propertyModel.leaseExpiryDate]) {
+        [data addEntriesFromDictionary:@{@"leaseExpiryDate":[DIHelpers convertDateToMySQLFormat:_contents[1][12][1]]}];
+    }
+    
+    NSMutableDictionary* propertyTitle = [NSMutableDictionary new];
+    if (((NSString*)_contents[1][0][1]).length > 0 && ![_contents[1][0][1] isEqualToString:_propertyModel.title.type]) {
+        [propertyTitle addEntriesFromDictionary:@{@"type":_contents[1][0][1]}];
+    }
+    
+    if (((NSString*)_contents[1][1][1]).length > 0 && ![_contents[1][1][1] isEqualToString:_propertyModel.title.value]) {
+        [propertyTitle addEntriesFromDictionary:@{@"value":_contents[1][1][1]}];
+    }
+    [data addEntriesFromDictionary:@{@"title":propertyTitle}];
+    
+    NSMutableDictionary* lotPT = [NSMutableDictionary new];
+    if (((NSString*)_contents[1][2][1]).length > 0 && ![_contents[1][2][1] isEqualToString:_propertyModel.lotPT.type]) {
+        [lotPT addEntriesFromDictionary:@{@"type":_contents[1][2][1]}];
+    }
+    
+    if (((NSString*)_contents[1][3][1]).length > 0 && ![_contents[1][3][1] isEqualToString:_propertyModel.lotPT.value]) {
+        [lotPT addEntriesFromDictionary:@{@"value":_contents[1][3][1]}];
+    }
+    [data addEntriesFromDictionary:@{@"lotPT":lotPT}];
+    
+    NSMutableDictionary* mukim = [NSMutableDictionary new];
+    if (((NSString*)_contents[1][4][1]).length > 0 && ![_contents[1][4][1] isEqualToString:_propertyModel.mukim.type]) {
+        [mukim addEntriesFromDictionary:@{@"type":_contents[1][4][1]}];
+    }
+    
+    if (((NSString*)_contents[1][5][1]).length > 0 && ![_contents[1][5][1] isEqualToString:_propertyModel.mukim.value]) {
+        [mukim addEntriesFromDictionary:@{@"value":_contents[1][5][1]}];
+    }
+    [data addEntriesFromDictionary:@{@"mukim":mukim}];
+    
+    if (((NSString*)_contents[1][7][1]).length > 0 && ![_contents[1][7][1] isEqualToString:_propertyModel.negeri]) {
+        [data addEntriesFromDictionary:@{@"negeri":_contents[1][7][1]}];
+    }
+    
+    if (selectedPropertyType.length > 0 && ![selectedPropertyType isEqualToString:_propertyModel.propertyType.codeValue]) {
+        [data addEntriesFromDictionary:@{@"propertyType": @{@"code":selectedPropertyType}}];
+    }
+    
+    if (((NSString*)_contents[1][13][1]).length > 0 && ![_contents[1][13][1] isEqualToString:_propertyModel.restrictionAgainst]) {
+        [data addEntriesFromDictionary:@{@"restrictionAgainst":_contents[1][13][1]}];
+    }
+    
+    if (selectedRestrictionCode.length > 0 && ![selectedRestrictionCode isEqualToString:_propertyModel.restrictionInInterest.codeValue]) {
+        [data addEntriesFromDictionary:@{@"restrictionInInterest": @{@"code":selectedRestrictionCode}}];
+    }
+    
+    if (((NSString*)_contents[2][0][1]).length > 0 && ![_contents[2][0][1] isEqualToString:_propertyModel.spaAccParcelNo]) {
+        [data addEntriesFromDictionary:@{@"spaAccParcelNo":_contents[2][0][1]}];
+    }
+    
+    NSMutableDictionary* spaArea = [NSMutableDictionary new];
+    if (((NSString*)_contents[3][6][1]).length > 0 && ![_contents[3][6][1] isEqualToString:_propertyModel.spaArea.type]) {
+        [spaArea addEntriesFromDictionary:@{@"type":_contents[3][6][1]}];
+    }
+    
+    if (((NSString*)_contents[3][7][1]).length > 0 && ![_contents[3][7][1] isEqualToString:_propertyModel.spaArea.value]) {
+        [spaArea addEntriesFromDictionary:@{@"value":_contents[3][7][1]}];
+    }
+    [data addEntriesFromDictionary:@{@"spaArea":spaArea}];
+    
+    if (((NSString*)_contents[3][3][1]).length > 0 && ![_contents[3][3][1] isEqualToString:_propertyModel.spaBuildingNo]) {
+        [data addEntriesFromDictionary:@{@"spaBuildingNo":_contents[3][3][1]}];
+    }
+    
+    if (((NSString*)_contents[3][4][1]).length > 0 && ![_contents[3][4][1] isEqualToString:_propertyModel.spaCondoName]) {
+        [data addEntriesFromDictionary:@{@"spaCondoName":_contents[3][4][1]}];
+    }
+    
+    NSMutableDictionary* spaParcel = [NSMutableDictionary new];
+    if (((NSString*)_contents[3][0][1]).length > 0 && ![_contents[3][0][1] isEqualToString:_propertyModel.spaParcel.type]) {
+        [spaParcel addEntriesFromDictionary:@{@"type":_contents[3][0][1]}];
+    }
+    
+    if (((NSString*)_contents[3][1][1]).length > 0 && ![_contents[3][1][1] isEqualToString:_propertyModel.spaParcel.value]) {
+        [spaParcel addEntriesFromDictionary:@{@"value":_contents[3][1][1]}];
+    }
+    [data addEntriesFromDictionary:@{@"spaParcel":spaParcel}];
+    
+    if (((NSString*)_contents[3][2][1]).length > 0 && ![_contents[3][2][1] isEqualToString:_propertyModel.spaStoreyNo]) {
+        [data addEntriesFromDictionary:@{@"spaStoreyNo":_contents[3][2][1]}];
+    }
+    
+    if (((NSString*)_contents[1][10][1]).length > 0 && ![_contents[1][10][1] isEqualToString:_propertyModel.tenure]) {
+        [data addEntriesFromDictionary:@{@"tenure":_contents[1][10][1]}];
+    }
+    
+    if (selectedTitleIssuedCode.length > 0 && ![selectedTitleIssuedCode isEqualToString:_propertyModel.titleIssued.codeValue]) {
+        [data addEntriesFromDictionary:@{@"titleIssued": @{@"code":selectedTitleIssuedCode}}];
+    }
+    
+    if (((NSString*)_contents[2][7][1]).length > 0 && ![_contents[2][7][1] isEqualToString:_propertyModel.totalShare]) {
+        [data addEntriesFromDictionary:@{@"totalShare":_contents[2][7][1]}];
+    }
+    
+    if (((NSString*)_contents[2][6][1]).length > 0 && ![_contents[2][6][1] isEqualToString:_propertyModel.tenure]) {
+        [data addEntriesFromDictionary:@{@"unitShare":_contents[2][6][1]}];
+    }
+    
+    return data;
+}
+
+- (void) _save {
     if (isLoading) return;
     isLoading = YES;
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self);
-    [[QMNetworkManager sharedManager] saveBillorQuotationWithParams:data inURL:PROPERTY_SAVE_URL WithCompletion:^(NSDictionary * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] savePropertyWithParams:[self buildParams] inURL:PROPERTY_SAVE_URL WithCompletion:^(AddPropertyModel * _Nonnull result, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         @strongify(self)
         self->isLoading = NO;
         if (error == nil) {
             [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully saved" duration:2.0];
-//            [self updateWholeData:result];
+            _viewType = @"view";
+            _propertyModel = result;
+            [self prepareUI];
+            [self.tableView reloadData];
+//            [self performSegueWithIdentifier:kAddPropertySegue sender:result];
         } else {
             [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:2.0];
         }
     }];
+}
+
+- (void) _update {
+    if (isLoading) return;
+    isLoading = YES;
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    __weak UINavigationController *navigationController = self.navigationController;
+    @weakify(self);
+    [[QMNetworkManager sharedManager] updatePropertyWithParams:[self buildParams] inURL:PROPERTY_SAVE_URL WithCompletion:^(AddPropertyModel * _Nonnull result, NSError * _Nonnull error) {
+        [navigationController dismissNotificationPanel];
+        @strongify(self)
+        self->isLoading = NO;
+        if (error == nil) {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Successfully updated" duration:2.0];
+            _viewType = @"view";
+            _propertyModel = result;
+            [self prepareUI];
+            [self.tableView reloadData];
+            
+        } else {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:2.0];
+        }
+    }];
+}
+
+- (IBAction)saveProperty:(id)sender {
+    if ([_viewType isEqualToString:@"view"]) {
+        _viewType = @"update";
+        [self.tableView reloadData];
+        return;
+    } else if([_viewType isEqualToString:@"update"]) {
+        [self _update];
+    } else {
+        [self _save];
+    }
 }
 
 - (void) registerNib {
@@ -327,7 +493,12 @@ NSMutableDictionary* keyValue;
         
         cell.rightFloatingText.delegate = self;
         cell.leftFloatingText.userInteractionEnabled = NO;
-        cell.rightFloatingText.userInteractionEnabled = YES;
+        if (![_viewType isEqualToString:@"view"]) {
+            cell.rightFloatingText.userInteractionEnabled = YES;
+        } else {
+            cell.rightFloatingText.userInteractionEnabled = NO;
+        }
+        
         cell.rightDetailDisclosure.hidden = YES;
         if (indexPath.section == 1 ) {
             if (indexPath.row == 2) {
@@ -336,7 +507,11 @@ NSMutableDictionary* keyValue;
                 cell.leftFloatingText.delegate = self;
                 cell.leftFloatingText.tag = 104;
                 cell.rightFloatingText.tag = 105;
-                cell.leftFloatingText.userInteractionEnabled = YES;
+                if (![_viewType isEqualToString:@"view"]) {
+                    cell.leftFloatingText.userInteractionEnabled = YES;
+                } else {
+                    cell.rightFloatingText.userInteractionEnabled = NO;
+                }
             }
         }
         
@@ -348,7 +523,11 @@ NSMutableDictionary* keyValue;
         NSInteger rows = indexPath.row;
         if (indexPath.section == 1) {
             rows += 3;
-            cell.rightType.userInteractionEnabled = YES;
+            if (![_viewType isEqualToString:@"view"]) {
+                cell.rightType.userInteractionEnabled = YES;
+            } else {
+                cell.rightType.userInteractionEnabled = NO;
+            }
             if (indexPath.row == 5) {
                 cell.rightType.userInteractionEnabled = NO;
             }
@@ -402,8 +581,11 @@ NSMutableDictionary* keyValue;
 
     
     cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.floatingTextField.userInteractionEnabled = YES;
-    
+    if (![_viewType isEqualToString:@"view"]) {
+        cell.floatingTextField.userInteractionEnabled = YES;
+    } else {
+        cell.floatingTextField.userInteractionEnabled = NO;
+    }
     cell.floatingTextField.delegate = self;
     if (indexPath.section == 0) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -430,7 +612,7 @@ NSMutableDictionary* keyValue;
             cell.floatingTextField.userInteractionEnabled = NO;
         }
         if (indexPath.row == 4) {
-            cell.floatingTextField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.floatingTextField.keyboardType = UIKeyboardTypeNumberPad;
         } else {
             cell.floatingTextField.keyboardType = UIKeyboardTypeDefault;
         }
@@ -487,7 +669,15 @@ NSMutableDictionary* keyValue;
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSArray* obj = [self calcSectionNumber:textField.tag];
-    if (([obj[0] integerValue] == 2 && ([obj[1] integerValue] == 6 || [obj[1] integerValue] == 7)) || ([obj[0] integerValue] == 3 && [obj[1] integerValue] == 5)) {
+    
+    if ([obj[0] integerValue] == 2 && ([obj[1] integerValue] == 6 || [obj[1] integerValue] == 7))
+    {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [DIHelpers addThousandsSeparator:text];;
+        return NO;
+    }
+    
+    if (([obj[0] integerValue] == 3 && [obj[1] integerValue] == 5)) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [DIHelpers formatDecimal:text];;
         return NO;
@@ -589,6 +779,9 @@ NSMutableDictionary* keyValue;
 - (void)tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([_viewType isEqualToString:@"view"]) {
+        return;
+    }
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             titleOfList = @"Select Property Type";
@@ -669,6 +862,9 @@ NSMutableDictionary* keyValue;
         if (indexPath.row == 0) {
             nameOfField = self.contents[indexPath.section][indexPath.row][0];
             [self showPropertyAutocomplete:PROPERTY_PROJECT_HOUSING_GET_URL];
+        } else if (indexPath.row == 3) {
+            nameOfField = self.contents[indexPath.section][indexPath.row][0];
+            [self performSegueWithIdentifier:kMasterTitleSegue sender:PROPERTY_MASTER_TITLE_GETLIST_URL];
         }
     }
 }
@@ -775,6 +971,13 @@ NSMutableDictionary* keyValue;
             [self replaceContentForSection:1 InRow:5 withValue:model.mukim];
             [self replaceContentForSection:1 InRow:6 withValue:model.daerah];
             [self replaceContentForSection:1 InRow:7 withValue:model.negeri];
+        };
+    }
+    
+    if ([segue.identifier isEqualToString:kMasterTitleSegue]) {
+        MasterTitleView* vc = segue.destinationViewController;
+        vc.updateHandler = ^(MasterTitleModel *model) {
+            [self replaceContentForSection:4 InRow:3 withValue:model.masterCode];
         };
     }
 }

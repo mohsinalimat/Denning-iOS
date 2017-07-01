@@ -24,6 +24,7 @@
 #import "DEMOCustomAutoCompleteCell.h"
 #import "DEMOCustomAutoCompleteObject.h"
 #import "AFHTTPSessionOperation.h"
+#import "AddPropertyViewController.h"
 
 typedef NS_ENUM(NSInteger, DISearchCellType) {
     DIContactCell = 1,
@@ -50,6 +51,8 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     NSString* _matterCode;
     NSString* searchType;
     NSString* gotoMatter;
+    NSString* _email;
+    NSString* _sessionID;
 }
 
 @property (weak, nonatomic) IBOutlet MLPAutoCompleteTextField *searchTextField;
@@ -146,6 +149,8 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) prepareUI
 {
+    _email = [DataManager sharedManager].user.email;
+    _sessionID = [DataManager sharedManager].user.sessionID;
     CGFloat customRefreshControlHeight = 50.0f;
     CGFloat customRefreshControlWidth = 320.0f;
     CGRect customRefreshControlFrame = CGRectMake(0.0f,
@@ -610,13 +615,13 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 {
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
-    [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(AddPropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
         
         @strongify(self);
         self->isLoading = false;
         [SVProgressHUD dismiss];
         if (error == nil) {
-            [self performSegueWithIdentifier:kPropertySearchSegue sender:propertyModel];
+            [self performSegueWithIdentifier:kAddPropertySegue sender:propertyModel];
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -743,12 +748,13 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         [[NSOperationQueue mainQueue] cancelAllOperations];
     }
     
-    
     if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:@"testdenningSkySea" forHTTPHeaderField:@"webuser-sessionid"];
+        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:_sessionID forHTTPHeaderField:@"webuser-sessionid"];
+        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:_email forHTTPHeaderField:@"webuser-id"];
         
     } else {
         [[QMNetworkManager sharedManager].manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
+        [[QMNetworkManager sharedManager].manager.requestSerializer setValue:_email forHTTPHeaderField:@"webuser-id"];
         
     }
     
@@ -839,10 +845,11 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         relatedMatterVC.relatedMatterModel = sender;
     }
     
-    if ([segue.identifier isEqualToString:kPropertySearchSegue]){
+    if ([segue.identifier isEqualToString:kAddPropertySegue]){
         UINavigationController* navC = segue.destinationViewController;
-        PropertyViewController* propertyVC = [navC viewControllers].firstObject;
+        AddPropertyViewController* propertyVC = [navC viewControllers].firstObject;
         propertyVC.propertyModel = sender;
+        propertyVC.viewType = @"view";
     }
     
     if ([segue.identifier isEqualToString:kLegalFirmSearchSegue]){

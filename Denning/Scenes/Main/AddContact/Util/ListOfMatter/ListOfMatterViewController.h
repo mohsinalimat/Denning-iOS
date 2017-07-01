@@ -10,7 +10,7 @@
 
 typedef void (^UpdateMatterCodeHandler)(MatterCodeModel* model);
 
-@interface ListOfMatterViewController : UITableViewController
+@interface ListOfMatterViewController : UIViewController
 
 @property (strong, nonatomic) UpdateMatterCodeHandler  updateHandler;
 

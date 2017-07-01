@@ -12,17 +12,21 @@
 
 + (NSString*) getWANIP
 {
-  //  NSString* WANIP = [[SystemServices sharedServices] externalIPAddress];
+    NSString* WANIP = [[SystemServices sharedServices] externalIPAddress];
     
-    NSString* WANIP = @"10.17.9.2";
+    if (WANIP == nil) {
+        WANIP = @"";
+    }
+    
+//    NSString* WANIP = @"10.17.9.2";
     
     return WANIP;
 }
 
 + (NSString*) getLANIP
 {
-//    NSString* LANIP = [[SystemServices sharedServices] currentIPAddress];
-    NSString* LANIP = @"192.168.2.29";
+    NSString* LANIP = [[SystemServices sharedServices] currentIPAddress];
+//    NSString* LANIP = @"192.168.2.29";
     
     return LANIP;
 }
@@ -43,8 +47,8 @@
 
 + (NSString*) getDeviceName
 {
-   // NSString* deviceName = [[SystemServices sharedServices] deviceName];
-    NSString* deviceName = [UIDevice currentDevice].model;
+    NSString* deviceName = [[SystemServices sharedServices] deviceName];
+//    NSString* deviceName = [UIDevice currentDevice].model;
     return deviceName;
 }
 
@@ -71,7 +75,7 @@
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
-    [formatter setDateFormat:@"yyyy-MM-dd"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     
@@ -83,14 +87,17 @@
 + (NSString*) getDateInShortForm: (NSString*) date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     
     NSDate *creationDate = [formatter dateFromString:date];
+    [newFormatter setTimeZone:timeZone];
+    [newFormatter setDateFormat:@"d MMM yyyy"];
     
-    return [NSDateFormatter localizedStringFromDate:creationDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+    return [newFormatter stringFromDate:creationDate];
 }
 
 + (NSString*) getDateInLongForm: (NSString*) date
@@ -116,7 +123,7 @@
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     [newFormatter setTimeZone:timeZone];
-    [newFormatter setDateFormat:@"yyyy-MM-dd"];
+    [newFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     NSDate *creationDate = [formatter dateFromString:date];
     
@@ -125,10 +132,13 @@
 
 + (NSString*) convertDateToCustomFormat: (NSString*) date
 {
+    if (date.length == 0) {
+        return date;
+    }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     NSDateFormatter *newFormatter = [[NSDateFormatter alloc] init];
     
-    [formatter setDateFormat:@"yyyy-MM-dd"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneForSecondsFromGMT:[[NSTimeZone localTimeZone] secondsFromGMT]/3600];
     [formatter setTimeZone:timeZone];
     [newFormatter setTimeZone:timeZone];
@@ -163,6 +173,15 @@
 + (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime
 {
    return [self getDateInShortForm:dateTime];
+}
+
++ (NSString*) currentYear
+{
+    NSDate *currentYear=[[NSDate alloc]init];
+    currentYear=[NSDate date];
+    NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
+    [formatter1 setDateFormat:@"yyyy"];
+    return [formatter1 stringFromDate:currentYear];
 }
 
 + (BOOL) isWordFile:(NSString*) fileExt
@@ -381,6 +400,11 @@
     return [formatter stringFromDate:Sunday];
 }
 
++ (NSString*) addThousandsSeparatorWithDecimal:(id)value
+{
+    return [DIHelpers formatDecimal:[DIHelpers addThousandsSeparator:value]];
+}
+
 + (NSString*) addThousandsSeparator: (id) value
 {
     NSScanner *scanner = [NSScanner scannerWithString:[value stringByReplacingOccurrencesOfString:@"," withString:@""]];
@@ -400,7 +424,10 @@
     
     NSString* string = @"";
     for (NSString* word in myWords) {
-        string = [NSString stringWithFormat:@"%@ %@", string,[ word capitalizedString]];
+        if (word.length == 0) {
+            continue;
+        }
+        string = [NSString stringWithFormat:@"%@ %@%@", string, [[word substringToIndex:1] capitalizedString], [word substringFromIndex:1]];
     }
     
     return string;

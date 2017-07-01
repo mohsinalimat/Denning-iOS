@@ -151,13 +151,13 @@
                         <outlet property="searchView" destination="zRq-Lb-Olq" id="Vzl-lk-90N"/>
                         <outlet property="tableView" destination="al5-Qu-IRX" id="sPe-s9-wjj"/>
                         <segue destination="I9t-RB-7G3" kind="presentation" identifier="RelatedMatterSegue" id="P4w-a1-XuH"/>
-                        <segue destination="Srh-0F-Bbf" kind="presentation" identifier="PropertySearchSegue" id="t3B-sP-8vK"/>
                         <segue destination="otr-bn-xcJ" kind="presentation" identifier="ContactSearchSegue" id="rvn-8G-Haa"/>
                         <segue destination="lib-hj-uPp" kind="presentation" identifier="LegalFirmSearchSegue" id="09f-7k-9qh"/>
                         <segue destination="lD9-2J-l1i" kind="presentation" identifier="BankSearchSegue" id="kyv-Si-JIe"/>
                         <segue destination="G93-68-FfG" kind="presentation" identifier="GovernmentOfficesSearchSegue" id="PYw-5J-xot"/>
                         <segue destination="gea-U5-wLg" kind="presentation" identifier="DocumentSearchSegue" id="i3X-Da-5Hf"/>
                         <segue destination="JeE-0C-4Q9" kind="presentation" identifier="LedgerSearchSegue" id="PH7-FG-49J"/>
+                        <segue destination="JUH-aO-MYo" kind="show" identifier="AddPropertySegue" id="TUn-Az-1b0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gfS-fg-PQm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -202,7 +202,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="Vpy-z2-2MT" kind="show" identifier="ContactSearchSegue" id="KRi-tg-i3A"/>
-                        <segue destination="jK6-PM-Dvx" kind="show" identifier="PropertySearchSegue" id="MrQ-Ju-Caf"/>
+                        <segue destination="jK6-PM-Dvx" kind="show" identifier="AddPropertySegue" id="MrQ-Ju-Caf"/>
                         <segue destination="1Li-v5-KWM" kind="show" identifier="LegalFirmSearchSegue" id="YvS-8z-eNr"/>
                         <segue destination="4NU-gk-a8b" kind="show" identifier="BankSearchSegue" id="Kky-VT-GOZ"/>
                         <segue destination="mJH-pp-8j5" kind="show" identifier="LedgerSearchSegue" id="S6L-bO-c4D"/>
@@ -222,13 +222,21 @@
             </objects>
             <point key="canvasLocation" x="7712" y="-670"/>
         </scene>
-        <!--PropertyViewController-->
+        <!--AddPropertyNavigation-->
         <scene sceneID="fg3-9w-bI8">
             <objects>
-                <viewControllerPlaceholder storyboardName="Search" referencedIdentifier="PropertyViewController" id="jK6-PM-Dvx" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="AddContact" referencedIdentifier="AddPropertyNavigation" id="jK6-PM-Dvx" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sZt-AP-nO2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7763" y="-571"/>
+        </scene>
+        <!--AddPropertyNavigation-->
+        <scene sceneID="RVA-6W-7Cl">
+            <objects>
+                <viewControllerPlaceholder storyboardName="AddContact" referencedIdentifier="AddPropertyNavigation" id="JUH-aO-MYo" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ARk-kE-2VW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6504" y="547"/>
         </scene>
         <!--LegalFirmViewController-->
         <scene sceneID="l91-xR-nX6">
@@ -377,7 +385,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="wQ4-zx-dEN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -497,7 +506,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="9SO-TB-UM3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -525,7 +535,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="a0u-9X-P4Z">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -549,7 +560,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="3ka-xi-Bu2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -617,7 +629,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YuN-Ot-afy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -685,7 +698,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="tkd-Nn-DhZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -730,7 +744,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="vxM-5a-pfB">
-                                        <rect key="frame" x="126" y="57" width="124.5" height="17"/>
+                                        <rect key="frame" x="125.5" y="57" width="124.5" height="17"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="File No" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VZC-tx-25w">
                                                 <rect key="frame" x="0.0" y="0.0" width="45" height="17"/>
@@ -747,7 +761,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.058823529409999999" green="0.094117647060000004" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="vxM-5a-pfB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tkc-oP-qc6" secondAttribute="leading" constant="12" id="5wz-mV-eZa"/>
                                     <constraint firstItem="vxM-5a-pfB" firstAttribute="centerX" secondItem="tkc-oP-qc6" secondAttribute="centerX" id="AK7-74-eJK"/>
@@ -807,7 +821,7 @@
                                 <rect key="frame" x="0.0" y="627" width="375" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ledger balance:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WV9-t8-H7Z">
-                                        <rect key="frame" x="20" y="11.5" width="116" height="18"/>
+                                        <rect key="frame" x="20" y="11" width="116" height="18"/>
                                         <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
                                         <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -920,7 +934,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Xlv-AL-x6H">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -939,7 +954,7 @@
         <scene sceneID="qKK-C9-NRg">
             <objects>
                 <tableViewController storyboardIdentifier="DocumentViewController" id="Siy-4G-Oqb" customClass="DocumentViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="4tY-HX-aaM">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="4tY-HX-aaM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -972,10 +987,38 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backBtn" destination="FOf-Hy-V0O" id="V4R-s8-cp5"/>
+                        <outlet property="cancelBtn" destination="8Eo-lY-203" id="Wip-Vh-jOE"/>
+                        <outlet property="selectBtn" destination="OhZ-Na-XT6" id="5lo-hT-5bP"/>
+                        <outlet property="shareBtn" destination="SQX-4r-Omq" id="T3V-fr-fEy"/>
                         <segue destination="o56-L1-MzY" kind="show" identifier="DocumentPreviewSegue" id="X9J-I5-H0L"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQB-eu-OFa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Cancel" id="8Eo-lY-203">
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <action selector="didTapCancel:" destination="Siy-4G-Oqb" id="Xoc-fY-uF7"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem title="Select" id="OhZ-Na-XT6">
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <action selector="didTapSelect:" destination="Siy-4G-Oqb" id="of5-pB-iHL"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem title="Share" id="SQX-4r-Omq">
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <action selector="didTapShare:" destination="Siy-4G-Oqb" id="48Z-5P-9uT"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem image="Back.png" id="FOf-Hy-V0O">
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <action selector="dismissScreen:" destination="Siy-4G-Oqb" id="Kf3-Qn-lGs"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="6841" y="3735"/>
         </scene>
@@ -1021,7 +1064,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="J8S-rc-ciR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.058823529409999999" green="0.090196078430000007" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SFUIText-Semibold" family="SF UI Text" pointSize="20"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1034,7 +1078,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BrJ-gX-CWx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6014" y="3736"/>
+            <point key="canvasLocation" x="6014" y="3783"/>
         </scene>
         <!--Matter-->
         <scene sceneID="coR-HH-b3z">
@@ -1382,7 +1426,7 @@
         <!--Transaction Detail-->
         <scene sceneID="x9m-ed-qhS">
             <objects>
-                <tableViewController id="nCz-r6-A29" customClass="TransactionDetail" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TransactionDetail" id="nCz-r6-A29" customClass="TransactionDetail" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Y1u-71-khx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="867"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

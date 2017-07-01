@@ -28,6 +28,7 @@ target ‘Denning’ do
 	pod 'VBFPopFlatButton'
 	pod 'Masonry'
 	pod "GLCalendarView", "~> 1.0.0"
+	pod 'FSCalendar'
 	pod 'UIFloatLabelTextField'
 	pod 'FZAccordionTableView', '~> 0.2.3'
 	pod "HNKGooglePlacesAutocomplete", "~> 1.1"

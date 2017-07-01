@@ -10,7 +10,7 @@
 
 typedef void (^UpdateMatterHandler)(MatterSimple* model);
 
-@interface SimpleMatterViewController : UITableViewController
+@interface SimpleMatterViewController : UIViewController
 
 @property (strong, nonatomic) UpdateMatterHandler  updateHandler;
 

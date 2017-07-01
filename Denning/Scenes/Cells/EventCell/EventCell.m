@@ -10,18 +10,13 @@
 
 @interface EventCell()
 @property (weak, nonatomic) IBOutlet UILabel *counsel;
+@property (weak, nonatomic) IBOutlet UIView *sideBar;
 
 @property (weak, nonatomic) IBOutlet UILabel *caseNoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subjectLabel;
-@property (weak, nonatomic) IBOutlet QMImageView *eventImageView;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
-@property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartDatelabel;
-@property (weak, nonatomic) IBOutlet UILabel *eventEndDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *eventStartTimeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *fileNoLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *fileName;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 
 @end
@@ -42,16 +37,29 @@
 - (void) configureCellWithEvent:(EventModel*) event
 {
     self.subjectLabel.text = event.caseName.uppercaseString;
-    NSArray *noName = [DIHelpers separateNameIntoTwo:event.FileNo];
-    self.fileNoLabel.text = noName[0];
-    self.fileName.text = noName[1];
     self.caseNoLabel.text = event.caseNo;
     self.locationLabel.text = event.location;
     self.eventStartDatelabel.text = [DIHelpers getOnlyDateFromDateTime:event.eventStart];
-    self.eventEndDateLabel.text = [DIHelpers getOnlyDateFromDateTime:event.eventEnd];
     self.dayLabel.text = [DIHelpers getDayFromDate:event.eventStart];
     self.eventStartTimeLabel.text = [DIHelpers getTimeFromDate:event.eventStart];
     self.counsel.text = event.counsel;
+    
+    if ([event.eventType isEqualToString:@"1court"]) {
+        _eventStartDatelabel.textColor = [UIColor babyRed];
+        _dayLabel.textColor = [UIColor babyRed];
+        _eventStartTimeLabel.textColor = [UIColor babyRed];
+        _sideBar.backgroundColor = [UIColor babyRed];
+    } else if ([event.eventType isEqualToString:@"2office"]) {
+        _eventStartDatelabel.textColor = [UIColor babyBule];
+        _dayLabel.textColor = [UIColor babyBule];
+        _eventStartTimeLabel.textColor = [UIColor babyBule];
+        _sideBar.backgroundColor = [UIColor babyBule];
+    } else if ([event.eventType isEqualToString:@"3personal"]) {
+        _eventStartDatelabel.textColor = [UIColor orangeColor];
+        _dayLabel.textColor = [UIColor orangeColor];
+        _eventStartTimeLabel.textColor = [UIColor orangeColor];
+        _sideBar.backgroundColor = [UIColor orangeColor];
+    }
 }
 
 @end

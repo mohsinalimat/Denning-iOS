@@ -34,6 +34,7 @@
     eventModel.descriptionValue = [response valueForKeyNotNull:@"description"];
     eventModel.eventStart = [response valueForKeyNotNull:@"eventStart"];
     eventModel.eventEnd = [response valueForKeyNotNull:@"eventEnd"];
+    eventModel.eventType = [response valueForKeyNotNull:@"eventType"];
     if (![[response objectForKey:@"img"] isEqual:[NSNull null]]){
         eventModel.imageURL = [[response objectForKey:@"img"] valueForKeyNotNull:@"FileName"];
         eventModel.imageData = [[response objectForKey:@"img"] valueForKeyNotNull:@"base64"];

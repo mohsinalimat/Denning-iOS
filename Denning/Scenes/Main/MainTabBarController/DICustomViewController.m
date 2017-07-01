@@ -37,10 +37,39 @@
 }
 
 - (void) hideTabBar {
-    self.tabBarController.tabBar.hidden = YES;
+    [self setTabBarVisible:NO animated:YES completion:^(BOOL finished) {
+    }];
+}
+
+- (void) showTabBar {
+    @weakify(self);
+    [self setTabBarVisible:YES animated:YES completion:^(BOOL finished) {
+        @strongify(self)
+        [self performSelector:@selector(hideTabBar) withObject:nil afterDelay:2.0];
+    }];
+}
+
+//Getter to know the current state
+- (BOOL)tabBarIsVisible {
+    return self.tabBarController.tabBar.frame.origin.y < CGRectGetMaxY(self.view.frame);
+}
+
+- (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated completion:(void (^)(BOOL))completion {
     
-    [self configureBackBtnWithImageName:@"Back" withSelector:@selector(popupScreen:)];
-//    [self configureMenuRightBtnWithImagename:@"menu_home" withSelector:@selector(popupScreen:)];
+    // bail if the current state matches the desired state
+    if ([self tabBarIsVisible] == visible) return (completion)? completion(YES) : nil;
+    
+    // get a frame calculation ready
+    CGRect frame = self.tabBarController.tabBar.frame;
+    CGFloat height = frame.size.height;
+    CGFloat offsetY = (visible)? -height : height;
+    
+    // zero duration means no animation
+    CGFloat duration = (animated)? 0.0 : 0.0;
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.tabBarController.tabBar.frame = CGRectOffset(frame, 0, offsetY);
+    } completion:completion];
 }
 
 - (void) configureBackBtnWithImageName:(NSString*) imageName withSelector:(SEL) action {

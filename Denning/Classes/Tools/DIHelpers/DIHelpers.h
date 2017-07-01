@@ -34,6 +34,8 @@
 
 + (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime;
 
++ (NSString*) currentYear;
+
 + (BOOL) isWordFile:(NSString*) fileExt;
 
 + (BOOL) isImageFile: (NSString*) fileExt;
@@ -73,6 +75,8 @@
 + (NSString*) currentSunday;
 
 + (NSString*) addThousandsSeparator: (id) value;
+
++ (NSString*) addThousandsSeparatorWithDecimal:(id)value;
 
 + (NSString*) capitalizedString: (id) value;
 

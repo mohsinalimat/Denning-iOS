@@ -7,15 +7,20 @@
 //
 
 #import "PresetBillViewController.h"
+#import "TwoColumnCell.h"
+#import "SecondMatterTypeCell.h"
 
 @interface PresetBillViewController ()
-<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate,UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
     __block BOOL isAppending;
     BOOL initCall;
 }
+
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSArray* listOfPresetBills;
 @property (strong, nonatomic) NSArray* copyedList;
@@ -33,7 +38,8 @@
     
     [self prepareUI];
     [self configureSearch];
-    [self getList];
+    [self registerNib];
+    [self getListWithCompletion:nil];
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -41,7 +47,11 @@
 }
 
 - (void) registerNib {
+    [TwoColumnCell registerForReuseInTableView:self.tableView];
+    [SecondMatterTypeCell registerForReuseInTableView:self.tableView];
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
 }
 
 - (void) configureSearch
@@ -54,7 +64,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
@@ -66,13 +76,6 @@
     initCall = YES;
     
     self.tableView.delegate = self;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -88,10 +91,11 @@
 
 - (void) appendList {
     isAppending = YES;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
-- (void) getList {
+- (void) getListWithCompletion:(void(^)(void)) completion {
+    
     if (isLoading) return;
     isLoading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -100,10 +104,7 @@
     [[QMNetworkManager sharedManager] getPresetBillCode:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
+       
         
         @strongify(self)
         if (error == nil) {
@@ -117,7 +118,9 @@
             }
             
             [self.tableView reloadData];
-            
+            if (completion != nil) {
+                [self performSelector:@selector(searchBarResponder) withObject:nil afterDelay:1];
+            }
         }
         else {
             [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
@@ -146,14 +149,25 @@
 }
 
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 33;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier]];
+    
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PresetBillCell" forIndexPath:indexPath];
     
     PresetBillModel *model = self.listOfPresetBills[indexPath.row];
-    UILabel* fileNo = [cell viewWithTag:1];
-    UILabel* caseName = [cell viewWithTag:2];
-    fileNo.text = model.billCode;
-    caseName.text = model.billDescription;
+
+    SecondMatterTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:[SecondMatterTypeCell cellIdentifier] forIndexPath:indexPath];
+    
+    cell.firstValue.text = model.billCode;
+    cell.secondValue.text = model.billDescription;
     
     return cell;
 }
@@ -190,18 +204,31 @@
 
 #pragma mark - Search Delegate
 
+- (void)didPresentSearchController:(UISearchController *)searchController
+{
+    [self.tableView reloadData];
+    [self performSelector:@selector(searchBarResponder) withObject:nil afterDelay:1];
+}
+
+- (void) searchBarResponder {
+    [self.searchController.searchBar becomeFirstResponder];
+}
+
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
-    isAppending = NO;
+    self.page = @(1);
     searchController.searchBar.text = @"";
-    [self getList];
+    isAppending = NO;
+    [self getListWithCompletion:nil];
 }
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
     isAppending = NO;
-    [self getList];
+    [self getListWithCompletion:^{
+        [self.searchController.searchBar becomeFirstResponder];
+    }];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {

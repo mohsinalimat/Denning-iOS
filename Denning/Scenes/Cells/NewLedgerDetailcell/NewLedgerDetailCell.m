@@ -41,9 +41,9 @@
     self.documentNoLabel.text = ledgerDetail.documentNo;
     self.descriptionLabel.text = ledgerDetail.ledgerDescription;
     if (ledgerDetail.amountDR.length == 0) {
-        self.amountLabel.text = [@"-" stringByAppendingString: [DIHelpers addThousandsSeparator:ledgerDetail.amountCR]];
+        self.amountLabel.text = [@"-" stringByAppendingString: [DIHelpers addThousandsSeparatorWithDecimal:ledgerDetail.amountCR]];
     } else {
-        self.amountLabel.text = [DIHelpers addThousandsSeparator:ledgerDetail.amountDR];
+        self.amountLabel.text = [DIHelpers addThousandsSeparatorWithDecimal:ledgerDetail.amountDR];
     }
     
     self.receivedPaid.text = ledgerDetail.recdPaid;

@@ -20,6 +20,7 @@
 #import "DocumentViewController.h"
 #import "MatterPropertyCell.h"
 #import "SearchMatterCodeDetail.h"
+#import "AddPropertyViewController.h"
 #import "CommonTextCell.h"
 
 @interface RelatedMatterViewController ()<MatterLastCellDelegate>
@@ -227,13 +228,13 @@
         PropertyModel* model = self.relatedMatterModel.propertyGroupArray[indexPath.row];
         [SVProgressHUD showWithStatus:@"Loading"];
         @weakify(self);
-        [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(PropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
+        [[QMNetworkManager sharedManager] loadPropertyfromSearchWithCode:model.key completion:^(AddPropertyModel * _Nonnull propertyModel, NSError * _Nonnull error) {
             
             @strongify(self);
             self->isLoading = false;
             [SVProgressHUD dismiss];
             if (error == nil) {
-                [self performSegueWithIdentifier:kPropertySearchSegue sender:propertyModel];
+                [self performSegueWithIdentifier:kAddPropertySegue sender:propertyModel];
             } else {
                 [SVProgressHUD showErrorWithStatus:error.localizedDescription];
             }
@@ -372,7 +373,7 @@
     } else if (indexPath.section == 2) { // Party Group
         NSDictionary* partySectionInfo = [self getPartySectionInfo:(int)indexPath.row];
         PartyGroupModel* partyGroup = relatedMatterModel.partyGroupArray[[[partySectionInfo objectForKey:@"group"] integerValue]];
-        PartyModel* party = partyGroup.partyArray[[[partySectionInfo objectForKey:@"party"] integerValue]];
+        PartyModel* party = (PartyModel*)partyGroup.partyArray[[[partySectionInfo objectForKey:@"party"] integerValue]];
         if ([[partySectionInfo objectForKey:@"party"] integerValue] == 0) {
             ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[ContactCell cellIdentifier] forIndexPath:indexPath];
            [cell configureCellWithContact:partyGroup.partyGroupName text:party.partyName];
@@ -470,10 +471,11 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString:kPropertySearchSegue]){
-        PropertyViewController* propertyVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:kAddPropertySegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        AddPropertyViewController* propertyVC = [navC viewControllers].firstObject;
         propertyVC.propertyModel = sender;
-        propertyVC.previousScreen = @"Back";
+        propertyVC.viewType = @"view";
     }
     
     if ([segue.identifier isEqualToString:kLedgerSearchSegue]){

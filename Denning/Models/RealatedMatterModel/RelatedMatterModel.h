@@ -15,6 +15,7 @@
 @class CourtModel;
 @class StaffModel;
 @class MatterCodeModel;
+@class ClientModel;
 
 @interface RelatedMatterModel : NSObject
 
@@ -54,14 +55,17 @@
 // Party Group
 @property (strong, nonatomic) NSArray *partyGroupArray;
 
+// Primary Client
+@property (strong, nonatomic) ClientModel* primaryClient;
+
 // Solicitor
-@property (strong, nonatomic) NSArray * solicitorGroupArray;
+@property (strong, nonatomic) NSArray<SolicitorGroup*> * solicitorGroupArray;
 
 // Property
-@property (strong, nonatomic) NSArray * propertyGroupArray;
+@property (strong, nonatomic) NSArray<PropertyModel*> * propertyGroupArray;
 
 // Bank
-@property (strong, nonatomic) NSArray * bankGroupArray;
+@property (strong, nonatomic) NSArray<BankGroupModel*> * bankGroupArray;
 
 // clerk
 @property (strong, nonatomic) StaffModel* clerk;

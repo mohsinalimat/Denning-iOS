@@ -9,9 +9,10 @@
 #import "PropertyContactListViewController.h"
 #import "ClientModel.h"
 #import "PropertyContactCell.h"
+#import "SecondContactCell.h"
 
 @interface PropertyContactListViewController ()
-<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
@@ -19,7 +20,8 @@
     BOOL initCall;
 }
 
-
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray* listOfContacts;
 @property (strong, nonatomic) NSArray* copyedList;
 
@@ -36,7 +38,7 @@
     [self prepareUI];
     [self configureSearch];
     [self registerNib];
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -45,6 +47,7 @@
 
 - (void) registerNib {
     [PropertyContactCell registerForReuseInTableView:self.tableView];
+    [SecondContactCell registerForReuseInTableView:self.tableView];
 }
 
 - (void) configureSearch
@@ -57,7 +60,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
@@ -70,19 +73,11 @@
     
     self.tableView.delegate = self;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
-    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.tableFooterView = [UIView new];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -91,10 +86,10 @@
 
 - (void) appendList {
     isAppending = YES;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
-- (void) getList {
+- (void) getListWithCompletion:(void(^)(void)) completion {
     if (isLoading) return;
     isLoading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -104,10 +99,6 @@
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
         
         if (error == nil) {
             if (isAppending) {
@@ -120,14 +111,15 @@
             }
             
             [self.tableView reloadData];
-            
+            if (completion != nil) {
+                [self performSelector:@selector(searchBarResponder) withObject:nil afterDelay:1];
+            }
         }
         else {
             [navigationController showNotificationWithType:QMNotificationPanelTypeWarning message:error.localizedDescription duration:1.0];
         }
         
         [self performSelector:@selector(clean) withObject:nil afterDelay:1.0];
-        
     }];
 }
 
@@ -147,11 +139,23 @@
     return self.listOfContacts.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 33;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    PropertyContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[PropertyContactCell cellIdentifier]];
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    PropertyContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[PropertyContactCell cellIdentifier] forIndexPath:indexPath];
-    
     StaffModel *model = self.listOfContacts[indexPath.row];
-    [cell configureCellWithStaffModel:model];
+    
+    SecondContactCell *cell = [tableView dequeueReusableCellWithIdentifier:[SecondContactCell cellIdentifier] forIndexPath:indexPath];
+    cell.firstValue.text = model.name;
+    cell.secondValue.text = model.IDNo;
+    
     return cell;
 }
 
@@ -187,19 +191,31 @@
 
 #pragma mark - Search Delegate
 
-- (void)willDismissSearchController:(UISearchController *) __unused searchController {
-    self.filter = @"";
-    searchController.searchBar.text = @"";
-    isAppending = NO;
-    [self getList];
+- (void)didPresentSearchController:(UISearchController *)searchController
+{
+    [self.tableView reloadData];
+    [self performSelector:@selector(searchBarResponder) withObject:nil afterDelay:1];
 }
 
+- (void) searchBarResponder {
+    [self.searchController.searchBar becomeFirstResponder];
+}
+
+- (void)willDismissSearchController:(UISearchController *) __unused searchController {
+    self.filter = @"";
+    self.page = @(1);
+    searchController.searchBar.text = @"";
+    isAppending = NO;
+    [self getListWithCompletion:nil];
+}
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
     isAppending = NO;
-    [self getList];
+    [self getListWithCompletion:^{
+        [self.searchController.searchBar becomeFirstResponder];
+    }];
 }
 
 

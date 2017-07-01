@@ -1008,10 +1008,6 @@ withAutoCompleteString:(NSString *)string
 }
 @end
 
-
-
-
-
 #pragma mark -
 #pragma mark - MLPAutoCompleteSortOperation
 

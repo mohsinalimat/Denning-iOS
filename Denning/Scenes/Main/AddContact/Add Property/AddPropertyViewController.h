@@ -10,4 +10,8 @@
 
 @interface AddPropertyViewController : UIViewController
 
+@property (strong, nonatomic) AddPropertyModel* propertyModel;
+
+@property(strong, nonatomic) NSString* viewType;
+
 @end

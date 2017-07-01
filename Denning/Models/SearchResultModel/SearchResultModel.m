@@ -23,7 +23,6 @@
         NSLog(@"%@",jsonOutput);
     }
     
-    
     searchResult.searchDescription = [response objectForKey:@"Desc"];
     searchResult.form = [response objectForKey:@"Form"];
     searchResult.header = [response objectForKey:@"Header"];
@@ -36,6 +35,7 @@
     searchResult.score = [response objectForKey:@"Score"];
     searchResult.title = [response objectForKey:@"Title"];
     searchResult.searchCode = [response objectForKey:@"code"];
+    searchResult.sortDate = [response valueForKeyNotNull:@"sortDate"];
     searchResult.dummy = [response objectForKey:@"dummy"];
     searchResult.key = [response objectForKey:@"key"];
     searchResult.row_number = [response objectForKey:@"row_number"];

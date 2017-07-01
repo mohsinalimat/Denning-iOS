@@ -55,7 +55,32 @@
 {
     FirmURLModel* model = self.branchArray[indexPath.row];
     [[DataManager sharedManager] setServerAPI:model.firmServerURL withFirmName:model.name withFirmCity:model.city];
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+        [[QMNetworkManager sharedManager] denningSignIn:[DataManager sharedManager].user.password withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull responseObject) {
+            if (error == nil) {
+                [[DataManager sharedManager] setSessionID:[responseObject valueForKeyNotNull:@"sessionID"]];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [QMAlert showAlertWithMessage:error.localizedLowercaseString actionSuccess:NO inViewController:self];
+            }
+        }];
+    } else {
+        NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_SIGNIN];
+        [[QMNetworkManager sharedManager] clientSignIn:url password:[DataManager sharedManager].user.password withCompletion:^(BOOL success, NSDictionary * _Nonnull responseObject, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
+            if (error == nil) {
+                [[DataManager sharedManager] setSessionID:[responseObject valueForKeyNotNull:@"sessionID"]];
+                if ([[responseObject valueForKeyNotNull:@"statusCode"] isEqualToString:@"200"]) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                } else {
+                    [self performSegueWithIdentifier:kPasswordConfirmSegue sender:nil];
+                }
+            } else {
+                [QMAlert showAlertWithMessage:error.localizedLowercaseString actionSuccess:NO inViewController:self];
+            }
+        }];
+    }
+    
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

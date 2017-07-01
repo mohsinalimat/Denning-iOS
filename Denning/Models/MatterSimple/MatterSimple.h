@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSString* dateOpen;
 @property (strong, nonatomic) NSString* manualNo;
 @property (strong, nonatomic) MatterCodeModel *matter;
-@property (strong, nonatomic) NSArray* partyGroupArray;
+@property (strong, nonatomic) NSArray<PartyGroupModel*>* partyGroupArray;
 @property (strong, nonatomic) ClientModel* primaryClient;
 @property (strong, nonatomic) NSString *referenceNo;
 @property (strong, nonatomic) NSString *systemNo;

@@ -35,6 +35,8 @@
     
     relatedMatter.partyGroupArray = [RelatedMatterModel getPartyGroupArrayFromResponse: [response objectForKeyNotNull:@"partyGroup"]];
     
+    relatedMatter.primaryClient = [ClientModel getClientFromResponse:[response objectForKeyNotNull:@"primaryClient"]];
+    
     relatedMatter.court = [CourtModel getCourtFromResponse:[response objectForKeyNotNull:@"courtInfo"]];
     
     relatedMatter.solicitorGroupArray = [RelatedMatterModel getSolicitorGroupArrayFromResponse:[response objectForKeyNotNull:@"solicitorsGroup"]];
@@ -102,5 +104,6 @@
     }
     return RMGroupArray;
 }
+
 
 @end

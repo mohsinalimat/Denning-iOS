@@ -15,7 +15,7 @@
     BankGroupModel* bankGroupModel = [BankGroupModel new];
     bankGroupModel.bankGroupName = [response objectForKey:@"groupName"];
     if ([[response objectForKey:@"bank"] isKindOfClass:[NSNull class]]) {
-        return nil;
+        return bankGroupModel;
     } else {
         bankGroupModel.bankCode = [[response objectForKey:@"bank"] objectForKey:@"code"];
         if ([bankGroupModel.bankCode isKindOfClass:[NSNull class]]) {

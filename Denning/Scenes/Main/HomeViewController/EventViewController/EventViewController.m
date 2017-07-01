@@ -13,12 +13,18 @@
 #import "CalendarRangeView.h"
 #import "EditCourtDiaryViewController.h"
 
-@interface EventViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate>
+@interface EventViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate,FSCalendarDataSource,FSCalendarDelegate,FSCalendarDelegateAppearance>
 {
     NSString* currentTopFilter, *currentBottomFilter;
     __block BOOL isLoading;
     NSString* startDate, *endDate;
 }
+@property (weak, nonatomic) IBOutlet UIView *calendarView;
+
+@property (strong  , nonatomic) FSCalendar *calendar;
+@property (strong, nonatomic) NSMutableArray<NSString *> *datesWithEvent;
+@property (strong, nonatomic) NSString* curMonth;
+@property (strong, nonatomic) NSDateFormatter *dateFormatter2;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray* eventsArray;
@@ -37,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tabbarIndicatorLeading;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomLeading;
 @property (strong, nonatomic) EventModel* latestEvent;
+@property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (copy, nonatomic) NSString *search;
@@ -55,7 +62,9 @@
     startDate = [DIHelpers today];
     endDate = [DIHelpers today];
     [self prepareUI];
-    [self displayLatestNewsOnTop];
+    [self configureCalendar];
+    _curMonth = @"06";
+    [self getMonthlySummaryWithCompletion:nil];
     [self registerNibs];
     [self configureSearch];
     [self presetDateRange];
@@ -94,7 +103,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    [self.tableView.tableHeaderView addSubview: self.searchController.searchBar];
+    [self.topView addSubview: self.searchController.searchBar];
 }
 
 - (void) displayLatestNewsOnTop
@@ -118,6 +127,18 @@
     [super viewWillDisappear:animated];
 }
 
+- (void) configureCalendar
+{
+    _calendar = [[FSCalendar alloc] initWithFrame:CGRectMake(0, 0, self.calendarView.frame.size.width, self.calendarView.frame.size.height)];
+    _calendar.dataSource = self;
+    _calendar.delegate = self;
+    //  calendar.allowsMultipleSelection = YES;
+    _calendar.swipeToChooseGesture.enabled = YES;
+    _calendar.backgroundColor = [UIColor whiteColor];
+    _calendar.appearance.caseOptions = FSCalendarCaseOptionsHeaderUsesUpperCase|FSCalendarCaseOptionsWeekdayUsesSingleUpperCase;
+    [self.calendarView addSubview:_calendar];
+}
+
 - (void) prepareUI
 {
     _search = @"";
@@ -133,7 +154,40 @@
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
     
-    [self.todayBtn setBackgroundColor:[UIColor babyBule]];
+    self.calendar.accessibilityIdentifier = @"calendar";
+    self.dateFormatter2 = [[NSDateFormatter alloc] init];
+    self.dateFormatter2.dateFormat = @"yyyy-MM-dd";
+    _datesWithEvent = [NSMutableArray new];
+}
+
+- (NSString*) getTwoMonthWords:(NSString*) month {
+//    NSString* string = [NSString stringWithFormat:@"%ld", [month integerValue]-1];
+    NSString* string = month;
+    if (string.length == 1) {
+        string = [@"0" stringByAppendingString:string];
+    }
+    return string;
+}
+
+- (void) getMonthlySummaryWithCompletion:(void(^)(void)) completion {
+    if (isLoading) return;
+    isLoading = YES;
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
+    __weak UINavigationController *navigationController = self.navigationController;
+    @weakify(self);
+    [[QMNetworkManager sharedManager] getCalenarMonthlySummaryWithYear:[DIHelpers currentYear] month:_curMonth filter:currentBottomFilter withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
+        @strongify(self)
+        self->isLoading = NO;
+        [navigationController dismissNotificationPanel];
+        if (error == nil) {
+            for (int i = 0; i < eventsArray.count; i++) {
+                NSString* _eventDate = [NSString stringWithFormat:@"%@-%@-%@", [DIHelpers currentYear], [self getTwoMonthWords:_curMonth], eventsArray[i]];
+                [_datesWithEvent addObject:_eventDate];
+            }
+            
+            [_calendar reloadData];
+        }
+    }];
 }
 
 - (void) loadEventFromFilters {
@@ -149,7 +203,6 @@
         self->isLoading = NO;
         [navigationController dismissNotificationPanel];
         if (error == nil) {
-            
             self.originalArray = eventsArray;
             [self updateEvents];
             
@@ -160,7 +213,7 @@
 }
 
 - (void) resetState: (UIButton*) button {
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor darkBarColor] forState:UIControlStateNormal];
     [button setBackgroundColor:[UIColor clearColor]];
 }
 
@@ -173,8 +226,8 @@
 
 - (IBAction) courtFilter: (id) sender  {
     currentBottomFilter = self.bottomFilters[0];
-    [self resetButtonState];
-    [self.courtBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [self resetButtonState];
+//    [self.courtBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
     [self updateBottomTabStateWithAnimate:0];
 }
@@ -182,16 +235,16 @@
 - (IBAction) officeFilter: (id) sender  {
     currentBottomFilter = self.bottomFilters[1];
     
-    [self resetButtonState];
-    [self.officeBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [self resetButtonState];
+//    [self.officeBtn setTitleColor:[UIColor babyRed] forState:UIControlStateNormal];
     [self loadEventFromFilters];
     [self updateBottomTabStateWithAnimate:1];
 }
 
 - (IBAction) personalFilter: (id) sender  {
     currentBottomFilter = self.bottomFilters[2];
-    [self resetButtonState];
-    [self.personalBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [self resetButtonState];
+//    [self.personalBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
     [self updateBottomTabStateWithAnimate:2];
 }
@@ -199,8 +252,8 @@
 - (IBAction) allFilter: (id) sender {
     currentBottomFilter = self.bottomFilters[3];
     
-    [self resetButtonState];
-    [self.allBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [self resetButtonState];
+//    [self.allBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [self loadEventFromFilters];
     [self updateBottomTabStateWithAnimate:3];
 }
@@ -266,7 +319,6 @@
     endDate = [DIHelpers today];
     [self loadEventFromFilters];
     [self updateTabStateWithAnimate:0];
-    [self.todayBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapThisWeek:(id)sender {
@@ -276,7 +328,6 @@
     endDate = [DIHelpers sevenDaysLater];
     [self loadEventFromFilters];
     [self updateTabStateWithAnimate:1];
-    [self.thisWeekBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapFuture:(id)sender {
@@ -286,7 +337,6 @@
     endDate = @"2999-12-31";
     [self loadEventFromFilters];
     [self updateTabStateWithAnimate:2];
-    [self.futureBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapPrevious:(id)sender {
@@ -296,7 +346,6 @@
     endDate = [DIHelpers today];
     [self loadEventFromFilters];
     [self updateTabStateWithAnimate:3];
-    [self.previousBtn setBackgroundColor:[UIColor babyBule]];
 }
 
 - (IBAction)didTapCalendar:(id)sender {
@@ -307,6 +356,16 @@
     self.search = @"";
     self.eventsArray = self.originalArray;
     [self.tableView reloadData];
+}
+
+#pragma mark - Calenar Datasource
+
+- (NSInteger)calendar:(FSCalendar *)calendar numberOfEventsForDate:(NSDate *)date
+{
+    if ([self.datesWithEvent containsObject:[self.dateFormatter2 stringFromDate:date]]) {
+        return 1;
+    }
+    return 0;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -337,7 +396,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 10;
+    if (section == 0) {
+        return 0;
+    }
+    return 5;
 }
 
 #pragma mark - Table view data source

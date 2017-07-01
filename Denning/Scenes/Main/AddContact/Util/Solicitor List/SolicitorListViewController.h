@@ -11,7 +11,7 @@
 typedef void (^UpdateSolicitorHandler)(SoliciorModel* model);
 
 
-@interface SolicitorListViewController : UITableViewController
+@interface SolicitorListViewController : UIViewController
 
 @property (strong, nonatomic) UpdateSolicitorHandler updateHandler;
 

@@ -23,6 +23,8 @@
 
 @interface AddContactViewController() <SWTableViewCellDelegate>
 {
+    __block BOOL isIDChecking, isNameChecking;
+    __block BOOL isIDDuplicated, isNameDuplicated;
     NSInteger selectedRow;
     
     NSString* titleOfList;
@@ -91,7 +93,6 @@
 @property (weak, nonatomic) IBOutlet UIFloatLabelTextField *registeredOffice;
 @property (weak, nonatomic) IBOutlet UISwitch *inviteDenning;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
-
 @property (weak, nonatomic) IBOutlet SWTableViewCell *IDTypeCell;
 @property (weak, nonatomic) IBOutlet SWTableViewCell *IDNoCell;
 @property (weak, nonatomic) IBOutlet SWTableViewCell *OldICCell;
@@ -118,7 +119,6 @@
 @property (weak, nonatomic) IBOutlet SWTableViewCell *IRDBranchCell;
 @property (weak, nonatomic) IBOutlet SWTableViewCell *registeredOfficeCell;
 @property (weak, nonatomic) IBOutlet SWTableViewCell *inviteDenningCell;
-
 
 @end
 
@@ -215,6 +215,35 @@
     [self showPopup:vc];
 }
 
+- (void) checkIDValidation:(NSString*) value url:(NSString*) url message:(NSString*) message withCompletion:(void(^)(void)) completion withFinalCompletion:(void(^)(void)) finalCompletion{
+  
+    [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"Checking", nil) duration:0];
+    
+    __weak UINavigationController *navigationController = self.navigationController;
+    [[QMNetworkManager sharedManager] checkIDorNameDuplication:value url:url WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+        
+        if (finalCompletion!= nil) {
+            finalCompletion();
+        }
+        
+        if (error == nil) {
+            if (result.count == 0) {
+                [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:@"Done" duration:1.0];
+            } else {
+                [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:message duration:2.0];
+                
+                if (completion != nil) {
+                    completion();
+                }
+            }
+            
+        } else {
+            [navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:error.localizedDescription duration:1.0];
+        }
+    }];
+
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -265,33 +294,8 @@
             self.citizenship.text = model.descriptionValue;
             selectedCitizenCode = model.codeValue;
         }
-        
     };
     [self showPopup:vc];
-}
-
-
-
-- (void) showCountryCallingCode{
-//    NSMutableArray* countriesArray = [[NSMutableArray alloc] init];
-//    
-//    NSLocale *locale = [NSLocale currentLocale];
-//    
-//    NSArray *countryArray = [NSLocale ISOCountryCodes];
-//    for (NSString *countryCode in countryArray)
-//    {
-//
-//        NSString *displayNameString = [locale displayNameForKey:NSLocaleCountryCode value:countryCode];
-//        [countriesArray addObject:displayNameString];
-//    }
-    
-    
-    
-//    YHCPickerView *objYHCPickerView = [[YHCPickerView alloc] initWithFrame:CGRectMake(0, 0, 320, 480) withNSArray:countriesNameList];
-//    
-//    objYHCPickerView.delegate = self;
-//    [self.tableView addSubview:objYHCPickerView];
-//    [objYHCPickerView showPicker];
 }
 
 - (void) showSimpleAutocomplete:(NSString*) url {
@@ -306,7 +310,6 @@
     
     [self showPopup:vc];
 }
-
 
 - (void) showPostcodeAutocomplete: (NSString*) url {
     [self.view endEditing:YES];
@@ -392,13 +395,13 @@
 - (id) getValidValue: (NSString*) value
 {
     if (value == nil || value.length == 0) {
-        return @"0";
+        return @"";
     }
     else {
         return value;
     }
 
-    return @"0";
+    return @"";
 }
 
 - (IBAction)saveContact:(id)sender {
@@ -406,15 +409,19 @@
         return;
     }
     
-    NSDictionary* address = @{@"city": [self getValidValue:self.town.text],
-                              @"state": [self getNotNull:self.state.text],
-                              @"country": [self getNotNull:self.country.text],
-                              @"postcode": [self getValidValue:self.postcode.text],
-                              @"fullAddress":@"",
-                              @"line1": [self getNotNull:self.address1.text],
-                              @"line2": [self getNotNull:self.address2.text],
-                              @"line3": [self getNotNull:self.address3.text]};
+    if (isIDChecking || isNameChecking) {
+        return;
+    }
     
+    if (isIDDuplicated) {
+        [QMAlert showAlertWithMessage:@"ID Duplicated" actionSuccess:NO inViewController:self];
+        return;
+    }
+    
+    if (isNameDuplicated) {
+        // informing
+    }
+  
     selectedPhoneHome = @"";
     if (self.phoneHome.text.length > 0) {
         selectedPhoneHome = [homeCountryCallingCode stringByAppendingString: self.phoneHome.text];
@@ -433,65 +440,156 @@
         selectedPhoneFax = [faxCountryCallingCode stringByAppendingString: self.fax.text];
     }
     
-    NSNumber* inviteToDenning = @(0);
-    if (self.inviteDenning.isOn) {
-        inviteToDenning = @(1);
-    }
-    
-    NSMutableDictionary *data = [@{@"IDNo": self.IDNo.text,
-                           @"idType": @{
-                                   @"code":[self getValidValue:selectedIDTypeCode]
-                           },
-                           @"address": address,
-                           @"emailAddress": [self getNotNull:self.email.text],
-                           @"name": [self getNotNull:self.name.text],
-                           @"phoneFax": [self getNotNull:selectedPhoneFax],
-                           @"phoneHome":[self getNotNull:selectedPhoneHome],
-                           @"phoneMobile": [self getNotNull:selectedPhoneMobile],
-                           @"phoneOffice": [self getNotNull:selectedPhoneOffice],
-                           @"dateBirth":[DIHelpers convertDateToMySQLFormat:self.dateOfBirth.text],
-                           @"title": [self getNotNull:self.contactTitle.text],
-                           @"webSite": [self getNotNull:self.website.text],
-                           @"citizenship": [self getNotNull:self.citizenship.text],
-                           @"contactPerson": [self getNotNull:self.contactPerson.text],
-                           @"irdBranch": @{
-                                   @"code":[self getValidValue:selectedIRDBranchCode]
-                                   },
-                           @"occupation": @{
-                                   @"code":[self getValidValue:selectedOccupationCode]
-                                   },
-                           @"registeredOffice":[self getNotNull:self.registeredOffice.text],
-                           @"taxFileNo":[self getNotNull:self.taxFileNo.text],
-                           @"KPLama": [self getNotNull:self.oldIC.text],
-                           @"InviteToDenning":inviteToDenning
-                           } mutableCopy];
-    
-    
     if (self.viewType == nil || self.viewType.length == 0) {
-        [self _save:data];
+        [self _save];
     } else {
-        [self _update:data];
+        [self _update];
     }
 }
 
 - (void) clearInput {
   self.IDType.text =  self.contactTitle.text = self.oldIC.text = self.IDNo.text = self.name.text = self.address1.text = self.address2.text = self.address3.text = self.registeredOffice.text = self.postcode.text = self.town.text = self.state.text = self.country.text = self.phoneMobile.text = self.phoneOffice.text = self.phoneHome.text = self.fax.text = self.contactTitle.text = self.IDType.text = self.email.text = self.website.text = self.contactPerson.text = self.dateOfBirth.text = self.occupation.text =  self.citizenship.text = self.taxFileNo.text = self.IRDBranch.text = self.registeredOffice.text = @"";
     
+    self.IDType.placeholder = @"ID Type *";
+    _IDNo.placeholder = @"ID No *";
     self.inviteDenning.on = NO;
-    selectedIDTypeCode = @"-1";
-    selectedTitleCode = @"-1";
-    selectedOccupationCode = @"-1";
-    selectedIRDBranchCode = @"-1";
+    selectedIDTypeCode = @"";
+    selectedTitleCode = @"";
+    selectedOccupationCode = @"";
+    selectedIRDBranchCode = @"";
 }
 
-- (void) _save: (NSDictionary*)data {
+- (NSMutableDictionary*) buildParams {
+    NSMutableDictionary* address = [NSMutableDictionary new];
+    if (_town.text.length > 0 && ![_town.text isEqualToString:_contactModel.address.city]) {
+        [address addEntriesFromDictionary:@{@"city": [self getValidValue:self.town.text]}];
+    }
+    
+    if (_state.text.length > 0 && ![_state.text isEqualToString:_contactModel.address.state]) {
+        [address addEntriesFromDictionary:@{@"state": [self getNotNull:self.state.text]}];
+    }
+    
+    if (_country.text.length > 0 && ![_country.text isEqualToString:_contactModel.address.country]) {
+        [address addEntriesFromDictionary:@{@"country": [self getNotNull:self.country.text]}];
+    }
+    
+    if (_postcode.text.length > 0 && ![_postcode.text isEqualToString:_contactModel.address.postCode]) {
+        [address addEntriesFromDictionary:@{@"postcode": [self getNotNull:_postcode.text]}];
+    }
+    
+    NSString* fullAddress = [NSString stringWithFormat:@"%@%@%@", _address1.text, _address2.text, _address3.text];
+    if (fullAddress.length > 0 && ![fullAddress isEqualToString:_contactModel.address.fullAddress]) {
+        [address addEntriesFromDictionary:@{@"fullAddress": [self getNotNull:fullAddress]}];
+    }
+    
+    if (_address1.text.length > 0 && ![_address1.text isEqualToString:_contactModel.address.line1]) {
+        [address addEntriesFromDictionary:@{@"line1": [self getNotNull:self.address1.text]}];
+    }
+    
+    if (_address2.text.length > 0 && ![_address1.text isEqualToString:_contactModel.address.line2]) {
+        [address addEntriesFromDictionary:@{@"line2": [self getNotNull:self.address2.text]}];
+    }
+    
+    if (_address3.text.length > 0 && ![_address1.text isEqualToString:_contactModel.address.line3]) {
+        [address addEntriesFromDictionary:@{@"line3": [self getNotNull:self.address3.text]}];
+    }
+
+    NSMutableDictionary* data = [NSMutableDictionary new];
+    [data addEntriesFromDictionary:@{@"address":address}];
+    if (_IDNo.text.length > 0 && ![_IDNo.text isEqualToString:_contactModel.IDNo]){
+        [data addEntriesFromDictionary:@{@"IDNo": _IDNo.text}];
+    }
+    
+    if (selectedIDTypeCode.length > 0 && ![selectedIDTypeCode isEqualToString:_contactModel.idType.codeValue]) {
+        [data addEntriesFromDictionary:@{@"idType": @{
+                                                 @"code":[self getValidValue:selectedIDTypeCode]
+                                                 }}];
+    }
+    
+    if (_name.text.length > 0 && ![_name.text isEqualToString:_contactModel.name]) {
+        [data addEntriesFromDictionary:@{@"name": [self getNotNull:self.name.text]}];
+    }
+    
+    if (_email.text.length > 0 && ![_email.text isEqualToString:_contactModel.email]) {
+        [data addEntriesFromDictionary:@{@"emailAddress": [self getNotNull:_email.text]}];
+    }
+    
+    if (_phoneMobile.text.length > 0 && ![_phoneMobile.text isEqualToString:_contactModel.mobilePhone]) {
+        [data addEntriesFromDictionary:@{@"phoneMobile": [mobileCountryCallingCode stringByAppendingString: [self getNotNull:_phoneMobile.text]]}];
+    }
+    
+    if (_phoneHome.text.length > 0 && ![_phoneHome.text isEqualToString:_contactModel.homePhone]) {
+        [data addEntriesFromDictionary:@{@"phoneHome": [homeCountryCallingCode stringByAppendingString:[self getNotNull:_phoneHome.text]]}];
+    }
+    
+    if (_phoneOffice.text.length > 0 && ![_phoneOffice.text isEqualToString:_contactModel.officePhone]) {
+        [data addEntriesFromDictionary:@{@"phoneOffice":[officeCountryCallingCode stringByAppendingString:[self getNotNull:_phoneOffice.text]]}];
+    }
+    
+    if (_fax.text.length > 0 && ![_fax.text isEqualToString:_contactModel.fax]) {
+        [data addEntriesFromDictionary:@{@"phoneFax": [faxCountryCallingCode stringByAppendingString:[self getNotNull:_fax.text]]}];
+    }
+    
+    if (_dateOfBirth.text.length > 0 && ![[DIHelpers convertDateToMySQLFormat:self.dateOfBirth.text] isEqualToString:_contactModel.dateOfBirth]) {
+        [data addEntriesFromDictionary:@{@"dateBirth": [DIHelpers convertDateToMySQLFormat:self.dateOfBirth.text]}];
+    }
+    
+    if (_contactTitle.text.length > 0 && ![_contactTitle.text isEqualToString:_contactModel.contactTitle]) {
+        [data addEntriesFromDictionary:@{@"title": [self getNotNull:_contactTitle.text]}];
+    }
+    
+    if (_website.text.length > 0 && ![_website.text isEqualToString:_contactModel.website]) {
+        [data addEntriesFromDictionary:@{@"webSite": [self getNotNull:_website.text]}];
+    }
+    
+    if (_contactPerson.text.length > 0 && ![_contactPerson.text isEqualToString:_contactModel.contactPerson]) {
+        [data addEntriesFromDictionary:@{@"contactPerson": [self getNotNull:_contactPerson.text]}];
+    }
+    
+    if (selectedIRDBranchCode.length > 0 && ![selectedIRDBranchCode isEqualToString:_contactModel.IRDBranch.codeValue]) {
+        [data addEntriesFromDictionary:@{@"irdBranch": @{
+                                                 @"code":[self getValidValue:selectedIRDBranchCode]
+                                                 }}];
+    }
+    
+    if (selectedOccupationCode.length > 0 && ![selectedOccupationCode isEqualToString:_contactModel.occupation.codeValue]) {
+        [data addEntriesFromDictionary:@{@"occupation": @{
+                                                 @"code":[self getValidValue:selectedOccupationCode]
+                                                 }}];
+    }
+
+    if (_registeredOffice.text.length > 0 && ![_registeredOffice.text isEqualToString:_contactModel.registeredOffice]) {
+        [data addEntriesFromDictionary:@{@"registeredOffice": [self getNotNull:_registeredOffice.text]}];
+    }
+    
+    if (_taxFileNo.text.length > 0 && ![_taxFileNo.text isEqualToString:_contactModel.tax]) {
+        [data addEntriesFromDictionary:@{@"taxFileNo": [self getNotNull:_taxFileNo.text]}];
+    }
+    
+    if (_oldIC.text.length > 0 && ![_oldIC.text isEqualToString:_contactModel.KPLama]) {
+        [data addEntriesFromDictionary:@{@"oldIC": [self getNotNull:_oldIC.text]}];
+    }
+    
+    
+    NSNumber* inviteToDenning = @(0);
+    if (self.inviteDenning.isOn) {
+        inviteToDenning = @(1);
+    }
+    if (inviteToDenning && ![inviteToDenning isEqual:_contactModel.InviteDennig]) {
+        [data addEntriesFromDictionary:@{@"inviteToDenning": inviteToDenning}];
+    }
+
+    return data;
+}
+
+- (void) _save {
     
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"Saving", nil) duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
     
     @weakify(self)
-    [[QMNetworkManager sharedManager] saveContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] saveContactWithData:[self buildParams] withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         @strongify(self)
         if (error == nil) {
@@ -506,12 +604,13 @@
     }];
 }
 
-- (void) _update:  (NSMutableDictionary*)data {
-    [data addEntriesFromDictionary:@{@"code":self.contactModel.contactCode}];
+- (void) _update {
     [self.navigationController showNotificationWithType:QMNotificationPanelTypeLoading message:NSLocalizedString(@"QM_STR_LOADING", nil) duration:0];
     
     __weak UINavigationController *navigationController = self.navigationController;
     
+    NSMutableDictionary* data = [self buildParams];
+    [data addEntriesFromDictionary:@{@"code":self.contactModel.contactCode}];
     [[QMNetworkManager sharedManager] updateContactWithData:data withCompletion:^(ContactModel * _Nonnull contactModel, NSError * _Nonnull error) {
         [navigationController dismissNotificationPanel];
         if (error == nil) {
@@ -530,12 +629,13 @@
     if (self.viewType.length == 0) {
         self.contactModel = [ContactModel new];
         [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+        self.title = @"Add Contact";
     } else {
         self.IDType.text = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"description"];
         selectedIDTypeCode = [((NSDictionary*)self.contactModel.idType) objectForKeyNotNull:@"code"];
         [self applyValidateRuleOfID];
         self.IDNo.text = self.contactModel.IDNo;
-//        self.oldIC.text = self.contactModel.
+        self.oldIC.text = self.contactModel.KPLama;
         self.name.text = self.contactModel.name;
         self.contactTitle.text = self.contactModel.contactTitle;
         self.address1.text = self.contactModel.address.line1;
@@ -564,6 +664,7 @@
         }
         
         [self.saveBtn setTitle:@"Update" forState:UIControlStateNormal];
+        self.title = @"Update Contact";
     }
     
     self.IDType.floatLabelPassiveColor = self.IDType.floatLabelActiveColor = [UIColor redColor];
@@ -646,34 +747,83 @@
     
     NSMutableString* string = [[DIHelpers capitalizedString:textField.text] mutableCopy];
     if (textField.tag > 19 && textField.tag < 23) {
+        string = [[string stringByReplacingOccurrencesOfString:@"," withString:@""] mutableCopy];
+        
         string = [[[string stringByTrimmingCharactersInSet:
                      [NSCharacterSet whitespaceCharacterSet]] stringByAppendingString:@","] mutableCopy];
     }
     
-    if (textField.tag == 2 && ([selectedIDTypeCode integerValue] == 1 || [selectedIDTypeCode integerValue] == 2)) {
-        string = [[[string stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]mutableCopy];
-        if (string.length > 12) {
-            [QMAlert showAlertWithMessage:@"ID is wrong" actionSuccess:NO inViewController:self];
-            return;
-        }
-        if (string.length > 6) {
-            NSString* birth = [string substringToIndex:6];
-            NSString* _year = [birth substringToIndex:2];
-            NSString* _month = [birth substringWithRange:NSMakeRange(2, 2)];
-            NSString* _day = [birth substringWithRange:NSMakeRange(4, 2)];
-            if ([_month integerValue] > 12 || [_day integerValue] > 31) {
-                [QMAlert showAlertWithMessage:@"Please input valid ID No." actionSuccess:NO inViewController:self];
-            } else {
-                birth = [NSString stringWithFormat:@"19%@-%@-%@", _year, _day, _month ];
-                self.dateOfBirth.text = [DIHelpers getDateInShortFormWithoutTime:birth];
+    if (textField.tag == 2) {
+        if ([selectedIDTypeCode integerValue] == 1 || [selectedIDTypeCode integerValue] == 2) {
+            string = [[[string stringByReplacingOccurrencesOfString:@"-" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]mutableCopy];
+            if (string.length > 12) {
+                [QMAlert showAlertWithMessage:@"ID is wrong" actionSuccess:NO inViewController:self];
+                return;
             }
-            
-            [string insertString:@"-" atIndex:6];
-        }
-        if (string.length > 9) {
-            [string insertString:@"-" atIndex:9];
+            if (string.length > 6) {
+                NSString* birth = [string substringToIndex:6];
+                NSString* _year = [birth substringToIndex:2];
+                if ([_year integerValue] < 50) {
+                    _year = [@"20" stringByAppendingString:_year];
+                } else {
+                    _year = [@"19" stringByAppendingString:_year];
+                }
+                NSString* _month = [birth substringWithRange:NSMakeRange(2, 2)];
+                NSString* _day = [birth substringWithRange:NSMakeRange(4, 2)];
+                if ([_month integerValue] > 12 || [_day integerValue] > 31) {
+                    [QMAlert showAlertWithMessage:@"Please input valid ID No." actionSuccess:NO inViewController:self];
+                    return;
+                } else {
+                    birth = [NSString stringWithFormat:@"%@-%@-%@ 00:00:00", _year, _month, _day];
+                    self.dateOfBirth.text = [DIHelpers getDateInShortFormWithoutTime:birth];
+                }
+                
+                [string insertString:@"-" atIndex:6];
+            }
+            if (string.length > 9) {
+                [string insertString:@"-" atIndex:9];
+            }
         }
         
+        if (self.viewType.length == 0) {
+            if (isIDChecking) {
+                return;
+            }
+            isIDChecking = YES;
+            [self checkIDValidation:string url:CONTACT_ID_DUPLICATE message:@"ID Duplication " withCompletion:^{
+                self->isIDDuplicated = YES;
+            } withFinalCompletion:^{
+                self->isIDChecking = NO;
+            }];
+        }
+    }
+    
+    if (textField.tag == 3) {
+        if (self.viewType.length == 0) {
+            if (isIDChecking) {
+                return;
+            }
+            isIDChecking = YES;
+            [self checkIDValidation:string url:CONTACT_ID_DUPLICATE message:@"ID Duplication " withCompletion:^{
+                self->isIDDuplicated = YES;
+            } withFinalCompletion:^{
+                self->isIDChecking = NO;
+            }];
+        }
+    }
+    
+    if (textField.tag == 4) {
+        if (self.viewType.length == 0) {
+            if (isNameChecking) {
+                return;
+            }
+            isNameChecking = YES;
+            [self checkIDValidation:string url:CONTACT_NAME_DUPLICATE message:@"Name Duplication" withCompletion:^{
+                self->isNameDuplicated = YES;
+            } withFinalCompletion:^{
+                self->isNameChecking = NO;
+            }];
+        }
     }
     
     if (textField.tag == 25 || textField.tag == 26 || textField.tag == 27) {
@@ -747,7 +897,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             self.IDTypeCell.leftUtilityButtons = [self leftButtons];

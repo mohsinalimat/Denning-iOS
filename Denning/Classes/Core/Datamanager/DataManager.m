@@ -105,6 +105,13 @@
     [self setUserInfoFromNewDeviceLogin:response];
 }
 
+- (void) setSessionID: (NSString*) sessionID
+{
+    [[RLMRealm defaultRealm] transactionWithBlock:^{
+        user.sessionID = sessionID;
+    }];
+}
+
 - (void) setServerAPI: (NSString*) serverAPI withFirmName:(NSString*) firmName withFirmCity:(NSString*)firmCity
 {
     self.searchType = @"General";

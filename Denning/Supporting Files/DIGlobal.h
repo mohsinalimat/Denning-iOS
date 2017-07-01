@@ -94,6 +94,10 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define EVENT_LATEST_URL        @"denningwcf/v1/DenningCalendar"
 
+#define CALENDAR_MONTHLY_SUMMARY_URL    @"denningwcf/v1/DenningCalendar/MonthlySummary"
+
+#define HOME_ADS_GET_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/advertisement"
+
 #define GET_CHAT_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v2/chat/contact?userid="
 
 #define PUBLIC_ADD_FAVORITE_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/chat/contact/fav"
@@ -101,6 +105,10 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define PRIVATE_ADD_FAVORITE_CONTACT_URL    @"denningwcf/v1/chat/contact/fav"
 
 #define REMOVE_FAVORITE_CONTACT_URL    @"http://denningsoft.dlinkddns.com/denningwcf/v1/chat/contact/fav"
+
+#define CONTACT_ID_DUPLICATE    @"denningwcf/v1/generalSearch?category=1&isAutoComplete=1&search="
+
+#define CONTACT_NAME_DUPLICATE  @"denningwcf/v1/generalSearch?category=1&isAutoComplete=1&search="
 
 #define CONTACT_IDTYPE_URL  @"denningwcf/v1/IDType?search="
 
@@ -137,7 +145,7 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define MATTER_LITIGATION_GET_LIST_URL @"denningwcf/v1/matter/litigationCase?search="
 
-#define MATTER_SAVE_URL @"denningwcf/v1/file"
+#define MATTER_SAVE_URL @"denningwcf/v1/app/matter"
 
 #define COURT_HEARINGTYPE_GET_URL @"denningwcf/v1/courtDiary/hearingType?search="
 
@@ -246,7 +254,9 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define RECEIPT_SAVE_URL @"denningwcf/v1/ClientReceipt"
 
-#define DASHBOARD_S1_MATTER_GET_URL @"denningwcf/v1/app/dashboard/S1"
+#define DASHBOARD_MAIN_GET_URL  @"denningwcf/v1/app/dashboard/main"
+
+#define DASHBOARD_S1_MATTERLISTING_GET_URL @"denningwcf/v1/app/dashboard/S1"
 
 #define DASHBOARD_S2_CONTACT_GET_URL @"denningwcf/v1/app/dashboard/S2"
 

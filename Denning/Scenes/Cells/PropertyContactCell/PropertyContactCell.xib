@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,68 +13,45 @@
         <array key="SF-UI-Text-Medium.otf">
             <string>SFUIText-Medium</string>
         </array>
-        <array key="SF-UI-Text-Regular.otf">
-            <string>SFUIText-Regular</string>
-        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="KGk-i7-Jjw" customClass="PropertyContactCell">
-            <rect key="frame" x="0.0" y="0.0" width="365" height="48"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="42" id="KGk-i7-Jjw" customClass="PropertyContactCell">
+            <rect key="frame" x="0.0" y="0.0" width="365" height="42"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="365" height="47.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="365" height="41.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mvr-OB-JoE">
-                        <rect key="frame" x="20" y="8" width="13.5" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
-                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ce0-aO-L6P">
-                        <rect key="frame" x="20" y="25" width="67" height="17"/>
+                        <rect key="frame" x="229" y="11" width="120" height="19.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="67" id="ze4-D7-4N4"/>
+                            <constraint firstAttribute="width" constant="120" id="zNo-xT-ofd"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
-                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
+                        <color key="textColor" red="0.08235294118" green="0.12549019610000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgV-Z5-tU1">
-                        <rect key="frame" x="202.5" y="8" width="37" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="13"/>
-                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gHg-66-ooa">
-                        <rect key="frame" x="202.5" y="25" width="36" height="17"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
-                        <nil key="textColor"/>
+                        <rect key="frame" x="16" y="11" width="205" height="19.5"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="14"/>
+                        <color key="textColor" red="0.08235294118" green="0.12549019610000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 <constraints>
-                    <constraint firstItem="Mvr-OB-JoE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="7wa-3T-kjn"/>
-                    <constraint firstAttribute="bottom" secondItem="ce0-aO-L6P" secondAttribute="bottom" constant="5.5" id="8u9-ap-ckc"/>
-                    <constraint firstItem="gHg-66-ooa" firstAttribute="bottom" secondItem="ce0-aO-L6P" secondAttribute="bottom" id="FAK-FU-Bax"/>
-                    <constraint firstItem="Mvr-OB-JoE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="KJ5-ZU-3q0"/>
-                    <constraint firstItem="ce0-aO-L6P" firstAttribute="leading" secondItem="Mvr-OB-JoE" secondAttribute="leading" id="QlY-7F-xnu"/>
-                    <constraint firstItem="ce0-aO-L6P" firstAttribute="top" secondItem="Mvr-OB-JoE" secondAttribute="bottom" constant="1" id="RAg-5z-wzE"/>
-                    <constraint firstItem="gHg-66-ooa" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ce0-aO-L6P" secondAttribute="trailing" constant="8" id="RyK-lS-FkE"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="RgV-Z5-tU1" secondAttribute="bottom" constant="3" id="Cpa-38-Hfy"/>
                     <constraint firstItem="RgV-Z5-tU1" firstAttribute="top" secondItem="Mvr-OB-JoE" secondAttribute="top" id="TPi-x1-dgl"/>
-                    <constraint firstItem="RgV-Z5-tU1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="centerX" constant="20" id="Wnk-R6-YW0"/>
-                    <constraint firstItem="RgV-Z5-tU1" firstAttribute="leading" secondItem="gHg-66-ooa" secondAttribute="leading" id="aJG-AN-XpH"/>
-                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="gHg-66-ooa" secondAttribute="trailing" constant="8" id="hP4-ya-Fpf"/>
-                    <constraint firstItem="ce0-aO-L6P" firstAttribute="top" secondItem="gHg-66-ooa" secondAttribute="top" id="lY9-tl-dPw"/>
+                    <constraint firstItem="RgV-Z5-tU1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="eGo-Ff-BXU"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Mvr-OB-JoE" secondAttribute="trailing" constant="8" id="l76-qI-PC4"/>
+                    <constraint firstItem="Mvr-OB-JoE" firstAttribute="leading" secondItem="RgV-Z5-tU1" secondAttribute="trailing" constant="8" id="uPI-oS-H2J"/>
+                    <constraint firstItem="RgV-Z5-tU1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="vDk-Yg-kM5"/>
+                    <constraint firstItem="Mvr-OB-JoE" firstAttribute="bottom" secondItem="RgV-Z5-tU1" secondAttribute="bottom" id="y6d-5F-2pz"/>
                 </constraints>
             </tableViewCellContentView>
-            <connections>
-                <outlet property="ID" destination="ce0-aO-L6P" id="Htp-rp-DDj"/>
-                <outlet property="name" destination="gHg-66-ooa" id="NTr-k8-8FA"/>
-            </connections>
-            <point key="canvasLocation" x="-32.5" y="-126"/>
+            <point key="canvasLocation" x="-193" y="-549"/>
         </tableViewCell>
     </objects>
 </document>

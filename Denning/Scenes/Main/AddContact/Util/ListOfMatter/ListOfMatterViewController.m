@@ -8,8 +8,9 @@
 
 #import "ListOfMatterViewController.h"
 #import "TwoColumnCell.h"
+#import "SecondMatterTypeCell.h"
 
-@interface ListOfMatterViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+@interface ListOfMatterViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
@@ -17,6 +18,8 @@
     BOOL initCall;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray* listOfMatters;
 @property (strong, nonatomic) NSArray* copyedList;
 
@@ -34,7 +37,7 @@
     [self prepareUI];
     [self registerNib];
     [self configureSearch];
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -43,6 +46,7 @@
 
 - (void) registerNib {
     [TwoColumnCell registerForReuseInTableView:self.tableView];
+    [SecondMatterTypeCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -58,7 +62,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
@@ -69,15 +73,10 @@
     self.filter = @"";
     initCall = YES;
     isAppending = NO;
+    self.title = @"Select matter";
     
     self.tableView.delegate = self;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -87,7 +86,7 @@
 
 - (void) appendList {
     isAppending = YES;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
 
@@ -96,7 +95,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) getList {
+- (void) getListWithCompletion:(void(^)(void)) completion {
+    
     if (isLoading) return;
     isLoading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -105,10 +105,7 @@
     [[QMNetworkManager sharedManager] getMatterCode:self.page withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
 
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
+        
         @strongify(self)
         if (error == nil) {
             if (isAppending) {
@@ -148,12 +145,24 @@
     return self.listOfMatters.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
-    MatterCodeModel *model = self.listOfMatters[indexPath.row];
-    [cell configureCellWithCodeLabel:@"Matter Code" codeValue:model.matterCode  descLabel:@"Description" descValue:model.matterDescription];
-    return cell;
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 33;
+}
 
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier]];
+    
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MatterCodeModel *model = self.listOfMatters[indexPath.row];
+    
+    SecondMatterTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:[SecondMatterTypeCell cellIdentifier] forIndexPath:indexPath];
+    
+    cell.firstValue.text = model.matterCode;
+    cell.secondValue.text = model.matterDescription;
     
     return cell;
 }
@@ -191,19 +200,18 @@
 
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
+    self.page = @(1);
     searchController.searchBar.text = @"";
     isAppending = NO;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
-
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
     isAppending = NO;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
     if (indexPath.row == self.listOfMatters.count-1 && initCall) {

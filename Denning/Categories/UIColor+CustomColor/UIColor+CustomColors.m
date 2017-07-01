@@ -39,7 +39,7 @@
 }
 
 +(UIColor*) babyBule {
-    return [UIColor colorWithRed:0/255.0f green:208/255.0f blue:255/255.0f alpha:1.0f];
+    return [UIColor colorWithHexString:@"4285F4"];
 }
 
 + (UIColor*) babyRed {

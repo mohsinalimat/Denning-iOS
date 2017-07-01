@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 typedef void (^UpdatePropertyContactHandler)(StaffModel* model);
 
-@interface PropertyContactListViewController : UITableViewController
+@interface PropertyContactListViewController : UIViewController
 
 @property (strong, nonatomic) UpdatePropertyContactHandler updateHandler;
 

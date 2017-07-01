@@ -111,7 +111,30 @@
                 [self performSegueWithIdentifier:kPersonalFolderSegue sender:urlModel.document];
             }
         } else {
-            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+            if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+                [[QMNetworkManager sharedManager] denningSignIn:[DataManager sharedManager].user.password withCompletion:^(BOOL success, NSString * _Nonnull error, NSDictionary * _Nonnull responseObject) {
+                    if (error == nil) {
+                        [[DataManager sharedManager] setSessionID:[responseObject valueForKeyNotNull:@"sessionID"]];
+                        [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+                    } else {
+                        [QMAlert showAlertWithMessage:error.localizedLowercaseString actionSuccess:NO inViewController:self];
+                    }
+                }];
+            } else {
+                NSString* url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_SIGNIN];
+                [[QMNetworkManager sharedManager] clientSignIn:url password:[DataManager sharedManager].user.password withCompletion:^(BOOL success, NSDictionary * _Nonnull responseObject, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
+                    if (error == nil) {
+                        [[DataManager sharedManager] setSessionID:[responseObject valueForKeyNotNull:@"sessionID"]];
+                        if ([[responseObject valueForKeyNotNull:@"statusCode"] isEqualToString:@"200"]) {
+                            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
+                        } else {
+                            [self performSegueWithIdentifier:kPasswordConfirmSegue sender:nil];
+                        }
+                    } else {
+                        [QMAlert showAlertWithMessage:error.localizedLowercaseString actionSuccess:NO inViewController:self];
+                    }
+                }];
+            }
         }
     } else {
         [self gotoSharedFolder];
@@ -141,7 +164,7 @@
     [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
     NSString *password = [DataManager sharedManager].user.password;
-    [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_SIGNIN] password:password withCompletion:^(BOOL success, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
+    [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_SIGNIN] password:password withCompletion:^(BOOL success, NSDictionary * _Nonnull responseObject, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
         
         [SVProgressHUD dismiss];
         @strongify(self);

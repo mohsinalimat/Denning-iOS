@@ -11,7 +11,6 @@
 
 @interface EventCell : DIGeneralCell
 
-
 - (void) configureCellWithEvent:(EventModel*) event;
 
 @end

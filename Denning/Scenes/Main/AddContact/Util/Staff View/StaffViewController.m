@@ -7,9 +7,12 @@
 //
 
 #import "StaffViewController.h"
+#import "StaffHeaderCell.h"
+#import "SecondMatterTypeCell.h"
 #import "TwoColumnCell.h"
+
 @interface StaffViewController ()
-<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
@@ -17,6 +20,8 @@
     BOOL isAppending;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray* listOfStaff;
 @property (strong, nonatomic) NSArray* copyedList;
 
@@ -34,7 +39,7 @@
     [self prepareUI];
     [self registerNibs];
     [self configureSearch];
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -51,16 +56,17 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void)registerNibs {
+    [StaffHeaderCell registerForReuseInTableView:self.tableView];
+    [SecondMatterTypeCell registerForReuseInTableView:self.tableView];
     [TwoColumnCell registerForReuseInTableView:self.tableView];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
 }
-
 
 - (void) prepareUI
 {
@@ -71,12 +77,6 @@
     initCall = YES;
     isAppending = NO;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -90,14 +90,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 - (void) appendList {
     isAppending = YES;
-    [self getList];
+    [self getListWithCompletion:nil];
 }
 
-- (void) getList {
-
+- (void) getListWithCompletion:(void(^)(void)) completion {
+    
     NSString* url = [[STAFF_GET_URL stringByAppendingString:self.typeOfStaff] stringByAppendingString:@"&search="];
     
     if (isLoading) return;
@@ -108,10 +107,7 @@
     [[QMNetworkManager sharedManager] getStaffArray:self.page withSearch:(NSString*)self.filter WithURL:url WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
+        
         
         if (error == nil) {
             if (result.count != 0) {
@@ -153,11 +149,22 @@
     return self.listOfStaff.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    StaffHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:[StaffHeaderCell cellIdentifier]];
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
-    
     StaffModel *model = self.listOfStaff[indexPath.row];
-    [cell configureCellWithCodeLabel:@"Nick Name" codeValue:model.nickName descLabel:@"Full Name" descValue:model.name];
+    
+    TwoColumnCell *cell = [tableView dequeueReusableCellWithIdentifier:[TwoColumnCell cellIdentifier] forIndexPath:indexPath];
+    cell.codeLabel.text = model.nickName;
+    cell.descLabel.text = model.name;
     
     return cell;
 }
@@ -196,21 +203,20 @@
 
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
+    self.page = @(1);
     searchController.searchBar.text = @"";
     isAppending = NO;
-    self.page = @(1);
-    [self getList];
+    [self getListWithCompletion:nil];
 }
-
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
     isAppending = NO;
-    self.page = @(1);
-    [self getList];
+    [self getListWithCompletion:^{
+        [self.searchController.searchBar becomeFirstResponder];
+    }];
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
     if (indexPath.row == self.listOfStaff.count-1 && initCall) {

@@ -176,12 +176,12 @@
 - (void) manageSuccessResult: (NSInteger) statusCode response:(NSDictionary*) response {
     [[DataManager sharedManager] setUserInfoFromLogin:response];
     [[QMCore instance].pushNotificationManager subscribeForPushNotifications];
-    if (statusCode == 250) {
+    if (statusCode == 250) { // New Device login
         [DataManager sharedManager].statusCode = [NSNumber numberWithInteger:statusCode];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self performSegueWithIdentifier:kNewDeviceSegue sender:nil];
         });
-    } else if (statusCode == 280) {
+    } else if (statusCode == 280) { // Change Password
         dispatch_async(dispatch_get_main_queue(), ^{
             [self performSegueWithIdentifier:kChangePasswordSegue sender:nil];
         });

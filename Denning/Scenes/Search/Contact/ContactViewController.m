@@ -10,6 +10,7 @@
 #import "ContactHeaderCell.h"
 #import "ContactCell.h"
 #import "CommonTextCell.h"
+#import "SearchLastCell.h"
 #import "NewContactHeaderCell.h"
 #import "RelatedMatterViewController.h"
 #import "AddContactViewController.h"
@@ -90,6 +91,7 @@
     [NewContactHeaderCell registerForReuseInTableView:self.tableView];
     [CommonTextCell registerForReuseInTableView:self.tableView];
     [ContactCell registerForReuseInTableView:self.tableView];
+    [SearchLastCell registerForReuseInTableView:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT/2;
 }
@@ -205,6 +207,12 @@
         NSArray* matter = [DIHelpers removeFileNoAndSeparateFromMatterTitle: matterModel.title];
         [cell configureCellWithContact:matter[0] text:matter[1]];
         [cell setEnableRightBtn:NO image:nil];
+        
+        SearchLastCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchLastCell cellIdentifier] forIndexPath:indexPath];
+        
+        cell.topLabel.text = matter[0];
+        cell.bottomLabel.text = matter[1];
+        cell.rightLabel.text = [DIHelpers getDateInShortForm:matterModel.sortDate];
       
         return cell;
     }

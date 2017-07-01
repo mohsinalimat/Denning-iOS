@@ -61,13 +61,13 @@
     
     [SVProgressHUD showWithStatus:NSLocalizedString(@"QM_STR_LOADING", nil)];
     @weakify(self);
-    NSString *password = [DataManager sharedManager].user.password;
-    [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_FIRST_SIGNIN] password:password withCompletion:^(BOOL success, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
+    NSString *password = self.TACTextField.text; // 5566
+    [[QMNetworkManager sharedManager] clientSignIn:[[DataManager sharedManager].user.serverAPI stringByAppendingString:DENNING_CLIENT_FIRST_SIGNIN] password:password withCompletion:^(BOOL success, NSDictionary * _Nonnull responseObject, NSString * _Nonnull error, DocumentModel * _Nonnull doumentModel) {
         
         [SVProgressHUD dismiss];
         @strongify(self);
         if (success) {
-            [self performSegueWithIdentifier:kPersonalFolderSegue sender:doumentModel];
+            [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         } else {
             [QMAlert showAlertWithMessage:error actionSuccess:NO inViewController:self];
         }

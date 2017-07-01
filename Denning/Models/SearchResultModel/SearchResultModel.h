@@ -24,6 +24,8 @@
 
 @property (strong, nonatomic) NSString * searchCode;
 
+@property (strong, nonatomic) NSString* sortDate;
+
 @property (strong, nonatomic) NSString * dummy;
 
 @property (strong, nonatomic) NSString * key;

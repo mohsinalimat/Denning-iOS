@@ -10,7 +10,7 @@
 
 typedef void (^UpdatePresetBillHandler)(PresetBillModel* model);
 
-@interface PresetBillViewController : UITableViewController
+@interface PresetBillViewController : UIViewController
 
 @property (strong, nonatomic) UpdatePresetBillHandler  updateHandler;
 

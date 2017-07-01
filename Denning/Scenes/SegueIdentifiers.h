@@ -170,4 +170,14 @@ static NSString* const kMukimValueSegue = @"MukimValueSegue";
 static NSString* const kSearchMatterCodeSegue = @"SearchMatterCodeSegue";
 
 static NSString* const kAccountDetailSegue = @"AccountDetailSegue";
+static NSString* const kMasterTitleSegue = @"MasterTitleSegue";
 
+static NSString* const kAddPropertySegue = @"AddPropertySegue";
+
+static NSString* const kFileListingSegue = @"FileListingSegue";
+
+static NSString* const kDueTaskSegue = @"DueTaskSegue";
+
+static NSString* const kMyDueTaskSegue = @"MyDueTaskSegue";
+
+static NSString* const kDashboardCollectionSegue = @"DashboardCollectionSegue";

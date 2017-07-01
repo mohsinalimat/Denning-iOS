@@ -17,6 +17,7 @@
 {
     NSString* customString;
     NSString* serverAPI;
+    NSString* sessionID;
 }
 @property (weak, nonatomic) IBOutlet MLPAutoCompleteTextField *autocompleteTF;
 @end
@@ -45,6 +46,7 @@
 }
 - (void) configureAutocompleteSearch {
     serverAPI = [DataManager sharedManager].user.serverAPI;
+    sessionID = [DataManager sharedManager].user.sessionID;
     UIToolbar* _accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(self.view.frame), 50)];
     _accessoryView.barTintColor = [UIColor groupTableViewBackgroundColor];
     _accessoryView.tintColor = [UIColor babyRed];
@@ -133,7 +135,7 @@
         [[NSOperationQueue mainQueue] cancelAllOperations];
     }
     
-    [[QMNetworkManager sharedManager].manager.requestSerializer setValue:@"testtestdenning" forHTTPHeaderField:@"webuser-sessionid"];
+    [[QMNetworkManager sharedManager].manager.requestSerializer setValue:sessionID forHTTPHeaderField:@"webuser-sessionid"];
     
     NSString* autocompleteUrl = [NSString stringWithFormat:@"%@%@%@", serverAPI, self.url, [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
     NSOperation *operation = [AFHTTPSessionOperation operationWithManager:[QMNetworkManager sharedManager].manager

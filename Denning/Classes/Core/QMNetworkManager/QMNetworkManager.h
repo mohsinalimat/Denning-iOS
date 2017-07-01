@@ -30,6 +30,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class EditCourtModel;
 @class ThreeItemModel;
 @class NewMatterModel;
+@class DashboardMainModel;
+@class AddPropertyModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -57,6 +59,9 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @property (nonatomic, strong) NSString* selectedBaseURLForGeneral;
 
 + (QMNetworkManager *)sharedManager;
+
+- (AFHTTPSessionManager*) setLoginHTTPHeader;
+- (AFHTTPSessionManager*) setOtherForLoginHTTPHeader;
 
 /*
  ******** Auth *********
@@ -126,7 +131,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 -(void) denningSignIn:(NSString*) password withCompletion:(void(^)(BOOL success, NSString* error, NSDictionary* responseObject)) completion;
 
 // client login
-- (void) clientSignIn: (NSString*) url password: (NSString*) password withCompletion: (void(^)(BOOL success, NSString* error,  DocumentModel* doumentModel)) completion;
+- (void) clientSignIn: (NSString*) url password: (NSString*) password withCompletion: (void(^)(BOOL success, NSDictionary * responseObject, NSString* error,  DocumentModel* doumentModel)) completion;
 
 
 /*
@@ -161,9 +166,19 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getLatestEventWithStartDate: (NSString*) startDate endDate:(NSString*) endDate filter:(NSString*) filter search:(NSString*)search withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
 
+- (void) getCalenarMonthlySummaryWithYear:(NSString*) year month:(NSString*) month filter:(NSString*)filter withCompletion: (void(^)(NSArray* eventsArray, NSError* error)) completion;
+
+// Ads
+
+- (void) getAdsWithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+/*
+ * Search
+ */
+
 // Property
 
-- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(PropertyModel* propertyModel, NSError* error)) completion;
+- (void) loadPropertyfromSearchWithCode: (NSString*) code completion: (void(^)(AddPropertyModel* propertyModel, NSError* error)) completion;
 
 // Contact
 - (void) loadContactFromSearchWithCode: (NSString*) code completion: (void(^)(ContactModel* contactModel, NSError* error)) completion;
@@ -221,7 +236,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getSolicitorList: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
-
+- (void) checkIDorNameDuplication:(NSString*) string url:(NSString*)url WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 /*
  * Court Diary
  */
@@ -257,6 +272,12 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 - (void) getPropertyList: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) getMukimValue: (NSNumber*) page withSearch:(NSString*) search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getMasterTitle:(NSNumber*) page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) savePropertyWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(AddPropertyModel* result, NSError* error)) completion;
+
+- (void) updatePropertyWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(AddPropertyModel* result, NSError* error)) completion;
 /*
  * Matter
  */
@@ -267,6 +288,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) saveMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion;
 
+- (void) updateMatterWithParams: (NSDictionary*) data inURL:(NSString*) url WithCompletion: (void(^)(RelatedMatterModel* result, NSError* error)) completion;
 
 /*
  * Quotation
@@ -298,7 +320,14 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
  * Dashbard
  */
 
+- (void) getDashboardMainWithCompletion: (void(^)(DashboardMainModel* result, NSError* error)) completion;
+
 - (void) getDashboardThreeItmesInURL:(NSString*)url withCompletion: (void(^)(ThreeItemModel* result, NSError* error)) completion;
+
+- (void) getDashboardItemModelWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardMyDueTaskWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
 - (void) getNewMatterInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) getDashboardContactInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;

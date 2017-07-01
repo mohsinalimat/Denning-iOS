@@ -10,7 +10,7 @@
 
 typedef void (^UpdateStaffHandler)(NSString* type, StaffModel *model);
 
-@interface StaffViewController : UITableViewController
+@interface StaffViewController : UIViewController
 
 @property (strong, nonatomic) NSString* typeOfStaff;
 

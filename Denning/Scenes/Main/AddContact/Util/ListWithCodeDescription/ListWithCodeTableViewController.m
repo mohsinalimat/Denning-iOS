@@ -9,13 +9,15 @@
 #import "ListWithCodeTableViewController.h"
 #import "AddContactViewController.h"
 
-@interface ListWithCodeTableViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate>
+@interface ListWithCodeTableViewController ()<UISearchBarDelegate, UISearchControllerDelegate, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
 {
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
     BOOL isAppending;
     BOOL initCall;
 }
+@property (weak, nonatomic) IBOutlet UIView *searchContainer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSMutableArray* copyedList;
 @property (strong, nonatomic) UISearchController *searchController;
@@ -48,7 +50,7 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self.searchContainer addSubview:self.searchController.searchBar];
 }
 
 - (void) prepareUI
@@ -61,13 +63,7 @@
     initCall = YES;
     
     self.tableView.delegate = self;
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor clearColor];
-    self.refreshControl.tintColor = [UIColor blackColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(appendList)
-                  forControlEvents:UIControlEventValueChanged];
+
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
@@ -110,10 +106,6 @@
     [[QMNetworkManager sharedManager] getCodeDescWithUrl:self.url withPage:self.page  withSearch:(NSString*)self.filter WithCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
-        if (self.refreshControl.isRefreshing) {
-            self.refreshControl.attributedTitle = [DIHelpers getLastRefreshingTime];
-            [self.refreshControl endRefreshing];
-        }
         
         if (error == nil) {
             if (result.count != 0) {
@@ -152,6 +144,28 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     return self.listOfCodeDesc.count;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
+}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+
+    if (_searchController == nil) {
+        self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        self.searchController.searchBar.placeholder = NSLocalizedString(@"Search", nil);
+        self.searchController.searchBar.delegate = self;
+        self.searchController.delegate = self;
+        self.searchController.dimsBackgroundDuringPresentation = NO;
+        self.searchController.hidesNavigationBarDuringPresentation = NO;
+        self.definesPresentationContext = YES;
+        [self.searchController.searchBar sizeToFit]; // iOS8 searchbar sizing
+        
+    }
+ 
+    return self.searchController.searchBar;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
