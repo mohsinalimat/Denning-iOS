@@ -1,1 +1,0 @@
-../../../drCharts/dr-Charts/Classes/BarChart/BarChart.h

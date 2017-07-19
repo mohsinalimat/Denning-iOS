@@ -216,7 +216,6 @@
     [self getList];
 }
 
-
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
@@ -224,7 +223,6 @@
     self.page = @(1);
     [self getList];
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
     if (indexPath.row == self.listOfCodeDesc.count-1 && initCall) {

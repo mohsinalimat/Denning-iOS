@@ -213,6 +213,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getListWithCompletion:^{
         [self.searchController.searchBar becomeFirstResponder];
     }];

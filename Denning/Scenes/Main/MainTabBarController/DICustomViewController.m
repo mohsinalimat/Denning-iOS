@@ -84,19 +84,10 @@
     [self.tabBarController.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
 
-- (void) configureMenuRightBtnWithImagename:(NSString*) imageName withSelector:(SEL) action {
-    UIButton *menuBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
-    [menuBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-    [menuBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *menuButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
-    [self.tabBarController.navigationItem setRightBarButtonItems:@[menuButtonItem] animated:YES];
-}
-
 - (void) popupScreen:(id)sender {
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.selectedViewController = self.tabBarController.viewControllers[0];
     
-    [self configureMenuRightBtnWithImagename:@"icon_menu" withSelector:@selector(gotoMenu)];
     [self configureBackBtnWithImageName:@"icon_user" withSelector:@selector(gotoLogin)];
 }
 

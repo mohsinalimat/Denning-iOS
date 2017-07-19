@@ -49,16 +49,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     self.tableView.tableFooterView = [UIView new];
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 13, 23)];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(onBackAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    
-    [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
-
 
 - (IBAction) onBackAction: (id) sender
 {
@@ -83,7 +74,7 @@
     
     self.topNewsTitle.text = newsModel.title;
     self.topNewsContent.text = newsModel.shortDescription;
-    self.topNewsDate.text = newsModel.theDateTime;
+    self.topNewsDate.text = [DIHelpers getDateInShortForm:newsModel.theDateTime];
 }
 
 - (void)registerNibs {
@@ -118,12 +109,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NewsModel* news = self.newsArray[indexPath.row+1];
-    NSURL* url = [NSURL URLWithString:news.URL];
     
-    if (![url.scheme isEqual:@"http"] && ![url.scheme isEqual:@"https"]) {
-        if ([[UIApplication sharedApplication]canOpenURL:url]) {
-            [[UIApplication sharedApplication]openURL:url options:@{} completionHandler:nil];
-        }
+    NSURL *URL = [NSURL URLWithString:news.URL];
+    
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+        [[UIApplication sharedApplication] openURL:URL options:@{}
+           completionHandler:^(BOOL success) {
+               
+           }];
+    } else {
+        [[UIApplication sharedApplication] openURL:URL];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

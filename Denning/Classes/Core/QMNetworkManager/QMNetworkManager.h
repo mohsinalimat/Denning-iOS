@@ -32,6 +32,8 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class NewMatterModel;
 @class DashboardMainModel;
 @class AddPropertyModel;
+@class ProfitLossDetailModel;
+@class S3Model;
 
 @interface QMNetworkManager : NSObject
 
@@ -154,7 +156,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Home Search
 
-- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category searchType:(NSString*)searchType withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion;
+- (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category searchType:(NSString*)searchType withPage:(NSNumber*)page withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion;
 
 // Updates
 - (void) getLatestUpdatesWithCompletion: (void(^)(NSArray* updatesArray, NSError* error)) completion;
@@ -324,9 +326,15 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getDashboardThreeItmesInURL:(NSString*)url withCompletion: (void(^)(ThreeItemModel* result, NSError* error)) completion;
 
+- (void) getDashboardCompletionHeaderInURL:(NSString*)url withCompletion: (void(^)(S3Model* result, NSError* error)) completion;
+
 - (void) getDashboardItemModelWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) getDashboardMyDueTaskWithURL: (NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardBankReconWithURL:(NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getDashboardTrialBalanceWithURL:(NSString*) url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion:(void(^)(NSArray* result, NSError* error)) completion;
 
 - (void) getNewMatterInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 
@@ -334,11 +342,17 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 - (void) getDashboardTaxInvoiceInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 
-- (void) getDashboardAccountInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
-
 - (void) getDashboardFeeTransferInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
 
--  (void) getDashboardTaskCheckListInURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getProfitLossDetailWithURL:(NSString*) url withCompletion:(void(^)(ProfitLossDetailModel* result, NSError* error)) completion;
+
+- (void) getStaffOnlineWithURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getAttendanceDetailWithURL:(NSString*)url withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) getCompletionTrackingWithURL:(NSString*)url withPage:(NSNumber*) page withFilter:(NSString*)filter withCompletion: (void(^)(NSArray* result, NSError* error)) completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

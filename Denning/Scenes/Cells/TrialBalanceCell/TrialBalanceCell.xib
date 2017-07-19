@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="64" id="KGk-i7-Jjw" customClass="TrialBalanceCell">
+            <rect key="frame" x="0.0" y="0.0" width="468" height="64"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="468" height="63.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k73-Ja-1zR" userLabel="left">
+                        <rect key="frame" x="351" y="0.0" width="117" height="63.5"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_check.png" translatesAutoresizingMaskIntoConstraints="NO" id="CVW-7O-HAK">
+                                <rect key="frame" x="46.5" y="21.5" width="24" height="20"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="CVW-7O-HAK" firstAttribute="centerX" secondItem="k73-Ja-1zR" secondAttribute="centerX" id="9be-Ir-g1t"/>
+                            <constraint firstItem="CVW-7O-HAK" firstAttribute="centerY" secondItem="k73-Ja-1zR" secondAttribute="centerY" id="X1L-6G-csT"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l0F-3n-k0g" userLabel="left">
+                        <rect key="frame" x="116.5" y="0.0" width="117" height="63.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Debit" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zAX-cX-lHN" userLabel="left">
+                                <rect key="frame" x="3" y="23.5" width="111" height="17"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="zAX-cX-lHN" firstAttribute="centerY" secondItem="l0F-3n-k0g" secondAttribute="centerY" id="Bt4-6Z-WKS"/>
+                            <constraint firstItem="zAX-cX-lHN" firstAttribute="leading" secondItem="l0F-3n-k0g" secondAttribute="leading" constant="3" id="Lly-xN-8S5"/>
+                            <constraint firstAttribute="trailing" secondItem="zAX-cX-lHN" secondAttribute="trailing" constant="3" id="XNu-7f-TWa"/>
+                            <constraint firstItem="zAX-cX-lHN" firstAttribute="centerX" secondItem="l0F-3n-k0g" secondAttribute="centerX" id="deZ-KX-p5n"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xci-8b-B7D" userLabel="left">
+                        <rect key="frame" x="233.5" y="0.0" width="117" height="63.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Credit" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hPk-Xp-ycR" userLabel="left">
+                                <rect key="frame" x="3" y="23.5" width="111" height="17"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hPk-Xp-ycR" firstAttribute="centerY" secondItem="Xci-8b-B7D" secondAttribute="centerY" id="B2f-Ww-ccf"/>
+                            <constraint firstItem="hPk-Xp-ycR" firstAttribute="leading" secondItem="Xci-8b-B7D" secondAttribute="leading" constant="3" id="HFW-mk-4rO"/>
+                            <constraint firstAttribute="trailing" secondItem="hPk-Xp-ycR" secondAttribute="trailing" constant="3" id="TOt-07-bbl"/>
+                            <constraint firstItem="hPk-Xp-ycR" firstAttribute="centerX" secondItem="Xci-8b-B7D" secondAttribute="centerX" id="bC3-bk-Zdl"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5C5-Rc-PN0" userLabel="__left">
+                        <rect key="frame" x="0.0" y="0.0" width="117" height="63.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Client" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UKW-QS-OR8" userLabel="left">
+                                <rect key="frame" x="12" y="23.5" width="100" height="17"/>
+                                <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="UKW-QS-OR8" secondAttribute="trailing" constant="5" id="J3X-I5-9c2"/>
+                            <constraint firstItem="UKW-QS-OR8" firstAttribute="leading" secondItem="5C5-Rc-PN0" secondAttribute="leading" constant="12" id="YVi-6y-gQ4"/>
+                            <constraint firstItem="UKW-QS-OR8" firstAttribute="centerY" secondItem="5C5-Rc-PN0" secondAttribute="centerY" id="zfr-AJ-r1A"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Xci-8b-B7D" firstAttribute="leading" secondItem="l0F-3n-k0g" secondAttribute="trailing" id="4Za-Up-eRR"/>
+                    <constraint firstItem="Xci-8b-B7D" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="D0u-JO-hoh"/>
+                    <constraint firstItem="5C5-Rc-PN0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="EF6-aG-Tc3"/>
+                    <constraint firstAttribute="bottom" secondItem="5C5-Rc-PN0" secondAttribute="bottom" id="FyK-0V-cRG"/>
+                    <constraint firstItem="5C5-Rc-PN0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="HbY-MT-6Sx"/>
+                    <constraint firstItem="5C5-Rc-PN0" firstAttribute="width" secondItem="l0F-3n-k0g" secondAttribute="width" id="I7c-wf-uOo"/>
+                    <constraint firstAttribute="bottom" secondItem="l0F-3n-k0g" secondAttribute="bottom" id="OSd-VM-VGP"/>
+                    <constraint firstItem="l0F-3n-k0g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="WS7-ap-Bjh"/>
+                    <constraint firstAttribute="trailing" secondItem="k73-Ja-1zR" secondAttribute="trailing" id="b1y-9B-GA9"/>
+                    <constraint firstAttribute="bottom" secondItem="Xci-8b-B7D" secondAttribute="bottom" id="nDd-9f-efU"/>
+                    <constraint firstItem="k73-Ja-1zR" firstAttribute="leading" secondItem="Xci-8b-B7D" secondAttribute="trailing" id="nln-kU-31V"/>
+                    <constraint firstItem="5C5-Rc-PN0" firstAttribute="width" secondItem="k73-Ja-1zR" secondAttribute="width" id="noJ-PI-6gF"/>
+                    <constraint firstItem="k73-Ja-1zR" firstAttribute="leading" secondItem="Xci-8b-B7D" secondAttribute="trailing" id="rfy-E4-GwG"/>
+                    <constraint firstItem="5C5-Rc-PN0" firstAttribute="width" secondItem="Xci-8b-B7D" secondAttribute="width" id="seZ-IA-vx3"/>
+                    <constraint firstItem="k73-Ja-1zR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="tTQ-d8-zYu"/>
+                    <constraint firstItem="l0F-3n-k0g" firstAttribute="leading" secondItem="5C5-Rc-PN0" secondAttribute="trailing" id="wHE-zl-L6L"/>
+                    <constraint firstItem="Xci-8b-B7D" firstAttribute="leading" secondItem="l0F-3n-k0g" secondAttribute="trailing" id="xAv-xW-TRB"/>
+                    <constraint firstAttribute="bottom" secondItem="k73-Ja-1zR" secondAttribute="bottom" id="zu9-5Z-F9Q"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="accountType" destination="UKW-QS-OR8" id="MDC-oc-lAh"/>
+                <outlet property="balance" destination="CVW-7O-HAK" id="mpZ-nI-Eiv"/>
+                <outlet property="credit" destination="hPk-Xp-ycR" id="2tC-9N-7Ub"/>
+                <outlet property="debit" destination="zAX-cX-lHN" id="yCM-sn-pDZ"/>
+            </connections>
+            <point key="canvasLocation" x="115" y="81"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_check.png" width="24" height="20"/>
+    </resources>
+</document>

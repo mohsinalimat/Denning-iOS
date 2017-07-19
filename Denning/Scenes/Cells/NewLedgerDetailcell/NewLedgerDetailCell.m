@@ -37,7 +37,7 @@
 
 - (void) configureCellWithLedgerDetailModel:(LedgerDetailModel*) ledgerDetail
 {
-    self.dateLabel.text = ledgerDetail.date;
+    self.dateLabel.text = [DIHelpers getDateInShortForm:ledgerDetail.date];
     self.documentNoLabel.text = ledgerDetail.documentNo;
     self.descriptionLabel.text = ledgerDetail.ledgerDescription;
     if (ledgerDetail.amountDR.length == 0) {

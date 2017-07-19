@@ -21,4 +21,6 @@
 +(UIColor*) babyBule;
 + (UIColor*) babyRed;
 
++ (UIColor*) babyGreen;
+
 @end

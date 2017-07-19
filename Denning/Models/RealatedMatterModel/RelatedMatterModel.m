@@ -53,6 +53,8 @@
     
     relatedMatter.textGroupArray = [RelatedMatterModel getGeneralGroupArrayFromResponse:[response objectForKeyNotNull:@"textGroup"]];
     
+    relatedMatter.remarks = [response valueForKeyNotNull:@"remarks"];
+    
     return relatedMatter;
 }
 
@@ -63,7 +65,7 @@
     for (id group in response) {
          PartyGroupModel* partyGroupModel = [PartyGroupModel new];
         partyGroupModel.partyGroupName = [group objectForKeyNotNull:@"PartyName"];
-        partyGroupModel.partyArray = [PartyModel getPartyArrayFromResponse:[group objectForKeyNotNull:@"party"]];
+        partyGroupModel.partyArray = [ClientModel getClientArrayFromReponse:[group objectForKeyNotNull:@"party"]];
         [partyGroupArray addObject:partyGroupModel];
     }
    
@@ -90,19 +92,20 @@
         [solicitorGroupArray addObject:solicitorGroup];
     }
     
-    return solicitorGroupArray;
+    return [solicitorGroupArray copy];
 }
 
 +(NSArray*) getGeneralGroupArrayFromResponse: (NSArray*) response
 {
-    NSMutableArray* RMGroupArray = [NSMutableArray new];
+    NSMutableArray<GeneralGroup*>* RMGroupArray = [NSMutableArray new];
     for (id group in response) {
         GeneralGroup *model = [GeneralGroup new];
+        model.fieldName = [group objectForKey:@"fieldName"];
         model.value = [group objectForKey:@"value"];
         model.label = [group objectForKey:@"label"];
         [RMGroupArray addObject:model];
     }
-    return RMGroupArray;
+    return [RMGroupArray copy];
 }
 
 

@@ -10,4 +10,6 @@
 
 @interface DashboardFileListing : UIViewController
 
+@property (strong, nonatomic) NSString* url;
+
 @end

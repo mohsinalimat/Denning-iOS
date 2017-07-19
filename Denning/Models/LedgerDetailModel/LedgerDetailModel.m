@@ -28,6 +28,7 @@
     ledgerDetailModel.fileName = [response valueForKeyNotNull:@"fileName"];
     ledgerDetailModel.issuedBy = [response valueForKeyNotNull:@"issuedBy"];
     ledgerDetailModel.recdPaid = [response valueForKeyNotNull:@"recdPaid"];
+    ledgerDetailModel.paymentMode = [response valueForKeyNotNull:@"paymentMode"];
     ledgerDetailModel.taxInvoice = [response valueForKeyNotNull:@"taxInvoice"];
     ledgerDetailModel.updatedBy = [response valueForKeyNotNull:@"updatedBy"];
     ledgerDetailModel.isDebit = [response valueForKeyNotNull:@"isDebit"];

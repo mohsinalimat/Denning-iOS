@@ -260,7 +260,13 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 #define DASHBOARD_S2_CONTACT_GET_URL @"denningwcf/v1/app/dashboard/S2"
 
+#define DASHBOARD_DUE_TASK_GET_URL  @"v1/app/dashboard/spaCheckList"
+
+#define DASHBOARD_COMPLETION_TRACKING_HEADER_GET_URL @"denningwcf/v1/app/dashboard/spaCompletionDate"
+
 #define DASHBOARD_S10_GET_URL   @"denningwcf/v1/app/dashboard/S10"
+
+#define DASHBOARD_S11_GET_URL   @"denningwcf/v1/app/dashboard/S11"
 
 /*
  *  Notification Names

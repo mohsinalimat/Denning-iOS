@@ -46,4 +46,9 @@
     return [UIColor colorWithRed:255/255.0f green:59/255.0f blue:47/255.0f alpha:1.0f];
 }
 
++ (UIColor*) babyGreen
+{
+    return [UIColor colorWithHexString:@"#1CD85E"];
+}
+
 @end

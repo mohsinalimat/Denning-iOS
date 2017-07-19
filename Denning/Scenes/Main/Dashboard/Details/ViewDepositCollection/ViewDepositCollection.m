@@ -13,7 +13,9 @@
 
 @interface ViewDepositCollection ()<HTHorizontalSelectionListDataSource, HTHorizontalSelectionListDelegate, UITableViewDelegate, UITableViewDataSource>
 {
+    NSString* basicUrl;
     NSInteger selectedIndex;
+    NSString* curBalanceFilter, *curTopFilter;
     __block BOOL isLoading;
 }
 
@@ -37,9 +39,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self parseUrl];
     [self displayTitle];
+    [self prepareUI];
     [self loadLedgersWithCompletion:^{
-        [self prepareUI];
         [self registerNibs];
     }];
 }
@@ -54,6 +57,17 @@
 {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBarHidden = NO;
+}
+
+- (void) parseUrl {
+    
+   NSRange range =  [_url rangeOfString:@"/" options:NSBackwardsSearch];
+    NSString* temp = [_url substringToIndex:range.location];
+    curTopFilter = [_url substringFromIndex:range.location+1];
+    
+    range = [temp rangeOfString:@"/" options:NSBackwardsSearch];
+    basicUrl = [temp substringToIndex:range.location];
+    curBalanceFilter = [temp substringFromIndex:range.location+1];
 }
 
 - (void) displayTitle {
@@ -96,23 +110,12 @@
 }
 
 - (IBAction)filterForDebitOrCredit:(id)sender {
-    NSMutableArray* newArray = [NSMutableArray new];
     if (self.topFilterSegmented.selectedSegmentIndex == 0) {
-        for (LedgerDetailModel* model in self.listOfLedgers) {
-            if (model.amountDR.length > 0) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfSelectedLedgers = [newArray copy];
+        curTopFilter = @"Deposited";
     } else {
-        for (LedgerDetailModel* model in self.listOfLedgers) {
-            if (model.amountDR.length == 0) {
-                [newArray addObject:model];
-            }
-        }
-        self.listOfSelectedLedgers = [newArray copy];
+        curTopFilter = @"notDeposited";
     }
-    [self.tableView reloadData];
+    [self loadLedgersWithCompletion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,6 +126,8 @@
 - (void) loadLedgersWithCompletion:(void(^)(void)) completion{
     if (isLoading) return;
     isLoading = YES;
+    
+    _url = [NSString stringWithFormat:@"%@/%@/%@", basicUrl, curBalanceFilter, curTopFilter];
 
     [SVProgressHUD showWithStatus:@"Loading"];
     @weakify(self);
@@ -138,6 +143,13 @@
                 completion();
             }
             [self.tableView reloadData];
+            if ([ledgerDetailModelArray count] > 0) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                    
+                    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                });
+            }
         } else {
             [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
@@ -160,14 +172,9 @@
 
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
     // update the view for the corresponding index
+    curBalanceFilter = _filterTitleArray[index];
     [self loadLedgersWithCompletion:nil];
-    
-    self.topFilterSegmented.selectedSegmentIndex = 0;
-    
-    [self.tableView reloadData];
 }
-
-
 
 #pragma mark - Table view data source
 

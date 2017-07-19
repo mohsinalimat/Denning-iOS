@@ -181,3 +181,31 @@ static NSString* const kDueTaskSegue = @"DueTaskSegue";
 static NSString* const kMyDueTaskSegue = @"MyDueTaskSegue";
 
 static NSString* const kDashboardCollectionSegue = @"DashboardCollectionSegue";
+
+static NSString* const kBankReconSegue = @"BankReconSegue";
+
+static NSString* const kFileLedgerSegue = @"FileLedgerSegue";
+
+static NSString* const kFileLedgerDetailSegue = @"FileLedgerDetailSegue";
+
+static NSString* const kBankAndCashBalanceSegue = @"BankAndCashBalanceSegue";
+
+static NSString* const kTrialBalanceSegue = @"TrialBalanceSegue";
+
+static NSString* const kFeesTransferSegue = @"FeesTransferSegue";
+
+static NSString* const kProfitLossDetailSegue = @"ProfitLossDetailSegue";
+
+static NSString* const kProfitLossSegue = @"ProfitLossSegue";
+
+static NSString* const kStaffOnlineSegue = @"StaffOnlineSegue";
+
+static NSString* const kAttendanceSegue = @"AttendanceSegue";
+
+static NSString* const kAttendanceDetailSegue = @"AttendanceDetailSegue";
+
+static NSString* const kFeeMatterGrowthSegue = @"FeeMatterGrowthSegue";
+
+static NSString* const kCompletionTrackingSegue = @"CompletionTrackingSegue";
+
+static NSString* const kBankLedgerDetailSegue = @"BankLedgerDetailSegue";

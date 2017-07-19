@@ -16,7 +16,6 @@
     __block BOOL isFirstLoading;
     __block BOOL isLoading;
     BOOL initCall;
-    BOOL isAppending;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
@@ -24,7 +23,6 @@
 @property (strong, nonatomic) NSMutableArray* listOfTasks;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (copy, nonatomic) NSString *filter;
-@property (strong, nonatomic) NSNumber* page;
 @end
 
 @implementation DashboardDueTask
@@ -64,12 +62,9 @@
 
 - (void) prepareUI
 {
-    self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
     initCall = YES;
-    isAppending = NO;
-    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = THE_CELL_HEIGHT;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -82,11 +77,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) appendList {
-    isAppending = YES;
-    [self getList];
-}
-
 - (void) getList{
     
     if (isLoading) return;
@@ -94,18 +84,10 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getDashboardItemModelWithURL:@"v1/app/dashboard/spaCheckList" withPage:_page withFilter:_filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getDashboardItemModelWithURL:DASHBOARD_DUE_TASK_GET_URL withPage:@(1) withFilter:_filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         @strongify(self)
         if (error == nil) {
-            if (result.count != 0) {
-                self.page = [NSNumber numberWithInteger:[self.page integerValue] + 1];
-            }
-            if (isAppending) {
-                self.listOfTasks = [[self.listOfTasks arrayByAddingObjectsFromArray:result] mutableCopy];
-                
-            } else {
-                self.listOfTasks = [result mutableCopy];
-            }
+            self.listOfTasks = [result mutableCopy];
             
             [self.tableView reloadData];
         }
@@ -148,6 +130,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self performSegueWithIdentifier:kMyDueTaskSegue sender:self.listOfTasks[indexPath.row]];
 }
 
@@ -163,32 +146,18 @@
     }
 }
 
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat offsetY = scrollView.contentOffset.y;
-    CGFloat contentHeight = scrollView.contentSize.height;
-    
-    if (offsetY > contentHeight - scrollView.frame.size.height && !isFirstLoading) {
-        
-        [self appendList];
-    }
-}
-
 #pragma mark - Search Delegate
 
 
 - (void)willDismissSearchController:(UISearchController *) __unused searchController {
     self.filter = @"";
-    self.page = @(1);
     searchController.searchBar.text = @"";
-    isAppending = NO;
     [self getList];
 }
 
 - (void)searchBar:(UISearchBar *) __unused searchBar textDidChange:(NSString *)searchText
 {
     self.filter = searchText;
-    isAppending = NO;
     [self getList];
 }
 
@@ -205,9 +174,9 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:kMyDueTaskSegue]) {
-        DashboarMyDueTask* vc = segue.destinationViewController;
+        UINavigationController* nav = segue.destinationViewController;
+        DashboarMyDueTask* vc = nav.viewControllers.firstObject;
         vc.url = ((ItemModel*)sender).api;
-        vc.taskID = ((ItemModel*)sender).itemId;
     }
 }
 

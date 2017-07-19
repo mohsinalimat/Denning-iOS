@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class MIBadgeButton;
 @interface DIHelpers : NSObject
 
 + (NSString*) getWANIP;
@@ -35,6 +36,12 @@
 + (NSString*) getOnlyDateFromDateTime: (NSString*)dateTime;
 
 + (NSString*) currentYear;
+
++ (NSString*) currentYearFromDate:(NSDate*) date;
+
++ (NSString*) currentMonth;
+
++ (NSString*) currentMonthFromDate:(NSDate*) date;
 
 + (BOOL) isWordFile:(NSString*) fileExt;
 
@@ -81,4 +88,6 @@
 + (NSString*) capitalizedString: (id) value;
 
 + (NSString*) formatDecimal:(NSString*) text;
+
++ (void) configureButton:(MIBadgeButton *) button withBadge:(NSString *) badgeString withColor:(UIColor*) color;
 @end

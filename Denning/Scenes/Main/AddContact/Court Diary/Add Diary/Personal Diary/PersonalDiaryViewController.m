@@ -246,7 +246,7 @@
 
 - (void) showPopup: (UIViewController*) vc {
     STPopupController *popupController = [[STPopupController alloc] initWithRootViewController:vc];
-    [STPopupNavigationBar appearance].barTintColor = [UIColor colorWithRed:0.20f green:0.60f blue:0.86f alpha:1.0f];
+    [STPopupNavigationBar appearance].barTintColor = [UIColor blackColor];
     [STPopupNavigationBar appearance].tintColor = [UIColor whiteColor];
     [STPopupNavigationBar appearance].barStyle = UIBarStyleDefault;
     [STPopupNavigationBar appearance].titleTextAttributes = @{ NSFontAttributeName: [UIFont fontWithName:@"Cochin" size:18], NSForegroundColorAttributeName: [UIColor whiteColor] };

@@ -29,6 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Transaction Detail";
     self.date.text = [DIHelpers convertDateToCustomFormat:_model.date];
     self.transactionNo.text = _model.ledgerCode;
     self.fileNo.text = _model.fileNo;
@@ -38,7 +39,7 @@
     self.descriptionValue.text = _model.ledgerDescription;
     self.DRAmount.text = _model.amountDR;
     self.CRAmount.text = _model.amountCR;
-    self.mode.text = @"";
+    self.mode.text = _model.paymentMode;
     self.bankAccount.text = _model.bankAcc;
     self.issuedBy.text = _model.issuedBy;
     self.updatedBy.text = _model.updatedBy;

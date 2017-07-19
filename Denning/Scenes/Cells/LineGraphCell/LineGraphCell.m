@@ -7,11 +7,11 @@
 //
 
 #import "LineGraphCell.h"
+#import "PNChartDelegate.h"
+#import "PNChart.h"
 
-@interface LineGraphCell()
-{
-}
-
+@interface LineGraphCell()<PNChartDelegate>
+@property (nonatomic) PNLineChart * lineChart;
 @end
 
 @implementation LineGraphCell
@@ -28,108 +28,78 @@
     // Configure the view for the selected state
 }
 
-#pragma Mark CreateLineGraph
-- (void)createLineGraph:(UIView*) view withGraphModel:(GraphModel*) graph {
-    MultiLineGraphView* myGraph = [[MultiLineGraphView alloc] initWithFrame:CGRectMake(0, header_height, WIDTH(view), HEIGHT(self.graphView) - header_height)];
-//    UIGraphicsBeginImageContext(myGraph.bounds.size);
-//    [myGraph.layer renderInContext:UIGraphicsGetCurrentContext()];
-    [myGraph setDelegate:self];
-    [myGraph setDataSource:self];
-    [myGraph setShowLegend:NO];
-    [myGraph setLegendViewType:LegendTypeHorizontal];
-    [myGraph setShowCustomMarkerView:NO];
-    self.xAxisData = graph.xValue;
-    self.yAxisData = graph.yValue;
-    self.graphCaption.text = graph.graphName.uppercaseString;
-    [myGraph drawGraph];
-//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-
-//    self.graphView.image = image;
-//    [self.graphView addSubview:myGraph];
-    [self.graphView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.graphView addSubview: myGraph];
-}
-
-- (void) showGraphWithGraphModel:(GraphModel*) graph {
+- (void)createLineGraph:(UIView*) view withGraphModel:(GraphModel*) graph
+{
+    self.graphCaption.text = graph.graphName;
+    self.xLedgend.text = graph.xLegend;
+    _yLedgend.text = graph.yLegend;
     
-     //   [graph reloadGraph];
-}
-
-#pragma mark MultiLineGraphViewDataSource
-- (NSInteger)numberOfLinesToBePlotted{
-    return 1;
-}
-
-- (LineDrawingType)typeOfLineToBeDrawnWithLineNumber:(NSInteger)lineNumber{
-    return LineDefault;
-}
-
-
-- (UIColor *)colorForTheLineWithLineNumber:(NSInteger)lineNumber{
+    self.lineChart.backgroundColor = [UIColor whiteColor];
+    self.lineChart.yGridLinesColor = [UIColor grayColor];
+    [self.lineChart.chartData enumerateObjectsUsingBlock:^(PNLineChartData *obj, NSUInteger idx, BOOL *stop) {
+        obj.pointLabelColor = [UIColor blackColor];
+    }];
     
-    return [UIColor babyBule];
-}
-
-- (CGFloat)widthForTheLineWithLineNumber:(NSInteger)lineNumber{
-    return 1;
-}
-
-- (NSString *)nameForTheLineWithLineNumber:(NSInteger)lineNumber{
-    return [NSString stringWithFormat:@"data %ld",(long)lineNumber];
-}
-
-- (BOOL)shouldFillGraphWithLineNumber:(NSInteger)lineNumber{
-    return NO;
-}
-
-
-- (BOOL)shouldDrawPointsWithLineNumber:(NSInteger)lineNumber{
-    return YES;
-}
-
-
-- (NSMutableArray *)dataForYAxisWithLineNumber:(NSInteger)lineNumber {
+    self.lineChart = [[PNLineChart alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH-20, 200.0)];
+    self.lineChart.showCoordinateAxis = YES;
+    self.lineChart.yLabelFormat = @"%1.2f";
+    self.lineChart.xLabelFont = [UIFont fontWithName:@"Helvetica-Light" size:8.0];
+    [self.lineChart setXLabels:graph.xValue];
+    self.lineChart.yLabelColor = [UIColor blackColor];
+    self.lineChart.xLabelColor = [UIColor blackColor];
+    self.lineChart.showGenYLabels = NO;
+    self.lineChart.showYGridLines = YES;
     
-    return [self.yAxisData mutableCopy];
-}
-
-
-- (NSMutableArray *)dataForXAxisWithLineNumber:(NSInteger)lineNumber {
-    return [self.xAxisData mutableCopy];
-
-}
-
-- (UIView *)customViewForLineChartTouchWithXValue:(id)xValue andYValue:(id)yValue{
-    UIView *view = [[UIView alloc] init];
-    [view setBackgroundColor:[UIColor whiteColor]];
-    [view.layer setCornerRadius:4.0F];
-    [view.layer setBorderWidth:1.0F];
-    [view.layer setBorderColor:[[UIColor lightGrayColor] CGColor]];
-    [view.layer setShadowColor:[[UIColor blackColor] CGColor]];
-    [view.layer setShadowRadius:2.0F];
-    [view.layer setShadowOpacity:0.3F];
-    
-    CGFloat y = 0;
-    CGFloat width = 0;
-    for (int i = 0; i < 3 ; i++) {
-        UILabel *label = [[UILabel alloc] init];
-        [label setFont:[UIFont systemFontOfSize:12]];
-        [label setTextAlignment:NSTextAlignmentCenter];
-        [label setText:[NSString stringWithFormat:@"Line Data:y = %@ x = %@", yValue, xValue]];
-        [label setFrame:CGRectMake(0, y, 200, 30)];
-        [view addSubview:label];
-        
-        width = WIDTH(label);
-        y = BOTTOM(label);
+    NSMutableArray* sortedArray = [NSMutableArray new];
+    for (NSString *val in graph.yValue) {
+        [sortedArray addObject:[NSNumber numberWithFloat:[val floatValue]]];
     }
     
-    [view setFrame:CGRectMake(0, 0, width, y)];
-    return view;
-}
-
-#pragma mark MultiLineGraphViewDelegate
-- (void)didTapWithValuesAtX:(NSString *)xValue valuesAtY:(NSString *)yValue{
-    NSLog(@"Line Chart: Value-X:%@, Value-Y:%@",xValue, yValue);
+    NSNumber* maxValue = [sortedArray valueForKeyPath:@"@max.floatValue"];
+    NSNumber* minValue = [sortedArray valueForKeyPath:@"@min.floatValue"];
+    NSMutableArray* newYValue = [NSMutableArray new];
+    
+    //Use yFixedValueMax and yFixedValueMin to Fix the Max and Min Y Value
+    //Only if you needed
+//    self.lineChart.yFixedValueMax = 300.0;
+//    self.lineChart.yFixedValueMin = 0.0;
+//    
+//    [self.lineChart setYLabels:graph.yValue
+//     ];
+    // Line Chart #1
+    NSArray *data01Array = graph.yValue;
+    data01Array = [[data01Array reverseObjectEnumerator] allObjects];
+    PNLineChartData *data01 = [PNLineChartData new];
+    
+//    data01.dataTitle = @"Alpha";
+    data01.color = [UIColor redColor];
+    data01.pointLabelColor = [UIColor blackColor];
+    data01.alpha = 0.3f;
+    data01.showPointLabel = YES;
+    data01.pointLabelFont = [UIFont fontWithName:@"Helvetica-Light" size:9.0];
+    data01.itemCount = data01Array.count;
+    data01.inflexionPointColor = [UIColor redColor];
+    data01.inflexionPointStyle = PNLineChartPointStyleCircle;
+    data01.getData = ^(NSUInteger index) {
+        CGFloat yValue = [data01Array[index] floatValue];
+        return [PNLineChartDataItem dataItemWithY:yValue];
+    };
+    self.lineChart.chartData = @[data01];
+    [self.lineChart.chartData enumerateObjectsUsingBlock:^(PNLineChartData *obj, NSUInteger idx, BOOL *stop) {
+        obj.pointLabelColor = [UIColor blackColor];
+    }];
+    
+    [self.lineChart strokeChart];
+    self.lineChart.delegate = self;
+    
+    [self.graphView addSubview:self.lineChart];
+    
+//    self.lineChart.legendStyle = PNLegendItemStyleStacked;
+//    self.lineChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
+//    self.lineChart.legendFontColor = [UIColor redColor];
+//    
+//    UIView *legend = [self.lineChart getLegendWithMaxWidth:320];
+//    [legend setFrame:CGRectMake(30, 340, legend.frame.size.width, legend.frame.size.width)];
+//    [self.graphView addSubview:legend];
 }
 @end

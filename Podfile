@@ -1,7 +1,7 @@
 platform :ios, ’10.2’
+'use_frameworks!'
 project ‘Denning.xcodeproj’
 source 'https://github.com/CocoaPods/Specs.git'
-'use_frameworks!'
 
 target ‘Denning’ do
     
@@ -31,12 +31,13 @@ target ‘Denning’ do
 	pod 'FSCalendar'
 	pod 'UIFloatLabelTextField'
 	pod 'FZAccordionTableView', '~> 0.2.3'
-	pod "HNKGooglePlacesAutocomplete", "~> 1.1"
 	pod 'UILabel+Copyable', '~> 1.0.0'
-	pod 'drCharts', :git => 'https://github.com/Zomato/DR-charts.git'
+	#pod 'drCharts', :git => 'https://github.com/Zomato/DR-charts.git'
 	pod 'UIFloatLabelTextView'
 	pod 'JVFloatLabeledTextField'
 	pod 'MaterialComponents/ShadowElevations'
+	pod "MIBadgeButton"
+	pod 'PNChart'
 
 	pod 'AFNetworking’
 	pod 'Bolts'

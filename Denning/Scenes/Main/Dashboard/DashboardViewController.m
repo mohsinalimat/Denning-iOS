@@ -18,7 +18,21 @@
 
 #import "DashboardFileListing.h"
 #import "DashboardDueTask.h"
+#import "DashboarMyDueTask.h"
 #import "ViewDepositCollection.h"
+#import "BankRecon.h"
+#import "FileLedger.h"
+#import "BankAndCashBalance.h"
+#import "TrialBalance.h"
+#import "TaxInvoice.h"
+#import "FeesTransfer.h"
+#import "ProfitAndLoss.h"
+#import "StaffOnline.h"
+#import "DashboardAttendance.h"
+#import "FeeAndMatterGrowth.h"
+#import "CompletionDateTracking.h"
+#import "DashboardFileListing.h"
+#import "EventViewController.h"
 
 @interface DashboardViewController ()
 <UIDocumentInteractionControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, SWTableViewCellDelegate>
@@ -55,6 +69,8 @@ NSMutableDictionary* keyValue;
 
 - (void) prepareUI {
     self.navigationController.tabBarItem.image = [UIImage imageNamed:@"icon_overview"];
+    
+    self.tabBarController.navigationItem.rightBarButtonItem = nil;
 //    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
@@ -183,19 +199,10 @@ NSMutableDictionary* keyValue;
     [self.tabBarController.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }
 
-- (void) configureMenuRightBtnWithImagename:(NSString*) imageName withSelector:(SEL) action {
-    UIButton *menuBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
-    [menuBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-    [menuBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *menuButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
-    [self.tabBarController.navigationItem setRightBarButtonItems:@[menuButtonItem] animated:YES];
-}
-
 - (void) popupScreen:(id)sender {
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.selectedViewController = self.tabBarController.viewControllers[0];
     
-    [self configureMenuRightBtnWithImagename:@"icon_menu" withSelector:@selector(gotoMenu)];
     [self configureBackBtnWithImageName:@"icon_user" withSelector:@selector(gotoLogin)];
 }
 
@@ -319,7 +326,7 @@ NSMutableDictionary* keyValue;
             width = self.collectionView.frame.size.width;
             height = 40;
         } else {
-            width = height =self.collectionView.frame.size.width/4-3;
+            width = height =self.collectionView.frame.size.width/4-1;
         }
     } else {
         width = height =self.collectionView.frame.size.width/3-1;
@@ -329,7 +336,7 @@ NSMutableDictionary* keyValue;
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     
-    return UIEdgeInsetsMake(1, 0, 1, 1);
+    return UIEdgeInsetsMake(1, 1, 1, 1);
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
@@ -342,23 +349,73 @@ NSMutableDictionary* keyValue;
 }
 
 
+- (void) geteventsArrayWithCompletion: (void (^)(NSArray* array))completion
+{
+    if (isLoading) return;
+    isLoading = YES;
+    [SVProgressHUD showWithStatus:@"Loading"];
+    @weakify(self)
+    [[QMNetworkManager sharedManager] getLatestEventWithStartDate:[DIHelpers today] endDate:[DIHelpers today] filter:@"1court" search:@"" withCompletion:^(NSArray * _Nonnull eventsArray, NSError * _Nonnull error) {
+        [SVProgressHUD dismiss];
+        @strongify(self)
+        self->isLoading = NO;
+        if (error == nil) {
+            if (completion != nil) {
+                completion(eventsArray);
+            }
+        } else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        }
+    }];
+}
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
+//    UICollectionViewCell* cell = [collectionView cellForItemAtIndexPath:indexPath];
     
     if (indexPath.section == 0) {
         
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            [self performSegueWithIdentifier:kFileListingSegue sender:nil];
+            [self performSegueWithIdentifier:kFileListingSegue sender:_mainModel.s1.items[indexPath.row].mainAPI];
         } else if (indexPath.row == 1) {
-            
+            [self geteventsArrayWithCompletion:^(NSArray *array) {
+                [self performSegueWithIdentifier:kEventSegue sender:array];
+            }];
         } else if (indexPath.row == 2){
-            [self performSegueWithIdentifier:kDueTaskSegue sender:_mainModel.s1.items[indexPath.row].mainAPI];
+            [self performSegueWithIdentifier:kMyDueTaskSegue sender:_mainModel.s1.items[indexPath.row]];
         }
-        
     } else if (indexPath.section == 2) {
-        [self performSegueWithIdentifier:kDashboardCollectionSegue sender:_mainModel.s2.items[indexPath.row]];
+        [self performSegueWithIdentifier:kDashboardCollectionSegue sender:_mainModel.s2.items[indexPath.row - 1]];
+    } else if (indexPath.section == 3) {
+        [self performSegueWithIdentifier:kCompletionTrackingSegue sender:_mainModel.s3.items[indexPath.row-1]];
+    } else if (indexPath.section == 4) {
+        NSString* url = _mainModel.s4.items[indexPath.row].mainAPI;
+        if (indexPath.row == 0) {
+           [self performSegueWithIdentifier:kContactGetListSegue sender:url];
+        } else if (indexPath.row == 1) {
+            [self performSegueWithIdentifier:kBankReconSegue sender:url];
+        } else if (indexPath.row == 2) {
+            [self performSegueWithIdentifier:kDueTaskSegue sender:_mainModel.s1.items[indexPath.row].mainAPI];
+        } else if (indexPath.row == 3) {
+            [self performSegueWithIdentifier:kFileLedgerSegue sender:url];
+        } else if (indexPath.row == 4) {
+            [self performSegueWithIdentifier:kBankAndCashBalanceSegue sender:url];
+        } else if (indexPath.row == 5) {
+            [self performSegueWithIdentifier:kTrialBalanceSegue sender:url];
+        } else if (indexPath.row == 6) {
+            [self performSegueWithIdentifier:kTaxInvoiceSegue sender:url];
+        } else if (indexPath.row == 7) {
+            [self performSegueWithIdentifier:kFeesTransferSegue sender:url];
+        } else if (indexPath.row == 8) {
+            [self performSegueWithIdentifier:kProfitLossSegue sender:url];
+        } else if (indexPath.row == 9) {
+            [self performSegueWithIdentifier:kStaffOnlineSegue sender:url];
+        } else if (indexPath.row == 10) {
+            [self performSegueWithIdentifier:kAttendanceSegue sender:url];
+        } else if (indexPath.row == 11) {
+            [self performSegueWithIdentifier:kFeeMatterGrowthSegue sender:url];
+        }
     }
 }
 
@@ -366,10 +423,36 @@ NSMutableDictionary* keyValue;
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:kFileListingSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        DashboardFileListing* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kEventSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        EventViewController* eventVC = nav.viewControllers.firstObject;
+        eventVC.originalArray = sender;
+    }
+    
     if ([segue.identifier isEqualToString:kDueTaskSegue]) {
         UINavigationController* nav = segue.destinationViewController;
         DashboardDueTask* vc = nav.viewControllers.firstObject;
         vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kMyDueTaskSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        DashboarMyDueTask* vc = nav.viewControllers.firstObject;
+        vc.url = ((FirstItemModel*)sender).mainAPI;
+    }
+    
+    if ([segue.identifier isEqualToString:kCompletionTrackingSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        CompletionDateTracking* vc = nav.viewControllers.firstObject;
+        vc.url = ((ThirdItemModel*)sender).api;
+        vc.selHeaderId = ((ThirdItemModel*)sender).itemID;
     }
     
     if ([segue.identifier isEqualToString:kDashboardCollectionSegue]) {
@@ -379,6 +462,67 @@ NSMutableDictionary* keyValue;
         vc.selectedID = ((SecondItemModel*)sender).itemId;
         vc.secondItem = sender;
     }
+    
+    if ([segue.identifier isEqualToString:kBankReconSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        BankRecon* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kFileLedgerSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        FileLedger* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kBankAndCashBalanceSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        BankAndCashBalance* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kTrialBalanceSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        TrialBalance* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kFeesTransferSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        FeesTransfer* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+
+    if ([segue.identifier isEqualToString:kProfitLossSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        ProfitAndLoss* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kStaffOnlineSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        StaffOnline* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kTaxInvoiceSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        TaxInvoice* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+
+    if ([segue.identifier isEqualToString:kAttendanceSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        DashboardAttendance* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kFeeMatterGrowthSegue]) {
+        UINavigationController* nav = segue.destinationViewController;
+        FeeAndMatterGrowth* vc = nav.viewControllers.firstObject;
+        vc.url = sender;
+    }
+
 }
 
 @end

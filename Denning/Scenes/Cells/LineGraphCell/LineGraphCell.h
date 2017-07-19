@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "DIGeneralCell.h"
 
-@interface LineGraphCell : DIGeneralCell<MultiLineGraphViewDataSource, MultiLineGraphViewDelegate>
+@interface LineGraphCell : DIGeneralCell
 
 @property (weak, nonatomic) IBOutlet UILabel *graphCaption;
+@property (weak, nonatomic) IBOutlet UILabel *yLedgend;
+@property (weak, nonatomic) IBOutlet UILabel *xLedgend;
 @property (weak, nonatomic) IBOutlet UIImageView *graphView;
 @property (strong, nonatomic) NSArray* xAxisData, *yAxisData;
 
 - (void)createLineGraph:(UIView*) view withGraphModel:(GraphModel*) graph;
-- (void) showGraphWithGraphModel:(GraphModel*) graph;
+//- (void) showGraphWithGraphModel:(GraphModel*) graph;
 
 @end

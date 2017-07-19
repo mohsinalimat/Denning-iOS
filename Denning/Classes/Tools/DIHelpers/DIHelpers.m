@@ -175,13 +175,26 @@
    return [self getDateInShortForm:dateTime];
 }
 
-+ (NSString*) currentYear
-{
-    NSDate *currentYear=[[NSDate alloc]init];
-    currentYear=[NSDate date];
++ (NSString*) currentYearFromDate:(NSDate*) date {
     NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
     [formatter1 setDateFormat:@"yyyy"];
-    return [formatter1 stringFromDate:currentYear];
+    return [formatter1 stringFromDate:date];
+}
+
++ (NSString*) currentYear
+{
+    return [DIHelpers currentYearFromDate:[NSDate date]];
+}
+
++ (NSString*) currentMonthFromDate:(NSDate*) date {
+    NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
+    [formatter1 setDateFormat:@"MM"];
+    return [formatter1 stringFromDate:date];
+}
+
++ (NSString*) currentMonth
+{
+    return [DIHelpers currentMonthFromDate:[NSDate date]];
 }
 
 + (BOOL) isWordFile:(NSString*) fileExt
@@ -444,7 +457,18 @@
     NSArray* obj = [formattedNumberString componentsSeparatedByString:@"."];
     if ([obj count] > 1 && ((NSString*)obj[1]).length == 1) {
         formattedNumberString = [formattedNumberString stringByAppendingString:@"0"];
+    } else if ([obj count] == 1) {
+        formattedNumberString = [formattedNumberString stringByAppendingString:@".00"];
     }
     return formattedNumberString;
+}
+
++ (void) configureButton:(MIBadgeButton *) button withBadge:(NSString *) badgeString withColor:(UIColor*) color {
+
+    // optional to change the default position of the badge
+    CGSize size = button.frame.size;
+    [button setBadgeEdgeInsets:UIEdgeInsetsMake(3, 3, 0, 3)];
+    [button setBadgeString:badgeString];
+    [button setBadgeBackgroundColor:color];
 }
 @end

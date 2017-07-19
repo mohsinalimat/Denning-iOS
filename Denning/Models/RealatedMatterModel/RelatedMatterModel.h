@@ -53,7 +53,7 @@
 @property (strong, nonatomic) StaffModel* partner;
 
 // Party Group
-@property (strong, nonatomic) NSArray *partyGroupArray;
+@property (strong, nonatomic) NSArray<PartyGroupModel*> *partyGroupArray;
 
 // Primary Client
 @property (strong, nonatomic) ClientModel* primaryClient;
@@ -71,15 +71,17 @@
 @property (strong, nonatomic) StaffModel* clerk;
 
 // ImportantRM
-@property (strong, nonatomic) NSArray * RMGroupArray;
+@property (strong, nonatomic) NSArray<GeneralGroup*> * RMGroupArray;
 
 // DateRM
-@property (strong, nonatomic) NSArray * dateGroupArray;
+@property (strong, nonatomic) NSArray<GeneralGroup*> * dateGroupArray;
 
 // Other information
 @property (strong, nonatomic) NSArray * textGroupArray ;
 
 @property (strong, nonatomic) NSArray * relatedMatter;
+
+@property (strong, nonatomic) NSString* remarks;
 
 + (RelatedMatterModel*) getRelatedMatterFromResponse: (NSDictionary*) response;
 

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="SF-UI-Text-Light.otf">
             <string>SFUIText-Light</string>
+        </array>
+        <array key="SF-UI-Text-Medium.otf">
+            <string>SFUIText-Medium</string>
         </array>
         <array key="SF-UI-Text-Regular.otf">
             <string>SFUIText-Regular</string>
@@ -28,7 +32,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C57-Jq-Ckb">
-                        <rect key="frame" x="20" y="9" width="31" height="17"/>
+                        <rect key="frame" x="20" y="9" width="31" height="19"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -46,25 +50,25 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Document No" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9T-5z-PCO">
-                        <rect key="frame" x="56" y="9" width="84.5" height="16"/>
-                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
-                        <nil key="textColor"/>
+                        <rect key="frame" x="59" y="9" width="99" height="18"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Medium" family="SF UI Text" pointSize="15"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Recd / Paid" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-jm-pYC">
-                        <rect key="frame" x="21" y="31" width="63" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recd / Paid" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-jm-pYC">
+                        <rect key="frame" x="20" y="33" width="212" height="15"/>
                         <fontDescription key="fontDescription" name="SFUIText-Light" family="SF UI Text" pointSize="11"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="g9T-5z-PCO" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="trailing" constant="5" id="4i6-WW-b9j"/>
+                    <constraint firstItem="g9T-5z-PCO" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="trailing" constant="8" id="4i6-WW-b9j"/>
                     <constraint firstItem="SHI-lg-YjZ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="4n6-Aa-pKt"/>
                     <constraint firstAttribute="bottomMargin" secondItem="QYY-Z8-DXr" secondAttribute="bottom" id="6Zm-ol-iGs"/>
                     <constraint firstItem="PdS-jm-pYC" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="leading" id="787-uy-mab"/>
-                    <constraint firstItem="SHI-lg-YjZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PdS-jm-pYC" secondAttribute="trailing" constant="10" id="FgR-Uo-i9O"/>
                     <constraint firstItem="g9T-5z-PCO" firstAttribute="top" secondItem="C57-Jq-Ckb" secondAttribute="top" id="Kxj-TO-C0x"/>
+                    <constraint firstItem="PdS-jm-pYC" firstAttribute="top" secondItem="g9T-5z-PCO" secondAttribute="bottom" constant="6" id="N1x-hs-31w"/>
                     <constraint firstItem="PdS-jm-pYC" firstAttribute="top" secondItem="C57-Jq-Ckb" secondAttribute="bottom" constant="5" id="QBg-u4-yQ0"/>
                     <constraint firstItem="QYY-Z8-DXr" firstAttribute="leading" secondItem="C57-Jq-Ckb" secondAttribute="leading" id="QBz-Ph-Uhj"/>
                     <constraint firstAttribute="trailingMargin" secondItem="SHI-lg-YjZ" secondAttribute="trailing" id="o7C-Yy-M0M"/>
@@ -73,6 +77,7 @@
                     <constraint firstItem="C57-Jq-Ckb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="v1g-1n-rr5"/>
                     <constraint firstItem="QYY-Z8-DXr" firstAttribute="top" secondItem="PdS-jm-pYC" secondAttribute="bottom" constant="4.5" id="vw6-2s-qu2"/>
                     <constraint firstItem="SHI-lg-YjZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="g9T-5z-PCO" secondAttribute="trailing" constant="14" id="xSa-CP-KcH"/>
+                    <constraint firstItem="PdS-jm-pYC" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="2:3" constant="-5" id="zOe-vS-HCc"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -82,7 +87,7 @@
                 <outlet property="documentNoLabel" destination="g9T-5z-PCO" id="9fY-wb-qWE"/>
                 <outlet property="receivedPaid" destination="PdS-jm-pYC" id="GFj-8C-zlb"/>
             </connections>
-            <point key="canvasLocation" x="-75" y="-74.5"/>
+            <point key="canvasLocation" x="-58" y="-82"/>
         </tableViewCell>
     </objects>
 </document>

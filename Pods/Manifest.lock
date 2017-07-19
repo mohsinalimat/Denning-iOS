@@ -28,7 +28,6 @@ PODS:
     - Fabric (~> 1.6.3)
   - Digits (1.15.3):
     - TwitterCore (= 1.15.3)
-  - drCharts (1.4)
   - DZNEmptyDataSet (1.8.1)
   - DZNPhotoPickerController/Editor (2.0)
   - Fabric (1.6.11)
@@ -42,9 +41,6 @@ PODS:
   - FSCalendar (2.7.8)
   - FZAccordionTableView (0.2.3)
   - GLCalendarView (1.0.3)
-  - HNKGooglePlacesAutocomplete (1.2.0):
-    - AFNetworking (~> 3.0)
-    - Mantle (~> 2.0)
   - HTHorizontalSelectionList (0.7.4):
     - M13BadgeView (~> 1.0.4)
   - JVFloatLabeledTextField (1.1.1)
@@ -55,12 +51,10 @@ PODS:
   - libextobjc/RuntimeExtensions (0.4.1)
   - libPhoneNumber-iOS (0.9.10)
   - M13BadgeView (1.0.4)
-  - Mantle (2.1.0):
-    - Mantle/extobjc (= 2.1.0)
-  - Mantle/extobjc (2.1.0)
   - Masonry (1.0.2)
   - MaterialComponents/ShadowElevations (23.4.1)
   - MBProgressHUD (1.0.0)
+  - MIBadgeButton (0.0.7)
   - MPGNotification (1.2.4)
   - NYTPhotoViewer (1.1.0):
     - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
@@ -69,6 +63,8 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.1.0)
+  - PNChart (0.8.9):
+    - UICountingLabel (~> 1.2.0)
   - pop (1.0.9)
   - QMChatViewController (0.4):
     - QMChatViewController/Categories (= 0.4)
@@ -137,6 +133,7 @@ PODS:
   - TTTAttributedLabel (2.0.0)
   - TwitterCore (1.15.3):
     - Fabric
+  - UICountingLabel (1.2.0)
   - UIDevice-Hardware (0.1.10)
   - UIFloatLabelTextField (1.2.9)
   - UIFloatLabelTextView (1.0.10)
@@ -151,7 +148,6 @@ DEPENDENCIES:
   - ChameleonFramework
   - Crashlytics
   - Digits (= 1.15.3)
-  - drCharts (from `https://github.com/Zomato/DR-charts.git`)
   - DZNEmptyDataSet
   - DZNPhotoPickerController/Editor
   - Fabric
@@ -161,7 +157,6 @@ DEPENDENCIES:
   - FSCalendar
   - FZAccordionTableView (~> 0.2.3)
   - GLCalendarView (~> 1.0.0)
-  - HNKGooglePlacesAutocomplete (~> 1.1)
   - HTHorizontalSelectionList (~> 0.7.4)
   - JVFloatLabeledTextField
   - libextobjc/EXTKeyPathCoding (~> 0.4.1)
@@ -170,8 +165,10 @@ DEPENDENCIES:
   - Masonry
   - MaterialComponents/ShadowElevations
   - MBProgressHUD (~> 1.0.0)
+  - MIBadgeButton
   - MPGNotification (~> 1.2)
   - NYTPhotoViewer (~> 1.1.0)
+  - PNChart
   - QMChatViewController (= 0.4.0)
   - QMServices
   - QuickBlox
@@ -193,15 +190,6 @@ DEPENDENCIES:
   - UILabel+Copyable (~> 1.0.0)
   - VBFPopFlatButton
 
-EXTERNAL SOURCES:
-  drCharts:
-    :git: https://github.com/Zomato/DR-charts.git
-
-CHECKOUT OPTIONS:
-  drCharts:
-    :commit: 7515365aa0ccb0c5922b35f0fae6fcad5911cc14
-    :git: https://github.com/Zomato/DR-charts.git
-
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -209,7 +197,6 @@ SPEC CHECKSUMS:
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Digits: 9823f8aad766c0aa824fac9b08938e22bc635fac
-  drCharts: fd568784a514819ea7af12aabdd67e00ac359370
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   DZNPhotoPickerController: 1a9b83a53a2f35094e35c163417ab0aeb8653fd1
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
@@ -220,18 +207,18 @@ SPEC CHECKSUMS:
   FSCalendar: 09369a2bf554ba71cd8e8cfb627e2df22a2c2af4
   FZAccordionTableView: e64f49c71c32d750feda14025b088bcd25d1a71f
   GLCalendarView: f3a71aca59f456b81abad9667dc5985c46810996
-  HNKGooglePlacesAutocomplete: 1977cf89b41080aba06ff0e934eb72c01efb8e03
   HTHorizontalSelectionList: c38792f4bc87f941ab6c07b02a40abf111c68249
   JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   libPhoneNumber-iOS: f721ae4d5854bce60934f9fb9b0b28e8e68913cb
   M13BadgeView: 700dd0714fdc837c0cf1c8c004454963ec22441f
-  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MaterialComponents: baaab2cdd2d4a4f75eb40beae6df360e5fedd3a2
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  MIBadgeButton: 7c34f180a194d152bb3817c05443eab3a01433cd
   MPGNotification: f0e3924087afa9b3eccd5ce624e03965ae31ae61
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
+  PNChart: 84774d225c2126ded6c93d4dbe6ae98c3a73c2d2
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   QMChatViewController: 6fe589c26396ce2ece7549b34835cf0a2551ec32
   QMServices: 617057b228eb5e41341e50216fc4af2fce3cfa46
@@ -248,12 +235,13 @@ SPEC CHECKSUMS:
   SystemServices: cc55971fb9b1a5b01ad11e6ae0f46483ca5affa5
   TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
   TwitterCore: cce24b3c798993ccde72787ea79ea9a478b284e4
+  UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
   UIDevice-Hardware: 4bb15b9bd9878762ab879ac86185baad17b6c3ff
   UIFloatLabelTextField: c1df7d4e688a1bd52738513f961df16f94914367
   UIFloatLabelTextView: 96b7c5a18739fd1af8fd9480f7943d75a7547e4d
   UILabel+Copyable: 39749df0a0a7112db8091a2b15ac9140a64b45a8
   VBFPopFlatButton: 39e48ab56277f3d056734a9b5ec5d0cc60d69778
 
-PODFILE CHECKSUM: 63d2cc1ce110c185935a37aa5105e290587883c5
+PODFILE CHECKSUM: 15f56801a60bc4bb383356dc9356efd197b860ab
 
 COCOAPODS: 1.2.1

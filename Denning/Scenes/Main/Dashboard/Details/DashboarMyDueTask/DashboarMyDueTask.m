@@ -43,6 +43,18 @@
     [self getList];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES];
+    [super viewWillDisappear:animated];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES];
+    [super viewWillAppear:animated];
+}
+
 - (IBAction)dismissScreen:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -80,7 +92,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.tableFooterView = [UIView new];
     
-    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 74, self.view.frame.size.width, 44)];
+    self.selectionList = [[HTHorizontalSelectionList alloc] initWithFrame:CGRectMake(0, 66, self.view.frame.size.width, 44)];
     self.selectionList.delegate = self;
     self.selectionList.dataSource = self;
     
@@ -97,7 +109,7 @@
     [self.selectionList setTitleFont:[UIFont fontWithName:@"SFUIText-SemiBold" size:17] forState:UIControlStateHighlighted];
     
     [self.view addSubview:self.selectionList];
-    self.selectionList.backgroundColor = [UIColor clearColor];
+    self.selectionList.backgroundColor = [UIColor blackColor];
     self.selectionList.selectedButtonIndex = 0;
     self.selectionList.hidden = NO;
 }
@@ -129,28 +141,28 @@
     self.page = @(1);
     _url = [self buildURL:index];
     [self getList];
-    
     [self.tableView reloadData];
 }
 
 - (void) appendList {
     isAppending = YES;
-    _url = [self buildURL:selectedIndex];
     [self getList];
 }
 
 - (NSString*) buildURL:(NSInteger) index {
-    return [NSString stringWithFormat:@"v1/spaCheckList/%@?filterBy=%@", _taskID, _arrayOfFilterValues[index]];
+    return [NSString stringWithFormat:@"%@?filterBy=%@", _url, _arrayOfFilterValues[index]];
 }
 
 - (void) getList{
     
     if (isLoading) return;
     isLoading = YES;
+    
+    NSString* newUrl = [self buildURL:selectedIndex];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getDashboardMyDueTaskWithURL:_url withPage:_page withFilter:_filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getDashboardMyDueTaskWithURL:newUrl withPage:_page withFilter:_filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         @strongify(self)
         if (error == nil) {
             if (result.count != 0) {
@@ -236,7 +248,6 @@
     self.page = @(1);
     searchController.searchBar.text = @"";
     isAppending = NO;
-    _url = [self buildURL:selectedIndex];
     [self getList];
 }
 
@@ -244,7 +255,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
-    _url = [self buildURL:selectedIndex];
+    self.page = @(1);
     [self getList];
 }
 

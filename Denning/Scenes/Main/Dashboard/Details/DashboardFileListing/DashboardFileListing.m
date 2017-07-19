@@ -19,6 +19,7 @@
     BOOL isAppending;
     
     NSInteger _idx;
+    NSArray* btnArray;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
@@ -28,15 +29,10 @@
 @property (strong, nonatomic) UISearchController *searchController;
 @property (copy, nonatomic) NSString *filter;
 @property (strong, nonatomic) NSNumber* page;
-@property (weak, nonatomic) IBOutlet UIView *allView;
-@property (weak, nonatomic) IBOutlet UILabel *allLabel;
-@property (weak, nonatomic) IBOutlet BadgeLabel *allBadge;
-@property (weak, nonatomic) IBOutlet UILabel *todayLabel;
-@property (weak, nonatomic) IBOutlet BadgeLabel *todayBadge;
-@property (weak, nonatomic) IBOutlet UIView *todayView;
-@property (weak, nonatomic) IBOutlet UIView *weekView;
-@property (weak, nonatomic) IBOutlet UILabel *weekLabel;
-@property (weak, nonatomic) IBOutlet BadgeLabel *weekBadge;
+@property (weak, nonatomic) IBOutlet UIButton *btnAll;
+@property (weak, nonatomic) IBOutlet UIButton *btnToday;
+@property (weak, nonatomic) IBOutlet UIButton *btnThisweek;
+
 @property (strong, nonatomic) NSArray<UILabel*>* topLabels;
 @end
 
@@ -52,6 +48,7 @@
     [self getHeaderWithCompletion:^{
         [self getList];
     }];
+    
 }
 
 - (IBAction)dismissScreen:(id)sender {
@@ -81,7 +78,7 @@
 
 - (void) prepareUI
 {
-    _topLabels = @[_allLabel, _todayLabel, _weekLabel];
+    btnArray = @[_btnAll, _btnToday, _btnThisweek];
     self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";
@@ -93,45 +90,45 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.tableFooterView = [UIView new];
     
-    UITapGestureRecognizer* allTap = [UITapGestureRecognizer new];
-    allTap.numberOfTapsRequired = 1;
-    [allTap addTarget:self action:@selector(allTapped)];
-    [_allView addGestureRecognizer:allTap];
-    
-    UITapGestureRecognizer* todayTap = [UITapGestureRecognizer new];
-    todayTap.numberOfTapsRequired = 1;
-    [todayTap addTarget:self action:@selector(todayTapped)];
-    [_todayView addGestureRecognizer:todayTap];
-    
-    UITapGestureRecognizer* weekTap = [UITapGestureRecognizer new];
-    weekTap.numberOfTapsRequired = 1;
-    [weekTap addTarget:self action:@selector(weekTapped)];
-    [_weekView addGestureRecognizer:weekTap];
 }
 
-- (void) resetLabel {
-    for (UILabel *label in _topLabels) {
-        label.textColor = [UIColor grayColor];
+
+- (void) resetState: (MIBadgeButton*) button {
+    [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [button setBackgroundColor:[UIColor clearColor]];
+    [button setBadgeBackgroundColor:[UIColor darkGrayColor]];
+}
+
+- (void) setStatus:(MIBadgeButton*) button {
+    [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+    [button setBadgeBackgroundColor:[UIColor redColor]];
+}
+
+- (void) resetAllButtons {
+    for (int i = 0; i < btnArray.count; i++) {
+        [self resetState:btnArray[i]];
     }
 }
 
-- (void) didTapLabel:(NSInteger) index {
-    [self resetLabel];
-    _topLabels[index].textColor = [UIColor redColor];
+- (void) didTapButton:(NSInteger) index {
+    [self resetAllButtons];
+    [self setStatus:btnArray[index]];
     _idx = index;
+    _url = _items[_idx].api;
     [self getList];
 }
 
-- (void) allTapped {
-    [self didTapLabel:0];
+- (IBAction)didTapAll:(id)sender {
+    [self didTapButton:0];
 }
 
-- (void) todayTapped {
-    [self didTapLabel:1];
+- (IBAction)didTapToday:(id)sender {
+    [self didTapButton:1];
 }
 
-- (void) weekTapped {
-    [self didTapLabel:2];
+- (IBAction)didTapThisweek:(id)sender {
+    [self didTapButton:2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -145,12 +142,11 @@
 }
 
 - (void) updateHeader {
-    _allLabel.text = _items[0].label;
-    _allBadge.text = _items[0].value;
-    _todayLabel.text = _items[1].label;
-    _todayBadge.text = _items[1].value;
-    _weekLabel.text = _items[2].label;
-    _weekBadge.text = _items[2].value;
+    for (int i = 0; i < btnArray.count; i++) {
+        [btnArray[i] setTitle:_items[i].label forState:UIControlStateNormal];
+        [DIHelpers configureButton:btnArray[i] withBadge:_items[i].value withColor:[UIColor grayColor]];
+    }
+    [btnArray[0] setBadgeBackgroundColor:[UIColor redColor]];
 }
 
 - (void) getHeaderWithCompletion:(void(^)(void))completion;
@@ -169,13 +165,12 @@
 }
 
 - (void) getList{
-
     if (isLoading) return;
     isLoading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getNewMatterInURL:_items[_idx].api withPage:self.page withFilter:self.filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getNewMatterInURL:_url withPage:self.page withFilter:self.filter withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         @strongify(self)
         if (error == nil) {
             if (result.count != 0) {
@@ -230,7 +225,7 @@
     
     FileListingCell *cell = [tableView dequeueReusableCellWithIdentifier:[FileListingCell cellIdentifier] forIndexPath:indexPath];
     cell.fileNo.text = model.key;
-    cell.fileNo.text = [DIHelpers separateNameIntoTwo:[model.title substringFromIndex:10]][1];
+    cell.fileName.text = [DIHelpers separateNameIntoTwo:[model.title substringFromIndex:10]][1];
     cell.openDate.text = [DIHelpers getDateInShortForm:model.sortDate];
     
     return cell;
@@ -279,6 +274,7 @@
 {
     self.filter = searchText;
     isAppending = NO;
+    self.page = @(1);
     [self getList];
 }
 

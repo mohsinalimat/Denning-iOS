@@ -330,7 +330,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     
     @weakify(self)
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
-    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:searchURL forCategory:category searchType:searchType withCompletion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
+    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:searchURL forCategory:category searchType:searchType withPage:@(1) withCompletion:^(NSArray * _Nonnull resultArray, NSError* _Nonnull error) {
         
         [SVProgressHUD dismiss];
         
