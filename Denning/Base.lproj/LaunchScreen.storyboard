@@ -21,13 +21,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="splash_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="AVI-hu-fRc">
-                                <rect key="frame" x="437.5" y="626.5" width="139" height="113"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="splash_logo_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="AVI-hu-fRc">
+                                <rect key="frame" x="452.5" y="636" width="119" height="94"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="AVI-hu-fRc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" constant="-5" id="gBB-Fg-ezP"/>
+                            <constraint firstItem="AVI-hu-fRc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="gBB-Fg-ezP"/>
                             <constraint firstItem="AVI-hu-fRc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="kiW-Wd-zmr"/>
                         </constraints>
                     </view>
@@ -39,6 +39,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash_logo.png" width="139" height="113"/>
+        <image name="splash_logo_white.png" width="119" height="94"/>
     </resources>
 </document>

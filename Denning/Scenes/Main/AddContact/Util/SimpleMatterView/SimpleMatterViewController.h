@@ -14,4 +14,6 @@ typedef void (^UpdateMatterHandler)(MatterSimple* model);
 
 @property (strong, nonatomic) UpdateMatterHandler  updateHandler;
 
+@property (strong, nonatomic) NSString* titleOfView;
+
 @end

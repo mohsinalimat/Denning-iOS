@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UIButton *countryBtn;
 @property (weak, nonatomic) IBOutlet UISwitch *isLayerControl;
+@property (weak, nonatomic) IBOutlet UILabel *youLawyerLabel;
+@property (weak, nonatomic) IBOutlet UIButton *firmBtn;
 
 @property (weak, nonatomic) IBOutlet UIButton *firmListSelectionBtn;
 @property (strong, nonatomic) NSNumber* firmCode;
@@ -58,6 +60,10 @@
     
     [DIHelpers drawWhiteBorderToButton:self.firmListSelectionBtn];
     [DIHelpers drawWhiteBorderToButton:self.countryBtn];
+    
+    [DIHelpers drawWhiteBorderToButton:_firmBtn];
+    
+    [DIHelpers drawBorderBottom:_youLawyerLabel];
 }
 
 - (void)addTapGesture {

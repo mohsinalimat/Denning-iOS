@@ -8,6 +8,9 @@
 
 #import "SearchMatterCell.h"
 @interface SearchMatterCell()
+{
+    NSString* fileNo;
+}
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
@@ -39,7 +42,9 @@
 {
     self.titleLabel.text = model.title;
     self.headerLabel.text = model.header;
-    self.descriptionLabel.text = model.description;
+    self.descriptionLabel.text = model.searchDescription;
+    
+    fileNo = model.key;
 }
 
 - (IBAction)fileFolderTapped:(id)sender {
@@ -50,6 +55,20 @@
     [self.delegate didTapLedger:self];
 }
 
+- (IBAction)tempateTapped:(id)sender {
+    [self.delegate didTapTemplate:self];
+}
 
+- (IBAction)uploadTapped:(id)sender {
+    [self.delegate didTapUpload:self];
+}
+
+- (IBAction)paymentRecordTapped:(id)sender {
+    [self.delegate didTapPaymentRecord:self fileNo:fileNo];
+}
+
+- (IBAction)fileNoteTapped:(id)sender {
+    [self.delegate didTapFileNote:self];
+}
 
 @end

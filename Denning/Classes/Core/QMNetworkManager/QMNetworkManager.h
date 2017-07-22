@@ -34,6 +34,7 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 @class AddPropertyModel;
 @class ProfitLossDetailModel;
 @class S3Model;
+@class FileNoteModel;
 
 @interface QMNetworkManager : NSObject
 
@@ -193,6 +194,22 @@ typedef void(^CompletionHandler)(BOOL success, id response, NSError *error);
 
 // Related Matter
 - (void) loadRelatedMatterWithCode: (NSString*) code completion: (void(^)(RelatedMatterModel* contactModel, NSError* error)) completion;
+
+// File Note
+- (void) loadFileNoteListWithCode:(NSString*) code withPage:page
+                       completion: (void(^)(NSArray *result, NSError* error)) completion;
+- (void) saveFileNoteWithParams: (NSDictionary*) params completion: (void(^)(FileNoteModel* result, NSError* error)) completion;
+
+- (void) updateFileNoteWithParams: (NSDictionary*) params completion: (void(^)(FileNoteModel* result, NSError* error)) completion;
+
+// File Upload
+- (void) getSuggestedNameWithUrl:(NSString*) url withPage:(NSNumber*)page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion;
+
+- (void) uploadFileWithUrl:(NSString*) url params:(NSDictionary*) params WithCompletion:(void(^)(NSString* result, NSError* error)) completion;
+
+// Payment Record
+
+- (void) getPaymentRecordWithFileNo:(NSString*) fileNo completion:(void(^)(NSDictionary* result, NSError* error)) completion;
 
 // Legal firm (Solicitor)
 - (void) loadLegalFirmWithCode: (NSString*) code completion: (void(^)(LegalFirmModel* legalFirmModel, NSError* error)) completion;

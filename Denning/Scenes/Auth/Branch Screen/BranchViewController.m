@@ -44,7 +44,7 @@
 }
 
 - (void) prepareUI {
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"splash_background.png"]];
+   
 }
 
 - (void)registerNibs {

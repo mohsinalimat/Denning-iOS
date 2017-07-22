@@ -43,6 +43,9 @@
 
 + (NSString*) currentMonthFromDate:(NSDate*) date;
 
++ (NSString*) trim:(NSString*) str;
+
+
 + (BOOL) isWordFile:(NSString*) fileExt;
 
 + (BOOL) isImageFile: (NSString*) fileExt;
@@ -55,11 +58,15 @@
 
 + (BOOL) isWebFile: (NSString*) fileExt;
 
++ (void) drawBorderBottom: (UIView*) view;
+
 + (void) drawWhiteBorderToButton: (UIButton*) button;
 
 + (void) drawWhiteBorderToTextField: (UITextField*) textField;
 
 + (NSArray*) separateNameIntoTwo:(NSString*) title;
+
++ (NSArray*) separateFileNameAndNoFromTitle:(NSString*) title;
 
 + (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title;
 

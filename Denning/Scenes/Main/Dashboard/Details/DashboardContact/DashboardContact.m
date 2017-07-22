@@ -98,7 +98,7 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     __weak UINavigationController *navigationController = self.navigationController;
     @weakify(self)
-    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:[[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL_V2] forCategory:0 searchType:@"General" withPage:_page withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
+    [[QMNetworkManager sharedManager] getGlobalSearchFromKeyword:keyword searchURL:[[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL] forCategory:0 searchType:@"General" withPage:_page withCompletion:^(NSArray * _Nonnull result, NSError * _Nonnull error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         @strongify(self)
         

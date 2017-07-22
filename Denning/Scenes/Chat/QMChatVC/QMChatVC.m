@@ -270,18 +270,8 @@ NYTPhotosViewControllerDelegate
 }
 
 - (void) prepareUI {
-
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 23)];
-    
-    [backButton setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
-    if (self.firmCode.length != 0) {
-        [backButton setTitle:self.firmCode forState:UIControlStateNormal];
-        backButton.frame = CGRectMake(0, 0, 23+15, 23)  ;
-    }
-    
-    [backButton addTarget:self action:@selector(popupScreen:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Back"] style:UIBarButtonItemStylePlain target:self action:@selector(popupScreen:)];
+    [backButtonItem setTintColor:[UIColor whiteColor]];
     
     [self.navigationItem setLeftBarButtonItems:@[backButtonItem] animated:YES];
 }

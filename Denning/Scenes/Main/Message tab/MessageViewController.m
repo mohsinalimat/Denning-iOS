@@ -42,7 +42,6 @@ typedef NS_ENUM(NSInteger, DIChatTabIndex) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self prepareUI];
 }
 
@@ -74,6 +73,8 @@ typedef NS_ENUM(NSInteger, DIChatTabIndex) {
 
 - (void) prepareUI
 {
+    [self configureBackBtnWithImageName:nil withSelector:@selector(popupScreen:)];
+    
     self.viewControllerIdentifiers = @[@"DenningContactViewController", @"FavoriteViewController",
         @"QMNewMessageViewController", @"QMDialogsViewController", @"ClientContactViewController"];
     

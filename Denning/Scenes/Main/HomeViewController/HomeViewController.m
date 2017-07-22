@@ -169,10 +169,8 @@ iCarouselDataSource, iCarouselDelegate>
         if (success){
            [[DataManager sharedManager] setUserInfoFromLogin:responseObject];
             if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
-                [DataManager sharedManager].seletedUserType = @"Denning";
                  [self performSegueWithIdentifier:kChangeBranchSegue sender:[DataManager sharedManager].denningArray];
             } else if ([DataManager sharedManager].personalArray.count > 0) {
-                [DataManager sharedManager].seletedUserType = @"Personal";
                 [self performSegueWithIdentifier:kChangeBranchSegue sender:[DataManager sharedManager].personalArray];
             } else {
                 [QMAlert showAlertWithMessage:@"No more branches" actionSuccess:NO inViewController:self];
@@ -323,7 +321,8 @@ iCarouselDataSource, iCarouselDelegate>
 }
 
 - (void) showComingSoon {
-    [QMAlert showInformationWithMessage:@"Coming Soon. Thank you for your support." inViewController:self];
+    [self performSegueWithIdentifier:kComingSoonSegue sender:nil];
+//    [QMAlert showInformationWithMessage:@"Coming Soon. Thank you for your support." inViewController:self];
 }
 
 #pragma mark -
@@ -447,10 +446,8 @@ iCarouselDataSource, iCarouselDelegate>
 
 - (void) manageUserType {
     if ([DataManager sharedManager].personalArray.count > 0) {
-        [DataManager sharedManager].seletedUserType = @"Personal";
         [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
     } else {
-        [DataManager sharedManager].seletedUserType = @"Public";
         [QMAlert showAlertWithMessage:@"Sorry, There is no shared document for you" actionSuccess:NO inViewController:self];
     }
 }

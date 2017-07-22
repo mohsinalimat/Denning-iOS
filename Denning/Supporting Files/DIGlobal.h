@@ -33,7 +33,6 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define kCountryCallingCode @"dial_code"
 #define kCountryCode        @"code"
 
-
 #define HEIGHT(v)                                       v.frame.size.height
 #define WIDTH(v)                                        v.frame.size.width
 #define BOTTOM(v)                                       (v.frame.origin.y + v.frame.size.height)
@@ -83,6 +82,8 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 #define GENERAL_SEARCH_URL   @"denningwcf/v1/generalSearch?search="
 
 #define GENERAL_SEARCH_URL_V2   @"denningwcf/v2/generalSearch?search="
+
+#define SEARCH_UPLOAD_SUGGESTED_FILENAME    @"denningwcf/v1/table/cboDocumentName?search="
 
 #define PUBLIC_KEYWORD_SEARCH_URL   @"http://denningsoft.dlinkddns.com/denningwcf/v1/publicSearch/keyword?search="
 
@@ -138,6 +139,8 @@ typedef NS_ENUM(NSInteger, DIPublicSearchFilter) {
 
 
 #define MATTERSIMPLE_GET_URL @"denningwcf/v1/matter/simpleList?search="
+
+#define MATTER_FILEFOLDER @"denningwcf/v1/app/matter/fileFolder"
 
 #define MATTER_FILE_STATUS_GET_LIST_URL @"denningwcf/v1/FileStatus?search="
 

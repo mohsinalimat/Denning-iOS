@@ -46,7 +46,7 @@
     
     self.manager = [QMNetworkManager sharedManager].manager;
     
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
         self.manager = [[QMNetworkManager sharedManager] setLoginHTTPHeader];
         _requestURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
     } else {

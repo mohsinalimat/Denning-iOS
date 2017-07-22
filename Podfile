@@ -38,6 +38,7 @@ target ‘Denning’ do
 	pod 'MaterialComponents/ShadowElevations'
 	pod "MIBadgeButton"
 	pod 'PNChart'
+	pod ‘TOCropViewController’
 
 	pod 'AFNetworking’
 	pod 'Bolts'

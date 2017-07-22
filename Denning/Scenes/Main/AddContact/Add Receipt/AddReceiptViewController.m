@@ -317,13 +317,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == 1) {
             [self performSegueWithIdentifier:kSimpleMatterSegue sender:MATTERSIMPLE_GET_URL];
-        } else if (indexPath.row == 1) {
-            [self performSegueWithIdentifier:kTaxInvoiceSegue sender:RECEIPT_TAX_INVOICE_GET_LIST_URL];
         } else if (indexPath.row == 2) {
+            [self performSegueWithIdentifier:kTaxInvoiceSegue sender:RECEIPT_TAX_INVOICE_GET_LIST_URL];
+        } else if (indexPath.row == 3) {
             [self performSegueWithIdentifier: kAccountTypeSegue sender:  ACCOUNT_TYPE_GET_LIST_URL];
-        } else if (indexPath.row == 5) {
+        } else if (indexPath.row == 6) {
             [self showAutocomplete];
         }
     } else if (indexPath.section == 1) {

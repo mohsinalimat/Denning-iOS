@@ -8,6 +8,7 @@
 
 #import "DIHelpers.h"
 
+
 @implementation DIHelpers
 
 + (NSString*) getWANIP
@@ -197,6 +198,12 @@
     return [DIHelpers currentMonthFromDate:[NSDate date]];
 }
 
++ (NSString*) trim:(NSString*) str
+{
+    return [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+
 + (BOOL) isWordFile:(NSString*) fileExt
 {
     NSArray* wordArray = @[@".docx", @".doc", @".rtf"];
@@ -260,24 +267,28 @@
 + (void) drawWhiteBorderToButton: (UIButton*) button {
     CALayer *border = [CALayer layer];
     CGFloat borderWidth = 1;
-    border.borderColor = [UIColor whiteColor].CGColor;
+    border.borderColor = [UIColor grayColor].CGColor;
     border.frame = CGRectMake(0, button.frame.size.height - borderWidth, button.frame.size.width, button.frame.size.height);
     border.borderWidth = borderWidth;
     [button.layer addSublayer:border];
     button.layer.masksToBounds = YES;
 }
 
-+ (void) drawWhiteBorderToTextField: (UITextField*) textField {
++ (void) drawBorderBottom: (UIView*) view {
     CALayer *border = [CALayer layer];
     CGFloat borderWidth = 1;
-    border.borderColor = [UIColor whiteColor].CGColor;
-    border.frame = CGRectMake(0, textField.frame.size.height - borderWidth, textField.frame.size.width, textField.frame.size.height);
+    border.borderColor = [UIColor grayColor].CGColor;
+    border.frame = CGRectMake(0, view.frame.size.height - borderWidth, view.frame.size.width, view.frame.size.height);
     border.borderWidth = borderWidth;
-    [textField.layer addSublayer:border];
-    textField.layer.masksToBounds = YES;
+    [view.layer addSublayer:border];
+    view.layer.masksToBounds = YES;
+}
+
++ (void) drawWhiteBorderToTextField: (UITextField*) textField {
+    [DIHelpers drawBorderBottom:textField];
     
     if ([textField respondsToSelector:@selector(setAttributedPlaceholder:)] && textField.placeholder.length != 0) {
-        UIColor *color = [UIColor whiteColor];
+        UIColor *color = [UIColor lightGrayColor];
         textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:textField.placeholder attributes:@{NSForegroundColorAttributeName: color}];
     } else {
         NSLog(@"Cannot set placeholder text's color, because deployment target is earlier than iOS 6.0");
@@ -311,6 +322,23 @@
     [newFormatter setDateFormat:@"EEEE"];
 
     return [newFormatter stringFromDate:[formatter dateFromString:date]];
+}
+
++ (NSArray*) separateFileNameAndNoFromTitle:(NSString*) title {
+    NSString* removedTitle;
+    
+    NSRange range = NSMakeRange(9, title.length-9);
+    removedTitle = [title substringWithRange:range];
+    
+    NSMutableArray *items = [[removedTitle componentsSeparatedByString:@"("] mutableCopy];
+    
+    if (items.count == 2) {
+        items[1] = [items[1] substringToIndex:((NSString*)items[1]).length-1];
+    } else {
+        [items addObject:@""];
+    }
+    
+    return items;
 }
 
 + (NSArray*) removeFileNoAndSeparateFromMatterTitle: (NSString*) title

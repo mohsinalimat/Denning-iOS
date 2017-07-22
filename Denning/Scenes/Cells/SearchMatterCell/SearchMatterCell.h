@@ -24,5 +24,13 @@
 
 - (void) didTapLedger: (SearchMatterCell*) cell;
 
+- (void) didTapFileNote: (SearchMatterCell*) cell;
+
+- (void) didTapPaymentRecord: (SearchMatterCell*) cell fileNo:(NSString*) fileNo;
+
+- (void) didTapUpload: (SearchMatterCell*) cell;
+
+- (void) didTapTemplate: (SearchMatterCell*) cell;
+
 @end
 

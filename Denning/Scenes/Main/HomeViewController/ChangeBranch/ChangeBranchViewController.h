@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^UpdateBranchHandler)(FirmURLModel *model);
+
 @interface ChangeBranchViewController : UITableViewController
 
 @property (strong, nonatomic) NSArray *branchArray;
+@property (strong, nonatomic) UpdateBranchHandler updateHandler;
 @end

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'F810F2DE5DEA6D87CADF2161B83A3C41'
+               BlueprintIdentifier = '7F3B6E56989C2C0063238BE6D98D0A19'
                BlueprintName = 'UILabel+Copyable'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libUILabel+Copyable.a'>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="SF-UI-Text-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="49" id="KGk-i7-Jjw" customClass="PaymentRecordFirstCell">
+            <rect key="frame" x="0.0" y="0.0" width="421" height="49"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="421" height="48.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nFp-rU-Uf8">
+                        <rect key="frame" x="301.5" y="13" width="103.5" height="17"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
+                        <color key="textColor" red="1" green="0.23137254900000001" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="09w-lO-9x9">
+                        <rect key="frame" x="160" y="13" width="135.5" height="16"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoZ-zd-rWP" userLabel="left">
+                        <rect key="frame" x="16" y="13" width="135.5" height="22.5"/>
+                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="09w-lO-9x9" firstAttribute="width" secondItem="SoZ-zd-rWP" secondAttribute="width" id="0yY-ec-t4i"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="SoZ-zd-rWP" secondAttribute="bottom" constant="5" id="Ayq-sm-M2N"/>
+                    <constraint firstItem="SoZ-zd-rWP" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:3" constant="-5" id="BhN-5J-Lic"/>
+                    <constraint firstItem="09w-lO-9x9" firstAttribute="leading" secondItem="SoZ-zd-rWP" secondAttribute="trailing" constant="8" id="MMz-4d-nWM"/>
+                    <constraint firstItem="09w-lO-9x9" firstAttribute="top" secondItem="nFp-rU-Uf8" secondAttribute="top" id="Nwa-Uq-mNc"/>
+                    <constraint firstItem="SoZ-zd-rWP" firstAttribute="top" secondItem="nFp-rU-Uf8" secondAttribute="top" id="bAl-QC-dS8"/>
+                    <constraint firstItem="nFp-rU-Uf8" firstAttribute="leading" secondItem="09w-lO-9x9" secondAttribute="trailing" constant="6" id="e4l-0T-T37"/>
+                    <constraint firstItem="SoZ-zd-rWP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="gY9-mx-Bf5"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="nFp-rU-Uf8" secondAttribute="trailing" constant="8" id="kAs-7a-LqI"/>
+                    <constraint firstItem="SoZ-zd-rWP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="s84-F5-DOS"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="firstValue" destination="SoZ-zd-rWP" id="RMc-oA-Lf2"/>
+                <outlet property="secondValue" destination="09w-lO-9x9" id="Zqf-OK-zfV"/>
+                <outlet property="thirdValue" destination="nFp-rU-Uf8" id="Q1U-9h-7pY"/>
+            </connections>
+            <point key="canvasLocation" x="67.5" y="56.5"/>
+        </tableViewCell>
+    </objects>
+</document>

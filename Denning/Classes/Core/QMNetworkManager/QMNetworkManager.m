@@ -56,7 +56,7 @@
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:@"email@com.my" forHTTPHeaderField:@"webuser-id"];
+    [self.manager.requestSerializer setValue:@" iPhone@denning.com.my" forHTTPHeaderField:@"webuser-id"];
     
     self.session = [NSURLSession sharedSession];
     
@@ -72,7 +72,7 @@
 - (AFHTTPSessionManager*) setLoginHTTPHeader
 {
     [self.manager.requestSerializer setValue:@"{334E910C-CC68-4784-9047-0F23D37C9CF9}" forHTTPHeaderField:@"webuser-sessionid"];
-    [self.manager.requestSerializer setValue:@"SkySea@denning.com.my" forHTTPHeaderField:@"webuser-id"];
+    [self.manager.requestSerializer setValue:@"iPhone@denning.com.my" forHTTPHeaderField:@"webuser-id"];
     
     return self.manager;
 }
@@ -83,6 +83,11 @@
     [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
     
     return self.manager;
+}
+
+- (void) setChangePasswordHTTPHeader {
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.sessionID  forHTTPHeaderField:@"webuser-sessionid"];
+    [self.manager.requestSerializer setValue:[DataManager sharedManager].user.email forHTTPHeaderField:@"webuser-id"];
 }
 
 - (void) setAddContactLoginHTTPHeader
@@ -223,7 +228,7 @@
 {
     NSDictionary* params = [self buildRquestParamsFromDictionary:@{@"email": email, @"password": password}];
     
-    [self setOtherForLoginHTTPHeader];
+    [self setChangePasswordHTTPHeader];
     
     [self.manager POST:CHANGE_PASSWORD_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -328,7 +333,7 @@
 - (void) getGlobalSearchFromKeyword: (NSString*) keyword searchURL:(NSString*)searchURL forCategory:(NSInteger)category searchType:(NSString*)searchType withPage:(NSNumber*)page withCompletion:(void(^)(NSArray* resultArray, NSError* error)) completion
 {
     NSString* urlString;
-    if ([[DataManager sharedManager].searchType isEqualToString:@"Public"]){
+    if (![[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
         [self setLoginHTTPHeader];
         urlString = [NSString stringWithFormat:@"%@%@&category=%ld", searchURL, [keyword stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], (long)category];
     } else {
@@ -538,6 +543,123 @@
     }];
 }
 
+- (void) loadFileNoteListWithCode:(NSString*) code withPage:page
+completion: (void(^)(NSArray *result, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/table/Note?fileNo=%@&page=%@", [DataManager sharedManager].user.serverAPI, code, page];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSArray* result = [FileNoteModel getFileNoteArrayFromResponse:responseObject];
+        if (completion != nil) {
+            completion(result, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+- (void) saveFileNoteWithParams: (NSDictionary*) params completion: (void(^)(FileNoteModel* result, NSError* error)) completion
+{
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString: @"denningwcf/v1/table/Note"];
+    [self setOtherForLoginHTTPHeader];
+    [self.manager POST:_url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([FileNoteModel getFileNoteFromResonse:responseObject], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void) updateFileNoteWithParams: (NSDictionary*) params completion: (void(^)(FileNoteModel* result, NSError* error)) completion
+{
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString: @"denningwcf/v1/table/Note"];
+    [self setOtherForLoginHTTPHeader];
+    [self.manager PUT:_url parameters:params  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion([FileNoteModel getFileNoteFromResonse:responseObject],nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+// File Upload
+- (void) getSuggestedNameWithUrl:(NSString*) url withPage:(NSNumber*)page withSearch:(NSString*)search WithCompletion:(void(^)(NSArray* result, NSError* error)) completion
+{
+    NSString* _url = [NSString stringWithFormat:@"%@%@%@&page=%@", [DataManager sharedManager].user.serverAPI, url,[search stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]], page];
+    [self setAddContactLoginHTTPHeader];
+    
+    [self.manager GET:_url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (completion != nil) {
+            completion(responseObject, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
+
+- (void) uploadFileWithUrl:(NSString*) url params:(NSDictionary*) params WithCompletion:(void(^)(NSString* result, NSError* error)) completion
+{
+    NSString* _url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:url];
+    [self setAddContactLoginHTTPHeader];
+    [self.manager POST:_url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if  (completion != nil)
+        {
+            completion(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if  (completion != nil)
+        {
+            completion(nil, error);
+        }
+    }];
+}
+
+// Payment Record
+- (void) getPaymentRecordWithFileNo:(NSString*) fileNo completion:(void(^)(NSDictionary* result, NSError* error)) completion
+{
+    NSString* url = [NSString stringWithFormat:@"%@denningwcf/v1/app/PaymentRecord/%@", [DataManager sharedManager].user.serverAPI, fileNo];
+    [self setOtherForLoginHTTPHeader];
+    
+    [self.manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+
+        if (completion != nil) {
+            completion(responseObject, nil);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (completion != nil) {
+            completion(nil, error);
+        }
+        
+        // Error Message
+    }];
+}
 // Bank
 - (void) loadBankFromSearchWithCode: (NSString*) code completion: (void(^)(BankModel* bankModel, NSError* error)) completion
 {
@@ -612,6 +734,8 @@
         // Error Message
     }];
 }
+
+
 
 // Ledger
 - (void) loadLedgerWithCode: (NSString*) code completion: (void(^)(NewLedgerModel* newLedgerModel, NSError* error)) completion
@@ -768,10 +892,6 @@
     [self setLoginHTTPHeader];
     NSDictionary* params = @{@"email": [QBSession currentSession].currentUser.email, @"favourite": user.email};
     NSString* url = PUBLIC_ADD_FAVORITE_CONTACT_URL;
-  /*  if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
-        url = [[DataManager sharedManager].user.serverAPI stringByAppendingString:PRIVATE_ADD_FAVORITE_CONTACT_URL];
-        [self.manager.requestSerializer setValue:@"tmho@hotmail.com" forHTTPHeaderField:@"webuser-id"];
-    } */
     
     [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if  (completion != nil)

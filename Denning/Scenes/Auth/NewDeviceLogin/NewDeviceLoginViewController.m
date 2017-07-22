@@ -92,13 +92,10 @@
 
 - (void) manageUserType {
     if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
-        [DataManager sharedManager].seletedUserType = @"Denning";
         [self manageFirmURL:[DataManager sharedManager].denningArray];
     } else if ([DataManager sharedManager].personalArray.count > 0) {
-        [DataManager sharedManager].seletedUserType = @"Personal";
         [self performSegueWithIdentifier:kBranchSegue sender:[DataManager sharedManager].personalArray];
     } else {
-        [DataManager sharedManager].seletedUserType = @"Public";
         dispatch_async(dispatch_get_main_queue(), ^{
             [self performSegueWithIdentifier:kQMSceneSegueMain sender:nil];
         });

@@ -209,3 +209,15 @@ static NSString* const kFeeMatterGrowthSegue = @"FeeMatterGrowthSegue";
 static NSString* const kCompletionTrackingSegue = @"CompletionTrackingSegue";
 
 static NSString* const kBankLedgerDetailSegue = @"BankLedgerDetailSegue";
+
+static NSString* const kFileNoteSegue = @"FileNoteSegue";
+
+static NSString* const kFileNoteListSegue = @"FileNoteListSegue";
+
+static NSString* const kFileUploadSegue = @"FileUploadSegue";
+
+static NSString* const kUploadToSegue = @"UploadToSegue";
+
+static NSString* const kPaymentSegue= @"PaymentSegue";
+
+static NSString* const kComingSoonSegue = @"ComingSoonSegue";

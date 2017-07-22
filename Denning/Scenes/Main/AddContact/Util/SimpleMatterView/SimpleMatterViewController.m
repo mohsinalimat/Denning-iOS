@@ -69,6 +69,9 @@
 - (void) prepareUI
 {
     self.title = @"Select Matter Type";
+    if (_titleOfView != nil) {
+        self.title = _titleOfView;
+    }
     self.page = @(1);
     isFirstLoading = YES;
     self.filter = @"";

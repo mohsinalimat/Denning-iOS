@@ -25,6 +25,8 @@
 #import "DEMOCustomAutoCompleteObject.h"
 #import "AFHTTPSessionOperation.h"
 #import "AddPropertyViewController.h"
+#import "FileNoteList.h"
+#import "PaymentRecord.h"
 
 typedef NS_ENUM(NSInteger, DISearchCellType) {
     DIContactCell = 1,
@@ -53,6 +55,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     NSString* gotoMatter;
     NSString* _email;
     NSString* _sessionID;
+    BOOL isDenningUser;
 }
 
 @property (weak, nonatomic) IBOutlet MLPAutoCompleteTextField *searchTextField;
@@ -149,6 +152,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) prepareUI
 {
+    isDenningUser = [[DataManager sharedManager].user.userType isEqualToString:@"denning"];
     _email = [DataManager sharedManager].user.email;
     _sessionID = [DataManager sharedManager].user.sessionID;
     CGFloat customRefreshControlHeight = 50.0f;
@@ -237,8 +241,8 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) buildSearchURL
 {
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
-        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL_V2];
+    if (isDenningUser){
+        searchURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_SEARCH_URL];
     } else {
         searchURL = PUBLIC_SEARCH_URL;
     }
@@ -246,13 +250,11 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 
 - (void) buildSearchKeywordURL
 {
-    if ([[DataManager sharedManager].user.userType isEqualToString:@"denning"]){
-        [DataManager sharedManager].searchType  = @"General";
+    if (isDenningUser){
         searchKeywordURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
         category = 0;
         self.searchTextField.placeholder = @"General Search";
     } else {
-        [DataManager sharedManager].searchType  = @"Public";
         category = -1;
         searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
         self.searchTextField.placeholder = @"Denning Search";
@@ -299,17 +301,15 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 }
 
 - (IBAction)toggleSearchType:(UIButton*)sender {
-    if (![[DataManager sharedManager].user.userType isEqualToString:@"denning"]) {
+    if (!isDenningUser) {
         return;
     }
     
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if (isDenningUser){
         self.searchTextField.placeholder = @"Denning Search";
-        [DataManager sharedManager].searchType = @"Public";
         category = -1;
        searchKeywordURL = PUBLIC_KEYWORD_SEARCH_URL;
     } else {
-        [DataManager sharedManager].searchType = @"General";
         self.searchTextField.placeholder = @"General Search";
         category = 0;
          searchKeywordURL = [[DataManager sharedManager].user.serverAPI stringByAppendingString: GENERAL_KEYWORD_SEARCH_URL];
@@ -390,17 +390,32 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     [self openLedger:model];
 }
 
+- (void) didTapFileNote:(SearchMatterCell *)cell
+{
+    [self performSegueWithIdentifier:kFileNoteListSegue sender:self.searchResultArray[cell.tag]];
+}
+
+- (void) didTapUpload:(SearchMatterCell *)cell
+{
+    [self performSegueWithIdentifier:kFileUploadSegue sender:nil];
+}
+
+- (void) didTapPaymentRecord: (SearchMatterCell*) cell fileNo:(NSString *)fileNo
+{
+    [self performSegueWithIdentifier:kPaymentSegue sender:fileNo];
+}
+
 #pragma mark - HTHorizontalSelectionListDataSource Protocol Methods
 
 - (NSInteger)numberOfItemsInSelectionList:(HTHorizontalSelectionList *)selectionList {
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if (isDenningUser){
         return self.generalSearchFilters.count;
     }
     return self.publicSearchFilters.count;
 }
 
 - (NSString *)selectionList:(HTHorizontalSelectionList *)selectionList titleForItemWithIndex:(NSInteger)index {
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if (isDenningUser){
         return generalKeyArray[index];
     }
     return self.publicSearchFilters.allKeys[index];
@@ -411,7 +426,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
 - (void)selectionList:(HTHorizontalSelectionList *)selectionList didSelectButtonWithIndex:(NSInteger)index {
     // update the view for the corresponding index
     selectedIndexOfFilter = index;
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if (isDenningUser){
         category = [generalValueArray[index] integerValue];
         
     } else {
@@ -495,7 +510,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
     SearchResultModel* model = self.searchResultArray[indexPath.section];
     NSUInteger cellType = [self detectItemType:model.form];
 
-    if (cellType == DIContactCell || cellType == DIBankCell || cellType == DIGovernmentPTGOfficesCell || cellType == DIGovernmentLandOfficesCell || cellType == DILegalFirmCell || cellType == DIPropertyCell) {
+    if (cellType == 0 || cellType == DIContactCell || cellType == DIBankCell || cellType == DIGovernmentPTGOfficesCell || cellType == DIGovernmentLandOfficesCell || cellType == DILegalFirmCell || cellType == DIPropertyCell) {
         SearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:[SearchResultCell cellIdentifier] forIndexPath:indexPath];
         
         cell.tag = indexPath.section;
@@ -748,7 +763,7 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         [[NSOperationQueue mainQueue] cancelAllOperations];
     }
     
-    if ([[DataManager sharedManager].searchType isEqualToString:@"General"]){
+    if (isDenningUser){
         [[QMNetworkManager sharedManager].manager.requestSerializer setValue:_sessionID forHTTPHeaderField:@"webuser-sessionid"];
         [[QMNetworkManager sharedManager].manager.requestSerializer setValue:_email forHTTPHeaderField:@"webuser-id"];
         
@@ -882,6 +897,17 @@ UITableViewDelegate, UITableViewDataSource, HTHorizontalSelectionListDataSource,
         UINavigationController* navC = segue.destinationViewController;
         BankViewController* bankVC = navC.viewControllers.firstObject;
         bankVC.bankModel = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kFileNoteListSegue]){
+        FileNoteList* vc = segue.destinationViewController;
+        vc.resultModel = sender;
+    }
+    
+    if ([segue.identifier isEqualToString:kPaymentSegue]){
+        UINavigationController* navC = segue.destinationViewController;
+        PaymentRecord* vc = navC.viewControllers.firstObject;
+        vc.fileNo = sender;
     }
 }
 

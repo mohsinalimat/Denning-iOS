@@ -26,13 +26,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ysh-kB-hhs">
-                        <rect key="frame" x="16" y="11" width="60" height="21.5"/>
+                        <rect key="frame" x="16" y="11" width="80" height="21.5"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfF-qy-Kju">
-                        <rect key="frame" x="84.5" y="11" width="36" height="21.5"/>
+                        <rect key="frame" x="104.5" y="11" width="36" height="21.5"/>
                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI Text" pointSize="14"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -42,7 +42,7 @@
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="lfF-qy-Kju" secondAttribute="trailing" constant="8" id="83r-oS-InN"/>
                     <constraint firstItem="Ysh-kB-hhs" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="9WI-OU-EIw"/>
                     <constraint firstItem="lfF-qy-Kju" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="Dva-KK-Fu9"/>
-                    <constraint firstItem="Ysh-kB-hhs" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:4" constant="-20" id="N4s-du-QPn"/>
+                    <constraint firstItem="Ysh-kB-hhs" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:4" id="N4s-du-QPn"/>
                     <constraint firstAttribute="bottomMargin" secondItem="lfF-qy-Kju" secondAttribute="bottom" constant="3" id="VG8-Ec-2t5"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Ysh-kB-hhs" secondAttribute="bottom" constant="3" id="fdz-zb-eHG"/>
                     <constraint firstItem="lfF-qy-Kju" firstAttribute="leading" secondItem="Ysh-kB-hhs" secondAttribute="trailing" constant="8" id="kWK-Qu-8gD"/>
